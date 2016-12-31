@@ -23,7 +23,7 @@ dat <- list(
   p = p,
   eff0 = eff0,
   tox1 = tox1,
-  
+
   alpha_mean = -7.9593,
   alpha_sd = 3.5487,
   beta_mean = 1.5482,
@@ -36,7 +36,7 @@ dat <- list(
   eta_sd = 0.2,
   psi_mean = 0,
   psi_sd = 1,
-  
+
   num_patients = 3,
   eff = c(0,1,1),
   tox = c(0,1,0),
@@ -46,9 +46,11 @@ dat <- list(
 samp = rstan::sampling(stanmodels$EffTox, data = dat)
 plot(samp)
 
+
+
 # ThallHierarchicalBinary
 dat = list(
-  m = 10, 
+  m = 10,
   x = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0),  # Num responses, by cohort
   n = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0),  # Num patients, by cohort
   target_resp = 0.3,
@@ -60,5 +62,9 @@ dat = list(
 )
 samp = rstan::sampling(stanmodels$ThallHierachicalBinary, data = dat)
 plot(samp)
+
+
+# Vignettes
+devtools::use_vignette("EffTox")
 
 

@@ -23,3 +23,6 @@ LinkingTo: StanHeaders (>= 2.12.0.1), rstan (>= 2.12.1), BH (>= 1.62.0.1), Rcpp
 URL: https://github.com/brockk/trialr
 BugReports: https://github.com/brockk/trialr/issues
 RoxygenNote: 5.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

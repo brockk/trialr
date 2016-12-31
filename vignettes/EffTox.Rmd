@@ -1,0 +1,162 @@
+---
+title: "EffTox in trialr"
+author: "Kristian Brock"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
+bibliography: C:/Users/krist/Dropbox/Projects/library.bib
+vignette: >
+  %\VignetteIndexEntry{EffTox in trialr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Recap of the EffTox model
+@Thall2004 introduced the _EffTox_ dose-finding design for scenarios where both efficacy and toxicity events should guide dose selections.
+Full details are given in @Thall2004, @Thall2006 and @Thall2014 but a brief recap summary follows.
+
+For doses $\boldsymbol{y} = (y_1, ..., y_n)$, the authors define codified doses $(x_1, ..., x_n)$ using the transform 
+
+$x_i = \log{y_i} - \sum_{j=1}^n \frac{\log{y_j}}{n}$
+
+The codified doses are used as the sole explanatory variables in logit models for the marginal probabilities of toxicity and efficacy:
+
+$\pi_T = \alpha + \beta x$
+
+$\pi_E = \gamma + \zeta x + \eta x^2$
+
+and the joint probability is modelled using the function
+
+$\pi_{a,b} = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}$.
+
+At each dose update decision, the dose $x$ is acceptable if
+
+$\text{Pr}\left\{ \pi_T(x, \boldsymbol{\theta}) < \overline{\pi}_T | \mathcal{D} \right\} > p_T$   and   $\text{Pr}\left\{ \pi_E(x, \boldsymbol{\theta}) > \underline{\pi}_E | \mathcal{D} \right\} > p_E$
+
+and is no more than than one position below the lowest dose-level given and no more than one position above the highest dose-level given.
+The net effect of these last two criteria is that untried doses may not be skipped in escalation of de-escalation.
+$\underline{\pi}_E, p_E, \overline{\pi}_T, p_T$ are provided by the user as the trial scenario dictates.
+
+The utility of dose $x$ is 
+
+$TODO$
+
+The dose-level from the acceptable set with maximal utility is selected to be given to the next patient or cohort.
+If there are no acceptable doses, the trial stops and no dose is recommended.
+
+Normal priors are specified for the elements of the parameter vector $\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \eta, \psi)$.
+
+There are several published examples of EffTOx trials, including explanations and tips on parameter choices  [@Thall2004, @Thall2006, @Thall2014, TODO].
+
+The MD Anderson Cancer Center publishes software [@EffTox] to perform calculations and simulations for EffTox trials.
+However, tHe software is available for Windows in compiled-form only.
+Thus, you will not be able to run the software on Mac or Linux.
+Furthermore, you will not be able to alter the behaviour of the model.
+Brock TODO describes a real trial scenario where some alteration of the default model behaviour would have been preferable.
+It was this that prompted the author to write the open-source implementation provided in 'trialr'.
+
+TODO
+
+## EffTox in `trialr`
+We will work with the scenario given in @Thall2014.
+This is the parameterisation loaded by default in the MD Anderson EffTox app.
+
+```{r}
+library(trialr)
+```
+They investigate five doses 1, 2, 4, 6.6 and 10 mcL/kg, seeking the best dose with $\text{Pr}\left\{ \pi_T(x, \boldsymbol{\theta}) < 0.3 | \mathcal{D} \right\} > 0.1$ and $\text{Pr}\left\{ \pi_E(x, \boldsymbol{\theta}) > 0.5 | \mathcal{D} \right\} > 0.1$ 
+
+thus $p_T = p_E = 0.1, \overline{\pi}_T = 0.3$ and $\underline{\pi}_E = 0.5$.
+
+Their hinge points on the neutral utility curve are (0.5, 0), (1, 0.65) and (0.7, 0.25), thus we have
+
+```{r}
+p <- efftox_solve_p(eff0 = 0.5, tox1 = 0.65, eff_star = 0.7, tox_star = 0.25)
+p
+```
+We see that the utility curves in this particular example have curvature parameter $p \approx 0.977$.
+
+Let's say that we have treated six patients in two cohorts of three at dose-levels 1 and 2 respectively. 
+ALso, let's say we observe no toxicities and one efficacy event in cohort 1, and one toxicity and two efficacies in cohort 2. 
+
+```{r}
+doses = c(1, 1, 1, 2, 2, 2)
+tox   = c(0, 0, 0, 0, 1, 0)
+eff   = c(0, 1, 0, 0, 1, 1)
+```
+
+The entire data list for this example, including hyperprior parameters, dose admissibility parameters and patient outcomes is
+
+```{r}
+dat <- list(
+  num_doses = 5,
+  real_doses = c(1, 2, 4, 6.6, 10),
+  efficacy_hurdle = 0.5,
+  toxicity_hurdle = 0.3,
+  p = p,
+  eff0 = 0.5,
+  tox1 = 0.65,
+
+  alpha_mean = -7.9593, alpha_sd = 3.5487,
+  beta_mean = 1.5482, beta_sd = 3.5018,
+  gamma_mean = 0.7367, gamma_sd = 2.5423,
+  zeta_mean = 3.4181, zeta_sd = 2.4406,
+  eta_mean = 0, eta_sd = 0.2,
+  psi_mean = 0, psi_sd = 1,
+
+  num_patients = 6,
+  doses = c(1, 1, 1, 2, 2, 2),
+  tox   = c(0, 0, 0, 0, 1, 0),
+  eff   = c(0, 1, 0, 0, 1, 1)
+)
+```
+
+We invoke the prior-to-posterior analysis by calling the `rstan::sampling` function with the pre-compiled EffTox stanmodel^[The advice by the RStan team is that authors of packages that use RStan should provide static model files that are compiled when the package is installed.] and our data list.
+We set the seed for reproducibility.
+
+```{r, results = "hide"}
+samp <- rstan::sampling(stanmodels$EffTox, data = dat, seed = 123)
+```
+
+The call to `rstan:sampling` prints logging information to the out stream.
+That has been suppressed here for brevity.
+
+The post-processing call to `efftox_process` extracts the most pertinent information from the sampling
+object.
+The parameters `p_e` and `p_t` are required here to calculate posterior dose acceptability.
+They were not required in the prior-to-posterior analysis, so they were not provided in `dat`.
+```{r}
+x <- efftox_process(dat, samp, p_e = 0.1, p_t = 0.1)
+x$recommended_dose
+```
+
+We see that dose-level 3 is recommended for the next cohort.
+
+```{r}
+knitr::kable(efftox_analysis_to_df(x), digits = 3)
+```
+
+This confirms that dose-level 3 has maximal utility.
+
+You can produce posterior density plots
+
+```{r, fig.width = 6, fig.cap = "Posterior densities of utility."}
+u <- rstan::extract(samp, 'utility')[[1]]
+df <- data.frame(Utility = as.vector(u), 
+                 Dose = factor(rep(1:ncol(u), each = nrow(u))))
+library(ggplot2)
+ggplot(df, aes(x = Utility, group = Dose, col = Dose)) + geom_density()
+```
+
+
+
+## Quoting
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
+
+
+# References
