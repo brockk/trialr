@@ -26,6 +26,9 @@ efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
 }
 
 efftox_process <- function(dat, fit, p_e, p_t) {
+  # fit, an object of class stanfit, yielded by a call to rstan::sampling(stanmodels$EffTox, data = dat)
+  #       where dat is a list of your data. See TODO[that explains dat]
+
   # Posterior mean estimates
   prob_eff <- colMeans(rstan::extract(fit, 'prob_eff')[[1]])
   prob_acc_eff <- colMeans(rstan::extract(fit, 'prob_acc_eff')[[1]])
@@ -66,66 +69,48 @@ efftox_analysis_to_df <- function(x) {
   return(df)
 }
 
-efftox_simulate <- function(dat, num_sims, max_patients, first_dose,
-                            eff0, tox1, p, p_e, p_t,
-                            true_eff, true_tox,
-                            cohort_size = NULL, cohort_sizes = NULL,
-                            ...) {
+efftox_simulate <- function(dat, num_sims, first_dose, p_e, p_t,
+                            true_eff, true_tox, cohort_sizes, ...) {
 
-  # Either cohort_size or cohort_sizes must be specified so we now
-  # how often to re-evaluate dose.
-  # cohort_sizes parameter allows varying cohort sizes
-  if(is.null(cohort_size) & is.null(cohort_sizes))
-    stop('specify either cohort_size (integer) or cohort_sizes (array of integers)')
-  if(is.null(cohort_sizes))
-    cohort_sizes = rep(cohort_size, max_patients / cohort_size)
-
-  fit = NULL
-  doses_picked = integer(length = num_sims)
-  # What is sum(cohort_sizes) != max_patients?
-  # efficacies = matrix(nrow = num_sims, ncol = max_patients)
-  # toxicities = matrix(nrow = num_sims, ncol = max_patients)
-  # doses_given = matrix(nrow = num_sims, ncol = max_patients)
-  efficacies = list()
-  toxicities = list()
-  doses_given = list()
+  recommended_dose <- integer(length = num_sims)
+  efficacies <- list()
+  toxicities <- list()
+  doses_given <- list()
 
   for(i in 1:num_sims) {
-    print(paste('Starting', i))
-    this_dat = dat
-    dose = first_dose
-    cohort_sizes = rep(3, max_patients / 3)
+    print(paste('Starting iteration', i))
+    this_dat <- dat
+    dose <- first_dose
     for(cohort_size in cohort_sizes) {
-      if(this_dat$num_patients >= max_patients) break()
-      prob_eff = true_eff[dose]
-      prob_tox = true_tox[dose]
+      prob_eff <- true_eff[dose]
+      prob_tox <- true_tox[dose]
       # Simulate new efficacy events
       new_eff <- rbinom(n = cohort_size, size = 1, prob = prob_eff)
       new_tox <- rbinom(n = cohort_size, size = 1, prob = prob_tox)
       # And append to trial data
-      this_dat$eff = c(this_dat$eff, new_eff)
-      this_dat$tox = c(this_dat$tox, new_tox)
+      this_dat$eff <- c(this_dat$eff, new_eff)
+      this_dat$tox <- c(this_dat$tox, new_tox)
       # Also reflect doses delivered
       this_dat$doses <- c(this_dat$doses, rep(dose, cohort_size))
-      this_dat$num_patients = this_dat$num_patients + cohort_size
-      fit <- efftox_fit(this_dat, fit = fit, ...)
-      l <- efftox_process(this_dat, fit, p_e = p_e, p_t = p_e)
+      this_dat$num_patients <- this_dat$num_patients + cohort_size
+      samp <- rstan::sampling(stanmodels$EffTox, data = this_dat, ...)
+      l <- efftox_process(this_dat, samp, p_e = p_e, p_t = p_e)
       # Select a dose?
-      if(sum(l$admissible) > 0) {
+      if(sum(l$acceptable) > 0) {
         # Select dose
-        dose = which.max(ifelse(l$admissible, l$utility, NA))
+        dose = which.max(ifelse(l$acceptable, l$utility, NA))
       } else {
         dose <- NA
         break()
       }
     }
-    doses_picked[i] = dose
+    recommended_dose[i] = dose
     efficacies[[i]] = this_dat$eff
     toxicities[[i]] = this_dat$tox
     doses_given[[i]] = this_dat$doses
   }
 
-  return(list(doses_picked = doses_picked,
+  return(list(recommended_dose = recommended_dose,
               efficacies = efficacies,
               toxicities = toxicities,
               doses_given = doses_given))

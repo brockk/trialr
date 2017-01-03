@@ -7,6 +7,780 @@
 
 #include <stan/model/model_header.hpp>
 
+namespace model_BebopInPeps2_namespace {
+
+using std::istream;
+using std::string;
+using std::stringstream;
+using std::vector;
+using stan::io::dump;
+using stan::math::lgamma;
+using stan::model::prob_grad;
+using namespace stan::math;
+
+typedef Eigen::Matrix<double,Eigen::Dynamic,1> vector_d;
+typedef Eigen::Matrix<double,1,Eigen::Dynamic> row_vector_d;
+typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> matrix_d;
+
+static int current_statement_begin__;
+
+template <typename T6__, typename T7__, typename T8__, typename T9__, typename T10__, typename T11__>
+inline
+typename boost::math::tools::promote_args<T6__, T7__, T8__, T9__, typename boost::math::tools::promote_args<T10__, T11__>::type>::type
+log_joint_pdf(const int& J,
+                  const std::vector<int>& eff,
+                  const std::vector<int>& tox,
+                  const std::vector<int>& x1,
+                  const std::vector<int>& x2,
+                  const std::vector<int>& x3,
+                  const T6__& alpha,
+                  const T7__& beta,
+                  const T8__& gamma,
+                  const T9__& zeta,
+                  const T10__& lambda,
+                  const T11__& psi, std::ostream* pstream__) {
+    typedef typename boost::math::tools::promote_args<T6__, T7__, T8__, T9__, typename boost::math::tools::promote_args<T10__, T11__>::type>::type fun_scalar_t__;
+    typedef fun_scalar_t__ fun_return_scalar_t__;
+    const static bool propto__ = true;
+    (void) propto__;
+    int current_statement_begin__ = -1;
+    try {
+        {
+            fun_scalar_t__ p;
+            (void) p;  // dummy to suppress unused var warning
+            stan::math::initialize(p, std::numeric_limits<double>::quiet_NaN());
+            stan::math::assign(p, 0);
+            for (int j = 1; j <= J; ++j) {
+                {
+                    fun_scalar_t__ prob1;
+                    (void) prob1;  // dummy to suppress unused var warning
+                    fun_scalar_t__ prob2;
+                    (void) prob2;  // dummy to suppress unused var warning
+                    fun_scalar_t__ p_delta;
+                    (void) p_delta;  // dummy to suppress unused var warning
+                    stan::math::initialize(prob1, std::numeric_limits<double>::quiet_NaN());
+                    stan::math::initialize(prob2, std::numeric_limits<double>::quiet_NaN());
+                    stan::math::initialize(p_delta, std::numeric_limits<double>::quiet_NaN());
+                    stan::math::assign(prob1, inv_logit((((alpha + (beta * get_base1(x1,j,"x1",1))) + (gamma * get_base1(x2,j,"x2",1))) + (zeta * get_base1(x3,j,"x3",1)))));
+                    stan::math::assign(prob2, inv_logit(lambda));
+                    stan::math::assign(p_delta, ((((pow(prob1,get_base1(eff,j,"eff",1)) * pow((1 - prob1),(1 - get_base1(eff,j,"eff",1)))) * pow(prob2,get_base1(tox,j,"tox",1))) * pow((1 - prob2),(1 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob1) * prob2) * (1 - prob1)) * (1 - prob2)) * (exp(psi) - 1)) / (exp(psi) + 1))));
+                    stan::math::assign(p, (p + log(p_delta)));
+                }
+            }
+            return stan::math::promote_scalar<fun_return_scalar_t__>(p);
+        }
+    } catch (const std::exception& e) {
+        stan::lang::rethrow_located(e,current_statement_begin__);
+        // Next line prevents compiler griping about no return
+        throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+    }
+}
+
+
+struct log_joint_pdf_functor__ {
+    template <typename T6__, typename T7__, typename T8__, typename T9__, typename T10__, typename T11__>
+    inline
+    typename boost::math::tools::promote_args<T6__, T7__, T8__, T9__, typename boost::math::tools::promote_args<T10__, T11__>::type>::type
+    operator()(const int& J,
+                  const std::vector<int>& eff,
+                  const std::vector<int>& tox,
+                  const std::vector<int>& x1,
+                  const std::vector<int>& x2,
+                  const std::vector<int>& x3,
+                  const T6__& alpha,
+                  const T7__& beta,
+                  const T8__& gamma,
+                  const T9__& zeta,
+                  const T10__& lambda,
+                  const T11__& psi, std::ostream* pstream__) const {
+        return log_joint_pdf(J, eff, tox, x1, x2, x3, alpha, beta, gamma, zeta, lambda, psi, pstream__);
+    }
+};
+
+class model_BebopInPeps2 : public prob_grad {
+private:
+    int J;
+    vector<int> eff;
+    vector<int> tox;
+    vector<int> x1;
+    vector<int> x2;
+    vector<int> x3;
+    double alpha_mean;
+    double alpha_sd;
+    double beta_mean;
+    double beta_sd;
+    double gamma_mean;
+    double gamma_sd;
+    double zeta_mean;
+    double zeta_sd;
+    double lambda_mean;
+    double lambda_sd;
+    double psi_mean;
+    double psi_sd;
+public:
+    model_BebopInPeps2(stan::io::var_context& context__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        typedef boost::ecuyer1988 rng_t;
+        rng_t base_rng(0);  // 0 seed default
+        ctor_body(context__, base_rng, pstream__);
+    }
+
+    template <class RNG>
+    model_BebopInPeps2(stan::io::var_context& context__,
+        RNG& base_rng__,
+        std::ostream* pstream__ = 0)
+        : prob_grad(0) {
+        ctor_body(context__, base_rng__, pstream__);
+    }
+
+    template <class RNG>
+    void ctor_body(stan::io::var_context& context__,
+                   RNG& base_rng__,
+                   std::ostream* pstream__) {
+        current_statement_begin__ = -1;
+
+        static const char* function__ = "model_BebopInPeps2_namespace::model_BebopInPeps2";
+        (void) function__; // dummy call to supress warning
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<int> vals_i__;
+        std::vector<double> vals_r__;
+        context__.validate_dims("data initialization", "J", "int", context__.to_vec());
+        J = int(0);
+        vals_i__ = context__.vals_i("J");
+        pos__ = 0;
+        J = vals_i__[pos__++];
+        context__.validate_dims("data initialization", "eff", "int", context__.to_vec(J));
+        validate_non_negative_index("eff", "J", J);
+        eff = std::vector<int>(J,int(0));
+        vals_i__ = context__.vals_i("eff");
+        pos__ = 0;
+        size_t eff_limit_0__ = J;
+        for (size_t i_0__ = 0; i_0__ < eff_limit_0__; ++i_0__) {
+            eff[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "tox", "int", context__.to_vec(J));
+        validate_non_negative_index("tox", "J", J);
+        tox = std::vector<int>(J,int(0));
+        vals_i__ = context__.vals_i("tox");
+        pos__ = 0;
+        size_t tox_limit_0__ = J;
+        for (size_t i_0__ = 0; i_0__ < tox_limit_0__; ++i_0__) {
+            tox[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "x1", "int", context__.to_vec(J));
+        validate_non_negative_index("x1", "J", J);
+        x1 = std::vector<int>(J,int(0));
+        vals_i__ = context__.vals_i("x1");
+        pos__ = 0;
+        size_t x1_limit_0__ = J;
+        for (size_t i_0__ = 0; i_0__ < x1_limit_0__; ++i_0__) {
+            x1[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "x2", "int", context__.to_vec(J));
+        validate_non_negative_index("x2", "J", J);
+        x2 = std::vector<int>(J,int(0));
+        vals_i__ = context__.vals_i("x2");
+        pos__ = 0;
+        size_t x2_limit_0__ = J;
+        for (size_t i_0__ = 0; i_0__ < x2_limit_0__; ++i_0__) {
+            x2[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "x3", "int", context__.to_vec(J));
+        validate_non_negative_index("x3", "J", J);
+        x3 = std::vector<int>(J,int(0));
+        vals_i__ = context__.vals_i("x3");
+        pos__ = 0;
+        size_t x3_limit_0__ = J;
+        for (size_t i_0__ = 0; i_0__ < x3_limit_0__; ++i_0__) {
+            x3[i_0__] = vals_i__[pos__++];
+        }
+        context__.validate_dims("data initialization", "alpha_mean", "double", context__.to_vec());
+        alpha_mean = double(0);
+        vals_r__ = context__.vals_r("alpha_mean");
+        pos__ = 0;
+        alpha_mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "alpha_sd", "double", context__.to_vec());
+        alpha_sd = double(0);
+        vals_r__ = context__.vals_r("alpha_sd");
+        pos__ = 0;
+        alpha_sd = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta_mean", "double", context__.to_vec());
+        beta_mean = double(0);
+        vals_r__ = context__.vals_r("beta_mean");
+        pos__ = 0;
+        beta_mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "beta_sd", "double", context__.to_vec());
+        beta_sd = double(0);
+        vals_r__ = context__.vals_r("beta_sd");
+        pos__ = 0;
+        beta_sd = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "gamma_mean", "double", context__.to_vec());
+        gamma_mean = double(0);
+        vals_r__ = context__.vals_r("gamma_mean");
+        pos__ = 0;
+        gamma_mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "gamma_sd", "double", context__.to_vec());
+        gamma_sd = double(0);
+        vals_r__ = context__.vals_r("gamma_sd");
+        pos__ = 0;
+        gamma_sd = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "zeta_mean", "double", context__.to_vec());
+        zeta_mean = double(0);
+        vals_r__ = context__.vals_r("zeta_mean");
+        pos__ = 0;
+        zeta_mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "zeta_sd", "double", context__.to_vec());
+        zeta_sd = double(0);
+        vals_r__ = context__.vals_r("zeta_sd");
+        pos__ = 0;
+        zeta_sd = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "lambda_mean", "double", context__.to_vec());
+        lambda_mean = double(0);
+        vals_r__ = context__.vals_r("lambda_mean");
+        pos__ = 0;
+        lambda_mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "lambda_sd", "double", context__.to_vec());
+        lambda_sd = double(0);
+        vals_r__ = context__.vals_r("lambda_sd");
+        pos__ = 0;
+        lambda_sd = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "psi_mean", "double", context__.to_vec());
+        psi_mean = double(0);
+        vals_r__ = context__.vals_r("psi_mean");
+        pos__ = 0;
+        psi_mean = vals_r__[pos__++];
+        context__.validate_dims("data initialization", "psi_sd", "double", context__.to_vec());
+        psi_sd = double(0);
+        vals_r__ = context__.vals_r("psi_sd");
+        pos__ = 0;
+        psi_sd = vals_r__[pos__++];
+
+        // validate data
+        check_greater_or_equal(function__,"J",J,0);
+        for (int k0__ = 0; k0__ < J; ++k0__) {
+            check_greater_or_equal(function__,"eff[k0__]",eff[k0__],0);
+            check_less_or_equal(function__,"eff[k0__]",eff[k0__],1);
+        }
+        for (int k0__ = 0; k0__ < J; ++k0__) {
+            check_greater_or_equal(function__,"tox[k0__]",tox[k0__],0);
+            check_less_or_equal(function__,"tox[k0__]",tox[k0__],1);
+        }
+        for (int k0__ = 0; k0__ < J; ++k0__) {
+            check_greater_or_equal(function__,"x1[k0__]",x1[k0__],0);
+            check_less_or_equal(function__,"x1[k0__]",x1[k0__],1);
+        }
+        for (int k0__ = 0; k0__ < J; ++k0__) {
+            check_greater_or_equal(function__,"x2[k0__]",x2[k0__],0);
+            check_less_or_equal(function__,"x2[k0__]",x2[k0__],1);
+        }
+        for (int k0__ = 0; k0__ < J; ++k0__) {
+            check_greater_or_equal(function__,"x3[k0__]",x3[k0__],0);
+            check_less_or_equal(function__,"x3[k0__]",x3[k0__],1);
+        }
+        check_greater_or_equal(function__,"alpha_sd",alpha_sd,0);
+        check_greater_or_equal(function__,"beta_sd",beta_sd,0);
+        check_greater_or_equal(function__,"gamma_sd",gamma_sd,0);
+        check_greater_or_equal(function__,"zeta_sd",zeta_sd,0);
+        check_greater_or_equal(function__,"lambda_sd",lambda_sd,0);
+        check_greater_or_equal(function__,"psi_sd",psi_sd,0);
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed data
+
+        // set parameter ranges
+        num_params_r__ = 0U;
+        param_ranges_i__.clear();
+        ++num_params_r__;
+        ++num_params_r__;
+        ++num_params_r__;
+        ++num_params_r__;
+        ++num_params_r__;
+        ++num_params_r__;
+    }
+
+    ~model_BebopInPeps2() { }
+
+
+    void transform_inits(const stan::io::var_context& context__,
+                         std::vector<int>& params_i__,
+                         std::vector<double>& params_r__,
+                         std::ostream* pstream__) const {
+        stan::io::writer<double> writer__(params_r__,params_i__);
+        size_t pos__;
+        (void) pos__; // dummy call to supress warning
+        std::vector<double> vals_r__;
+        std::vector<int> vals_i__;
+
+        if (!(context__.contains_r("alpha")))
+            throw std::runtime_error("variable alpha missing");
+        vals_r__ = context__.vals_r("alpha");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "alpha", "double", context__.to_vec());
+        double alpha(0);
+        alpha = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(alpha);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable alpha: ") + e.what());
+        }
+
+        if (!(context__.contains_r("beta")))
+            throw std::runtime_error("variable beta missing");
+        vals_r__ = context__.vals_r("beta");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "beta", "double", context__.to_vec());
+        double beta(0);
+        beta = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(beta);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
+        }
+
+        if (!(context__.contains_r("gamma")))
+            throw std::runtime_error("variable gamma missing");
+        vals_r__ = context__.vals_r("gamma");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "gamma", "double", context__.to_vec());
+        double gamma(0);
+        gamma = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(gamma);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable gamma: ") + e.what());
+        }
+
+        if (!(context__.contains_r("zeta")))
+            throw std::runtime_error("variable zeta missing");
+        vals_r__ = context__.vals_r("zeta");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "zeta", "double", context__.to_vec());
+        double zeta(0);
+        zeta = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(zeta);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable zeta: ") + e.what());
+        }
+
+        if (!(context__.contains_r("lambda")))
+            throw std::runtime_error("variable lambda missing");
+        vals_r__ = context__.vals_r("lambda");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "lambda", "double", context__.to_vec());
+        double lambda(0);
+        lambda = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(lambda);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable lambda: ") + e.what());
+        }
+
+        if (!(context__.contains_r("psi")))
+            throw std::runtime_error("variable psi missing");
+        vals_r__ = context__.vals_r("psi");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "psi", "double", context__.to_vec());
+        double psi(0);
+        psi = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(psi);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable psi: ") + e.what());
+        }
+
+        params_r__ = writer__.data_r();
+        params_i__ = writer__.data_i();
+    }
+
+    void transform_inits(const stan::io::var_context& context,
+                         Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                         std::ostream* pstream__) const {
+      std::vector<double> params_r_vec;
+      std::vector<int> params_i_vec;
+      transform_inits(context, params_i_vec, params_r_vec, pstream__);
+      params_r.resize(params_r_vec.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r(i) = params_r_vec[i];
+    }
+
+
+    template <bool propto__, bool jacobian__, typename T__>
+    T__ log_prob(vector<T__>& params_r__,
+                 vector<int>& params_i__,
+                 std::ostream* pstream__ = 0) const {
+
+        T__ DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+        T__ lp__(0.0);
+        stan::math::accumulator<T__> lp_accum__;
+
+        // model parameters
+        stan::io::reader<T__> in__(params_r__,params_i__);
+
+        T__ alpha;
+        (void) alpha;  // dummy to suppress unused var warning
+        if (jacobian__)
+            alpha = in__.scalar_constrain(lp__);
+        else
+            alpha = in__.scalar_constrain();
+
+        T__ beta;
+        (void) beta;  // dummy to suppress unused var warning
+        if (jacobian__)
+            beta = in__.scalar_constrain(lp__);
+        else
+            beta = in__.scalar_constrain();
+
+        T__ gamma;
+        (void) gamma;  // dummy to suppress unused var warning
+        if (jacobian__)
+            gamma = in__.scalar_constrain(lp__);
+        else
+            gamma = in__.scalar_constrain();
+
+        T__ zeta;
+        (void) zeta;  // dummy to suppress unused var warning
+        if (jacobian__)
+            zeta = in__.scalar_constrain(lp__);
+        else
+            zeta = in__.scalar_constrain();
+
+        T__ lambda;
+        (void) lambda;  // dummy to suppress unused var warning
+        if (jacobian__)
+            lambda = in__.scalar_constrain(lp__);
+        else
+            lambda = in__.scalar_constrain();
+
+        T__ psi;
+        (void) psi;  // dummy to suppress unused var warning
+        if (jacobian__)
+            psi = in__.scalar_constrain(lp__);
+        else
+            psi = in__.scalar_constrain();
+
+
+        // transformed parameters
+        vector<T__> prob_eff(6);
+        T__ prob_tox;
+        (void) prob_tox;  // dummy to suppress unused var warning
+
+        // initialize transformed variables to avoid seg fault on val access
+        stan::math::fill(prob_eff,DUMMY_VAR__);
+        stan::math::fill(prob_tox,DUMMY_VAR__);
+
+        try {
+            stan::math::assign(get_base1_lhs(prob_eff,1,"prob_eff",1), inv_logit((((alpha + (beta * 0)) + (gamma * 1)) + (zeta * 0))));
+            stan::math::assign(get_base1_lhs(prob_eff,2,"prob_eff",1), inv_logit((((alpha + (beta * 0)) + (gamma * 0)) + (zeta * 1))));
+            stan::math::assign(get_base1_lhs(prob_eff,3,"prob_eff",1), inv_logit((((alpha + (beta * 0)) + (gamma * 0)) + (zeta * 0))));
+            stan::math::assign(get_base1_lhs(prob_eff,4,"prob_eff",1), inv_logit((((alpha + (beta * 1)) + (gamma * 1)) + (zeta * 0))));
+            stan::math::assign(get_base1_lhs(prob_eff,5,"prob_eff",1), inv_logit((((alpha + (beta * 1)) + (gamma * 0)) + (zeta * 1))));
+            stan::math::assign(get_base1_lhs(prob_eff,6,"prob_eff",1), inv_logit((((alpha + (beta * 1)) + (gamma * 0)) + (zeta * 0))));
+            stan::math::assign(prob_tox, inv_logit(lambda));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+        for (int i0__ = 0; i0__ < 6; ++i0__) {
+            if (stan::math::is_uninitialized(prob_eff[i0__])) {
+                std::stringstream msg__;
+                msg__ << "Undefined transformed parameter: prob_eff" << '[' << i0__ << ']';
+                throw std::runtime_error(msg__.str());
+            }
+        }
+        if (stan::math::is_uninitialized(prob_tox)) {
+            std::stringstream msg__;
+            msg__ << "Undefined transformed parameter: prob_tox";
+            throw std::runtime_error(msg__.str());
+        }
+
+        const char* function__ = "validate transformed params";
+        (void) function__;  // dummy to suppress unused var warning
+        for (int k0__ = 0; k0__ < 6; ++k0__) {
+            check_greater_or_equal(function__,"prob_eff[k0__]",prob_eff[k0__],0);
+            check_less_or_equal(function__,"prob_eff[k0__]",prob_eff[k0__],1);
+        }
+        check_greater_or_equal(function__,"prob_tox",prob_tox,0);
+        check_less_or_equal(function__,"prob_tox",prob_tox,1);
+
+        // model body
+        try {
+            lp_accum__.add(normal_log(alpha,alpha_mean,alpha_sd));
+            lp_accum__.add(normal_log(beta,beta_mean,beta_sd));
+            lp_accum__.add(normal_log(gamma,gamma_mean,gamma_sd));
+            lp_accum__.add(normal_log(zeta,zeta_mean,zeta_sd));
+            lp_accum__.add(normal_log(lambda,lambda_mean,lambda_sd));
+            lp_accum__.add(normal_log(psi,psi_mean,psi_sd));
+            lp_accum__.add(log_joint_pdf(J,eff,tox,x1,x2,x3,alpha,beta,gamma,zeta,lambda,psi, pstream__));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        lp_accum__.add(lp__);
+        return lp_accum__.sum();
+
+    } // log_prob()
+
+    template <bool propto, bool jacobian, typename T_>
+    T_ log_prob(Eigen::Matrix<T_,Eigen::Dynamic,1>& params_r,
+               std::ostream* pstream = 0) const {
+      std::vector<T_> vec_params_r;
+      vec_params_r.reserve(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        vec_params_r.push_back(params_r(i));
+      std::vector<int> vec_params_i;
+      return log_prob<propto,jacobian,T_>(vec_params_r, vec_params_i, pstream);
+    }
+
+
+    void get_param_names(std::vector<std::string>& names__) const {
+        names__.resize(0);
+        names__.push_back("alpha");
+        names__.push_back("beta");
+        names__.push_back("gamma");
+        names__.push_back("zeta");
+        names__.push_back("lambda");
+        names__.push_back("psi");
+        names__.push_back("prob_eff");
+        names__.push_back("prob_tox");
+    }
+
+
+    void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
+        dimss__.resize(0);
+        std::vector<size_t> dims__;
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dims__.push_back(6);
+        dimss__.push_back(dims__);
+        dims__.resize(0);
+        dimss__.push_back(dims__);
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng__,
+                     std::vector<double>& params_r__,
+                     std::vector<int>& params_i__,
+                     std::vector<double>& vars__,
+                     bool include_tparams__ = true,
+                     bool include_gqs__ = true,
+                     std::ostream* pstream__ = 0) const {
+        vars__.resize(0);
+        stan::io::reader<double> in__(params_r__,params_i__);
+        static const char* function__ = "model_BebopInPeps2_namespace::write_array";
+        (void) function__; // dummy call to supress warning
+        // read-transform, write parameters
+        double alpha = in__.scalar_constrain();
+        double beta = in__.scalar_constrain();
+        double gamma = in__.scalar_constrain();
+        double zeta = in__.scalar_constrain();
+        double lambda = in__.scalar_constrain();
+        double psi = in__.scalar_constrain();
+        vars__.push_back(alpha);
+        vars__.push_back(beta);
+        vars__.push_back(gamma);
+        vars__.push_back(zeta);
+        vars__.push_back(lambda);
+        vars__.push_back(psi);
+
+        if (!include_tparams__) return;
+        // declare and define transformed parameters
+        double lp__ = 0.0;
+        (void) lp__; // dummy call to supress warning
+        stan::math::accumulator<double> lp_accum__;
+
+        vector<double> prob_eff(6, 0.0);
+        double prob_tox(0.0);
+        (void) prob_tox;  // dummy to suppress unused var warning
+
+        try {
+            stan::math::assign(get_base1_lhs(prob_eff,1,"prob_eff",1), inv_logit((((alpha + (beta * 0)) + (gamma * 1)) + (zeta * 0))));
+            stan::math::assign(get_base1_lhs(prob_eff,2,"prob_eff",1), inv_logit((((alpha + (beta * 0)) + (gamma * 0)) + (zeta * 1))));
+            stan::math::assign(get_base1_lhs(prob_eff,3,"prob_eff",1), inv_logit((((alpha + (beta * 0)) + (gamma * 0)) + (zeta * 0))));
+            stan::math::assign(get_base1_lhs(prob_eff,4,"prob_eff",1), inv_logit((((alpha + (beta * 1)) + (gamma * 1)) + (zeta * 0))));
+            stan::math::assign(get_base1_lhs(prob_eff,5,"prob_eff",1), inv_logit((((alpha + (beta * 1)) + (gamma * 0)) + (zeta * 1))));
+            stan::math::assign(get_base1_lhs(prob_eff,6,"prob_eff",1), inv_logit((((alpha + (beta * 1)) + (gamma * 0)) + (zeta * 0))));
+            stan::math::assign(prob_tox, inv_logit(lambda));
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate transformed parameters
+        for (int k0__ = 0; k0__ < 6; ++k0__) {
+            check_greater_or_equal(function__,"prob_eff[k0__]",prob_eff[k0__],0);
+            check_less_or_equal(function__,"prob_eff[k0__]",prob_eff[k0__],1);
+        }
+        check_greater_or_equal(function__,"prob_tox",prob_tox,0);
+        check_less_or_equal(function__,"prob_tox",prob_tox,1);
+
+        // write transformed parameters
+        for (int k_0__ = 0; k_0__ < 6; ++k_0__) {
+            vars__.push_back(prob_eff[k_0__]);
+        }
+        vars__.push_back(prob_tox);
+
+        if (!include_gqs__) return;
+        // declare and define generated quantities
+
+        double DUMMY_VAR__(std::numeric_limits<double>::quiet_NaN());
+        (void) DUMMY_VAR__;  // suppress unused var warning
+
+
+        // initialize transformed variables to avoid seg fault on val access
+
+        try {
+        } catch (const std::exception& e) {
+            stan::lang::rethrow_located(e,current_statement_begin__);
+            // Next line prevents compiler griping about no return
+            throw std::runtime_error("*** IF YOU SEE THIS, PLEASE REPORT A BUG ***");
+        }
+
+        // validate generated quantities
+
+        // write generated quantities
+    }
+
+    template <typename RNG>
+    void write_array(RNG& base_rng,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& params_r,
+                     Eigen::Matrix<double,Eigen::Dynamic,1>& vars,
+                     bool include_tparams = true,
+                     bool include_gqs = true,
+                     std::ostream* pstream = 0) const {
+      std::vector<double> params_r_vec(params_r.size());
+      for (int i = 0; i < params_r.size(); ++i)
+        params_r_vec[i] = params_r(i);
+      std::vector<double> vars_vec;
+      std::vector<int> params_i_vec;
+      write_array(base_rng,params_r_vec,params_i_vec,vars_vec,include_tparams,include_gqs,pstream);
+      vars.resize(vars_vec.size());
+      for (int i = 0; i < vars.size(); ++i)
+        vars(i) = vars_vec[i];
+    }
+
+    static std::string model_name() {
+        return "model_BebopInPeps2";
+    }
+
+
+    void constrained_param_names(std::vector<std::string>& param_names__,
+                                 bool include_tparams__ = true,
+                                 bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "alpha";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "beta";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "gamma";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "zeta";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "lambda";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "psi";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 6; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "prob_eff" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "prob_tox";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__) return;
+    }
+
+
+    void unconstrained_param_names(std::vector<std::string>& param_names__,
+                                   bool include_tparams__ = true,
+                                   bool include_gqs__ = true) const {
+        std::stringstream param_name_stream__;
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "alpha";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "beta";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "gamma";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "zeta";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "lambda";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "psi";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__ && !include_tparams__) return;
+        for (int k_0__ = 1; k_0__ <= 6; ++k_0__) {
+            param_name_stream__.str(std::string());
+            param_name_stream__ << "prob_eff" << '.' << k_0__;
+            param_names__.push_back(param_name_stream__.str());
+        }
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "prob_tox";
+        param_names__.push_back(param_name_stream__.str());
+
+        if (!include_gqs__) return;
+    }
+
+}; // model
+
+} // namespace
+
+
+
+
+// Code generated by Stan version 2.12
+
+#include <stan/model/model_header.hpp>
+
 namespace model_EffTox_namespace {
 
 using std::istream;

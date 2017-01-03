@@ -78,7 +78,7 @@ p
 We see that the utility curves in this particular example have curvature parameter $p \approx 0.977$.
 
 Let's say that we have treated six patients in two cohorts of three at dose-levels 1 and 2 respectively. 
-ALso, let's say we observe no toxicities and one efficacy event in cohort 1, and one toxicity and two efficacies in cohort 2. 
+Also, let's say we observe no toxicities and one efficacy event in cohort 1, and one toxicity and two efficacies in cohort 2. 
 
 ```{r}
 doses = c(1, 1, 1, 2, 2, 2)
@@ -122,12 +122,16 @@ samp <- rstan::sampling(stanmodels$EffTox, data = dat, seed = 123)
 The call to `rstan:sampling` prints logging information to the out stream.
 That has been suppressed here for brevity.
 
+```{r}
+x <- efftox_process(dat, samp, p_e = 0.1, p_t = 0.1)
+```
+
 The post-processing call to `efftox_process` extracts the most pertinent information from the sampling
 object.
 The parameters `p_e` and `p_t` are required here to calculate posterior dose acceptability.
 They were not required in the prior-to-posterior analysis, so they were not provided in `dat`.
+
 ```{r}
-x <- efftox_process(dat, samp, p_e = 0.1, p_t = 0.1)
 x$recommended_dose
 ```
 
@@ -150,13 +154,96 @@ ggplot(df, aes(x = Utility, group = Dose, col = Dose)) + geom_density()
 ```
 
 
+## Simulation
+We also provide a way to simulate EffTox trial scenarios.
+In addition to the parameters already described, the user must provide the true probabilities of efficacy and toxicity at each dose, and a vector of desired cohort sizes.
 
-## Quoting
+For illustration, we simulate Scenario 1 under contour $C_2$ in Table 1 of @Thall2014.
+They use the model above to investigate performance under true efficacy probabilities (0.2, 0.4, 0.6, 0.8, 0.9) and toxicity probabilities (0.05, 0.1, 0.15, 0.2, 0.4).
 
-Also a quote using `>`:
+The preferable dose is re-evaluated at the end of each cohort and the following cohort is treated at the dose recommended.
+We provide the desired cohort sizes as a vector of integers via the `cohort_sizes` parameter.
+In the Thall example, they treat a maximum of 39 patients in thirteen cohorts of 3, thus we use  `cohort_sizes = rep(3, 13)`.
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+Cohort sizes need not be the same.
+We can specify different cohort sizes, an option not possible in the official EffTox software.
+For instance, the investigators might want to re-evaluate the ideal dose after every patient in the early trial stages, where information is scarce.
+However, once a certain number of patient outcomes have been observed, they might prefer to revert to cohorts of three to avoid unnecessarily frequent analyses. 
+To analyse the dose after each patient for the first 9 patients, followed by ten cohorts of three, we could use `cohort_sizes = c(rep, 1, 9), rep(3, 10))`.
 
+Once again, we need a list of data items to pass to the sampler.
+
+```{r}
+dat <- list(
+  num_doses = 5,
+  real_doses = c(1, 2, 4, 6.6, 10),
+  efficacy_hurdle = 0.5,
+  toxicity_hurdle = 0.3,
+  p = p,
+  eff0 = 0.5,
+  tox1 = 0.65,
+
+  alpha_mean = -7.9593, alpha_sd = 3.5487,
+  beta_mean = 1.5482, beta_sd = 3.5018,
+  gamma_mean = 0.7367, gamma_sd = 2.5423,
+  zeta_mean = 3.4181, zeta_sd = 2.4406,
+  eta_mean = 0, eta_sd = 0.2,
+  psi_mean = 0, psi_sd = 1,
+
+  num_patients = 0,
+  doses = c(),
+  tox   = c(),
+  eff   = c()
+)
+```
+
+This is almost identical to before, but for one notable difference. 
+Now the `num_patients`, `doses`, `tox` and `eff` parameters convey that no patients have been observed.
+The `dat` parameter to `efftox_simulate` marks the point that each simulated trial will commence from.
+Thus, to simulate entire trials starting from a blank canvas, these four data-items should be set as shown.
+Notably, this provides the option of performing simulations from a partly observed trial.
+This is another feature not possible in the official EffTox software.
+
+The following code will run a simulation.
+
+```{r run_sims, eval = FALSE, cache = TRUE, results = "hide" }
+set.seed(123)
+sims = efftox_simulate(dat, num_sims = 100, first_dose = 1, p_e = 0.1, p_t = 0.1,
+                       true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
+                       true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
+                       cohort_sizes = rep(3, 13))
+```
+
+This call will take about 25 minutes to run 100 iterations.
+The process of simulating dose-finding trials (like those using EffTox) is relatively slow because the dose update decision is made at the end of each cohort.
+In the above scenario, the dose decision is performed up to 13 times per iteration.
+In the `trialr` implementation, inference is based on calls to `rstan::sampling`.
+By default in `rstan`, 4 chains are used.
+Thus, 100 itetarions of the above scenario involves $100 \times 13 \times 4 = 5,200$ chains sampled from the posterior distribution.
+Even if each call takes a fraction of a second (about 0.3s per sampled chain on my computer), the aggregate run-time is of the order of 20-30 minutes. 
+Users can alter the number of chains used points sampled by providing 
+All parameters to `efftox_simulate` beyond those named above are forwarded to the call to `rstan::sampling` via the ellipsis operator.
+Simulation is a costly exercise.
+It pays to hone parameters on small exploratory batches and commit to large jobs only when ready.
+
+
+
+
+The doses recommended at the end of each simulated trial are recorded in the `recommended_dose` slot of the simulatoins object.
+For instance, infer from the simulated trials the probability that each dose will be recommended using 
+
+```{r, eval = FALSE}
+table(sims$recommended_dose) / length(sims$recommended_dose)
+```
+
+Similarly, you can calculate the probability of each dose being given to a random patient using 
+```{r, eval = FALSE}
+table(unlist(sims$doses_given)) / length(unlist(sims$doses_given))
+```
+
+and the mean number of patients being treated at each dose-level in each simulation
+```{r, eval = FALSE}
+table(unlist(sims$doses_given)) / length(sims$recommended_dose)
+```
 
 # References
