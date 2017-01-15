@@ -98,6 +98,7 @@ apply(sapply(sims, function(x) x$Decision), 1, mean)
 # Vignettes  -------
 devtools::use_vignette("EffTox")
 devtools::use_vignette("BEBOP")
+devtools::use_vignette("HierarchicalBayesianResponse")
 
 
 

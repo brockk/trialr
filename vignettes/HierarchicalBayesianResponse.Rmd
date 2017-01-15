@@ -1,0 +1,37 @@
+---
+title: "Hierarchical Bayesian Model for Responses"
+author: "Kristian Brock"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
+bibliography: C:/Users/krist/Dropbox/Projects/library.bib
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Hierarchical Bayesian model for responses
+@Thall2003 described a method for analysing treatment effects of a single drug in several sub-types of a single disease.
+The treatment effects are assumed to be different but exchangeable and correlated.
+Observing a good efficacy in one cohort, for example, increases your expectations of efficacy in other cohorts.
+
+They demonstrate the hierarchical model in a trial with binary response outcomes and in another with continuous time-to-event outcomes.
+This vignette describes the example with binary response outcomes.
+The authors provide WinBUGS code for each example in the apppendix [Thall2003].
+We port their example to Stan and illustrate usage with the example given in the paper.
+
+
+# Implementation in `trialr`
+The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of the `standmodels` object.
+
+Statistically, the authors assume that in a trial of $k$ disease subtypes, the treatment effects are drawn from the same common normal distribution
+
+$\theta_1, ..., \theta_k \sim N(\mu, \sigma^2)$.
+
+Hyperparameters and hyperpriors are specified for $\mu$ and $\sigma$.
+
+
+
+# References

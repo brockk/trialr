@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Recap of the EffTox model
+# Recap of the EffTox model
 @Thall2004 introduced the _EffTox_ dose-finding design for scenarios where both efficacy and toxicity events should guide dose selections.
 Full details are given in @Thall2004, @Thall2006 and @Thall2014 but a brief recap summary follows.
 
@@ -58,7 +58,7 @@ It was this that prompted the author to write the open-source implementation pro
 
 TODO
 
-## EffTox in `trialr`
+# EffTox in `trialr`
 We will work with the scenario given in @Thall2014.
 This is the parameterisation loaded by default in the MD Anderson EffTox app.
 
@@ -154,7 +154,7 @@ ggplot(df, aes(x = Utility, group = Dose, col = Dose)) + geom_density()
 ```
 
 
-## Simulation
+# Simulation
 We also provide a way to simulate EffTox trial scenarios.
 In addition to the parameters already described, the user must provide the true probabilities of efficacy and toxicity at each dose, and a vector of desired cohort sizes.
 
