@@ -25,15 +25,23 @@ Get parameters for EffTox model
 Add outcomes for 3 patients: patient 1, treated at dose 1, has neither efficacy nor toxicity; patient 2, treated at dose 2, has just efficacy; and patients 3, treated at dose 3,  has both.
 
 `dat$num_patients <- 3`
+
 `dat$eff <- c(0, 1, 1)`
+
 `dat$tox <- c(0, 0, 1)`
+
 `dat$doses <- c(1, 2, 3)`
+
+
 
 Invoke RStan posterior sampling on model and data. By installing `trialr`, the EffTox model is compiled on your system and made available for sampling via the `stanmodels` object.
 
 `set.seed(123)`
+
 `samp <- rstan::sampling(stanmodels$EffTox, data = dat)`
+
 `decision <- efftox_process(dat, samp, p_e = 0.10, p_t = 0.10)`
+
 `decision$recommended_dose  # 3 is the recommended dose-level`  
 
 `round(decision$utility, 2)  #  -0.63  0.04  0.22 -0.07 -0.21`
@@ -49,6 +57,14 @@ Functions are provided to create useful plots. The five doses are shown in red. 
 
 
 ![contours](contours.png)
+
+Another way of viewing dose-utility is a density plot
+
+`efftox_utility_density_plot(samp, doses = 1:3) + ggtitle("EffTox dose utility densities")`
+
+![utility_densities](utility_densities.png)
+
+From this plot, it is perhaps not obvious that dose 3 has higher expected utility than dose 2. That is an important inference in itself. 
 
 ## Installation
 

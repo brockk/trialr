@@ -195,3 +195,22 @@ efftox_contour_plot <- function(dat,
   }
 }
 
+efftox_utility_density_plot <- function(samp, doses = NULL) {
+  u <- extract(samp, par = 'utility')[[1]]
+  df <- data.frame(Utility = as.numeric(u),
+                   D = rep(1:5, each = nrow(u))
+  )
+  df$Dose = factor(df$D)
+  if(!is.null(doses))
+    df = df %>% dplyr::filter(D %in% doses)
+  ggplot2::ggplot(df, aes(x = Utility, group = Dose, colour = Dose)) +
+    geom_density()
+}
+
+efftox_superiority <- function(samp) {
+  u <- extract(samp, par = 'utility')[[1]]
+  superiority_mat <- sapply(1:ncol(u), function(i) sapply(1:ncol(u), function(j)
+    mean(u[ , i] > u[ , j])))
+  diag(superiority_mat) <- NA
+  return(superiority_mat)
+}
