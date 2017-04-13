@@ -20,6 +20,7 @@ Trial designs currently implemented include:
 In a nutshell, Thall & Cook's EffTox is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. Refer to _Dose-Finding Based on Efficacy-Toxicity Trade-Offs_ (Thall & Cook) and _Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding_ (Thall, Herrick, Nguyen, Venier & Norris).
 
 Get parameters for EffTox model
+
 `dat <- efftox_parameters_demo()`
 
 Add outcomes for 3 patients: patient 1, treated at dose 1, has neither efficacy nor toxicity; patient 2, treated at dose 2, has just efficacy; and patients 3, treated at dose 3,  has both.
