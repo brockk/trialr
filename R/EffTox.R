@@ -18,6 +18,41 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
   return(rt$root)
 }
 
+efftox_parameters_demo <- function() {
+  # Demonstration from 'Effective sample size for computing prior
+  # hyperparameters in Bayesian phase I-II dose-finding', Thall et al., 2014
+  eff0 = 0.5
+  tox1 = 0.65
+  eff_star = 0.7
+  tox_star = 0.25
+  p = efftox_solve_p(eff0, tox1, eff_star, tox_star)
+  x <- list(
+    num_doses = 5,
+    real_doses = c(1, 2, 4, 6.6, 10),
+    efficacy_hurdle = 0.5,
+    toxicity_hurdle = 0.3,
+    p = p,
+    eff0 = eff0,
+    tox1 = tox1,
+    eff_star = 0.7,
+    tox_star = 0.25,
+
+    alpha_mean = -7.9593, alpha_sd = 3.5487,
+    beta_mean = 1.5482, beta_sd = 3.5018,
+    gamma_mean = 0.7367, gamma_sd = 2.5423,
+    zeta_mean = 3.4181, zeta_sd = 2.4406,
+    eta_mean = 0, eta_sd = 0.2,
+    psi_mean = 0, psi_sd = 1,
+
+    eff = c(),
+    tox = c(),
+    doses = c(),
+    num_patients = 0
+
+  )
+  return(x)
+}
+
 efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
   a <- ((1 - prob_eff) / (1 - eff0))
   b <- prob_tox / tox1
@@ -36,7 +71,8 @@ efftox_process <- function(dat, fit, p_e, p_t) {
   prob_acc_tox <- colMeans(rstan::extract(fit, 'prob_acc_tox')[[1]])
   post_utility <- colMeans(rstan::extract(fit, 'utility')[[1]])
   # Derived quantities
-  utility = efftox_utility(dat$p, dat$eff0, dat$tox1, prob_eff, prob_tox)
+  utility = efftox_utility(dat$p, dat$eff0, dat$tox1,
+                           prob_eff, prob_tox)
   # Dose admissibility
   dose_indices <- 1:dat$num_doses
   lowest <- min(dat$doses)
@@ -114,5 +150,48 @@ efftox_simulate <- function(dat, num_sims, first_dose, p_e, p_t,
               efficacies = efficacies,
               toxicities = toxicities,
               doses_given = doses_given))
+}
+
+efftox_get_tox <- function(eff, util, p, eff0, tox1) {
+
+  a = ((1 - eff) / (1 - eff0))
+  return(tox1 * ((1 - util)^p - a^p)^(1 / p))
+}
+
+efftox_contour_plot <- function(dat,
+                                use_ggplot = FALSE,
+                                prob_eff = NULL, prob_tox = NULL,
+                                n = 1000, util_lower = -3,
+                                util_upper = 3, util_delta = 0.2) {
+  eff_vals = seq(0, 1, length.out = n)
+  util_vals = seq(util_lower, util_upper, by = util_delta)
+
+
+  if(use_ggplot) {
+    stop('Not implemented')
+  } else {
+    plot(NULL, ylim = c(0, 1), xlim = c(0, 1), ylab = 'Prob(Toxicity)',
+         xlab = 'Prob(Efficacy)')
+
+    for(u in util_vals) {
+      tox_vals = efftox_get_tox(eff_vals, u, dat$p, dat$eff0, dat$tox1)
+      points(eff_vals, tox_vals, type = 'l', col = 'grey', lwd = 0.2)
+    }
+
+    # # Add neutral utility contour
+    tox_vals = efftox_get_tox(eff_vals, 0, dat$p, dat$eff0, dat$tox1)
+    points(eff_vals, tox_vals, type = 'l', col = 'black', lwd = 2)
+
+    # Add hinge points
+    points(dat$eff0, 0, col = 'blue', pch = 2)
+    points(1, dat$tox1, col = 'blue', pch = 2)
+    points(dat$eff_star, dat$tox_star, col = 'blue', pch = 2)
+
+    # # Add provided eff & tox points
+    if(!is.null(prob_eff) & !is.null(prob_tox)) {
+      points(prob_eff, prob_tox, col = 'red',
+             pch = as.character(1:length(prob_eff)))
+    }
+  }
 }
 

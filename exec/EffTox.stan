@@ -1,3 +1,7 @@
+// Dose-Finding Based on Efficacy-Toxicity Trade-Offs, by Thall, Cook
+// Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding,
+//  by Thall, Herrick, Nguyen, Venier, Norris
+
 functions {
   real log_joint_pdf(real[] coded_doses, real[] coded_doses_squ,
                      int num_patients, int[] eff, int[] tox, int[] doses,

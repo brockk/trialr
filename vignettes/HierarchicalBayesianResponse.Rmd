@@ -28,18 +28,24 @@ The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of th
 
 Statistically, the authors assume that in a trial of $k$ disease subtypes, the treatment effects are drawn from the same common normal distribution
 
-$\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)$.
+$\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)$
 
 As is the convention in BUGS, the authors define normal distributions by a precision parameter $\tau$ as opposed to the standard deviation parameter $\sigma$ used here.
 We have re-specified the model to comply with the Stan convention of using standard deviation.
 The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$ that becomes an inverse gamma hyperprior on $\sigma$.
 
 We observe $x_i$ responses in $n_i$ patients in disease sub-type $i$.
-Each $x_i$ is assumed to be binomially distributed with success parameter $\text{logit}(\rho_i)$.
+The rate of response in subtype $i$ is $p_i = \text{logit}^{-1}(\rho_i)$.
+Each $x_i$ is assumed to be binomially distributed with success parameter $p_i$.
 In Stan, that relationship is conveyed by
 `x ~ binomial_logit(n, rho);`
 
-The treatment is adjudged to be worthy of further investigation in cohort $i$ if
+The treatment is judged to be worthy of further investigation in cohort $i$ if
+
+$\text{Pr}\left\{ p_i > \theta | \mathcal{D} \right\} > q$
+
+where $\theta$ is the minimum required response rate, and $q$ is the required certainty to approve.
+In their provided example, @Thall2003 use $\theta = 0.3$ and $q=?$.
 
 
 
