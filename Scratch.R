@@ -5,12 +5,13 @@
 # install.packages('Rcpp')
 # install.packages('rstantools')
 # install.packages('gtools')
+# install.packages('devtools')
 
 # library(rstan)
 # library(rstantools)
 # library(Rcpp)
 # library(trialr)
-
+devtools::load_all()
 
 # EffTox -------
 # Get parameters for EffTox model
@@ -23,12 +24,13 @@ dat$tox <- c(0, 0, 1)
 dat$doses <- c(1, 2, 3)
 
 # Invoke RStan posterior sampling on model and data
-set.seed(123)
-samp <- rstan::sampling(stanmodels$EffTox, data = dat)
+samp <- rstan::sampling(stanmodels$EffTox, data = dat, seed = 123)
 decision <- efftox_process(dat, samp, p_e = 0.10, p_t = 0.10)
 decision
-decision$recommended_dose  # 2
-round(decision$utility, 2)  #  -0.63  0.04  0.22 -0.07 -0.21
+decision$recommended_dose  # 3
+round(decision$utility, 2)
+#  -0.64  0.04  0.25 -0.05 -0.20 on Win
+#  -0.64  0.05  0.26 -0.04 -0.19 on Mac
 plot(samp, par = 'utility') + ggtitle('Utility of doses after outcomes: 1NBE')
 
 efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
@@ -105,6 +107,7 @@ apply(sapply(sims, function(x) x$Decision), 1, mean)
 devtools::use_vignette("EffTox")
 devtools::use_vignette("BEBOP")
 devtools::use_vignette("HierarchicalBayesianResponse")
+devtools::build_vignettes()
 
 
 
