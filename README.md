@@ -1,6 +1,6 @@
 # trialr - Clinical Trial Designs in R & Stan
 
-This R package implements clinical trial designs in R via RStan. 
+This R package implements clinical trial designs in R and RStan. 
 
 RStan is the R connector of the [Stan](http://mc-stan.org/) project. Stan offers full Bayesian statistical inference so the designs implemented here tend to be Bayesian in nature. Furthermore, there is a preponderance of early-phase clinical trial designs because a) these are the designs that tend to use Bayesian methodology; and b) this is my research area.
 
@@ -8,7 +8,7 @@ Functions are provided to invoke a trial analysis on observed outcomes and perfo
 
 Trial designs currently implemented include:
 - EffTox, by Thall &amp; Cook. 
-- Hierarchical Bayesian model for binary response outcomes, by Thall et al. 
+- a Hierarchical Bayesian model for binary response outcomes, by Thall, Wathen, Bekele, Champlin, Baker & Benjamin (2003)
 - Bayesian Evaluation of Bivariate Binary Outcomes with Predictive Information (BEBOP), by Brock et al.
 
 ## Usage

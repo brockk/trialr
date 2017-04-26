@@ -108,6 +108,10 @@ devtools::use_vignette("EffTox")
 devtools::use_vignette("BEBOP")
 devtools::use_vignette("HierarchicalBayesianResponse")
 devtools::build_vignettes()
+# Documentation
+roxygen2::roxygenise()
 
-
+# Help examples ----
+help(efftox_solve_p)
+# devtools::dev_help(efftox_solve_p)
 

@@ -15,16 +15,16 @@ vignette: >
 # Hierarchical Bayesian model for responses
 @Thall2003 described a method for analysing treatment effects of a common intervention in several sub-types of a single disease.
 The treatment effects are assumed to be different but exchangeable and correlated.
-Observing a good efficacy in one cohort, for example, increases one's expectations of efficacy in other cohorts.
+Observing good efficacy in one cohort, for example, increases one's expectations of efficacy in other cohorts.
 
 They demonstrate the hierarchical model in a trial with binary response outcomes and in another with time-to-event outcomes.
-This vignette describes the example with binary response outcomes.
-The authors provide WinBUGS code for each example in the apppendix [Thall2003].
+This vignette describes the sarcoma example with binary response outcomes.
+The authors provide WinBUGS code for each example in the appendix of their paper [@Thall2003].
 We port their example to Stan and illustrate usage with the example given in the paper.
 
 
 # Implementation in `trialr`
-The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of the `standmodels` object.
+The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of the `stanmodels` object.
 
 Statistically, the authors assume that in a trial of $k$ disease subtypes, the treatment effects are drawn from the same common normal distribution
 
@@ -32,12 +32,12 @@ $\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)$
 
 As is the convention in BUGS, the authors define normal distributions by a precision parameter $\tau$ as opposed to the standard deviation parameter $\sigma$ used here.
 We have re-specified the model to comply with the Stan convention of using standard deviation.
-The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$ that becomes an inverse gamma hyperprior on $\sigma$.
+The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$, equivalent to an inverse gamma hyperprior on $\sigma$.
 
 We observe $x_i$ responses in $n_i$ patients in disease sub-type $i$.
 The rate of response in subtype $i$ is $p_i = \text{logit}^{-1}(\rho_i)$.
 Each $x_i$ is assumed to be binomially distributed with success parameter $p_i$.
-In Stan, that relationship is conveyed by
+In Stan, that relationship is described as
 `x ~ binomial_logit(n, rho);`
 
 The treatment is judged to be worthy of further investigation in cohort $i$ if
