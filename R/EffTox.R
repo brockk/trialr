@@ -354,13 +354,66 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
   return(tox1 * ((1 - util)^p - a^p)^(1 / p))
 }
 
+#' @title Plot EffTox utility contours
+#'
+#' @description Plot EffTox utility contours. The probability of efficacy is
+#' on the x-axis and toxicity on the y-axis. The zero-utility curve is plotted
+#' bolder. The three "hinge points" are plotted as blue triangles. Optional
+#' Prob(Efficacy) vs Prob(Toxicity) points can be added; these are shown as
+#' red numerals, enumerated in the order provided.
+#'
+#' @param dat An instance of \code{\link{efftox_params}}, a list of EffTox
+#' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
+#' @param use_ggplot logical, TRUE to use ggplot2. Defaults to FALSE to use
+#'  standard R graphics.
+#' @param prob_eff an optional vector of numbers between 0 and 1, containing the
+#' efficacy probabilities of extra points to add to the plot as points,
+#' e.g. the posterior mean efficacy probabilities of the doses under
+#' investigation. Paired with prob_tox, thus they should be the same length.
+#' @param prob_tox an optional vector of numbers between 0 and 1, containing the
+#' toxicity probabilities of extra points to add to the plot as points,
+#' e.g. the posterior mean toxicity probabilities of the doses under
+#' investigation. Paired with prob_eff, thus they should be the same length.
+#' @param num_points integer for number of points to calculate on each curve.
+#' The default is 1000 and this should be plenty.
+#' @param util_vals A contour is plotted for each of these utility values.
+#' The default is contours spaced by 0.2 between from -3 and 3,
+#' i.e. \code{seq(-3, 3, by = 0.2)}.
+#'
+#' @return if \code{use_ggplot = TRUE}, an instance of \code{ggplot}; else no
+#' object is returned. Omit assignment in either case to just view the plot.
+#' @export
+#'
+#' @examples
+#' dat <- efftox_parameters_demo()
+#' efftox_contour_plot(dat)
+#' # Add posterior beliefs
+#' dat$num_patients <- 3
+#' dat$eff <- c(0, 1, 1)
+#' dat$tox <- c(0, 0, 1)
+#' dat$doses <- c(1, 2, 3)
+#' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
+#' decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
+#' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
+#' title('EffTox utility contours')
+#' # The same with ggplot2
+#' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
+#' use_ggplot = TRUE) + ggtitle('EffTox utility contours')
+#'
+#' @seealso
+#' \code{\link{efftox_params}}
+#'
+#' \code{\link{efftox_parameters_demo}}
 efftox_contour_plot <- function(dat,
                                 use_ggplot = FALSE,
                                 prob_eff = NULL, prob_tox = NULL,
                                 num_points = 1000,
                                 util_vals = seq(-3, 3, by = 0.2)) {
   eff_vals = seq(0, 1, length.out = num_points)
-  #util_vals = seq(util_lower, util_upper, by = util_delta)
+
+  if(!is.null(prob_eff) & !is.null(prob_tox))
+    if(length(prob_eff) != length(prob_tox))
+      stop('prob_eff and prob_tox should be the same length')
 
   if(use_ggplot) {
     tox_vals = sapply(util_vals, function(u) efftox_get_tox(eff_vals, u, dat$p,
@@ -371,29 +424,35 @@ efftox_contour_plot <- function(dat,
 
     plt <- ggplot2::ggplot(df, ggplot2::aes(x = eff_vals, y = tox_vals,
                             group = as.factor(util_vals))) +
-      ggplot2::geom_line() +
+      ggplot2::geom_line(size = 0.5, alpha = 0.25) +
       ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
-      ggplot2::xlab('Prob(Efficacy)') + ggplot2::ylab('Prob(Toxicity')
+      ggplot2::xlab('Prob(Efficacy)') + ggplot2::ylab('Prob(Toxicity)')
 
     # Add neutral utility contour
     tox_vals = efftox_get_tox(eff_vals, 0, dat$p, dat$eff0, dat$tox1)
     df2 = data.frame(eff_vals, tox_vals, util_vals = 0)
-    plt <- plt + geom_line(data = df2, size = 2)
+    plt <- plt + ggplot2::geom_line(data = df2, size = 1)
 
     # Add hinge points
     df3 <- data.frame(prob_eff = c(dat$eff0, 1, dat$eff_star),
                       prob_tox = c(0, dat$tox1, dat$tox_star))
-    plt <- plt + geom_point(data = df3, aes(x = prob_eff, y = prob_tox, group = 1),
-                            col = 'blue', shape = 17, size = 4)
+    plt <- plt + ggplot2::geom_point(data = df3, ggplot2::aes(x = prob_eff,
+                                                              y = prob_tox,
+                                                              group = 1),
+                                     col = 'blue', shape = 24, size = 3)
 
     # Add provided eff & tox points
     if(!is.null(prob_eff) & !is.null(prob_tox)) {
       # prob_eff = decision$prob_eff
       # prob_tox = decision$prob_tox
-      df4 <- data.frame(prob_eff, prob_tox, dl = as.character(1:length(prob_eff)))
-      plt <- plt + geom_point(data = df4, aes(x = prob_eff, y = prob_tox, group = 1, shape=dl),
-                              col = 'red', size = 4)
+      df4 <- data.frame(prob_eff, prob_tox, dl = 1:length(prob_eff))
+      plt <- plt + ggplot2::geom_text(data = df4, ggplot2::aes(x = prob_eff,
+                                                               y = prob_tox,
+                                                               group = 1,
+                                                               label = dl),
+                                      col = 'red', size = 4)
     }
+    return(plt)
   } else {
     plot(NULL, ylim = c(0, 1), xlim = c(0, 1), ylab = 'Prob(Toxicity)',
          xlab = 'Prob(Efficacy)')
@@ -420,7 +479,39 @@ efftox_contour_plot <- function(dat,
   }
 }
 
+
+#' @title Plot densities of EffTox dose utilities
+#'
+#' @description Plot densities of EffTox dose utilities. Optionally plot only a
+#' subset of the doses by specifying the \code{doses} parameter. This function
+#' requires ggplot2 be installed.
+#'
+#' @param fit An instance of \code{rstan::stanmodel}, derived by sampling an
+#' EffTox model. Use \code{stan::sampling(stanmodels$EffTox, data = dat)}.
+#' @param doses optional, vector of integer dose-levels to plot. E.g. to plot
+#' only dose-levels 1, 2 & 3 (and suppress the plotting of any other doses), use
+#' \code{doses = 1:3}
+#'
+#' @return an instance of \code{ggplot}. Omit assignment to just view the plot.
+#' @export
+#'
+#' @note This function requires that ggplot2 be installed.
+#'
+#' @examples
+#' dat <- efftox_parameters_demo()
+#' dat$num_patients <- 3
+#' dat$eff <- c(0, 1, 1)
+#' dat$tox <- c(0, 0, 1)
+#' dat$doses <- c(1, 2, 3)
+#' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
+#' efftox_utility_density_plot(fit) + ggtitle('My doses')  # Bit too busy?
+#' efftox_utility_density_plot(fit, doses = 1:3) + ggtitle('My doses') # Clearer
+#'
+#' @seealso
 efftox_utility_density_plot <- function(fit, doses = NULL) {
+  if(!('ggplot2' %in% installed.packages()))
+    stop('THis function requires ggplot2 be installed.')
+
   u <- rstan::extract(fit, par = 'utility')[[1]]
   df <- data.frame(Utility = as.numeric(u),
                    D = rep(1:5, each = nrow(u))
@@ -428,9 +519,11 @@ efftox_utility_density_plot <- function(fit, doses = NULL) {
   df$Dose = factor(df$D)
   if(!is.null(doses))
     df = df[df$D %in% doses, ]
-  ggplot2::ggplot(df, ggplot2::aes(x = Utility, group = Dose, colour = Dose)) +
-    ggplot2::geom_density()
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = Utility, group = Dose,
+                                        colour = Dose)) + ggplot2::geom_density()
+  return(p)
 }
+
 
 #' @title Get dose-superiority matrix in EffTox
 #'

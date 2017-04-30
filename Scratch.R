@@ -14,6 +14,7 @@
 devtools::load_all()
 
 # EffTox -------
+help("efftox_analysis")
 # Get parameters for EffTox model
 dat <- efftox_parameters_demo()
 # Add outcomes for 3 patients: Neither event in patient 1; both efficacy and
@@ -33,11 +34,17 @@ round(decision$utility, 2)
 #  -0.64  0.05  0.26 -0.04 -0.19 on Mac
 plot(samp, par = 'utility') + ggtitle('Utility of doses after outcomes: 1NBE')
 
+# Contour plot
 efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
 title('EffTox utility contours')
+# Or
+efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
+                    use_ggplot = TRUE) + ggtitle('EffTox utility contours')
 
+# Utility density plot
 efftox_utility_density_plot(samp, doses = 1:3) +
   ggtitle("EffTox dose utility densities")
+
 
 (sup_mat <- efftox_superiority(samp))
 # Probability that utility of the dose in column i exceeds the utility of the
@@ -65,19 +72,18 @@ table(unlist(sims$doses_given)) / length(sims$recommended_dose)
 
 
 # ThallHierarchicalBinary -------
-dat <- list(
-  m = 10,
-  x = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0),  # Num responses, by cohort
-  n = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0),  # Num patients, by cohort
-  target_resp = 0.3,
-  mu_mean = -1.3863,
-  mu_sd = sqrt(1 / 0.1),
-  tau_alpha = 2,  # Thall et al. give a prior for the precision (tau) of rho,
-  # as was the custom in BUGS.
-  tau_beta = 20   # I use stdev (sigma) but retain his prior.
-)
+help("thallhierarchicalbinary_parameters_demo")
+dat <- thallhierarchicalbinary_parameters_demo()
 samp = rstan::sampling(stanmodels$ThallHierachicalBinary, data = dat)
-plot(samp)
+plot(samp, pars = 'p')
+plot(samp, pars = 'pg')
+# Posterior Prob(Response)...
+# In group 4
+ggplot(data.frame(ProbResponse = extract(samp, 'p[4]')[[1]]),
+       aes(x = ProbResponse)) + geom_density() + ggtitle('Prob(Response) in Sub-group 4')
+
+ggplot(data.frame(ProbResponse = extract(samp, 'p[3]')[[1]]),
+       aes(x = ProbResponse)) + geom_density() + ggtitle('Prob(Response) in Sub-group 3')
 
 
 # BEBOP in PePS2 ------
