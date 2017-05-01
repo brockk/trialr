@@ -23,8 +23,9 @@ being probably tolerable; a number between 0 and 1.}
 An instance of \code{\link{efftox_analysis}}.
 }
 \description{
-Process RStan samples from an EffTox model to make inferences about
-dose-acceptability, dose-utility and which dose should be recommended next.
+Process RStan samples from an EffTox model to make inferences
+about dose-acceptability, dose-utility and which dose should be recommended
+next.
 }
 \examples{
 dat <- efftox_parameters_demo()

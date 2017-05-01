@@ -7,7 +7,7 @@
 efftox_parameters_demo()
 }
 \value{
-a \code{list} of parameters
+a \code{list} of parameters, described in \link{\code{efftox_params}}
 }
 \description{
 Get parameters to run the EffTox demo. These match those used

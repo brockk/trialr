@@ -89,14 +89,18 @@ ggplot(data.frame(ProbResponse = extract(samp, 'p[3]')[[1]]),
 # BEBOP in PePS2 ------
 set.seed(123)
 dat <- peps2_get_data(num_patients = 60,
-                      prob_eff = rep(0.3, 6),
-                      prob_tox = 0.1,
-                      eff_tox_or = 1.0)
+                      prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
+                      prob_tox = rep(0.1, 6),
+                      #prob_tox = c(0.9, 0.15, 0.1, 0.9, 0.1, 0.1),
+                      eff_tox_or = rep(1, 6))
 samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
-plot(samp)
-d <- peps2_trial_decision(dat, samp)
-d$Decision
-dat$cohort_eff
+plot(samp, pars = 'prob_eff')
+decision <- peps2_process(dat, samp)
+decision$Accept
+decision$ProbEff
+decision$ProbAccEff
+decision$ProbTox
+decision$ProbAccTox
 
 # Simulate
 peps2_sc_1 <- function() peps2_get_data(num_patients = 60,
@@ -105,8 +109,8 @@ peps2_sc_1 <- function() peps2_get_data(num_patients = 60,
                                         eff_tox_or = 1.0)
 set.seed(123)
 sims <- peps2_run_sims(num_sims = 10, sample_data_func = peps2_sc_1,
-                       summarise_func = peps2_trial_decision)
-apply(sapply(sims, function(x) x$Decision), 1, mean)
+                       summarise_func = peps2_process)
+apply(sapply(sims, function(x) x$Accept), 1, mean)
 
 
 # Vignettes  -------
@@ -118,6 +122,9 @@ devtools::build_vignettes()
 roxygen2::roxygenise()
 
 # Help examples ----
-help(efftox_solve_p)
+help("efftox_analysis")
+help("efftox_contour_plot")
+help("peps2_process")
+help("peps2_run_sims")
 # devtools::dev_help(efftox_solve_p)
 

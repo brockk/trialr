@@ -56,7 +56,7 @@ efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_
 title('EffTox utility contours')
 # The same with ggplot2
 efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
-use_ggplot = TRUE) + ggtitle('EffTox utility contours')
+                    use_ggplot = TRUE) + ggtitle('EffTox utility contours')
 
 }
 \seealso{

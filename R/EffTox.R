@@ -47,7 +47,7 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 #' @description Get parameters to run the EffTox demo. These match those used
 #' to demonstrate EffTox in Thall et al. 2014.
 #'
-#' @return a \code{list} of parameters
+#' @return a \code{list} of parameters, described in \link{\code{efftox_params}}
 #' @export
 #'
 #' @examples
@@ -129,8 +129,9 @@ efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
 
 #' @title Process RStan samples from an EffTox model
 #'
-#' @description Process RStan samples from an EffTox model to make inferences about
-#' dose-acceptability, dose-utility and which dose should be recommended next.
+#' @description Process RStan samples from an EffTox model to make inferences
+#' about dose-acceptability, dose-utility and which dose should be recommended
+#' next.
 #'
 #' @param dat An instance of \code{\link{efftox_params}}, a list of EffTox
 #' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
@@ -212,7 +213,7 @@ efftox_process <- function(dat, fit, p_e, p_t) {
 #' dat$doses <- c(1, 2, 3)
 #' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
 #' decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
-#' df = efftox_analysis_to_df(decision)
+#' df <- efftox_analysis_to_df(decision)
 #' round(df$Utility, 2) == c(-0.64, 0.04, 0.24, -0.05, -0.19)
 #'
 efftox_analysis_to_df <- function(x) {
@@ -260,11 +261,11 @@ efftox_analysis_to_df <- function(x) {
 #' dat <- efftox_parameters_demo()
 #' set.seed(123)
 #' # Let's say we want to use only 2 chains. Extra args are passed to stan
-#' sims = efftox_simulate(dat, num_sims = 2, first_dose = 1, p_e, p_t,
-#'                        true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
-#'                        true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
-#'                        cohort_sizes = rep(3, 13),
-#'                        chains = 2)
+#' sims <- efftox_simulate(dat, num_sims = 2, first_dose = 1, p_e, p_t,
+#'                         true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
+#'                         true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
+#'                         cohort_sizes = rep(3, 13),
+#'                         chains = 2)
 #' table(sims$recommended_dose) / length(sims$recommended_dose)
 #' table(unlist(sims$doses_given)) / length(unlist(sims$doses_given))
 #' table(unlist(sims$doses_given)) / length(sims$recommended_dose)
@@ -398,7 +399,7 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
 #' title('EffTox utility contours')
 #' # The same with ggplot2
 #' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
-#' use_ggplot = TRUE) + ggtitle('EffTox utility contours')
+#'                     use_ggplot = TRUE) + ggtitle('EffTox utility contours')
 #'
 #' @seealso
 #' \code{\link{efftox_params}}
@@ -507,7 +508,6 @@ efftox_contour_plot <- function(dat,
 #' efftox_utility_density_plot(fit) + ggtitle('My doses')  # Bit too busy?
 #' efftox_utility_density_plot(fit, doses = 1:3) + ggtitle('My doses') # Clearer
 #'
-#' @seealso
 efftox_utility_density_plot <- function(fit, doses = NULL) {
   if(!('ggplot2' %in% installed.packages()))
     stop('THis function requires ggplot2 be installed.')
