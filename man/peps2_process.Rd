@@ -71,7 +71,7 @@ decision$ProbEff  # The probability of efficacy is driving that decision
 
 }
 \seealso{
-\link{\code{peps2_params}}
+\code{\link{peps2_params}}
 
-\link{\code{peps2_get_data}}
+\code{\link{peps2_get_data}}
 }

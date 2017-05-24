@@ -43,9 +43,9 @@ apply(sapply(sims, function(x) x$Accept), 1, mean)  # 0.5 0.7 1.0 0.2 0.5 1.0
 
 }
 \seealso{
-\link{\code{peps2_params}}
+\code{\link{peps2_params}}
 
-\link{\code{peps2_get_data}}
+\code{\link{peps2_get_data}}
 
-\link{\code{peps2_process}}
+\code{\link{peps2_process}}
 }

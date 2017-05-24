@@ -7,7 +7,7 @@
 efftox_parameters_demo()
 }
 \value{
-a \code{list} of parameters, described in \link{\code{efftox_params}}
+a \code{list} of parameters, described in \code{efftox_params}
 }
 \description{
 Get parameters to run the EffTox demo. These match those used
@@ -24,5 +24,5 @@ Thall et al. 2014, Effective sample size for computing prior
 hyperparameters in Bayesian phase I-II dose-finding
 }
 \seealso{
-\link{\code{efftox_params}}
+\code{\link{efftox_params}}
 }

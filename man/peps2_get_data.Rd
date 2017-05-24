@@ -71,7 +71,7 @@ association parameter.}
 order given above; a vector of numbers between 0 and 1}
 }
 \value{
-a \code{list} of parameters, described in \link{\code{peps2_params}}
+a \code{list} of parameters, described in \code{peps2_params}
 }
 \description{
 Get data to run the BEBOP model in the PePS2 trial. The trial
@@ -104,5 +104,5 @@ samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
 
 }
 \seealso{
-\link{\code{peps2_params}}
+\code{\link{peps2_params}}
 }

@@ -4,7 +4,7 @@
 \alias{efftox_process}
 \title{Process RStan samples from an EffTox model}
 \usage{
-efftox_process(dat, fit, p_e, p_t)
+efftox_process(dat, fit)
 }
 \arguments{
 \item{dat}{An instance of \code{\link{efftox_params}}, a list of EffTox
@@ -12,12 +12,6 @@ parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.}
 
 \item{fit}{An instance of \code{rstan::stanmodel}, derived by sampling an
 EffTox model. Use \code{stan::sampling(stanmodels$EffTox, data = dat)}.}
-
-\item{p_e}{Certainty required to infer a dose is acceptable with regards to
-being probably efficacious; a number between 0 and 1.}
-
-\item{p_t}{Certainty required to infer a dose is acceptable with regards to
-being probably tolerable; a number between 0 and 1.}
 }
 \value{
 An instance of \code{\link{efftox_analysis}}.
@@ -34,7 +28,7 @@ dat$eff <- c(0, 1, 1)
 dat$tox <- c(0, 0, 1)
 dat$doses <- c(1, 2, 3)
 fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
+decision <- efftox_process(dat, fit)
 decision$recommended_dose == 3
 }
 \seealso{

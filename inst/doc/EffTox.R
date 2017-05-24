@@ -12,6 +12,8 @@ dat <- list(
   real_doses = c(1, 2, 4, 6.6, 10),
   efficacy_hurdle = 0.5,
   toxicity_hurdle = 0.3,
+  p_e = 0.1,
+  p_t = 0.1,
   p = p,
   eff0 = 0.5,
   tox1 = 0.65,
@@ -41,7 +43,7 @@ dat$num_patients = 6
 samp <- rstan::sampling(stanmodels$EffTox, data = dat, seed = 123)
 
 ## ------------------------------------------------------------------------
-x <- efftox_process(dat, samp, p_e = 0.1, p_t = 0.1)
+x <- efftox_process(dat, samp)
 
 ## ------------------------------------------------------------------------
 x$recommended_dose
@@ -69,6 +71,8 @@ dat <- list(
   real_doses = c(1, 2, 4, 6.6, 10),
   efficacy_hurdle = 0.5,
   toxicity_hurdle = 0.3,
+  p_e = 0.1,
+  p_t = 0.1,
   p = p,
   eff0 = 0.5,
   tox1 = 0.65,
@@ -87,14 +91,6 @@ dat <- list(
   eff   = c(),
   num_patients = 0
 )
-
-## ----run_sims, eval = FALSE, cache = TRUE, results = "hide"--------------
-#  set.seed(123)
-#  sims = efftox_simulate(dat, num_sims = 100, first_dose = 1,
-#                         p_e = 0.1, p_t = 0.1,
-#                         true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
-#                         true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
-#                         cohort_sizes = rep(3, 13))
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  table(sims$recommended_dose) / length(sims$recommended_dose)

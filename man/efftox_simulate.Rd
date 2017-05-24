@@ -4,8 +4,8 @@
 \alias{efftox_simulate}
 \title{Run EffTox simulations}
 \usage{
-efftox_simulate(dat, num_sims, first_dose, p_e, p_t, true_eff, true_tox,
-  cohort_sizes, ...)
+efftox_simulate(dat, num_sims, first_dose, true_eff, true_tox, cohort_sizes,
+  ...)
 }
 \arguments{
 \item{dat}{An instance of \code{\link{efftox_params}}, a list of EffTox
@@ -15,12 +15,6 @@ parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.}
 
 \item{first_dose}{integer, the dose-level to give to patient 1, e.g. 1 for
 the lowest dose.}
-
-\item{p_e}{Certainty required to infer a dose is acceptable with regards to
-being probably efficacious; a number between 0 and 1.}
-
-\item{p_t}{Certainty required to infer a dose is acceptable with regards to
-being probably tolerable; a number between 0 and 1.}
 
 \item{true_eff}{the true probabilities of efficacy at the doses under
 investigation; a vector of numbers between 0 and 1.}

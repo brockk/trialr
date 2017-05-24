@@ -23,9 +23,9 @@ $x_i = \log{y_i} - \sum_{j=1}^n \frac{\log{y_j}}{n}$
 
 The codified doses are used as the sole explanatory variables in logit models for the marginal probabilities of toxicity and efficacy:
 
-$\pi_T = \alpha + \beta x$
+$\text{logit } \pi_T = \alpha + \beta x$
 
-$\pi_E = \gamma + \zeta x + \eta x^2$
+$\text{logit } \pi_E = \gamma + \zeta x + \eta x^2$
 
 and the joint probability is modelled using the function
 
@@ -102,6 +102,8 @@ dat <- list(
   real_doses = c(1, 2, 4, 6.6, 10),
   efficacy_hurdle = 0.5,
   toxicity_hurdle = 0.3,
+  p_e = 0.1,
+  p_t = 0.1,
   p = p,
   eff0 = 0.5,
   tox1 = 0.65,
@@ -146,13 +148,11 @@ The call to `rstan:sampling` prints logging information to the standard out stre
 It has been suppressed here for brevity.
 
 ```{r}
-x <- efftox_process(dat, samp, p_e = 0.1, p_t = 0.1)
+x <- efftox_process(dat, samp)
 ```
 
 The call to `efftox_process` extracts the most pertinent information from the sampling
 object.
-The parameters `p_e` and `p_t` are required here to calculate posterior dose acceptability.
-They were not required in the prior-to-posterior analysis, so they were not provided in `dat`.
 
 ```{r}
 x$recommended_dose
@@ -231,6 +231,8 @@ dat <- list(
   real_doses = c(1, 2, 4, 6.6, 10),
   efficacy_hurdle = 0.5,
   toxicity_hurdle = 0.3,
+  p_e = 0.1,
+  p_t = 0.1,
   p = p,
   eff0 = 0.5,
   tox1 = 0.65,
@@ -262,7 +264,6 @@ The following code will run a simulation.
 ```{r run_sims, eval = FALSE, cache = TRUE, results = "hide" }
 set.seed(123)
 sims = efftox_simulate(dat, num_sims = 100, first_dose = 1, 
-                       p_e = 0.1, p_t = 0.1,
                        true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
                        true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
                        cohort_sizes = rep(3, 13))

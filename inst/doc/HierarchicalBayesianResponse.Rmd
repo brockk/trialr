@@ -15,16 +15,16 @@ vignette: >
 # Hierarchical Bayesian model for responses
 @Thall2003 described a method for analysing treatment effects of a common intervention in several sub-types of a single disease.
 The treatment effects are assumed to be different but exchangeable and correlated.
-Observing a good efficacy in one cohort, for example, increases one's expectations of efficacy in other cohorts.
+Observing good efficacy in one cohort, for example, increases one's expectations of efficacy in other cohorts.
 
 They demonstrate the hierarchical model in a trial with binary response outcomes and in another with time-to-event outcomes.
-This vignette describes the example with binary response outcomes.
-The authors provide WinBUGS code for each example in the apppendix [Thall2003].
-We port their example to Stan and illustrate usage with the example given in the paper.
+This vignette describes the sarcoma example with binary response outcomes.
+The authors provide WinBUGS code in the appendix of their paper [@Thall2003].
+We port their model to Stan and illustrate usage with the example given in their paper.
 
 
 # Implementation in `trialr`
-The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of the `standmodels` object.
+The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of the `stanmodels` object.
 
 Statistically, the authors assume that in a trial of $k$ disease subtypes, the treatment effects are drawn from the same common normal distribution
 
@@ -32,12 +32,12 @@ $\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)$
 
 As is the convention in BUGS, the authors define normal distributions by a precision parameter $\tau$ as opposed to the standard deviation parameter $\sigma$ used here.
 We have re-specified the model to comply with the Stan convention of using standard deviation.
-The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$ that becomes an inverse gamma hyperprior on $\sigma$.
+The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$, equivalent to an inverse gamma hyperprior on $\sigma$.
 
 We observe $x_i$ responses in $n_i$ patients in disease sub-type $i$.
-The rate of response in subtype $i$ is $p_i = \text{logit}^{-1}(\rho_i)$.
+The rate of response in subtype $i$ is modelled as $p_i = \text{logit}^{-1}(\rho_i)$.
 Each $x_i$ is assumed to be binomially distributed with success parameter $p_i$.
-In Stan, that relationship is conveyed by
+In Stan, that relationship is described as
 `x ~ binomial_logit(n, rho);`
 
 The treatment is judged to be worthy of further investigation in cohort $i$ if
@@ -45,7 +45,62 @@ The treatment is judged to be worthy of further investigation in cohort $i$ if
 $\text{Pr}\left\{ p_i > \theta | \mathcal{D} \right\} > q$
 
 where $\theta$ is the minimum required response rate, and $q$ is the required certainty to approve.
-In their provided example, @Thall2003 use $\theta = 0.3$ and $q=?$.
+In their provided example, @Thall2003 use $\theta = 0.3$.
+
+# Example
+We can learn about the parameters required by the `ThallHierarchicalBinary` model using
+```{r message=FALSE}
+library(trialr)
+help(thallhierarchicalbinary_parameters)
+```
+
+We can get an example using
+```{r}
+dat <- thallhierarchicalbinary_parameters_demo()
+dat
+```
+
+We have outcomes in 10 disease subgroups.
+The number of responses is stored in `x` and the number of patients in `n`.
+There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.
+
+We invoke the model by calling `rstan::sampling` on the included `ThallHierachicalBinary` model.
+We set the seed for reproducble randomness.
+```{r, results = "hide"}
+samp <- rstan::sampling(stanmodels$ThallHierachicalBinary, data = dat, 
+                        seed = 123)
+```
+
+The probability that the efficacy probability in each subgroup exceeds the threshold is stored as `pg`.
+We extract that variable and use the `rstan::summary` function to make inference.
+
+```{r}
+knitr::kable(rstan::summary(samp, par = 'pg')$summary, digits = 3)
+```
+
+Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least $q = 70$% certainty that the probability of efficacy exceeds the target response rate of 30%
+On that basis, at this interim stage, we would be willing to approve the treatment in subgroups 3, 4, 5 and 8.
+
+Some distribution plots of the probabilities of efficacy in some subgroups may be informative.
+
+```{r, fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 3"}
+library(ggplot2)
+library(rstan)
+ggplot(data.frame(ProbResponse = extract(samp, 'p[3]')[[1]]),
+       aes(x = ProbResponse)) + geom_density() + ggtitle('Prob(Response | D) in Sub-group 3')
+```
+
+We see that the inferred efficacy in subgroup 3 is very high.
+
+```{r, fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 4"}
+ggplot(data.frame(ProbResponse = extract(samp, 'p[4]')[[1]]),
+       aes(x = ProbResponse)) + geom_density() + ggtitle('Prob(Response | D) in Sub-group 4')
+```
+
+In contrast, efficacy is subject to more uncertainty in subgroup 4, but the majority of the mass clearly lies to the right of 30%.
+
+# trialr
+`trialr` is available at https://github.com/brockk/trialr
 
 
 

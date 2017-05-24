@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kristian Brock" />
 
-<meta name="date" content="2017-04-19" />
+<meta name="date" content="2017-05-24" />
 
 <title>EffTox in trialr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">EffTox in trialr</h1>
 <h4 class="author"><em>Kristian Brock</em></h4>
-<h4 class="date"><em>2017-04-19</em></h4>
+<h4 class="date"><em>2017-05-24</em></h4>
 
 
 
@@ -80,8 +80,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>For doses <span class="math inline">\(\boldsymbol{y} = (y_1, ..., y_n)\)</span>, the authors define codified doses <span class="math inline">\((x_1, ..., x_n)\)</span> using the transform</p>
 <p><span class="math inline">\(x_i = \log{y_i} - \sum_{j=1}^n \frac{\log{y_j}}{n}\)</span></p>
 <p>The codified doses are used as the sole explanatory variables in logit models for the marginal probabilities of toxicity and efficacy:</p>
-<p><span class="math inline">\(\pi_T = \alpha + \beta x\)</span></p>
-<p><span class="math inline">\(\pi_E = \gamma + \zeta x + \eta x^2\)</span></p>
+<p><span class="math inline">\(\text{logit } \pi_T = \alpha + \beta x\)</span></p>
+<p><span class="math inline">\(\text{logit } \pi_E = \gamma + \zeta x + \eta x^2\)</span></p>
 <p>and the joint probability is modelled using the function</p>
 <p><span class="math inline">\(\pi_{a,b} = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}\)</span>.</p>
 <p>Normal priors are specified for the elements of the parameter vector <span class="math inline">\(\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \eta, \psi)\)</span>.</p>
@@ -118,6 +118,8 @@ p</code></pre></div>
   <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="fl">6.6</span>, <span class="dv">10</span>),
   <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>,
   <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,
+  <span class="dt">p_e =</span> <span class="fl">0.1</span>,
+  <span class="dt">p_t =</span> <span class="fl">0.1</span>,
   <span class="dt">p =</span> p,
   <span class="dt">eff0 =</span> <span class="fl">0.5</span>,
   <span class="dt">tox1 =</span> <span class="fl">0.65</span>,
@@ -145,8 +147,8 @@ dat$num_patients =<span class="st"> </span><span class="dv">6</span></code></pre
 <p>This completes the information required by EffTox to calculate the next dose. We invoke the prior-to-posterior analysis by calling the <code>rstan::sampling</code> function with the pre-compiled EffTox stanmodel<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> in <code>trialr</code> and our data list. We set the seed for reproducibility.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samp &lt;-<span class="st"> </span>rstan::<span class="kw">sampling</span>(stanmodels$EffTox, <span class="dt">data =</span> dat, <span class="dt">seed =</span> <span class="dv">123</span>)</code></pre></div>
 <p>The call to <code>rstan:sampling</code> prints logging information to the standard out stream. It has been suppressed here for brevity.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">efftox_process</span>(dat, samp, <span class="dt">p_e =</span> <span class="fl">0.1</span>, <span class="dt">p_t =</span> <span class="fl">0.1</span>)</code></pre></div>
-<p>The call to <code>efftox_process</code> extracts the most pertinent information from the sampling object. The parameters <code>p_e</code> and <code>p_t</code> are required here to calculate posterior dose acceptability. They were not required in the prior-to-posterior analysis, so they were not provided in <code>dat</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">efftox_process</span>(dat, samp)</code></pre></div>
+<p>The call to <code>efftox_process</code> extracts the most pertinent information from the sampling object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x$recommended_dose</code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>We see that dose-level 3 is recommended for the next cohort.</p>
@@ -298,6 +300,8 @@ dat$num_patients =<span class="st"> </span><span class="dv">6</span></code></pre
   <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="fl">6.6</span>, <span class="dv">10</span>),
   <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>,
   <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,
+  <span class="dt">p_e =</span> <span class="fl">0.1</span>,
+  <span class="dt">p_t =</span> <span class="fl">0.1</span>,
   <span class="dt">p =</span> p,
   <span class="dt">eff0 =</span> <span class="fl">0.5</span>,
   <span class="dt">tox1 =</span> <span class="fl">0.65</span>,
@@ -320,7 +324,6 @@ dat$num_patients =<span class="st"> </span><span class="dv">6</span></code></pre
 <p>The following code will run a simulation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 sims =<span class="st"> </span><span class="kw">efftox_simulate</span>(dat, <span class="dt">num_sims =</span> <span class="dv">100</span>, <span class="dt">first_dose =</span> <span class="dv">1</span>, 
-                       <span class="dt">p_e =</span> <span class="fl">0.1</span>, <span class="dt">p_t =</span> <span class="fl">0.1</span>,
                        <span class="dt">true_eff =</span> <span class="kw">c</span>(<span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span>, <span class="fl">0.90</span>),
                        <span class="dt">true_tox =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>, <span class="fl">0.20</span>, <span class="fl">0.40</span>),
                        <span class="dt">cohort_sizes =</span> <span class="kw">rep</span>(<span class="dv">3</span>, <span class="dv">13</span>))</code></pre></div>
@@ -345,7 +348,7 @@ sims =<span class="st"> </span><span class="kw">efftox_simulate</span>(dat, <spa
 <h1>References</h1>
 <div id="refs" class="references">
 <div id="ref-EffTox">
-<p>Herrick, R, C Norris, JD Cook, and J Venier. 2015. “EffTox.” MD Anderson Cnter. <a href="https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2" class="uri">https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2</a>.</p>
+<p>Herrick, R, C Norris, JD Cook, and J Venier. 2015. “EffTox.” MD Anderson Cancer Center. <a href="https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2" class="uri">https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2</a>.</p>
 </div>
 <div id="ref-Monahan1997">
 <p>Monahan, John, and Alan Genz. 1997. “Spherical-Radial Integration Rules for Bayesian Computation.” <em>Journal of the American Statistical Association</em> 92 (438): 664–74. <a href="http://www.jstor.org/stable/2965714" class="uri">http://www.jstor.org/stable/2965714</a>.</p>
@@ -378,7 +381,7 @@ sims =<span class="st"> </span><span class="kw">efftox_simulate</span>(dat, <spa
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

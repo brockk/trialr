@@ -65,7 +65,7 @@
 #' @param psi_sd The prior standard deviation of psi. Psi is the joint model
 #' association parameter.
 #'
-#' @return a \code{list} of parameters, described in \link{\code{peps2_params}}
+#' @return a \code{list} of parameters, described in \code{peps2_params}
 #' @export
 #'
 #' @examples
@@ -76,7 +76,7 @@
 #'                       eff_tox_or = rep(1, 6))
 #' samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
 #'
-#' @seealso \link{\code{peps2_params}}
+#' @seealso \code{\link{peps2_params}}
 peps2_get_data <- function(num_patients, cohort_probs = NULL,
                            prob_eff, prob_tox, eff_tox_or,
                            cohort_rho = c(15.7, 21.8, 12.4, 20.7, 18.0, 11.4),
@@ -196,9 +196,9 @@ peps2_get_data <- function(num_patients, cohort_probs = NULL,
 #' decision$ProbEff  # The probability of efficacy is driving that decision
 #'
 #' @seealso
-#' \link{\code{peps2_params}}
+#' \code{\link{peps2_params}}
 #'
-#' \link{\code{peps2_get_data}}
+#' \code{\link{peps2_get_data}}
 peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
                                  eff_cert = 0.7, tox_cert = 0.9) {
   #fit = samp
@@ -206,17 +206,17 @@ peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
   acc_tox <- rstan::extract(fit, par = 'prob_tox')[[1]] < max_tox
   accept <- (apply(acc_eff, 2, mean) > eff_cert) &
     (apply(acc_tox, 2, mean) > tox_cert)
-  prob_eff <- unname(summary(fit, pars='prob_eff')$summary[, 'mean'])
-  prob_tox <- unname(summary(fit, pars='prob_tox')$summary[, 'mean'])
+  prob_eff <- colMeans(rstan::extract(samp, 'prob_eff')[[1]])
+  prob_tox <- colMeans(rstan::extract(samp, 'prob_tox')[[1]])
   l <- list(ProbEff = prob_eff, ProbAccEff = apply(acc_eff, 2, mean),
             ProbTox = prob_tox, ProbAccTox = apply(acc_tox, 2, mean),
             Accept = accept)
   # Append posterior parameter means
-  l <- append(l, lapply(extract(fit, pars=c('alpha', 'beta', 'gamma', 'zeta',
-                                            'lambda')), mean))
+  l <- append(l, lapply(rstan::extract(fit, pars=c('alpha', 'beta', 'gamma',
+                                                   'zeta', 'lambda')), mean))
   # Add psi posterior mean
   if('psi' %in% names(fit))
-    l <- append(l, lapply(extract(fit, pars=c('psi')), mean))
+    l <- append(l, lapply(rstan::extract(fit, pars=c('psi')), mean))
   return(l)
 }
 
@@ -255,11 +255,11 @@ peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
 #' # In real life, we run thousands of iterations, not 10. This is an example.
 #'
 #' @seealso
-#' \link{\code{peps2_params}}
+#' \code{\link{peps2_params}}
 #'
-#' \link{\code{peps2_get_data}}
+#' \code{\link{peps2_get_data}}
 #'
-#' \link{\code{peps2_process}}
+#' \code{\link{peps2_process}}
 peps2_run_sims <- function(num_sims, sample_data_func, summarise_func, ...) {
   dat <- sample_data_func()
   model <- stanmodels$BebopInPeps2

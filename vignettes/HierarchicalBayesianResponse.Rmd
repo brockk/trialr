@@ -99,5 +99,9 @@ ggplot(data.frame(ProbResponse = extract(samp, 'p[4]')[[1]]),
 
 In contrast, efficacy is subject to more uncertainty in subgroup 4, but the majority of the mass clearly lies to the right of 30%.
 
+# trialr
+`trialr` is available at https://github.com/brockk/trialr
+
+
 
 # References

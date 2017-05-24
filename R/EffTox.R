@@ -47,7 +47,7 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 #' @description Get parameters to run the EffTox demo. These match those used
 #' to demonstrate EffTox in Thall et al. 2014.
 #'
-#' @return a \code{list} of parameters, described in \link{\code{efftox_params}}
+#' @return a \code{list} of parameters, described in \code{efftox_params}
 #' @export
 #'
 #' @examples
@@ -55,7 +55,9 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 #' names(dat)
 #' dat$real_doses == c(1, 2, 4, 6.6, 10)
 #'
-#' @seealso \link{\code{efftox_params}}
+#' @seealso
+#' \code{\link{efftox_params}}
+#'
 #' @references Thall et al. 2014, Effective sample size for computing prior
 #' hyperparameters in Bayesian phase I-II dose-finding
 efftox_parameters_demo <- function() {
@@ -71,11 +73,13 @@ efftox_parameters_demo <- function() {
     real_doses = c(1, 2, 4, 6.6, 10),
     efficacy_hurdle = 0.5,
     toxicity_hurdle = 0.3,
+    p_e = 0.1,
+    p_t = 0.1,
     p = p,
     eff0 = eff0,
     tox1 = tox1,
-    eff_star = 0.7,
-    tox_star = 0.25,
+    eff_star = eff_star,
+    tox_star = tox_star,
 
     alpha_mean = -7.9593, alpha_sd = 3.5487,
     beta_mean = 1.5482, beta_sd = 3.5018,
@@ -88,7 +92,6 @@ efftox_parameters_demo <- function() {
     tox = c(),
     doses = c(),
     num_patients = 0
-
   )
   return(x)
 }
@@ -137,10 +140,6 @@ efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
 #' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
 #' @param fit An instance of \code{rstan::stanmodel}, derived by sampling an
 #' EffTox model. Use \code{stan::sampling(stanmodels$EffTox, data = dat)}.
-#' @param p_e Certainty required to infer a dose is acceptable with regards to
-#' being probably efficacious; a number between 0 and 1.
-#' @param p_t Certainty required to infer a dose is acceptable with regards to
-#' being probably tolerable; a number between 0 and 1.
 #' @return An instance of \code{\link{efftox_analysis}}.
 #' @export
 #'
@@ -151,16 +150,13 @@ efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
 #' dat$tox <- c(0, 0, 1)
 #' dat$doses <- c(1, 2, 3)
 #' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-#' decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
+#' decision <- efftox_process(dat, fit)
 #' decision$recommended_dose == 3
 #' @seealso
 #' \code{\link{efftox_params}}
 #'
 #' \code{\link{efftox_parameters_demo}}
-efftox_process <- function(dat, fit, p_e, p_t) {
-  # fit, an object of class stanfit, yielded by a call to rstan::sampling(stanmodels$EffTox, data = dat)
-  #       where dat is a list of your data. See TODO[that explains dat]
-
+efftox_process <- function(dat, fit) {
   # Posterior mean estimates
   prob_eff <- colMeans(rstan::extract(fit, 'prob_eff')[[1]])
   prob_acc_eff <- colMeans(rstan::extract(fit, 'prob_acc_eff')[[1]])
@@ -176,13 +172,11 @@ efftox_process <- function(dat, fit, p_e, p_t) {
   highest <- max(dat$doses)
   in_range <- sapply(dose_indices,
                     function(x) (x >= lowest - 1) & (x <= highest + 1))
-  acceptable <- (prob_acc_eff > p_e) & (prob_acc_tox > p_t) & in_range
+  acceptable <- (prob_acc_eff > dat$p_e) & (prob_acc_tox > dat$p_t) & in_range
   if(sum(acceptable) > 0) {
     recommended_dose <- which.max(ifelse(acceptable, utility, NA))  # 2
-    # rec <- dose_indices == selected_dose
   } else {
     recommended_dose <- NA
-    # rec <- rep(FALSE, length(dose_indices))
   }
 
   l <- list(dose_indices = dose_indices, recommended_dose = recommended_dose,
@@ -233,10 +227,6 @@ efftox_analysis_to_df <- function(x) {
 #' @param num_sims integer, number of simulated iterations
 #' @param first_dose integer, the dose-level to give to patient 1, e.g. 1 for
 #' the lowest dose.
-#' @param p_e Certainty required to infer a dose is acceptable with regards to
-#' being probably efficacious; a number between 0 and 1.
-#' @param p_t Certainty required to infer a dose is acceptable with regards to
-#' being probably tolerable; a number between 0 and 1.
 #' @param true_eff the true probabilities of efficacy at the doses under
 #' investigation; a vector of numbers between 0 and 1.
 #' @param true_tox the true probabilities of toxicity at the doses under
@@ -269,8 +259,8 @@ efftox_analysis_to_df <- function(x) {
 #' table(sims$recommended_dose) / length(sims$recommended_dose)
 #' table(unlist(sims$doses_given)) / length(unlist(sims$doses_given))
 #' table(unlist(sims$doses_given)) / length(sims$recommended_dose)
-efftox_simulate <- function(dat, num_sims, first_dose, p_e, p_t,
-                            true_eff, true_tox, cohort_sizes, ...) {
+efftox_simulate <- function(dat, num_sims, first_dose, true_eff, true_tox,
+                            cohort_sizes, ...) {
 
   recommended_dose <- integer(length = num_sims)
   efficacies <- list()
@@ -294,7 +284,7 @@ efftox_simulate <- function(dat, num_sims, first_dose, p_e, p_t,
       this_dat$doses <- c(this_dat$doses, rep(dose, cohort_size))
       this_dat$num_patients <- this_dat$num_patients + cohort_size
       samp <- rstan::sampling(stanmodels$EffTox, data = this_dat, ...)
-      l <- efftox_process(this_dat, samp, p_e = p_e, p_t = p_e)
+      l <- efftox_process(this_dat, samp)
       # Select a dose?
       if(sum(l$acceptable) > 0) {
         # Select dose
@@ -555,4 +545,166 @@ efftox_superiority <- function(fit) {
   diag(superiority_mat) <- NA
   dimnames(superiority_mat) = list(1:ncol(u), 1:ncol(u))
   return(superiority_mat)
+}
+
+#' @title Parse a string of EffTox outcomes to binary vector notation.
+#'
+#' @description Parse a string of EffTox outcomes to the binary vector notation
+#' required by Stan for model invocation. The outcome string describes the doses
+#' given and outcomes observed. The format of the string is described in Brock
+#' et al. (2017). The letters E, T, N and B are used to represents patients that
+#' experienced (E)fficacy only, (T)oxicity only, (B)oth efficacy and toxicity,
+#' and (B)oth. These letters are concatenated after numerical dose-levels to
+#' convey the outcomes of cohorts of patients. For instance, \code{2ETB}
+#' represents a cohort of three patients that were treated at dose-level 2, and
+#' experienced efficacy, toxicity and both events, respectively. The results of
+#' cohorts are separated by spaces. Thus, \code{2ETB 1NN} extends our previous
+#' example, where the next cohort of two were treated at dose-level 1 and both
+#' patients experienced neither efficacy nor toxicity. See examples.
+#'
+#' We present the notation in the EffTox setting but it is applicable in
+#' general seamless phase I/II dose-finding scenarios.
+#'
+#' @param outcome_string character string, conveying doses given and outcomes
+#' observed.
+#'
+#' @return a list with elements \code{eff}, \code{tox}, \code{doses} and
+#' \code{num_patients}. These elements are congruent with the same in
+#' \code{efftox_params}.
+#'
+#' @export
+#'
+#' @examples
+#' x = efftox_parse_outcomes('1NNE 2EEN 3TBB')
+#' x$num_patients == 9
+#' x$eff == c(0, 0, 1, 1, 1, 0, 0, 1, 1)
+#' sum(x$tox) == 3
+#'
+#' @references Brock et al. (submitted 2017), Implementing the EffTox
+#' Dose-Finding Design in the Matchpoint Trial.
+efftox_parse_outcomes <- function(outcome_string) {
+  regex = '\\w*\\d+[ETBN]+\\w*'
+  outcomes = outcome_string
+  m = gregexpr(pattern = regex, text = outcomes)
+  cohorts = regmatches(outcomes, m)
+  if(length(cohorts) <= 0) stop(paste('Matching', outcomes,
+                                      'to EffTox outcomes failed'))
+  cohorts = cohorts[[1]]
+  doses = c(); eff = c(); tox = c();
+  num_patients = 0
+  for(cohort in cohorts) {
+    # print(cohort)
+    mc = regexpr('(\\d+)', cohort)
+    dl_start = mc[1]
+    dl_end = mc[1] + attr(mc,"match.length") - 1
+    dl = substr(cohort, dl_start, dl_end)
+    dl = as.integer(dl)
+    outcomes = substr(cohort, dl_end + 1, nchar(cohort))
+    outcomes = strsplit(outcomes, "")[[1]]
+    these_doses = rep(dl, length(outcomes))
+    doses = c(doses, these_doses)
+    these_eff = as.integer((outcomes == 'E') | (outcomes == 'B'))
+    eff =c(eff, these_eff)
+    these_tox = as.integer((outcomes == 'T') | (outcomes == 'B'))
+    tox = c(tox, these_tox)
+    num_patients = num_patients + length(outcomes)
+  }
+  return(list(
+    doses = doses, eff = eff, tox = tox, num_patients = num_patients
+  ))
+}
+
+
+#' @title Calculate dose-transition pathways for an EffTox study
+#'
+#' @description Calculate dose-transition pathways for an EffTox study.
+#'
+#' @param dat An instance of \code{\link{efftox_params}}, a list of EffTox
+#' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
+#' @param cohort_sizes vector of future cohort sizes, i.e. positive integers.
+#' E.g. Tot calculate paths for the the next cohort of two followed by the next
+#' cohort of three, use \code{c(2, 3)}.
+#' @param next_dose the dose-level to be given to the immediately next cohort.
+#'
+#' @return dose pathways in a \code{data.frame}.
+#' @export
+#'
+#' @examples
+#' # Calculate the paths for the first cohort of 3 in Thall et al 2014 example
+#' dat <- efftox_parameters_demo()
+#' dtps1 <- efftox_dtps(dat = dat, cohort_sizes = c(3), next_dose = 1)
+#'
+#' # To calculate future paths in a partially-observed trial
+#' dat <- efftox_parameters_demo()
+#' dat$doses = array(c(1,1,1))
+#' dat$eff = array(c(0,0,0))
+#' dat$tox = array(c(1,1,1))
+#' dat$num_patients = 3
+#' dtps2 <- efftox_dtps(dat = dat, cohort_sizes = c(3), next_dose = 1)
+#'
+#' @seealso
+#' \code{\link{efftox_params}}
+#'
+#' \code{\link{efftox_parameters_demo}}
+efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
+  previous_doses = dat$doses
+  previous_eff = dat$eff
+  previous_tox = dat$tox
+  previous_num_patients = dat$num_patients
+  outcomes <- c('E', 'T', 'N', 'B')
+
+  # Calculate feasible outcome combinations by cohort
+  cohort_paths <- lapply(cohort_sizes,
+                         function(x) gtools::combinations(n = 4, r = x,
+                                                          v = outcomes,
+                                                          repeats.allowed=TRUE))
+  # Flatten cohort outcomes
+  cohort_paths <- lapply(cohort_paths, function(x) apply(x, 1, paste0,
+                                                         collapse = ''))
+
+  # Calculate pathways
+  cohort_paths <- expand.grid(cohort_paths, stringsAsFactors = FALSE)
+  # Place to record dose recommendations
+  dose_recs = matrix(nrow = nrow(cohort_paths), ncol = ncol(cohort_paths))
+  # Cache DTP calculations to avoid needless repetition
+  cache <- new.env()
+  for(i in 1:nrow(cohort_paths)) {
+    cohort_path <- cohort_paths[i,]
+    cohort_dose <- next_dose
+    dtp <- ""
+
+    for(j in 1:length(cohort_path)) {
+      dtp <- ifelse(nchar(dtp) > 0,
+                    paste0(dtp, ' ', cohort_dose, cohort_path[j]),
+                    paste0(cohort_dose, cohort_path[j])
+      )
+      if(dtp %in% names(cache)) {
+        # Fetch from cache
+        print(paste0('Fetching ', dtp, ' from cache'))
+        cohort_dose <- cache[[dtp]]
+      } else {
+        # Calculate
+        these_outcomes <- efftox_parse_outcomes(dtp)
+        dat$doses <- array(c(previous_doses, these_outcomes$doses))
+        dat$eff <- array(c(previous_eff, these_outcomes$eff))
+        dat$tox <- array(c(previous_tox, these_outcomes$tox))
+        dat$num_patients <- previous_num_patients +
+          these_outcomes$num_patients
+        print(paste0('Running ', dtp))
+        fit <- rstan::sampling(stanmodels$EffTox, data = dat, ...)
+        decision <- efftox_process(dat, fit)
+        cohort_dose <- decision$recommended_dose
+        # Cache
+        cache[[dtp]] <- cohort_dose
+      }
+      dose_recs[i, j] <- cohort_dose
+    }
+  }
+
+  df <- data.frame(D0 = rep(next_dose, nrow(cohort_paths)))
+  for(k in 1:ncol(cohort_paths)) {
+    df[, paste0('C', k - 1)] = cohort_paths[, k]
+    df[, paste0('D', k)] = dose_recs[, k]
+  }
+  return(df)
 }

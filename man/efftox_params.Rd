@@ -16,6 +16,10 @@ convenience.
    probability exceeding this value, a number between 0 and 1.
    \item \code{toxicity hurdle}, acceptable doses should have toxicity
    probability less than this value, a number between zero and 1.
+   \item \code{p_e}, certainty required to infer a dose is acceptable with
+   regards to being probably efficacious; a number between 0 and 1.
+   \item \code{p_t}, certainty required to infer a dose is acceptable with
+   regards to being probably tolerable; a number between 0 and 1.
    \item \code{p}, the p-index of EffTox utility contours.
    Use \code{efftox_solve_p}. A number.
    \item \code{eff0}, Efficacy probability required when toxicity is impossible;
