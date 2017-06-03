@@ -29,7 +29,7 @@
 #' add up to 1. \code{cohort_probs} or \code{cohort_rho} must be specified.
 #' @param prob_eff Probabilities of efficacy in each of the 6 cohorts, in the
 #' order given above; a vector of numbers between 0 and 1
-#' @param prob_eff Probabilities of toxicity in each of the 6 cohorts, in the
+#' @param prob_tox Probabilities of toxicity in each of the 6 cohorts, in the
 #' order given above; a vector of numbers between 0 and 1
 #' @param eff_tox_or Measure of strength of association between efficacy and
 #' toxicity, in each of the 6 cohorts, in the order given above; a vector of
@@ -89,7 +89,8 @@ peps2_get_data <- function(num_patients, cohort_probs = NULL,
 
   if (is.null(cohort_probs))
     cohort_probs <- gtools::rdirichlet(1, cohort_rho)
-  cohort_sizes <- c(rmultinom(1, size = num_patients, prob = cohort_probs))
+  cohort_sizes <- c(stats::rmultinom(1, size = num_patients,
+                                     prob = cohort_probs))
   cohorts <- rep(1:length(cohort_sizes), times = cohort_sizes)
   cohorts = factor(cohorts, levels = 1:length(cohort_rho))
 
@@ -187,7 +188,8 @@ peps2_get_data <- function(num_patients, cohort_probs = NULL,
 #' @examples
 #' set.seed(123)
 #' dat <- peps2_get_data(num_patients = 60,
-#'                       prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
+#'                       prob_eff = c(0.167, 0.192, 0.5,
+#'                                    0.091, 0.156, 0.439),
 #'                       prob_tox = rep(0.1, 6),
 #'                       eff_tox_or = rep(1, 6))
 #' samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
@@ -206,8 +208,8 @@ peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
   acc_tox <- rstan::extract(fit, par = 'prob_tox')[[1]] < max_tox
   accept <- (apply(acc_eff, 2, mean) > eff_cert) &
     (apply(acc_tox, 2, mean) > tox_cert)
-  prob_eff <- colMeans(rstan::extract(samp, 'prob_eff')[[1]])
-  prob_tox <- colMeans(rstan::extract(samp, 'prob_tox')[[1]])
+  prob_eff <- colMeans(rstan::extract(fit, 'prob_eff')[[1]])
+  prob_tox <- colMeans(rstan::extract(fit, 'prob_tox')[[1]])
   l <- list(ProbEff = prob_eff, ProbAccEff = apply(acc_eff, 2, mean),
             ProbTox = prob_tox, ProbAccTox = apply(acc_tox, 2, mean),
             Accept = accept)
@@ -223,19 +225,26 @@ peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
 
 #' @title Run simulations of BEBOP in PePS2
 #'
+#' @description Run simulations of the BEBOP model in a PePS2 scenario.
+#' The logic of creating the data to be passed to the Stan model is delegated to
+#' a function, thus the user may tailor rates of efficacy and toxicity, priors,
+#' cohort membership probabilities, by specialising this function. Similarly,
+#' the post-processing to perform on the RStan sample is delegated to another
+#' function. This pattern gives a flexible interface.
+#'
 #' @param num_sims integer, number of simulated iterations
 #' @param sample_data_func delegate function that takes no parameters and
-#' returns a list like \link{\code{peps2_params}}. This function is called
+#' returns a list like \code{peps2_params}. This function is called
 #' during each simulated iteration so it should contain random outcomes.
 #' @param summarise_func delegate function that takes args \code{dat} and
-#' \code{fit}, where \code{dat} is an instance of \link{\code{peps2_params}}
+#' \code{fit}, where \code{dat} is an instance of \code{peps2_params}
 #' returned by \code{sample_data_func()}, and \code{fit} is an instance of
 #' \code{rstan::stanmodel}, derived by sampling the BebopInPeps2 model. The
 #' simulation routine collects this using
 #' \code{stan::sampling(stanmodels$BebopInPeps2, data = dat)}. The objects
 #' returned by this delegate are ultimately returned to the user. Thus, this
 #' function should perform the post-processing to get the RStan sample into
-#' some useful format. An example if \link{\code{peps2_process}}.
+#' some useful format. An example if \code{\link{peps2_process}}.
 #' @param ... extra parameters passed to \code{rstan::sampling}.
 #'
 #' @return a list of length \code{num_sims}, with element \code{i} being the
@@ -243,9 +252,11 @@ peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
 #' @export
 #'
 #' @examples
+#' prob_eff <- c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439)
+#' prob_tox = c(0.1, 0.1, 0.1, 0.1, 0.1, 0.1)
 #' peps2_scenario_data <- function() peps2_get_data(num_patients = 60,
-#'                                                  prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
-#'                                                  prob_tox = rep(0.1, 6),
+#'                                                  prob_eff = prob_eff,
+#'                                                  prob_tox = prob_tox,
 #'                                                  eff_tox_or = rep(1, 6))
 #' set.seed(123)
 #' sims <- peps2_run_sims(num_sims = 10, sample_data_func = peps2_scenario_data,

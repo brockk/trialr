@@ -31,6 +31,6 @@ efftox_solve_p(0.5, 0.65, 0.7, 0.25)
 
 }
 \references{
-Thall et al. 2014, Effective sample size for computing prior
-hyperparameters in Bayesian phase I-II dose-finding
+Thall, Herrick, Nguyen, Venier & Norris. 2014, Effective sample
+size for computing prior hyperparameters in Bayesian phase I-II dose-finding
 }

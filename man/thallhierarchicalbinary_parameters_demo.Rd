@@ -24,5 +24,5 @@ Thall et al. 2014, Effective sample size for computing prior
 hyperparameters in Bayesian phase I-II dose-finding
 }
 \seealso{
-\link{\code{efftox_params}}
+\code{\link{efftox_params}}
 }

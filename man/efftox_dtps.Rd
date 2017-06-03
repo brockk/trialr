@@ -15,6 +15,8 @@ E.g. Tot calculate paths for the the next cohort of two followed by the next
 cohort of three, use \code{c(2, 3)}.}
 
 \item{next_dose}{the dose-level to be given to the immediately next cohort.}
+
+\item{...}{extra params passed to \code{rstan::sampling}.}
 }
 \value{
 dose pathways in a \code{data.frame}.
@@ -35,6 +37,10 @@ dat$tox = array(c(1,1,1))
 dat$num_patients = 3
 dtps2 <- efftox_dtps(dat = dat, cohort_sizes = c(3), next_dose = 1)
 
+}
+\references{
+Brock et al. (submitted 2017), Implementing the EffTox
+Dose-Finding Design in the Matchpoint Trial.
 }
 \seealso{
 \code{\link{efftox_params}}

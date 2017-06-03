@@ -20,8 +20,8 @@ dat$real_doses == c(1, 2, 4, 6.6, 10)
 
 }
 \references{
-Thall et al. 2014, Effective sample size for computing prior
-hyperparameters in Bayesian phase I-II dose-finding
+Thall, Herrick, Nguyen, Venier & Norris. 2014, Effective sample
+size for computing prior hyperparameters in Bayesian phase I-II dose-finding
 }
 \seealso{
 \code{\link{efftox_params}}

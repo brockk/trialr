@@ -24,8 +24,8 @@
 #' @examples
 #' efftox_solve_p(0.5, 0.65, 0.7, 0.25)
 #'
-#' @references Thall et al. 2014, Effective sample size for computing prior
-#' hyperparameters in Bayesian phase I-II dose-finding
+#' @references Thall, Herrick, Nguyen, Venier & Norris. 2014, Effective sample
+#' size for computing prior hyperparameters in Bayesian phase I-II dose-finding
 efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
   # Calculate p for the efficacy/toxicity contours that will intersect points
   # (eff0, 0), (eff.star, tox.star), and (1, tox1)
@@ -36,9 +36,9 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
     return(a^p + b^p - 1)
   }
 
-  rt <- uniroot(.objective, interval = c(0, 100),
-                eff0 = eff0, tox1 = tox1, eff_star = eff_star,
-                tox_star = tox_star)
+  rt <- stats::uniroot(.objective, interval = c(0, 100),
+                       eff0 = eff0, tox1 = tox1, eff_star = eff_star,
+                       tox_star = tox_star)
   return(rt$root)
 }
 
@@ -58,8 +58,8 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 #' @seealso
 #' \code{\link{efftox_params}}
 #'
-#' @references Thall et al. 2014, Effective sample size for computing prior
-#' hyperparameters in Bayesian phase I-II dose-finding
+#' @references Thall, Herrick, Nguyen, Venier & Norris. 2014, Effective sample
+#' size for computing prior hyperparameters in Bayesian phase I-II dose-finding
 efftox_parameters_demo <- function() {
   # Demonstration from 'Effective sample size for computing prior
   # hyperparameters in Bayesian phase I-II dose-finding', Thall et al., 2014
@@ -206,7 +206,7 @@ efftox_process <- function(dat, fit) {
 #' dat$tox <- c(0, 0, 1)
 #' dat$doses <- c(1, 2, 3)
 #' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-#' decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
+#' decision <- efftox_process(dat, fit)
 #' df <- efftox_analysis_to_df(decision)
 #' round(df$Utility, 2) == c(-0.64, 0.04, 0.24, -0.05, -0.19)
 #'
@@ -251,7 +251,7 @@ efftox_analysis_to_df <- function(x) {
 #' dat <- efftox_parameters_demo()
 #' set.seed(123)
 #' # Let's say we want to use only 2 chains. Extra args are passed to stan
-#' sims <- efftox_simulate(dat, num_sims = 2, first_dose = 1, p_e, p_t,
+#' sims <- efftox_simulate(dat, num_sims = 2, first_dose = 1,
 #'                         true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
 #'                         true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
 #'                         cohort_sizes = rep(3, 13),
@@ -275,8 +275,8 @@ efftox_simulate <- function(dat, num_sims, first_dose, true_eff, true_tox,
       prob_eff <- true_eff[dose]
       prob_tox <- true_tox[dose]
       # Simulate new efficacy events
-      new_eff <- rbinom(n = cohort_size, size = 1, prob = prob_eff)
-      new_tox <- rbinom(n = cohort_size, size = 1, prob = prob_tox)
+      new_eff <- stats::rbinom(n = cohort_size, size = 1, prob = prob_eff)
+      new_tox <- stats::rbinom(n = cohort_size, size = 1, prob = prob_tox)
       # And append to trial data
       this_dat$eff <- c(this_dat$eff, new_eff)
       this_dat$tox <- c(this_dat$tox, new_tox)
@@ -384,12 +384,13 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
 #' dat$tox <- c(0, 0, 1)
 #' dat$doses <- c(1, 2, 3)
 #' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-#' decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
+#' decision <- efftox_process(dat, fit)
 #' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
 #' title('EffTox utility contours')
 #' # The same with ggplot2
 #' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
-#'                     use_ggplot = TRUE) + ggtitle('EffTox utility contours')
+#'                     use_ggplot = TRUE) +
+#'                     ggplot2::ggtitle('EffTox utility contours')
 #'
 #' @seealso
 #' \code{\link{efftox_params}}
@@ -445,27 +446,27 @@ efftox_contour_plot <- function(dat,
     }
     return(plt)
   } else {
-    plot(NULL, ylim = c(0, 1), xlim = c(0, 1), ylab = 'Prob(Toxicity)',
+    graphics::plot(NULL, ylim = c(0, 1), xlim = c(0, 1), ylab = 'Prob(Toxicity)',
          xlab = 'Prob(Efficacy)')
 
     for(u in util_vals) {
       tox_vals = efftox_get_tox(eff_vals, u, dat$p, dat$eff0, dat$tox1)
-      points(eff_vals, tox_vals, type = 'l', col = 'grey', lwd = 0.2)
+      graphics::points(eff_vals, tox_vals, type = 'l', col = 'grey', lwd = 0.2)
     }
 
     # Add neutral utility contour
     tox_vals = efftox_get_tox(eff_vals, 0, dat$p, dat$eff0, dat$tox1)
-    points(eff_vals, tox_vals, type = 'l', col = 'black', lwd = 2)
+    graphics::points(eff_vals, tox_vals, type = 'l', col = 'black', lwd = 2)
 
     # Add hinge points
-    points(dat$eff0, 0, col = 'blue', pch = 2)
-    points(1, dat$tox1, col = 'blue', pch = 2)
-    points(dat$eff_star, dat$tox_star, col = 'blue', pch = 2)
+    graphics::points(dat$eff0, 0, col = 'blue', pch = 2)
+    graphics::points(1, dat$tox1, col = 'blue', pch = 2)
+    graphics::points(dat$eff_star, dat$tox_star, col = 'blue', pch = 2)
 
     # # Add provided eff & tox points
     if(!is.null(prob_eff) & !is.null(prob_tox)) {
-      points(prob_eff, prob_tox, col = 'red',
-             pch = as.character(1:length(prob_eff)))
+      graphics::points(prob_eff, prob_tox, col = 'red',
+                       pch = as.character(1:length(prob_eff)))
     }
   }
 }
@@ -495,11 +496,12 @@ efftox_contour_plot <- function(dat,
 #' dat$tox <- c(0, 0, 1)
 #' dat$doses <- c(1, 2, 3)
 #' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-#' efftox_utility_density_plot(fit) + ggtitle('My doses')  # Bit too busy?
-#' efftox_utility_density_plot(fit, doses = 1:3) + ggtitle('My doses') # Clearer
+#' efftox_utility_density_plot(fit) + ggplot2::ggtitle('My doses')  # Too busy?
+#' # Specify subset of doses to make plot less cluttered
+#' efftox_utility_density_plot(fit, doses = 1:3) + ggplot2::ggtitle('My doses')
 #'
 efftox_utility_density_plot <- function(fit, doses = NULL) {
-  if(!('ggplot2' %in% installed.packages()))
+  if(!('ggplot2' %in% utils::installed.packages()))
     stop('THis function requires ggplot2 be installed.')
 
   u <- rstan::extract(fit, par = 'utility')[[1]]
@@ -625,6 +627,7 @@ efftox_parse_outcomes <- function(outcome_string) {
 #' E.g. Tot calculate paths for the the next cohort of two followed by the next
 #' cohort of three, use \code{c(2, 3)}.
 #' @param next_dose the dose-level to be given to the immediately next cohort.
+#' @param ... extra params passed to \code{rstan::sampling}.
 #'
 #' @return dose pathways in a \code{data.frame}.
 #' @export
@@ -646,6 +649,9 @@ efftox_parse_outcomes <- function(outcome_string) {
 #' \code{\link{efftox_params}}
 #'
 #' \code{\link{efftox_parameters_demo}}
+#'
+#' @references Brock et al. (submitted 2017), Implementing the EffTox
+#' Dose-Finding Design in the Matchpoint Trial.
 efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
   previous_doses = dat$doses
   previous_eff = dat$eff

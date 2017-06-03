@@ -1,24 +1,31 @@
 Package: trialr
 Type: Package
-Title: Clinical Trial Designs in R & RStan
+Title: Clinical Trial Designs in RStan & R
 Version: 0.0.1
+Date: 2017-06-01
 Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com",
     role = c("aut", "cre"))
-Description: Implementation of Bayesian clinical trial designs in R and RStan.
-    Functions are provided to perform simulations and invoke designs on
-    observed trial outcomes. There is a preponderance of early-phase trial
-    designs because this is where the Bayesian methodology is used most.
-    If there is a published Bayesian design you want implemented in Stan,
-    get in touch.
+Author: Kristian Brock [aut, cre]
+Maintainer: Kristian Brock <kristian.brock@gmail.com>
+Description: This package is a showcase of Bayesian clinical trial designs, 
+    implemented in RStan and R. Some designs are implemented in R for the first
+    time (e.g. EffTox). Given the emphasis on flexibility in Bayesian analysis,
+    the implementations in a common language and style may serve as a cookbook 
+    to encourage the use of Bayesian methods in trials. Compiled RStan models 
+    are provided in addition to helper functions to perform simulations and 
+    inference on observed trial outcomes. There is a preponderance of early 
+    phase trial designs because this is where Bayesian methods are used most. 
+    If there is a published Bayesian design you want implemented in Stan, get in
+    touch.
 License: GPL-3
 Depends:
     R (>= 3.0.2),
     Rcpp (>= 0.12.8),
-    methods (>= 3.3.2),
-    gtools
+    methods (>= 3.3.2)
 Imports:
     rstan (>= 2.12.1),
-    rstantools (>= 1.1.0)
+    rstantools (>= 1.1.0),
+    gtools
 LinkingTo: StanHeaders (>= 2.12.0.1), rstan (>= 2.12.1), BH (>= 1.62.0.1), Rcpp
     (>= 0.12.8), RcppEigen (>= 0.3.2.9.0)
 URL: https://github.com/brockk/trialr

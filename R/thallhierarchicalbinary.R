@@ -12,7 +12,7 @@
 #' names(dat)
 #' dat$target_resp == 0.3
 #'
-#' @seealso \link{\code{efftox_params}}
+#' @seealso \code{\link{efftox_params}}
 #' @references Thall et al. 2014, Effective sample size for computing prior
 #' hyperparameters in Bayesian phase I-II dose-finding
 thallhierarchicalbinary_parameters_demo <- function() {

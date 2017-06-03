@@ -51,12 +51,13 @@ dat$eff <- c(0, 1, 1)
 dat$tox <- c(0, 0, 1)
 dat$doses <- c(1, 2, 3)
 fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-decision <- efftox_process(dat, fit, p_e = 0.1, p_t = 0.1)
+decision <- efftox_process(dat, fit)
 efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
 title('EffTox utility contours')
 # The same with ggplot2
 efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
-                    use_ggplot = TRUE) + ggtitle('EffTox utility contours')
+                    use_ggplot = TRUE) +
+                    ggplot2::ggtitle('EffTox utility contours')
 
 }
 \seealso{

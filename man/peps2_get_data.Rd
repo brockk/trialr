@@ -20,6 +20,9 @@ add up to 1. \code{cohort_probs} or \code{cohort_rho} must be specified.}
 \item{prob_eff}{Probabilities of efficacy in each of the 6 cohorts, in the
 order given above; a vector of numbers between 0 and 1}
 
+\item{prob_tox}{Probabilities of toxicity in each of the 6 cohorts, in the
+order given above; a vector of numbers between 0 and 1}
+
 \item{eff_tox_or}{Measure of strength of association between efficacy and
 toxicity, in each of the 6 cohorts, in the order given above; a vector of
 numbers. Use 1 for no association; numbers increasingly greater than 1 for
@@ -66,9 +69,6 @@ parameter.}
 
 \item{psi_sd}{The prior standard deviation of psi. Psi is the joint model
 association parameter.}
-
-\item{prob_eff}{Probabilities of toxicity in each of the 6 cohorts, in the
-order given above; a vector of numbers between 0 and 1}
 }
 \value{
 a \code{list} of parameters, described in \code{peps2_params}

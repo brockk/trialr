@@ -2,3 +2,9 @@ cleanup*
 ^\.travis\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+Scratch\.R
+MyNotes
+EffTox_stepthrough\.R
+utility_densities\.png
+contours\.png
+cran-comments\.md

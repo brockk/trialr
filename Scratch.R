@@ -1,4 +1,3 @@
-
 # R.version
 
 # install.packages('rstan')
@@ -118,8 +117,9 @@ set.seed(123)
 
 # ThallHierarchicalBinary -------
 dat <- thallhierarchicalbinary_parameters_demo()
-samp = rstan::sampling(stanmodels$ThallHierachicalBinary, data = dat)
+samp = rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat)
 plot(samp, pars = 'p')
+
 plot(samp, pars = 'pg')
 # Posterior Prob(Response)...
 # In group 4
@@ -184,3 +184,6 @@ help(pep)
 help("peps2_run_sims")
 
 
+class(stanmodels)
+class(stan_files)
+stan_files
