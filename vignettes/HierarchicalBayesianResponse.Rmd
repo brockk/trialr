@@ -1,18 +1,18 @@
 ---
-title: "Hierarchical Bayesian Model for Responses"
+title: "Hierarchical Bayesian Model for Binary Responses"
 author: "Kristian Brock"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     fig_caption: yes
-bibliography: C:/Users/krist/Dropbox/Projects/library.bib
+bibliography: library.bib
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Hierarchical Bayesian model for responses
+# Hierarchical Bayesian model for binary responses
 @Thall2003 described a method for analysing treatment effects of a common intervention in several sub-types of a single disease.
 The treatment effects are assumed to be different but exchangeable and correlated.
 Observing good efficacy in one cohort, for example, increases one's expectations of efficacy in other cohorts.
