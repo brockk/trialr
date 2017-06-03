@@ -7,7 +7,7 @@ output:
     fig_caption: yes
 bibliography: library.bib
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Hierarchical Bayesian Model for Binary Responses}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

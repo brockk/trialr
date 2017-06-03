@@ -10,7 +10,7 @@
 # library(rstantools)
 # library(Rcpp)
 # library(trialr)
-devtools::load_all()
+# devtools::load_all()
 
 # EffTox -------
 help("efftox_analysis")
@@ -159,9 +159,9 @@ apply(sapply(sims, function(x) x$Accept), 1, mean)
 
 
 # Vignettes  -------
-devtools::use_vignette("EffTox")
-devtools::use_vignette("BEBOP")
-devtools::use_vignette("HierarchicalBayesianResponse")
+# devtools::use_vignette("EffTox")
+# devtools::use_vignette("BEBOP")
+# devtools::use_vignette("HierarchicalBayesianResponse")
 devtools::build_vignettes()
 # Documentation
 roxygen2::roxygenise()
@@ -180,10 +180,7 @@ help("thallhierarchicalbinary_parameters_demo")
 help("peps2_params")
 help("peps2_get_data")
 help("peps2_process")
-help(pep)
 help("peps2_run_sims")
 
 
-class(stanmodels)
-class(stan_files)
-stan_files
+# devtools::release()

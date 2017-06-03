@@ -3,8 +3,8 @@
 
 ## Test environments
 * local Windows install, R 3.3.3
-* TODO travis-ci ubuntu xx.xx
-* TODO Mac
+* ubuntu 12.04 on travis-ci, devel fork
+* local OS X install, R 3.3.2
 
 ## R CMD check results
 0 errors | 0 warnings | 3 notes
