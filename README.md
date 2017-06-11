@@ -58,15 +58,16 @@ efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_
 title('EffTox utility contours')
 ```
 
+*plot not shown in CRAN version of README. View at https://github.com/brockk/trialr *
 
 
-![contours](contours.png)
 
 Another way of viewing dose-utility is a density plot
 
 `efftox_utility_density_plot(samp, doses = 1:3) + ggtitle("EffTox dose utility densities")`
 
-![utility_densities](utility_densities.png)
+*plot not shown in CRAN version of README. View at https://github.com/brockk/trialr *
+
 
 From this plot, it is perhaps not obvious that dose 3 has higher expected utility than dose 2. 
 
