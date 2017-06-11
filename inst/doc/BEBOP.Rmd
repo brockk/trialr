@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     fig_caption: yes
-bibliography: C:/Users/krist/Dropbox/Projects/library.bib
+bibliography: library.bib
 vignette: >
   %\VignetteIndexEntry{BEBOP: Bayesian Evaluation of Bivariate Binary Outcomes and Predictive Information}
   %\VignetteEngine{knitr::rmarkdown}

@@ -7,7 +7,7 @@ dat <- thallhierarchicalbinary_parameters_demo()
 dat
 
 ## ---- results = "hide"---------------------------------------------------
-samp <- rstan::sampling(stanmodels$ThallHierachicalBinary, data = dat, 
+samp <- rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat, 
                         seed = 123)
 
 ## ------------------------------------------------------------------------

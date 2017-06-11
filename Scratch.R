@@ -164,6 +164,7 @@ apply(sapply(sims, function(x) x$Accept), 1, mean)
 # devtools::use_vignette("HierarchicalBayesianResponse")
 devtools::build_vignettes()
 # Documentation
+devtools::use_readme_rmd()
 roxygen2::roxygenise()
 
 # Help examples ----
@@ -182,5 +183,8 @@ help("peps2_get_data")
 help("peps2_process")
 help("peps2_run_sims")
 
-
+devtools::build_vignettes()
+devtools::check()
+devtools::build()
 # devtools::release()
+

@@ -1,18 +1,18 @@
 ---
-title: "Hierarchical Bayesian Model for Responses"
+title: "Hierarchical Bayesian Model for Binary Responses"
 author: "Kristian Brock"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     fig_caption: yes
-bibliography: C:/Users/krist/Dropbox/Projects/library.bib
+bibliography: library.bib
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Hierarchical Bayesian Model for Binary Responses}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Hierarchical Bayesian model for responses
+# Hierarchical Bayesian model for binary responses
 @Thall2003 described a method for analysing treatment effects of a common intervention in several sub-types of a single disease.
 The treatment effects are assumed to be different but exchangeable and correlated.
 Observing good efficacy in one cohort, for example, increases one's expectations of efficacy in other cohorts.
@@ -64,10 +64,10 @@ We have outcomes in 10 disease subgroups.
 The number of responses is stored in `x` and the number of patients in `n`.
 There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.
 
-We invoke the model by calling `rstan::sampling` on the included `ThallHierachicalBinary` model.
+We invoke the model by calling `rstan::sampling` on the included `ThallHierarchicalBinary` model.
 We set the seed for reproducble randomness.
 ```{r, results = "hide"}
-samp <- rstan::sampling(stanmodels$ThallHierachicalBinary, data = dat, 
+samp <- rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat, 
                         seed = 123)
 ```
 
