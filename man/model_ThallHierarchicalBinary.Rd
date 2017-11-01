@@ -13,7 +13,7 @@ run-time under \code{stanmodels$ThallHierarchicalBinary}.
 The design was first published by Thall et al. in 2003.
 
 See the Hierarchical Bayesian Response vignette for a detailed description of
-the probability model and a demonstration of the implentation in \code{trial}.
+the probability model and a demonstration of the implementation in \code{trial}.
 }
 \references{
 Thall, Wathen, Bekele, Champlin, Baker, & Benjamin. 2003. "Hierarchical Bayesian

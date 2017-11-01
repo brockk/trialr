@@ -26,7 +26,7 @@ order given above; a vector of numbers between 0 and 1}
 \item{eff_tox_or}{Measure of strength of association between efficacy and
 toxicity, in each of the 6 cohorts, in the order given above; a vector of
 numbers. Use 1 for no association; numbers increasingly greater than 1 for
-stronger positive associations, and numbers less than 1 for stronger nagative
+stronger positive associations, and numbers less than 1 for stronger negative
 associations}
 
 \item{cohort_rho}{Concentration parameters for cohort membership, in the
@@ -87,7 +87,7 @@ presence of predictive data. Thus, PePS2 studies efficacy and toxicity in
 TN Low, TN Medium, TN High, PT Low, PT Medium, PT High.
 The design admits all-comers and does not target specific sample sizes in the
 individual cohorts.
-Hyperprior parmaters have defaults to match those used in PePS2, but all may
+Hyperprior parameters have defaults to match those used in PePS2, but all may
 be overridden.
 The returned object includes randomly-sampled outcomes, as well as parameters
 to run the model. These are all combined in the same list object for passing

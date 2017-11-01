@@ -34,7 +34,7 @@ The object is essentially a list with slots:
    calculated from the posterior distributions of the utilities. This is in
    contrast to \code{utility}, which uses plug-in posterior means of efficacy
    and toxicity, as advocated by Thall & Cook; a vector of numbers.
-   \item \code{acceptable}, a vector of logicval values to indicate whether
+   \item \code{acceptable}, a vector of logical values to indicate whether
    doses 1:n are acceptable, according to the rules for acceptable efficacy &
    toxicity, and rules on not skipping untested doses.
   }

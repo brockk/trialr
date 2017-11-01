@@ -13,7 +13,7 @@ run-time under \code{stanmodels$BebopInPeps2}.
 The design has been submitted for publication by Brock et al. in 2017.
 
 See the BEBOP vignette for a detailed description of the probability model and
-a demonstration of the pertinent methods implented in \code{trial}.
+a demonstration of the pertinent methods implemented in \code{trial}.
 }
 \examples{
 # Get model parameters as used in the PePS2 trial.

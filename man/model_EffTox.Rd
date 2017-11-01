@@ -13,7 +13,7 @@ The design was first published by Thall & Cook in 2004.
 Advice on its use was materially updated in 2014.
 
 See the EffTox vignette for a detailed description of the probability model and
-a demonstration of the pertinent methods implented in \code{trial}.
+a demonstration of the pertinent methods implemented in \code{trial}.
 }
 \references{
 Thall & Cook. 2004, Dose-Finding Based on Efficacy-Toxicity Trade-Offs

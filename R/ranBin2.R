@@ -42,7 +42,7 @@
 #' @title Sample pairs of correlated binary events
 #'
 #' @description This function is reproduced from the \code{binarySimCLF} package
-#' on CRAN. The original package appears no longer to be mainatined.
+#' on CRAN. The original package appears no longer to be maintained.
 #' View the original source at:
 #'  https://github.com/cran/binarySimCLF/blob/master/R/ranBin2.R
 #'
@@ -52,7 +52,7 @@
 #' \code{u = c(0.8, 0.3)}.
 #' @param psi Odds ratio, number. This parameter controls the strength of
 #' association. Use \code{psi = 1} for no association. Values greater than 1
-#' correspond to increasingly positive association between thw two events,
+#' correspond to increasingly positive association between the two events,
 #' and vice-versa.
 #'
 #' @return Matrix of events represented as 0s and 1s, with \code{nRep} rows

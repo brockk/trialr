@@ -13,7 +13,7 @@
 in \code{rstan} and R.
 Bayesian designs are being used more commonly in clinical trials however
 software implementation remains a frequent challenge.
-\code{rstan} is the R implementation of Stan, a probabilisitic programming
+\code{rstan} is the R implementation of Stan, a probabilistic programming
 language that performs full Bayesian statistical inference using MCMC sampling.
 It allows the statistician to focus on specifying the model (the good bit)
 without having to worry about the prior-to-posterior analysis (the nuisance bit).
