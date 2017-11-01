@@ -187,7 +187,8 @@ help("peps2_process")
 help("peps2_run_sims")
 
 devtools::build_vignettes()
-devtools::check()
+# devtools::check()
+devtools::check(manual = TRUE)
 devtools::build()
 devtools::release()
 

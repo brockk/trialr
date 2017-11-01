@@ -23,3 +23,4 @@ useDynLib(trialr, .registration = TRUE)
 
 import(Rcpp)
 import(methods)
+import(rstantools)
