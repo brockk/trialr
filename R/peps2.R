@@ -259,11 +259,14 @@ peps2_process <- function(dat, fit, min_eff = 0.1, max_tox = 0.3,
 #'                                                  prob_tox = prob_tox,
 #'                                                  eff_tox_or = rep(1, 6))
 #' set.seed(123)
+#' \dontrun{
 #' sims <- peps2_run_sims(num_sims = 10, sample_data_func = peps2_scenario_data,
 #'                        summarise_func = peps2_process)
 #' apply(sapply(sims, function(x) x$Accept), 1, mean)  # 0.5 0.7 1.0 0.2 0.5 1.0
+#' }
 #' # Simulation suggests we are likely to approve in cohorts 3 and 6.
-#' # In real life, we run thousands of iterations, not 10. This is an example.
+#' # In real life, we would run thousands of iterations, not 10.
+#' # This is an example.
 #'
 #' @seealso
 #' \code{\link{peps2_params}}

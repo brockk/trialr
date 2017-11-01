@@ -46,7 +46,8 @@ Run EffTox simulations for assumed true efficacy and toxicity
 dat <- efftox_parameters_demo()
 set.seed(123)
 # Let's say we want to use only 2 chains. Extra args are passed to stan
-sims <- efftox_simulate(dat, num_sims = 2, first_dose = 1,
+\dontrun{
+sims <- efftox_simulate(dat, num_sims = 10, first_dose = 1,
                         true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
                         true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
                         cohort_sizes = rep(3, 13),
@@ -54,4 +55,7 @@ sims <- efftox_simulate(dat, num_sims = 2, first_dose = 1,
 table(sims$recommended_dose) / length(sims$recommended_dose)
 table(unlist(sims$doses_given)) / length(unlist(sims$doses_given))
 table(unlist(sims$doses_given)) / length(sims$recommended_dose)
+}
+# In real life, we would run thousands of iterations, not 10.
+# This is an example.
 }

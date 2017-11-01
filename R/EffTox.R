@@ -251,7 +251,8 @@ efftox_analysis_to_df <- function(x) {
 #' dat <- efftox_parameters_demo()
 #' set.seed(123)
 #' # Let's say we want to use only 2 chains. Extra args are passed to stan
-#' sims <- efftox_simulate(dat, num_sims = 2, first_dose = 1,
+#' \dontrun{
+#' sims <- efftox_simulate(dat, num_sims = 10, first_dose = 1,
 #'                         true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
 #'                         true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
 #'                         cohort_sizes = rep(3, 13),
@@ -259,6 +260,9 @@ efftox_analysis_to_df <- function(x) {
 #' table(sims$recommended_dose) / length(sims$recommended_dose)
 #' table(unlist(sims$doses_given)) / length(unlist(sims$doses_given))
 #' table(unlist(sims$doses_given)) / length(sims$recommended_dose)
+#' }
+#' # In real life, we would run thousands of iterations, not 10.
+#' # This is an example.
 efftox_simulate <- function(dat, num_sims, first_dose, true_eff, true_tox,
                             cohort_sizes, ...) {
 
@@ -438,6 +442,7 @@ efftox_contour_plot <- function(dat,
       # prob_eff = decision$prob_eff
       # prob_tox = decision$prob_tox
       df4 <- data.frame(prob_eff, prob_tox, dl = 1:length(prob_eff))
+      dl <- NULL
       plt <- plt + ggplot2::geom_text(data = df4, ggplot2::aes(x = prob_eff,
                                                                y = prob_tox,
                                                                group = 1,
@@ -511,8 +516,10 @@ efftox_utility_density_plot <- function(fit, doses = NULL) {
   df$Dose = factor(df$D)
   if(!is.null(doses))
     df = df[df$D %in% doses, ]
+  Dose <- Utility <- NULL
   p <- ggplot2::ggplot(df, ggplot2::aes(x = Utility, group = Dose,
-                                        colour = Dose)) + ggplot2::geom_density()
+                                        colour = Dose)) +
+    ggplot2::geom_density()
   return(p)
 }
 
@@ -635,15 +642,18 @@ efftox_parse_outcomes <- function(outcome_string) {
 #' @examples
 #' # Calculate the paths for the first cohort of 3 in Thall et al 2014 example
 #' dat <- efftox_parameters_demo()
+#' \dontrun{
 #' dtps1 <- efftox_dtps(dat = dat, cohort_sizes = c(3), next_dose = 1)
-#'
+#' }
 #' # To calculate future paths in a partially-observed trial
 #' dat <- efftox_parameters_demo()
 #' dat$doses = array(c(1,1,1))
 #' dat$eff = array(c(0,0,0))
 #' dat$tox = array(c(1,1,1))
 #' dat$num_patients = 3
+#' \dontrun{
 #' dtps2 <- efftox_dtps(dat = dat, cohort_sizes = c(3), next_dose = 1)
+#' }
 #'
 #' @seealso
 #' \code{\link{efftox_params}}

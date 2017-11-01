@@ -2,7 +2,7 @@ Package: trialr
 Type: Package
 Title: Clinical Trial Designs in RStan & R
 Version: 0.0.1
-Date: 2017-06-01
+Date: 2017-11-01
 Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com",
     role = c("aut", "cre"))
 Author: Kristian Brock [aut, cre]

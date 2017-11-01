@@ -5,7 +5,10 @@
 # install.packages('rstantools')
 # install.packages('gtools')
 # install.packages('devtools')
+# install.packages('curl')
 
+
+# R.version
 # library(rstan)
 # library(rstantools)
 # library(Rcpp)
@@ -186,5 +189,15 @@ help("peps2_run_sims")
 devtools::build_vignettes()
 devtools::check()
 devtools::build()
-# devtools::release()
+devtools::release()
+
+# RStan breaks?
+# Time to do a rain dance:
+# https://groups.google.com/forum/#!topic/stan-users/8e73htnTxro
+# remove.packages("rstan")
+# dir(system.file("libs", package = "rstan"))
+# install.packages("rstan", dependencies = TRUE)
+# Scrub the environ. Restart R session.
+# Then Clean and Rebuild
+# eight_schools <- stan_demo("eight_schools")
 
