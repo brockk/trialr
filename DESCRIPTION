@@ -3,19 +3,20 @@ Type: Package
 Title: Clinical Trial Designs in 'RStan'
 Version: 0.0.1
 Date: 2017-11-01
-Authors@R: person("Kristian", "Brock", email = "kristian.brock@gmail.com",
-    role = c("aut", "cre"))
-Author: Kristian Brock [aut, cre]
+Authors@R: c(person("Kristian", "Brock", email = "kristian.brock@gmail.com", role = c("aut", "cre")),
+             person("Trustees of", "Columbia University", role = "cph"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
 Description: A showcase of Bayesian clinical trial designs, implemented in 
     'RStan' and R. Some designs are implemented in R for the first
-    time (e.g. EffTox). Given the emphasis on flexibility in Bayesian analysis,
+    time (e.g. 'EffTox' by Thall and Cook, 2004, 
+    <https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software_Id=2>). 
+    Given the emphasis on flexibility in Bayesian analysis,
     the implementations in a common language and style may serve as a cookbook
     to encourage the use of Bayesian methods in trials. Compiled 'RStan' models
     are provided in addition to helper functions to perform simulations and
     inference on observed trial outcomes. There is a preponderance of early
     phase trial designs because this is where Bayesian methods are used most.
-    If there is a published Bayesian design you want implemented in Stan, get in
+    If there is a published Bayesian design you want implemented in 'Stan', get in
     touch.
 License: GPL-3
 Depends:
