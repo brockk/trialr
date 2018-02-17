@@ -10,7 +10,7 @@
 // K Brock, April 2017
 
 data {
-  # Observed data and trial constants
+  // Observed data and trial constants
   int<lower=1> m;                         // Number of cohorts
   int<lower=0> x[m];                      // Number of responses by cohort
   int<lower=0> n[m];                      // Number of patients by cohort

@@ -9,9 +9,9 @@
 
 
 # R.version
+# library(Rcpp)
 # library(rstan)
 # library(rstantools)
-# library(Rcpp)
 # library(trialr)
 # devtools::load_all()
 
@@ -143,6 +143,7 @@ dat <- peps2_get_data(num_patients = 60,
 samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
 colMeans(extract(samp, 'prob_eff')[[1]])
 plot(samp, pars = 'prob_eff')
+
 decision <- peps2_process(dat, samp)
 decision$Accept
 decision$ProbEff
@@ -160,6 +161,69 @@ sims <- peps2_run_sims(num_sims = 10, sample_data_func = peps2_sc,
                        summarise_func = peps2_process)
 apply(sapply(sims, function(x) x$Accept), 1, mean)
 
+
+# CRM ----
+
+# Example 1
+library(dfcrm)
+d <- c(1,1,1, 2,2,2, 2,2,2, 3,3,3)
+tox <- c(0,0,0, 0,1,0, 0,0,0, 1,1,0)
+target <- 0.25
+skeleton <- c(0.1, 0.15, 0.25, 0.4, 0.65)
+df_mod <- crm(prior = skeleton, target = target, tox = tox, level = d,
+              model = 'empiric', method = 'bayes')
+df_mod
+
+library(rstan)
+crm_emp_normal <- rstan::stan_model(file = 'exec_dev/CRM_Empirical_NormalPrior.stan')
+crm_emp_dat <- list(beta_sd = sqrt(1.34),
+                    num_doses = length(skeleton),
+                    skeleton = skeleton,
+                    num_patients = length(d),
+                    tox = tox,
+                    doses = d)
+crm_samp <- rstan::sampling(object = crm_emp_normal, data = crm_emp_dat)
+plot(crm_samp)
+summary(crm_samp)$summary
+
+# Example - p.21 Cheung (2011)
+library(dfcrm)
+target <- 0.25
+skeleton <- c(0.05, 0.12, 0.25, 0.4, 0.55)
+d <- c(3, 5, 5, 3, 4)
+tox <- c(0, 0, 1, 0, 0)
+crm(skeleton, target, tox, d, model = "logistic", intcpt = 3)
+
+crm_logit1_normal <- rstan::stan_model(file = 'exec/CRM_OneParamLogistic_NormalPrior.stan')
+crm_logit1_dat <- list(a0 = 3,
+                       beta_mean = 0,
+                       beta_sd = sqrt(1.34),
+                       num_doses = length(skeleton),
+                       skeleton = skeleton,
+                       num_patients = length(d),
+                       tox = tox,
+                       doses = d)
+crm_samp <- rstan::sampling(object = crm_logit1_normal, data = crm_logit1_dat)
+summary(crm_samp)$summary
+
+
+prob_tox_samp <- as.data.frame(crm_samp, 'prob_tox')
+# Posterior mean
+apply(prob_tox_samp, 2, mean)
+# Posterior median
+apply(prob_tox_samp, 2, median)
+# Posterior probability that prob_tox exceeds target
+apply(prob_tox_samp > target, 2, mean)
+# Posterior probability that prob_tox exceeds target by 10%
+apply(prob_tox_samp > target + 0.1, 2, mean)
+all(prob_tox_samp[, 1] < prob_tox_samp[, 2])
+all(prob_tox_samp[, 3] < prob_tox_samp[, 4])
+table(apply(prob_tox_samp, 1, function(x) which.min(abs(x - target)))) / nrow(prob_tox_samp) # Note: apply by row, not col!!
+
+pt_tall <- data.frame(ProbTox = as.vector(as.matrix(prob_tox_samp)),
+                      Dose = as.factor(rep(1:ncol(prob_tox_samp), each = nrow(prob_tox_samp))))
+ggplot(pt_tall, aes(x = ProbTox, group = Dose, col = Dose)) +
+  geom_density()
 
 # Vignettes  -------
 # devtools::use_vignette("EffTox")
@@ -201,4 +265,4 @@ devtools::release()
 # Scrub the environ. Restart R session.
 # Then Clean and Rebuild
 # eight_schools <- stan_demo("eight_schools")
-
+# eight_schools

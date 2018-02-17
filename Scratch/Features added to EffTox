@@ -1,0 +1,13 @@
+
+The implementation of EffTox in trialr provides:
+
+- the first implementation of EffTox in R;
+- the ability to run EffTox on non-Windows machines
+- a script approach, as opposed to menus-and-buttons approach, which is useful for automation, saving, sharing, source control, etc;
+- access to posterior utility samples, for plotting etc;
+- the dose-superiority matrix (not presented by Thall et al.);
+- ability to use variable cohort sizes in simulation;
+- ability to simulate culmination of trial from partially observed state;
+- Users can control level of precision in posterior sampling via Stan args;
+- an open-source implementation from which adaptation is relatively simple.
+

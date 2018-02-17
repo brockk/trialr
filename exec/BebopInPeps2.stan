@@ -32,7 +32,7 @@ data {
   int<lower=0, upper=1> x3[J];  // x3=1 if PD-L1 is medium
                                 // Implicityly, x2=0 & x3=0 if PD-L1 is high
 
-  # Hyperparameters
+  // Hyperparameters
   real alpha_mean;
   real<lower=0> alpha_sd;
   real beta_mean;

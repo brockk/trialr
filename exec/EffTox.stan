@@ -24,7 +24,7 @@ functions {
 }
 
 data {
-  # Hyperparameters
+  // Hyperparameters
   real alpha_mean;
   real<lower=0> alpha_sd;
   real beta_mean;
@@ -37,7 +37,7 @@ data {
   real<lower=0> eta_sd;
   real psi_mean;
   real<lower=0> psi_sd;
-  # Fixed trial parameters
+  // Fixed trial parameters
   int<lower=1> num_doses;
   real<lower=0> real_doses[num_doses]; // Doses under investigation, e.g. 10, 20, 30 for 10mg, 20mg, 30mg
   real p;  // The p of the L^p norm used to model the efficacy-toxicity indifference contours.
@@ -46,7 +46,7 @@ data {
   real tox1; // Maximum permissable Pr(Toxicity) when Pr(Efficacy) = 1
   real efficacy_hurdle; // A dose is acceptable if prob(eff) exceeds this hurdle...
   real toxicity_hurdle; //  ... and prob(tox) is less than this hurdle
-  # Observed trial outcomes
+  // Observed trial outcomes
   int<lower=0> num_patients;
   int<lower=0, upper=1> eff[num_patients]; // Binary efficacy event for patients j=1,..,num_patients
   int<lower=0, upper=1> tox[num_patients]; // Binary toxicity event for patients j=1,..,num_patients
@@ -56,7 +56,7 @@ data {
 }
 
 transformed data {
-  # Thall & Cook transform the actual doses by logging and centralising:
+  // Thall & Cook transform the actual doses by logging and centralising:
   real coded_doses[num_doses];
   real coded_doses_squ[num_doses]; // The square of coded_doses
   real mean_log_dose; // Variable created for convenience
@@ -72,15 +72,15 @@ transformed data {
 }
 
 parameters {
-  # Coefficients in toxicity logit model:
+  // Coefficients in toxicity logit model:
   real alpha;
   real beta;
-  # Coefficients in efficacy logit model:
-  # Why not delta and epsilon? They have such common, alternative usage that I skipped them.
+  // Coefficients in efficacy logit model:
+  // Why not delta and epsilon? They have such common, alternative usage that I skipped them.
   real gamma;
   real zeta;
   real eta;
-  # Association:
+  // Association:
   real psi;
 }
 
@@ -90,8 +90,8 @@ transformed parameters {
   real<lower=0, upper=1> prob_acc_eff[num_doses]; // Probability efficacy is acceptable at doses i=1,...,num_doses
   real<lower=0, upper=1> prob_acc_tox[num_doses]; // Probability toxicity is acceptable at doses i=1,...,num_doses
   real utility[num_doses]; // Posterior utility of doses i=1,...,num_doses
-  # Calculate the utility of each dose using the method described in
-  # "Efficacy-Toxicity trade-offs based on L-p norms: Technical Report UTMDABTR-003-06", John Cook
+  // Calculate the utility of each dose using the method described in
+  // "Efficacy-Toxicity trade-offs based on L-p norms: Technical Report UTMDABTR-003-06", John Cook
   for(i in 1:num_doses)
   {
     real r_to_the_p; // Convenience variable, as in (2) of Cook.
