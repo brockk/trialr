@@ -1,11 +1,12 @@
 // The one-parameter Bayesian Continual Reassessment Method (CRM) model for
-// dose-finding using the empiric link function and a normal prior on the exponent
+// dose-finding using the logistic link function and a gamma prior on the slope
 // parameter.
 //
-// i.e. F(x, beta) = x ^ exp(beta)
-// where x is the skeleton (the prior dose-toxicity curve)
-// and beta ~ N(0, beta_sd).
-// The exponent is exponentiated because it is required to be positive for
+// i.e. F(x, beta) = exp{a0 + exp(beta) x} / (1 + exp{a0 + exp(beta) x})
+// where x is the skeleton (the prior dose-toxicity curve), a0 is a constant
+// intercept parameter, and the slope parameter
+// beta ~ gamma(beta_shape, beta_inverse_scale), i.e. Exp[beta] = beta_shape / beta_inverse_scale
+// The slope is exponentiated because it is required to be positive for
 // monotonic dose-toxicity curves. See p.18 Cheung (2011).
 //
 // References:
@@ -17,14 +18,14 @@
 // New York: Chapman & Hall / CRC Press.
 
 functions {
-  real log_joint_pdf(int num_patients, int[] tox, int[] doses, real[] skeleton,
-                     real beta) {
+  real log_joint_pdf(int num_patients, int[] tox, int[] doses,
+                     real[] codified_doses, real a0, real beta) {
     real p;
     p = 0;
     for(j in 1:num_patients) {
       real prob_tox;
       real p_j;
-      prob_tox = skeleton[doses[j]] ^ exp(beta);
+      prob_tox = inv_logit(a0 + beta * codified_doses[doses[j]]);
       p_j = prob_tox^tox[j] * (1 - prob_tox)^(1 - tox[j]);
       p = p + log(p_j);
     }
@@ -34,13 +35,17 @@ functions {
 
 data {
   // Hyperparameters
-  real<lower=0> beta_sd;
+  real<lower=0> beta_shape;
+  real<lower=0> beta_inverse_scale;
 
   // Fixed trial parameters
   int<lower=1> num_doses;
+
   // Prior probability of toxicity at each dose, commonly referred to as the
   // skeleton. Should be monotonically increasing.
   real<lower=0, upper = 1> skeleton[num_doses];
+  // Constant intercept
+  real a0;
 
   // Observed trial outcomes
   int<lower=0> num_patients;
@@ -48,8 +53,19 @@ data {
   int<lower=0, upper=1> tox[num_patients];
   // Dose-levels given for patients j=1,..,num_patients.
   // Dose-levels are 1-based indices of real_doses.
-  // E.g. 1 means 1st dose in real_doses was given
+  // E.g. 1 means 1st dose in real_doses was given.
   int<lower=1, upper=num_doses> doses[num_patients];
+}
+
+transformed data {
+  // Codified doses, aka dose-labels, are obtained by backwards substitution
+  // of skeleton values into dose-toxicity relationship. I.e. given assumed
+  // dose-toxicity relationship and parameters, what "dose" gives me prob_tox =(
+  // skeleton[1], skeleton[2], etc? See p.18 of Cheung (2011).
+  real codified_doses[num_doses];
+  for(i in 1:num_doses) {
+    codified_doses[i] = (logit(skeleton[i]) - a0) / (beta_shape / beta_inverse_scale);
+  }
 }
 
 parameters {
@@ -61,20 +77,20 @@ transformed parameters {
   // Posterior probability of toxicity at doses i=1,...,num_doses
   real<lower=0, upper=1> prob_tox[num_doses];
   for(i in 1:num_doses) {
-    prob_tox[i] = skeleton[i] ^ exp(beta);
+    prob_tox[i] = inv_logit(a0 + beta * codified_doses[i]);
   }
 }
 
 model {
-  target += normal_lpdf(beta | 0, beta_sd);
-  target += log_joint_pdf(num_patients, tox, doses, skeleton, beta);
+  target += gamma_lpdf(beta | beta_shape, beta_inverse_scale);
+  target += log_joint_pdf(num_patients, tox, doses, codified_doses, a0, beta);
 }
 
 generated quantities {
   vector[num_patients] log_lik;
   for (j in 1:num_patients) {
     real p_j;
-    p_j = skeleton[doses[j]] ^ exp(beta);
+    p_j = inv_logit(a0 + beta * codified_doses[doses[j]]);
     log_lik[j] = log(p_j^tox[j] * (1 - p_j)^(1 - tox[j]));
   }
 }

@@ -5,7 +5,7 @@
 // i.e. F(x, beta) = exp{a0 + exp(beta) x} / (1 + exp{a0 + exp(beta) x})
 // where x is the skeleton (the prior dose-toxicity curve), a0 is a constant
 // intercept parameter, and the slope parameter beta ~ N(beta_mean, beta_sd).
-// The exponent is exponentiated because it is required to be positive for
+// The slope is exponentiated because it is required to be positive for
 // monotonic dose-toxicity curves. See p.18 Cheung (2011).
 //
 // References:
