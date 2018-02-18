@@ -138,7 +138,6 @@ set.seed(123)
 dat <- peps2_get_data(num_patients = 60,
                       prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
                       prob_tox = rep(0.1, 6),
-                      #prob_tox = c(0.9, 0.15, 0.1, 0.9, 0.1, 0.1),
                       eff_tox_or = rep(1, 6))
 samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
 colMeans(extract(samp, 'prob_eff')[[1]])
@@ -184,7 +183,7 @@ library(rstan)
 crm_samp <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior, data = crm_emp_dat, seed = 123)
 # crm_emp_normal <- rstan::stan_model(file = 'exec_dev/CRM_Empirical_NormalPrior.stan')
 # crm_samp <- rstan::sampling(object = crm_emp_normal, data = crm_emp_dat)
-plot(crm_samp)
+plot(crm_samp, 'prob_tox')
 summary(crm_samp)$summary
 
 # Example - p.21 Cheung (2011)
@@ -208,10 +207,7 @@ crm_logit1_dat <- list(a0 = 3,
 # crm_samp <- rstan::sampling(object = crm_logit1_normal, data = crm_logit1_dat)
 crm_samp <- rstan::sampling(stanmodels$CrmOneParamLogisticNormalPrior,
                             data = crm_logit1_dat, seed = 123)
-
 summary(crm_samp)$summary
-
-
 prob_tox_samp <- as.data.frame(crm_samp, 'prob_tox')
 
 # Posterior mean
@@ -223,80 +219,19 @@ apply(prob_tox_samp > target, 2, mean)
 # Posterior probability that prob_tox exceeds target by 10%
 apply(prob_tox_samp > target + 0.1, 2, mean)
 
-# Dissonance over next dose
+# Dissonance over next dose?
 # Recommended dose using mean
 which.min(abs(apply(prob_tox_samp, 2, mean) - target))
 # Recommended dose using median
 which.min(abs(apply(prob_tox_samp, 2, median) - target))
 # Posterior MTD prob
 table(apply(prob_tox_samp, 1, function(x) which.min(abs(x - target)))) / nrow(prob_tox_samp) # Note: apply by row, not col!!
+# All methods agree
 
 pt_tall <- data.frame(ProbTox = as.vector(as.matrix(prob_tox_samp)),
                       Dose = as.factor(rep(1:ncol(prob_tox_samp), each = nrow(prob_tox_samp))))
 ggplot(pt_tall, aes(x = ProbTox, group = Dose, col = Dose)) +
   geom_density()
-
-# Levy example
-# See Levy2006, Grieve2017
-target <- 0.33
-skeleton <- c(0.05, 0.10, 0.15, 0.33, 0.5)
-d <- c(1, 1, 1)
-tox <- c(0, 0, 0)
-levy1_dat <- list(a0 = 3,
-                  beta_shape = 1,
-                  beta_inverse_scale = 1,
-                  num_doses = length(skeleton),
-                  skeleton = skeleton,
-                  num_patients = length(d),
-                  tox = tox,
-                  doses = d)
-
-crm_samp <- rstan::sampling(stanmodels$CrmOneParamLogisticGammaPrior,
-                            data = levy1_dat, seed = 123,
-                            control = list(adapt_delta = 0.95))
-summary(crm_samp)$summary
-prob_tox_samp <- as.data.frame(crm_samp, 'prob_tox')
-
-# Posterior mean
-apply(prob_tox_samp, 2, mean)  # This matches bcrm but not Levy2006
-# Posterior median
-apply(prob_tox_samp, 2, median) # This is too high
-
-levy1b_dat <- list(a0 = 3,
-                   beta_mean = 0,
-                   beta_sd = sqrt(1.34),
-                   num_doses = length(skeleton),
-                   skeleton = skeleton,
-                   num_patients = length(d),
-                   tox = tox,
-                   doses = d)
-crm_samp_norm <- rstan::sampling(stanmodels$CrmOneParamLogisticNormalPrior,
-                            data = levy1b_dat, seed = 123)
-beta_samp_1 <- exp(as.data.frame(crm_samp_norm, 'beta'))
-summary(beta_samp_1)
-beta_samp_2 <- as.data.frame(crm_samp, 'beta')
-summary(beta_samp_2)
-# They look kinda similar but the gamma prior yields much wider posterior, as
-# might be expected when n=3
-
-qgamma(p = c(0.05, 0.95), shape = 1, rate = 1) # 0.05 - 3.00
-exp(qnorm(p = c(0.05, 0.95), mean = 0, sd = sqrt(1.34))) # 0.15 - 6.71
-# The norm interval is much wider, and this is reflected in the posterior CI
-
-# Posterior prob_tox
-summary(crm_samp, 'prob_tox')$summary[, c('mean', 'sd', '50%')]
-# The mean and SD match bcrm. But median does not
-summary(crm_samp_norm, 'prob_tox')$summary[, c('mean', 'sd', '50%')]
-# These all match bcrm
-
-
-# Dissonance over next dose
-# Recommended dose using mean
-which.min(abs(apply(prob_tox_samp, 2, mean) - target)) # Dose 5
-# Recommended dose using median
-which.min(abs(apply(prob_tox_samp, 2, median) - target)) # Dose 5
-# Posterior MTD prob
-table(apply(prob_tox_samp, 1, function(x) which.min(abs(x - target)))) / nrow(prob_tox_samp) # Dose 5
 
 
 

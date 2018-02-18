@@ -1,0 +1,7 @@
+base
+Rcpp
+gtools
+trialr
+ggplot2
+StanHeaders
+rstan

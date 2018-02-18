@@ -1,0 +1,36 @@
+- title: "EffTox"
+    desc: >
+      Functions for installing Spark components and managing
+      connections to Spark
+    contents:
+      - starts_with("efftox_")
+  - title: "PePS2"
+    desc: "Functions for reading and writing Spark DataFrames."
+    contents:
+      - starts_with("peps2_")
+
+
+reference:
+    - title: "EffTox"
+      desc: "Functions for reading and writing Spark DataFrames."
+      contents:
+        - efftox_solve_p
+
+
+navbar:
+  title: "trialr"
+  type: inverse
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "dplyr"
+      href: articles/dplyr.html
+    - text: "ML"
+      href: articles/ML.html
+    - text: "Extensions"
+      href: articles/extensions.html
+    - text: "Deployment"
+      href: articles/deployment.html
+  right:
+    - icon: fa-github
+      href: https://github.com/rstudio/sparklyr

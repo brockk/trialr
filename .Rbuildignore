@@ -8,3 +8,5 @@ EffTox_stepthrough\.R
 utility_densities\.png
 contours\.png
 cran-comments\.md
+^docs$
+^_pkgdown\.yml$
