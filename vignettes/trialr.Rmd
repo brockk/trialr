@@ -1,0 +1,135 @@
+---
+title: "The `trialr` package"
+author: "Kristian Brock"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`trialr` is a collection of Bayesian clinical trial designs implemented in Stan and R.
+
+Many notable Bayesian designs for clinical trials have been published.
+However, one of the factors that has constrained their adoption is availability of software.
+We present here some of the most popular, implemented and demonstrated in a consistent style, leveraging the powerful Stan environment.
+
+It should be stressed that Bayesian trialists are not generally without code.
+Often authors make available code with their design publication.
+There are also some fantastic packages that aid the use of certain designs.
+However, challenges to use still persist.
+The disparate methods are naturally presented in a style that appeals to the particular author.
+Features implemented in one package for one design may be missing in another.
+Sometimes the technology chosen may only be available on one particular operating system, or the chosen technology may have fallen into disuse.
+
+`trialr` seeks to address these problems.
+Models are specified in [Stan](http://mc-stan.org/), a state-of-the-art environment for Bayesian analysis.
+It uses Hamiltonian Monte Carlo to take samples from the posterior distributions.
+This method is more efficient than Gibbs sampling, for instance, and reliable inference can be performed on a few thousand posterior samples.
+Both R and Stan are available on Mac, Linux, and Windows, and all the examples presented here should work on each operating system.
+Furthermore, Stan offers a very simple method to split the sampling across _n_ cores, taking full advantage of the modern multicore processor in your computer (probably).
+
+The designs implemented in `trialr` are introduced briefly below, and developed more fully in vignettes.
+We focus on real-life usage, including:
+
+- fitting models to observed data using your prior;
+- processing posterior samples to produce useful inferences;
+- and visualising inferences using modern `ggplot` graphics.
+
+# Examples
+In all examples, we will need to load `trialr`
+
+```{r, message=FALSE, warning=FALSE}
+library(trialr)
+```
+
+## CRM
+The Continual Reassessment Method was first published by O'Quigley, Pepe and Fisher (1990).
+It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose.
+There are many variations to suit different clinical scenarios and the design has enjoyed _relatively_ common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).
+
+We illustrate the 
+
+
+## EffTox
+Thall & Cook's EffTox is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. 
+We present it briefly here there is a much more thorough examination in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
+
+We include a convenience function to get parameters for the EffTox demo scenario of a study with five doses:
+
+```{r}
+dat <- efftox_parameters_demo()
+```
+
+but generally you would specify parameters in a list. See the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html) for full details.
+
+Let us add outcomes for 3 patients: 
+
+- patient 1, treated at dose 1, has neither efficacy nor toxicity; 
+- patient 2, treated at dose 2, has just efficacy; 
+- and patients 3, treated at dose 3,  has both:
+
+```{r}
+dat$num_patients <- 3
+dat$eff <- c(0, 1, 1)
+dat$tox <- c(0, 0, 1)
+dat$doses <- c(1, 2, 3)
+```
+
+To get posterior samples, we invoke Stan the model on our `dat` object. 
+The EffTox model is include in `trialr` as `stanmodels$EffTox`.
+The `stanmodels` object is compiled when you install `trialr` and made available when you load the package.
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+samp <- rstan::sampling(stanmodels$EffTox, data = dat, refresh = FALSE)
+```
+
+The `efftox_process` function is provided to perform the calculations on the posterior samples necessary to follow the design published by Thall & Cook:
+
+```{r}
+decision <- efftox_process(dat, samp)
+```
+
+For instance, after evaluation of our three patients, the dose advocated for the next group is dose-level 3: 
+```{r}
+decision$recommended_dose
+```
+
+This is not surprising because dose 3 has the highest utility score:
+
+```{r}
+decision$utility
+```
+
+Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. 
+See the papers for details. 
+
+Functions are provided to create useful plots. 
+For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours.
+The five doses are shown in red. Doses closer to the lower-right corner have higher utility. 
+
+```{r, fig.width=7, fig.height=7}
+efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
+title('EffTox utility contours')
+```
+
+This example continues in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
+
+There are many publications related to EffTox but the two most important are _Dose-Finding Based on Efficacy-Toxicity Trade-Offs_ (Thall & Cook, 2004) and _Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding_ (Thall, Herrick, Nguyen, Venier & Norris, 2014).
+
+
+
+## Hierachical analysis of response in related cohorts
+TODO
+
+## BEBOP in PePS2
+TODO

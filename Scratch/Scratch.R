@@ -239,9 +239,11 @@ ggplot(pt_tall, aes(x = ProbTox, group = Dose, col = Dose)) +
 sessionInfo()
 
 # Vignettes  -------
+# devtools::use_vignette("trialr")
 # devtools::use_vignette("EffTox")
 # devtools::use_vignette("BEBOP")
 # devtools::use_vignette("HierarchicalBayesianResponse")
+# devtools::use_vignette("CRM")
 devtools::build_vignettes()
 # Documentation
 devtools::use_readme_rmd()
