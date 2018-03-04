@@ -25,7 +25,7 @@ functions {
     for(j in 1:num_patients) {
       real prob_tox;
       real p_j;
-      prob_tox = inv_logit(a0 + beta * codified_doses[doses[j]]);
+      prob_tox = inv_logit(a0 + exp(beta) * codified_doses[doses[j]]);
       p_j = prob_tox^tox[j] * (1 - prob_tox)^(1 - tox[j]);
       p = p + log(p_j);
     }
@@ -90,7 +90,7 @@ generated quantities {
   vector[num_patients] log_lik;
   for (j in 1:num_patients) {
     real p_j;
-    p_j = inv_logit(a0 + beta * codified_doses[doses[j]]);
+    p_j = inv_logit(a0 + exp(beta) * codified_doses[doses[j]]);
     log_lik[j] = log(p_j^tox[j] * (1 - p_j)^(1 - tox[j]));
   }
 }

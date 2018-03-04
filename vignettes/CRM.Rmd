@@ -17,13 +17,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-The Continual Reassessment Method is the grand archduke of adaptive clinical trials.
+The Continual Reassessment Method (CRM) is the elder statesman of adaptive clinical trials.
 Originally published by @OQuigley1990, it assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose.
-It is a truly seminal design, with many variants appearing over the years to handle different clinical scenarios, such as seperate groups, late-onset toxicity, efficacy and toxicity outcomes, etc.
+It is a truly seminal design, with many variants appearing over the years to handle different clinical scenarios, such as seperate groups, late-onset toxicity, efficacy and toxicity outcomes, and more.
 
 In this vignette, we focus on the original Bayesian MTD-seeking design in one homogeneous group.
 Let $x_i$ be a standardised dose-level. 
-The probability of DLT at dose $x_i$ is estimated to be $F(x_i, \theta)$, where $F$ is the smooth mathematical function, and $\theta$ is a general vector of parameters.
+The probability of _dose-limiting toxicity_ (DLT) at dose $x_i$ is estimated to be $F(x_i, \theta)$, where $F$ is a smooth mathematical function, and $\theta$ is a general vector of parameters.
 Even within this simple scenario, there are variants that use different forms for $F$, and different distributions on $\theta$.
 
 The CRM variants currently implemented in `trialr` for MTD-finding in a single homogeneous group are:
@@ -31,21 +31,21 @@ The CRM variants currently implemented in `trialr` for MTD-finding in a single h
 | `trialr` model | Link Function | Parameters |
 | ------------- |:-------------:| -----:|
 | `stanmodels$CrmEmpiricNormalPrior` | $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$ | normal prior on $\beta$; |
-| `stanmodels$CrmOneParamLogisticNormalPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
-| `stanmodels$CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i}))$ | $a_0$ fixed and a gamma prior on $\beta$ |
-| `stanmodels$CrmTwoParamLogisticNormalPrior` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \beta x_i}))$ | normal priors on $\alpha$ and $\beta$ |
+| `stanmodels$CrmOneParamLogisticNormalPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
+| `stanmodels$CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
+| `stanmodels$CrmTwoParamLogisticNormalPrior` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)})$ | normal priors on $\alpha$ and $\beta$ |
 
-<!-- - `stanmodels$CrmEmpiricNormalPrior`, for the empiric model (aka the power model), $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$, with normal prior on $\beta$; -->
-<!-- - `stanmodels$CrmOneParamLogisticNormalPrior`, the one-parameter logistic model, $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i}))$, with $a_0$ fixed and a normal prior on $\beta$; -->
-<!-- - `stanmodels$CrmOneParamLogisticGammaPrior`, the one-parameter logistic model, $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i}))$, with  $a_0$ fixed and a gamma prior on $\beta$; -->
-<!-- - `stanmodels$CrmTwoParamLogisticNormalPrior`, the two-parameter logistic model, $F(x_i, \beta) = 1 / (1 + \exp{(-\alpha - \beta x_i}))$, with normal priors on $\alpha$ and $\beta$; -->
+In each instance, the slope parameter $\beta$ is exponentiated to ensure a positive value.
+One of the core assumptions of the CRM and dose-escalation methods in general, is that the probability of toxicity increases with dose.
+If a negative value for $\beta$ is implausible, it makes sense to reflect this in the model.
 
-Other variants could easily be added in future, if requested.
+Other CRM variants could easily be added in future, if requested.
 For instance, @Cheung2011 defines a model that uses the hyperbolic tangent link function, but we have not implemented it here because we have never required it.
 
 # Usage
 Let's conduct some examples. 
-We must load `trialr`
+
+To access the Stan implementations of the CRM, we must load `trialr`:
 ```{r, message=FALSE, warning=FALSE}
 library(trialr)
 ```
@@ -79,7 +79,7 @@ We then briefly compare the inferences at the end.
 
 ## Empiric model
 
-We collect the data required by the Stan routine in a list.
+We collect the data required by the Stan routine in a list:
 
 ```{r, results = "hide"}
 dat1 <- list(
@@ -95,8 +95,8 @@ samp1 <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
                          data = dat1, seed = 123)
 ```
 
-We use a fixed intercept value of 3 and a prior variance of $\beta$ equal to 1.34, as used in Cheung.
-In this demonstration, we set the seed when sampling for reproducibility but in the wild, you might not do this.
+We use a fixed intercept value of 3 and a prior variance of $\beta$ equal to 1.34, as used by Cheung in his examples.
+In this demonstration, we set the seed for reproducibility when sampling however, in the wild, you might not do this.
 
 We extract the samples of the posterior probability of DLT at each dose, stored as the series of parameters called `prob_tox`.
 From there, all manner of inference is possible.
@@ -121,7 +121,7 @@ Even at this early stage, we are quite sure that the top dose is too toxic.
 
 
 ## One parameter logisitic model with normal prior
-THis model takes similar parameters to those used before:
+This model takes similar parameters to those used before:
 
 ```{r}
 dat2 <- list(
@@ -172,14 +172,122 @@ samp3 <- rstan::sampling(stanmodels$CrmOneParamLogisticGammaPrior,
                          data = dat3, seed = 123)
 ```
 
+Generally, divergent transitions are bad news but we will not concern ourselves with the very small number observed here.
+Performing the usual post-processing to estimate Pr(DLT):
+
 ```{r}
 prob_tox_samp3 <- as.data.frame(samp3, 'prob_tox')
 prob_tox3 <- colMeans(prob_tox_samp3)
 prob_tox3
 ```
 
-
 ## Two parameter logisitic model with normal priors
+We now have two parameters on which to specify priors.
+The other parameters stay the same:
+
+```{r}
+dat4 <- list(alpha_mean = 0,
+             alpha_sd = 1,
+             beta_mean = 0,
+             beta_sd = sqrt(1.34),
+             num_doses = length(skeleton),
+             skeleton = skeleton,
+             num_patients = length(doses_given),
+             tox = dlt,
+             doses = doses_given
+)
+```
+
+The processes of sampling:
+```{r, results = "hide"}
+samp4 <- rstan::sampling(stanmodels$CrmTwoParamLogisticNormalPrior,
+                         data = dat4, seed = 123)
+```
+
+and post-processing:
+
+```{r}
+prob_tox_samp4 <- as.data.frame(samp4, 'prob_tox')
+prob_tox4 <- colMeans(prob_tox_samp4)
+prob_tox4
+```
+
+remain the same. 
+These estimates look different, so let's compare the methods.
+
+## Comparison
+Let's compare the posterior estimate of the dose-toxicity curve:
+
+```{r}
+post_curves <- data.frame(
+  DoseLevel = 1:length(skeleton),
+  Empiric = prob_tox1,
+  Logit1N = prob_tox2,
+  Logit1G = prob_tox3,
+  Logit2N = prob_tox4
+)
+knitr::kable(post_curves, digits = 2)
+```
+
+It is perhaps no surprise that the three single-parameter models (`Empiric`, `Logit1N`, & `Logit1G`) provide very similar estimates and agree that the dose closest to the target is dose-level 2.
+In contrast, the two-parameter model estimates a steeper curve, and proposes dose-level 3 for the next patient(s).
+Let's have a look at that graphically:
+
+```{r, fig.width=7, fig.height=7}
+post_curves_tall <- data.frame(
+  DoseLevel = rep(1:length(skeleton), times = 4),
+  ProbTox = c(prob_tox1, prob_tox2, prob_tox3, prob_tox4),
+  Model = rep(c('Empiric', 'Logit1N', 'Logit1G', 'Logit2N'), each = 5)
+)
+
+library(ggplot2)
+ggplot(post_curves_tall, aes(x = DoseLevel, y = ProbTox, group = Model, col = Model)) + 
+  geom_line() + 
+  geom_hline(yintercept = target, col = 'red', linetype = 'dashed')
+```
+
+If we suspect that the difference in inference might be driven by our prior for $\alpha$ in the two-parameter model, we can look at a summary of the posterior samples for that parameter:
+
+```{r}
+knitr::kable(rstan::summary(samp4, 'alpha')$summary, digits = 2)
+```
+
+The posterior mean is not near the tail of the $N(0, 1)$ prior distribution and the posterior 95% credible interval has relocated from prior guess of (-2, 2).
+The prior on $\alpha$ does not appear to be unduly driving the divergence from the one-parameter models.
+
+## Are we interested in Pr(DLT) or Pr(MTD)?
+The traditional method of inference using the CRM has been to estimate the expected dose-toxicity curve and infer the suggested dose by identifying which is estimated to have toxicity rate closest to the target.
+
+However, with Stan we can take a different approach. 
+We have many possible realities sampled from the posterior distributions.
+For instance, each Stan-fit samples many possible dose-toxicity curves, in accordance with the model and priors specified and the data observed.
+With each sampled dose-toxicity curve we can calculate the dose that is closest to the target.
+Each sampled curve advocates a single dose.
+We can then tabulate the number of times that each dose is chosen, effectively creating the posterior probability that each dose is the MTD.
+This is probably what we really want when we conduct an MTD-seeking clinical trial.
+
+```{r}
+prob_mtd1 <- table(apply(prob_tox_samp1, 1, function(x) which.min(abs(x - target)))) / 
+  nrow(prob_tox_samp1) 
+prob_mtd4 <- table(apply(prob_tox_samp4, 1, function(x) which.min(abs(x - target)))) / 
+  nrow(prob_tox_samp4) 
+knitr::kable(
+  data.frame(
+    DoseLevel = 1:length(skeleton),
+    ProbMTD1 = as.numeric(prob_mtd1),
+    ProbMTD4 = as.numeric(prob_mtd4)
+  ), digits = 2
+)
+```
+
+The empiric model (model 1) is actually relatively ambivalent between the first four dose-levels, assigning each roughly the same probability of being the MTD.
+The other one-parameter models are similar (not shown).
+In contrast, the two-parameter model is actually more confident in its choice of dose-level 3.
+However, none of the models is particularly confident and this should not surprise us as we have only observed 6 patients.
+
+## Other CRM vignettes
 TODO
+
+
 
 # References
