@@ -15,12 +15,21 @@ prob_tox_samp_tall %>% head()
 (p1 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
   geom_boxplot() + ylim(0, 1) + labs(title = 'boxplot'))
 (p2 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
-    geom_violin() + ylim(0, 1) + labs(title = 'violin plot'))
-(p3 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox)) +
-  geom_smooth(method = 'loess') + ylim(0, 1) + labs(title = 'loess'))
+    geom_violin(fill = 'orange') + ylim(0, 1) + labs(title = 'violin plot'))
+# (p3 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox)) +
+#   geom_smooth(method = 'loess') + ylim(0, 1) + labs(title = 'loess'))
 (p4 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox, group = Draw)) +
   geom_line(alpha = 0.03, col = 'orange') + ylim(0, 1) + labs(title = 'overplot'))
 
 gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 2,
                         top = "Four beautiful visualisations of the posterior dose-toxicity curve in a CRM model analysis")
 
+
+library(ggridges)
+prob_tox_samp_tall %>% head
+
+
+ggplot(prob_tox_samp_tall %>% mutate(DoseLevel = factor(DoseLevel)),
+       aes(x = ProbTox, y = DoseLevel, fill = DoseLevel)) +
+  geom_density_ridges() + theme(legend.position = 'none') +
+  labs(title = 'joyplot')

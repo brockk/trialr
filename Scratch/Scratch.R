@@ -239,11 +239,12 @@ ggplot(pt_tall, aes(x = ProbTox, group = Dose, col = Dose)) +
 sessionInfo()
 
 # Vignettes  -------
-# devtools::use_vignette("trialr")
+# devtools::use_vignette("trialr-overview")
 # devtools::use_vignette("EffTox")
 # devtools::use_vignette("BEBOP")
 # devtools::use_vignette("HierarchicalBayesianResponse")
 # devtools::use_vignette("CRM")
+# devtools::use_vignette("CRM-visualisation")
 devtools::build_vignettes()
 # Documentation
 devtools::use_readme_rmd()
@@ -265,7 +266,7 @@ help("peps2_get_data")
 help("peps2_process")
 help("peps2_run_sims")
 
-devtools::build_vignettes()
+# Release etc
 # devtools::check()
 devtools::check(manual = TRUE)
 devtools::build()

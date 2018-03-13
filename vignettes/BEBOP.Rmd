@@ -116,7 +116,7 @@ samp <- rstan::sampling(stanmodels$BebopInPeps2, data = dat)
 It is informative to view plots of posterior beliefs. 
 Posterior samples of parameter values are available but they are less meaningful to us than the modelled efficacy rates, for example.
 View posterior distributions using code like
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=T}
+```{r, fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=FALSE}
 rstan::plot(samp, pars = 'prob_eff')
 ```
 
