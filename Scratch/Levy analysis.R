@@ -4,6 +4,8 @@
 # homoharringtonine (ssHHT) in patients with advanced acute myeloid leukaemia.
 # British Journal of Cancer, 95(3), 253–259. https://doi.org/10.1038/sj.bjc.6603265
 
+library(trialr)
+
 target <- 0.33
 skeleton <- c(0.05, 0.10, 0.15, 0.33, 0.5)
 

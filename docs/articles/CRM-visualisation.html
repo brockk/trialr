@@ -48,6 +48,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-model-choice.html">Posterior model choice in CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM in `trialr`</a>
     </li>
     <li>
@@ -91,13 +94,14 @@
 </h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-03-13</h4>
+            <h4 class="date">2018-03-17</h4>
           </div>
 
     
     
 <div class="contents">
-<p>In the general <a href="https://brockk.github.io/trialr/articles/CRM.html">introductory CRM vignette</a>, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in <code>trialr</code>. In this vignette, we demonstrate some visualisation methods that will be useful, applicable in all variants.</p>
+<p>In the general <a href="https://brockk.github.io/trialr/articles/CRM.html">introductory CRM vignette</a>, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in <code>trialr</code>. In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.</p>
+<p>The following visualisation methods are applicable in all <code>trialr</code> variants of the CRM because they rely only on the family of <code>prob_tox</code> parameters that are estimated by all CRM models.</p>
 <p>For illustration, let us assume that we have treated 6 patients at 3 dose-levels:</p>
 <table class="table">
 <thead><tr class="header">
@@ -164,14 +168,14 @@ target &lt;-<span class="st"> </span><span class="fl">0.25</span></code></pre></
 )
 samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">sampling</a></span>(stanmodels<span class="op">$</span>CrmEmpiricNormalPrior,
                         <span class="dt">data =</span> dat, <span class="dt">seed =</span> <span class="dv">123</span>)</code></pre></div>
-<p>Recall that we set the random number generator seed in demonstrations for reproducibility, but you would probably not do this in a real life.</p>
+<p>Recall that we set the random number generator seed in demonstrations for reproducibility. YOu may or may not choose to do this in a real analysis.</p>
 <p>We learned <a href="https://brockk.github.io/trialr/articles/CRM.html">before</a> that we can easily calculate the posterior probability of toxicity at each dose:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prob_tox_samp &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(samp, <span class="st">'prob_tox'</span>)
 <span class="kw">colMeans</span>(prob_tox_samp)</code></pre></div>
 <pre><code>## prob_tox[1] prob_tox[2] prob_tox[3] prob_tox[4] prob_tox[5] 
 ##   0.1081169   0.2159618   0.3098591   0.4444842   0.6235105</code></pre>
 <p>and infer that, in this instance, dose-level 2 is closest to our target toxicity rate of 25%. However, we will probably like to convey this information to the research world in a visually-appealing manner. This is simple with access to the posterior samples.</p>
-<p>For ease of plotting with <code>ggplot2</code>, we recompose the posterior samples to a tall format using <code>tidyr</code> and <code>dplyr</code>:</p>
+<p>For ease of plotting with <code>ggplot2</code>, we recompose the posterior samples to a tall “tidy” format using <code>tidyr</code> and <code>dplyr</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 <span class="kw">library</span>(dplyr)
 
@@ -181,7 +185,7 @@ prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">
     <span class="dt">DoseLevel =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(prob_tox_samp), <span class="dt">each =</span> <span class="kw">nrow</span>(prob_tox_samp)),
     <span class="dt">Draw =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(prob_tox_samp), <span class="dt">times =</span> <span class="kw">ncol</span>(prob_tox_samp))
   )</code></pre></div>
-<p>for instance:</p>
+<p>The tidy data looks like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prob_tox_samp_tall <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)</code></pre></div>
 <pre><code>##          Label     ProbTox DoseLevel Draw
 ## 1  prob_tox[1] 0.008326509         1    1
@@ -204,7 +208,7 @@ prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p2 &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(prob_tox_samp_tall, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbTox, <span class="dt">group =</span> DoseLevel)) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_violin">geom_violin</a></span>(<span class="dt">fill =</span> <span class="st">'orange'</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/lims">ylim</a></span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'violin plot of Pr(DLT) under CRM'</span>))</code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
-<p>If you are a child of the nineties (and you have installed the <a href="https://cran.r-project.org/web/packages/ggridges/"><code>ggridges</code></a> package), you may however prefer to show this information using a ridge plot, aka a <a href="https://en.wikipedia.org/wiki/Unknown_Pleasures">joyplot</a></p>
+<p>If you are a fan of post-punk UK music (and you have installed the <a href="https://cran.r-project.org/web/packages/ggridges/"><code>ggridges</code></a> package), you may however prefer to show this information using a ridge plot, aka a <a href="https://en.wikipedia.org/wiki/Unknown_Pleasures">joyplot</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggridges)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(prob_tox_samp_tall <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">DoseLevel =</span> <span class="kw">factor</span>(DoseLevel)),
        <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbTox, <span class="dt">y =</span> DoseLevel, <span class="dt">fill =</span> DoseLevel)) <span class="op">+</span>
@@ -212,13 +216,13 @@ prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'joyplot of Pr(DLT) under CRM'</span>)</code></pre></div>
 <pre><code>## Picking joint bandwidth of 0.0247</code></pre>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-<p>We see that the posterior probabilities of Pr(DLT) are far from normal, under this model.</p>
+<p>Hopefully none of us would try to claim these posterior probabilities of toxicity are normally distributed under this model. Assuming normality has been one method for performing posterior inference with CRM models in the non-MCMC setting. With the posterior samples provided by <code>rstan</code>, we do not need to assume.</p>
 <p>We will naturally want to visualise quantities beyond just the probability of toxicity. We learned in the <a href="https://brockk.github.io/trialr/articles/CRM.html">introductory CRM vignette</a> that with the full Bayesian CRM provided by <code>trialr</code> and <code>rstan</code>, we can calculate the probability that each dose is the maximum tolerable dose (MTD). The natural next step is to visualise that trade-off:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 
 <span class="kw">apply</span>(prob_tox_samp, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span>target))) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">Dose =</span> .) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Dose)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">geom_bar</a></span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">stat_count</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Dose, <span class="dt">y =</span> ..prop.., <span class="dt">group =</span> <span class="dv">1</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior probability that each dose is the MTD'</span>,
        <span class="dt">y =</span> <span class="st">'Prob(MTD)'</span>)</code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
@@ -230,6 +234,20 @@ prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior probability that each dose is too toxic'</span>,
        <span class="dt">y =</span> <span class="st">'Prob(Tox &gt; target)'</span>)</code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p>Based on our prior and the data assembled thus far, dose-levels 4 and 5 are likely to be overdoses.</p>
+<div id="other-crm-vignettes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-crm-vignettes" class="anchor"></a>Other CRM vignettes</h2>
+<p>There are many vignettes illuminating the CRM in <code>trialr</code>:</p>
+<ul>
+<li><a href="https://brockk.github.io/trialr/articles/CRM.html">An introduction to CRM in ‘trialr’</a></li>
+<li><a href="https://brockk.github.io/trialr/articles/CRM-visualisation.html">Visualisation in CRM</a></li>
+<li><a href="https://brockk.github.io/trialr/articles/CRM-model-choice.html">Posterior model choice</a></li>
+<li>Stopping in CRM</li>
+<li>Case study using Levy, et al. (2006)</li>
+<li>Simulation</li>
+</ul>
+</div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
@@ -242,7 +260,8 @@ prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#references">References</a></li>
+<li><a href="#other-crm-vignettes">Other CRM vignettes</a></li>
+      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>

@@ -245,6 +245,7 @@ sessionInfo()
 # devtools::use_vignette("HierarchicalBayesianResponse")
 # devtools::use_vignette("CRM")
 # devtools::use_vignette("CRM-visualisation")
+# devtools::use_vignette("CRM-model-choice")
 devtools::build_vignettes()
 # Documentation
 devtools::use_readme_rmd()

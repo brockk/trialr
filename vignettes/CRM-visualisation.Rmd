@@ -10,7 +10,9 @@ vignette: >
 ---
 
 In the general [introductory CRM vignette](https://brockk.github.io/trialr/articles/CRM.html), we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in `trialr`.
-In this vignette, we demonstrate some visualisation methods that will be useful, applicable in all variants.
+In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.
+
+The following visualisation methods are applicable in all `trialr` variants of the CRM because they rely only on the family of `prob_tox` parameters that are estimated by all CRM models.
 
 For illustration, let us assume that we have treated 6 patients at 3 dose-levels:
 
@@ -55,7 +57,8 @@ samp <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
                         data = dat, seed = 123)
 ```
 
-Recall that we set the random number generator seed in demonstrations for reproducibility, but you would probably not do this in a real life.
+Recall that we set the random number generator seed in demonstrations for reproducibility.
+YOu may or may not choose to do this in a real analysis.
 
 We learned [before](https://brockk.github.io/trialr/articles/CRM.html) that we can easily calculate the posterior probability of toxicity at each dose:
 
@@ -68,7 +71,7 @@ and infer that, in this instance, dose-level 2 is closest to our target toxicity
 However, we will probably like to convey this information to the research world in a visually-appealing manner.
 This is simple with access to the posterior samples.
 
-For ease of plotting with `ggplot2`, we recompose the posterior samples to a tall format using `tidyr` and `dplyr`:
+For ease of plotting with `ggplot2`, we recompose the posterior samples to a tall "tidy" format using `tidyr` and `dplyr`:
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyr)
@@ -82,7 +85,7 @@ prob_tox_samp_tall <- prob_tox_samp %>%
   )
 ```
 
-for instance:
+The tidy data looks like this:
 
 ```{r}
 prob_tox_samp_tall %>% head(10)
@@ -107,7 +110,7 @@ This inference is much more clear, however, using a violin-plot:
     geom_violin(fill = 'orange') + ylim(0, 1) + labs(title = 'violin plot of Pr(DLT) under CRM'))
 ```
 
-If you are a child of the nineties (and you have installed the [`ggridges`](https://cran.r-project.org/web/packages/ggridges/) package), you may however prefer to show this information using a ridge plot, aka a [joyplot](https://en.wikipedia.org/wiki/Unknown_Pleasures)
+If you are a fan of post-punk UK music (and you have installed the [`ggridges`](https://cran.r-project.org/web/packages/ggridges/) package), you may however prefer to show this information using a ridge plot, aka a [joyplot](https://en.wikipedia.org/wiki/Unknown_Pleasures)
 
 ```{r, fig.width=7, fig.height=7}
 library(ggridges)
@@ -117,7 +120,9 @@ ggplot(prob_tox_samp_tall %>% mutate(DoseLevel = factor(DoseLevel)),
   labs(title = 'joyplot of Pr(DLT) under CRM')
 ```
 
-We see that the posterior probabilities of Pr(DLT) are far from normal, under this model.
+Hopefully none of us would try to claim these posterior probabilities of toxicity are normally distributed under this model.
+Assuming normality has been one method for performing posterior inference with CRM models in the non-MCMC setting.
+With the posterior samples provided by `rstan`, we do not need to assume.
 
 We will naturally want to visualise quantities beyond just the probability of toxicity.
 We learned in the [introductory CRM vignette](https://brockk.github.io/trialr/articles/CRM.html) that with the full Bayesian CRM provided by `trialr` and `rstan`, we can calculate the probability that each dose is the maximum tolerable dose (MTD).
@@ -128,7 +133,7 @@ library(magrittr)
 
 apply(prob_tox_samp, 1, function(x) which.min(abs(x - target))) %>% 
   data.frame(Dose = .) %>% 
-  ggplot(aes(x = Dose)) + geom_bar() + 
+  ggplot() + stat_count(aes(x = Dose, y = ..prop.., group = 1)) +
   labs(title = 'Posterior probability that each dose is the MTD',
        y = 'Prob(MTD)')
 ```
@@ -146,7 +151,17 @@ colMeans(prob_tox_samp > target) %>%
        y = 'Prob(Tox > target)')
 ```
 
+Based on our prior and the data assembled thus far, dose-levels 4 and 5 are likely to be overdoses.
 
+## Other CRM vignettes
+There are many vignettes illuminating the CRM in `trialr`:
+
+- [An introduction to CRM in 'trialr'](https://brockk.github.io/trialr/articles/CRM.html)
+- [Visualisation in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html)
+- [Posterior model choice](https://brockk.github.io/trialr/articles/CRM-model-choice.html)
+- Stopping in CRM
+- Case study using Levy, et al. (2006)
+- Simulation
 
 
 # References

@@ -28,14 +28,18 @@ Even within this simple scenario, there are variants that use different forms fo
 
 The CRM variants currently implemented in `trialr` for MTD-finding in a single homogeneous group are:
 
-| `trialr` model | Link Function | Parameters |
+| Slot in `trialr::stanmodels` | Link Function | Parameters |
 | ------------- |:-------------:| -----:|
-| `stanmodels$CrmEmpiricNormalPrior` | $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$ | normal prior on $\beta$; |
-| `stanmodels$CrmOneParamLogisticNormalPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
-| `stanmodels$CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
-| `stanmodels$CrmTwoParamLogisticNormalPrior` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)})$ | normal priors on $\alpha$ and $\beta$ |
+| `CrmEmpiricNormalPrior` | $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$ | normal prior on $\beta$; |
+| `CrmOneParamLogisticNormalPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
+| `CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
+| `CrmTwoParamLogisticNormalPrior` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)})$ | normal priors on $\alpha$ and $\beta$ |
 
-In each instance, the slope parameter $\beta$ is exponentiated to ensure a positive value.
+These models are compiled when you install `trialr` and stored in the `stanmodels` object.
+For instance, to fit the empiric model you would use `stanmodels$CrmEmpiricNormalPrior`.
+Examples are given below.
+
+In each parameterisation, the slope parameter $\beta$ is exponentiated to ensure a positive value.
 One of the core assumptions of the CRM and dose-escalation methods in general, is that the probability of toxicity increases with dose.
 If a negative value for $\beta$ is implausible, it makes sense to reflect this in the model.
 
@@ -91,6 +95,11 @@ dat1 <- list(
   tox = dlt,
   doses = doses_given
 )
+```
+
+We fit the model to our observed data by calling `rstan::sampling`:
+
+```{r, results = "hide", warning=FALSE, message=FALSE}
 samp1 <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
                          data = dat1, seed = 123)
 ```
@@ -109,7 +118,7 @@ prob_tox1
 ```
 
 We see that dose-level 2 is closest to our toxicity target of 25%.
-Having posterior samples is very liberating, for an inferential point of view.
+Having posterior samples is very liberating from an inferential point of view.
 For example, it is trivial to calculate the probability that the toxicity rate exceeds the target DLT probability at each dose:
 
 ```{r}
@@ -118,6 +127,7 @@ prob_too_toxic1
 ```
 
 Even at this early stage, we are quite sure that the top dose is too toxic.
+This type of calculation is trivial because we have access to the posterior samples.
 
 
 ## One parameter logisitic model with normal prior
@@ -150,6 +160,8 @@ prob_tox2 <- colMeans(prob_tox_samp2)
 prob_tox2
 ```
 
+Once again, we see that dose-level 2 would be recommended for the next cohort because it is forecast to have rob(DLT) closest to the target, 25%.
+
 ## One parameter logisitic model with gamma prior
 This model requires slightly different parameters, on account of the gamma prior:
 
@@ -172,7 +184,6 @@ samp3 <- rstan::sampling(stanmodels$CrmOneParamLogisticGammaPrior,
                          data = dat3, seed = 123)
 ```
 
-Generally, divergent transitions are bad news but we will not concern ourselves with the very small number observed here.
 Performing the usual post-processing to estimate Pr(DLT):
 
 ```{r}
@@ -213,10 +224,11 @@ prob_tox4
 ```
 
 remain the same. 
-These estimates look different, so let's compare the methods.
+However, these estimates look different to the other methods.
+We compare in the next section.
 
 ## Comparison
-Let's compare the posterior estimate of the dose-toxicity curve:
+Let's compare the posterior estimates of the dose-toxicity curve:
 
 ```{r}
 post_curves <- data.frame(
@@ -230,7 +242,7 @@ knitr::kable(post_curves, digits = 2)
 ```
 
 It is perhaps no surprise that the three single-parameter models (`Empiric`, `Logit1N`, & `Logit1G`) provide very similar estimates and agree that the dose closest to the target is dose-level 2.
-In contrast, the two-parameter model estimates a steeper curve, and proposes dose-level 3 for the next patient(s).
+In contrast, the two-parameter model estimates a more convex curve, and proposes dose-level 3 for the next patient(s).
 Let's have a look at that graphically:
 
 ```{r, fig.width=7, fig.height=7}
@@ -274,8 +286,8 @@ prob_mtd4 <- table(apply(prob_tox_samp4, 1, function(x) which.min(abs(x - target
 knitr::kable(
   data.frame(
     DoseLevel = 1:length(skeleton),
-    ProbMTD1 = as.numeric(prob_mtd1),
-    ProbMTD4 = as.numeric(prob_mtd4)
+    ProbMTD_Empiric = as.numeric(prob_mtd1),
+    ProbMTD_Logit2N = as.numeric(prob_mtd4)
   ), digits = 2
 )
 ```
@@ -286,11 +298,14 @@ In contrast, the two-parameter model is actually more confident in its choice of
 However, none of the models is particularly confident and this should not surprise us as we have only observed 6 patients.
 
 ## Other CRM vignettes
+There are many vignettes illuminating the CRM in `trialr`:
 
-Coming soon:
-
-- Visualisation in CRM
-- Model choice in CRM
+- [An introduction to CRM in 'trialr'](https://brockk.github.io/trialr/articles/CRM.html)
+- [Visualisation in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html)
+- [Posterior model choice](https://brockk.github.io/trialr/articles/CRM-model-choice.html)
+- Stopping in CRM
+- Case study using Levy, et al. (2006)
+- Simulation
 
 
 
