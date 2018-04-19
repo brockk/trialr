@@ -1,5 +1,10 @@
 # trialr - Clinical Trial Designs in R & Stan
 
+[![Build Status](https://travis-ci.org/brockk/trialr.svg?branch=master)](https://travis-ci.org/brockk/trialr)
+[![cran version](http://www.r-pkg.org/badges/version/trialr)](https://cran.r-project.org/web/packages/trialr)
+[![downloads](http://cranlogs.r-pkg.org/badges/trialr)](http://cranlogs.r-pkg.org/badges/trialr)
+[![total downloads](http://cranlogs.r-pkg.org/badges/grand-total/trialr)](http://cranlogs.r-pkg.org/badges/grand-total/trialr)
+
 This R package implements clinical trial designs in R and RStan. 
 
 RStan is the R connector of the [Stan](http://mc-stan.org/) project. Stan offers full Bayesian statistical inference so the designs implemented here tend to be Bayesian in nature. Furthermore, there is a preponderance of early-phase clinical trial designs because a) these are the designs that tend to use Bayesian methodology; and b) this is my research area.
