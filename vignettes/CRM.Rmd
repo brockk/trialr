@@ -32,16 +32,17 @@ The CRM variants currently implemented in `trialr` for MTD-finding in a single h
 | ------------- |:-------------:| -----:|
 | `CrmEmpiricNormalPrior` | $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$ | normal prior on $\beta$; |
 | `CrmOneParamLogisticNormalPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
-| `CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
+| `CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
 | `CrmTwoParamLogisticNormalPrior` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)})$ | normal priors on $\alpha$ and $\beta$ |
 
 These models are compiled when you install `trialr` and stored in the `stanmodels` object.
 For instance, to fit the empiric model you would use `stanmodels$CrmEmpiricNormalPrior`.
 Examples are given below.
 
-In each parameterisation, the slope parameter $\beta$ is exponentiated to ensure a positive value.
+Where necessary, the slope parameter $\beta$ is exponentiated to ensure a positive value.
 One of the core assumptions of the CRM and dose-escalation methods in general, is that the probability of toxicity increases with dose.
 If a negative value for $\beta$ is implausible, it makes sense to reflect this in the model.
+In the model with gamma prior, this step is not necessary because the prior constrains the values to be positive.
 
 Other CRM variants could easily be added in future, if requested.
 For instance, @Cheung2011 defines a model that uses the hyperbolic tangent link function, but we have not implemented it here because we have never required it.

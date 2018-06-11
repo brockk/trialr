@@ -1363,7 +1363,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_CrmOneParamLogisticGammaPrior");
-    reader.add_event(96, 96, "end", "model_CrmOneParamLogisticGammaPrior");
+    reader.add_event(95, 95, "end", "model_CrmOneParamLogisticGammaPrior");
     return reader;
 }
 
@@ -1407,7 +1407,7 @@ log_joint_pdf(const int& num_patients,
             stan::math::fill(p_j,DUMMY_VAR__);
 
 
-            stan::math::assign(prob_tox, inv_logit((a0 + (exp(beta) * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
+            stan::math::assign(prob_tox, inv_logit((a0 + (beta * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
             stan::math::assign(p_j, (pow(prob_tox,get_base1(tox,j,"tox",1)) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))));
             stan::math::assign(p, (p + log(p_j)));
             }
@@ -1785,7 +1785,7 @@ public:
                 stan::math::fill(p_j,DUMMY_VAR__);
 
 
-                stan::math::assign(p_j, inv_logit((a0 + (exp(beta) * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
+                stan::math::assign(p_j, inv_logit((a0 + (beta * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
                 stan::math::assign(get_base1_lhs(log_lik,j,"log_lik",1), log((pow(p_j,get_base1(tox,j,"tox",1)) * pow((1 - p_j),(1 - get_base1(tox,j,"tox",1))))));
                 }
             }

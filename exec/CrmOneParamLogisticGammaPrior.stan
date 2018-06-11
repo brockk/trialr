@@ -2,12 +2,11 @@
 // dose-finding using the logistic link function and a gamma prior on the slope
 // parameter.
 //
-// i.e. F(x, beta) = exp{a0 + exp(beta) x} / (1 + exp{a0 + exp(beta) x})
+// i.e. F(x, beta) = exp{a0 + beta x} / (1 + exp{a0 + beta x})
 // where x is the skeleton (the prior dose-toxicity curve), a0 is a constant
 // intercept parameter, and the slope parameter
 // beta ~ gamma(beta_shape, beta_inverse_scale), i.e. Exp[beta] = beta_shape / beta_inverse_scale
-// The slope is exponentiated because it is required to be positive for
-// monotonic dose-toxicity curves. See p.18 Cheung (2011).
+// The slope is constrained to be positive by the prior.
 //
 // References:
 // 1) O’Quigley, J., Pepe, M., & Fisher, L. (1990).
@@ -25,7 +24,7 @@ functions {
     for(j in 1:num_patients) {
       real prob_tox;
       real p_j;
-      prob_tox = inv_logit(a0 + exp(beta) * codified_doses[doses[j]]);
+      prob_tox = inv_logit(a0 + beta * codified_doses[doses[j]]);
       p_j = prob_tox^tox[j] * (1 - prob_tox)^(1 - tox[j]);
       p = p + log(p_j);
     }
@@ -90,7 +89,7 @@ generated quantities {
   vector[num_patients] log_lik;
   for (j in 1:num_patients) {
     real p_j;
-    p_j = inv_logit(a0 + exp(beta) * codified_doses[doses[j]]);
+    p_j = inv_logit(a0 + beta * codified_doses[doses[j]]);
     log_lik[j] = log(p_j^tox[j] * (1 - p_j)^(1 - tox[j]));
   }
 }

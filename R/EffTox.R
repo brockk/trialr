@@ -576,6 +576,8 @@ efftox_superiority <- function(fit) {
 #'
 #' @param outcome_string character string, conveying doses given and outcomes
 #' observed.
+#' @param as.list TRUE (be default) to return a \code{list};
+#' FALSE to return a \code{data.frame}
 #'
 #' @return a list with elements \code{eff}, \code{tox}, \code{doses} and
 #' \code{num_patients}. These elements are congruent with the same in
@@ -591,36 +593,50 @@ efftox_superiority <- function(fit) {
 #'
 #' @references Brock et al. (submitted 2017), Implementing the EffTox
 #' Dose-Finding Design in the Matchpoint Trial.
-efftox_parse_outcomes <- function(outcome_string) {
-  regex = '\\w*\\d+[ETBN]+\\w*'
-  outcomes = outcome_string
-  m = gregexpr(pattern = regex, text = outcomes)
-  cohorts = regmatches(outcomes, m)
-  if(length(cohorts) <= 0) stop(paste('Matching', outcomes,
-                                      'to EffTox outcomes failed'))
-  cohorts = cohorts[[1]]
-  doses = c(); eff = c(); tox = c();
-  num_patients = 0
-  for(cohort in cohorts) {
-    # print(cohort)
-    mc = regexpr('(\\d+)', cohort)
-    dl_start = mc[1]
-    dl_end = mc[1] + attr(mc,"match.length") - 1
-    dl = substr(cohort, dl_start, dl_end)
-    dl = as.integer(dl)
-    outcomes = substr(cohort, dl_end + 1, nchar(cohort))
-    outcomes = strsplit(outcomes, "")[[1]]
-    these_doses = rep(dl, length(outcomes))
-    doses = c(doses, these_doses)
-    these_eff = as.integer((outcomes == 'E') | (outcomes == 'B'))
-    eff =c(eff, these_eff)
-    these_tox = as.integer((outcomes == 'T') | (outcomes == 'B'))
-    tox = c(tox, these_tox)
-    num_patients = num_patients + length(outcomes)
+efftox_parse_outcomes <- function(outcome_string, as.list = TRUE) {
+
+  # Matching is done by regex.
+
+  # This pattern ensures that outcome_string is valid. It is the gate-keeper.
+  # It allows leading and trailing white space and demands >0 cohort strings.
+  # e.g. "2ENT 3TT 2E "
+  valid_str_match <- '^\\s*(\\d+[ETNB]+\\s*)+$'
+  # This pattern identifies the individual cohort strings, e.g. 2ENT
+  cohort_str_match <- '\\d+[ETNB]+'
+  # This pattern extracts the dose-level from a cohort string, e.g. 2
+  dl_str_match <- '\\d+'
+  # And this pattern extracts the outcomes from a cohort string, e.g ENT
+  outcomes_match_str <- '[ETNB]+'
+
+  if(stringr::str_detect(outcome_string, valid_str_match)) {
+    doses <- eff <- tox <- c()
+    cohort_strs <- stringr::str_extract_all(outcome_string, cohort_str_match)[[1]]
+    for(cohort_str in cohort_strs) {
+      c_dl <- as.integer(stringr::str_extract(cohort_str, dl_str_match))
+      if(c_dl <= 0) stop('Dose-levels must be strictly positive integers.')
+      c_outcomes <- stringr::str_extract(cohort_str, outcomes_match_str)
+
+      these_doses <- rep(c_dl, nchar(c_outcomes))
+      doses <- c(doses, these_doses)
+
+      these_outcomes = stringr::str_split(c_outcomes, '')[[1]]
+      these_eff = as.integer((these_outcomes == 'E') | (these_outcomes == 'B'))
+      eff = c(eff, these_eff)
+      these_tox = as.integer((these_outcomes == 'T') | (these_outcomes == 'B'))
+      tox = c(tox, these_tox)
+    }
+  } else {
+    stop(paste0('"', outcome_string, '" is not a valid outcome string.
+                A valid example is "1N 2EE 3TB 2BE"'))
   }
-  return(list(
-    doses = doses, eff = eff, tox = tox, num_patients = num_patients
-  ))
+
+  if(as.list) {
+    return(list(
+      doses = doses, eff = eff, tox = tox, num_patients = length(doses)
+    ))
+  } else {
+    return(data.frame(doses = doses, eff = eff, tox = tox))
+  }
 }
 
 
