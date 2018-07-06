@@ -161,7 +161,7 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>efftox_params</code></p>
+    <div class='dont-index'><p><code><a href='efftox_params-class.html'>efftox_params</a></code></p>
 <p><code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code></p>
 <p><code><a href='efftox_process.html'>efftox_process</a></code></p></div>
     
@@ -178,8 +178,8 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 4.7e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.47 seconds.
+#&gt; Gradient evaluation took 4.5e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -196,15 +196,15 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.511397 seconds (Warm-up)
-#&gt;                0.35529 seconds (Sampling)
-#&gt;                0.866687 seconds (Total)
+#&gt;  Elapsed Time: 0.525762 seconds (Warm-up)
+#&gt;                0.355739 seconds (Sampling)
+#&gt;                0.881501 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.9e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -221,37 +221,12 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.495928 seconds (Warm-up)
-#&gt;                0.351313 seconds (Sampling)
-#&gt;                0.847241 seconds (Total)
+#&gt;  Elapsed Time: 0.491218 seconds (Warm-up)
+#&gt;                0.358009 seconds (Sampling)
+#&gt;                0.849227 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
-#&gt; 
-#&gt; Gradient evaluation took 4e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.497855 seconds (Warm-up)
-#&gt;                0.35161 seconds (Sampling)
-#&gt;                0.849465 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; 
 #&gt; Gradient evaluation took 3.7e-05 seconds
 #&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
@@ -271,9 +246,34 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.505288 seconds (Warm-up)
-#&gt;                0.356199 seconds (Sampling)
-#&gt;                0.861487 seconds (Total)
+#&gt;  Elapsed Time: 0.483037 seconds (Warm-up)
+#&gt;                0.344766 seconds (Sampling)
+#&gt;                0.827803 seconds (Total)
+#&gt; 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
+#&gt; 
+#&gt; Gradient evaluation took 3.9e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#&gt; Adjust your expectations accordingly!
+#&gt; 
+#&gt; 
+#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; 
+#&gt;  Elapsed Time: 0.502658 seconds (Warm-up)
+#&gt;                0.357751 seconds (Sampling)
+#&gt;                0.860409 seconds (Total)
 #&gt; </div><div class='input'><span class='co'># The fit object is quite crude. Post-process to perform useful inference:</span>
 <span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
 <span class='no'>decision</span>$<span class='no'>recommended_dose</span> <span class='kw'>==</span> <span class='fl'>3</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'># Dose-level 3 is recommended for the next cohort of patients.

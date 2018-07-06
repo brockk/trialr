@@ -1046,8 +1046,8 @@ stan_efftox <- function(outcome_str = NULL,
   if(is.null(outcome_str)) {
     if(length(doses_given) != length(eff))
       stop('doses_given and eff vectors should have same length')
-    if(length(toxicity) != length(eff))
-      stop('toxicity and eff vectors should have same length')
+    if(length(tox) != length(eff))
+      stop('tox and eff vectors should have same length')
     dat$doses <- doses_given
     dat$eff <- eff
     dat$tox <- tox

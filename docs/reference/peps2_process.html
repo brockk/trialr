@@ -227,8 +227,8 @@ rules.</p></li>
 <span class='no'>samp</span> <span class='kw'>=</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>BebopInPeps2</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 0.000182 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.82 seconds.
+#&gt; Gradient evaluation took 0.000184 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.84 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -245,15 +245,15 @@ rules.</p></li>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.43734 seconds (Warm-up)
-#&gt;                2.53062 seconds (Sampling)
-#&gt;                4.96797 seconds (Total)
+#&gt;  Elapsed Time: 2.56828 seconds (Warm-up)
+#&gt;                2.6186 seconds (Sampling)
+#&gt;                5.18688 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 0.000178 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.78 seconds.
+#&gt; Gradient evaluation took 0.000177 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.77 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -270,15 +270,15 @@ rules.</p></li>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.49736 seconds (Warm-up)
-#&gt;                2.40559 seconds (Sampling)
-#&gt;                4.90296 seconds (Total)
+#&gt;  Elapsed Time: 2.70149 seconds (Warm-up)
+#&gt;                2.53712 seconds (Sampling)
+#&gt;                5.23861 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 3).
 #&gt; 
-#&gt; Gradient evaluation took 0.000178 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.78 seconds.
+#&gt; Gradient evaluation took 0.000191 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.91 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -295,15 +295,15 @@ rules.</p></li>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.41716 seconds (Warm-up)
-#&gt;                2.78732 seconds (Sampling)
-#&gt;                5.20448 seconds (Total)
+#&gt;  Elapsed Time: 2.50381 seconds (Warm-up)
+#&gt;                2.79051 seconds (Sampling)
+#&gt;                5.29432 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 0.000178 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.78 seconds.
+#&gt; Gradient evaluation took 0.000177 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.77 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -320,9 +320,9 @@ rules.</p></li>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.50224 seconds (Warm-up)
-#&gt;                2.656 seconds (Sampling)
-#&gt;                5.15824 seconds (Total)
+#&gt;  Elapsed Time: 2.50065 seconds (Warm-up)
+#&gt;                2.64207 seconds (Sampling)
+#&gt;                5.14272 seconds (Total)
 #&gt; </div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'>peps2_process</span>(<span class='no'>dat</span>, <span class='no'>samp</span>)
 <span class='no'>decision</span>$<span class='no'>Accept</span>   <span class='co'># Accept in cohort 2, 3, 5, 6 but not 1, 4</span></div><div class='output co'>#&gt; [1] FALSE  TRUE  TRUE FALSE  TRUE  TRUE</div><div class='input'><span class='no'>decision</span>$<span class='no'>ProbEff</span>  <span class='co'># The probability of efficacy is driving that decision</span></div><div class='output co'>#&gt; [1] 0.07441455 0.24984030 0.42934468 0.04037307 0.14885626 0.28395153</div><div class='input'>
 </div></pre>

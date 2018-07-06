@@ -24,6 +24,8 @@ test_that('stan_crm output for logistic model matches DFCRM by Cheung', {
   #                    tox = c(0, 0, 1, 0, 0), lev = c(3, 5, 5, 3, 4),
   #                    model = "logistic", intcpt = 3)
 
+  epsilon <- 0.01
+
   skeleton <- c(0.05, 0.12, 0.25, 0.40, 0.55)
   target <- 0.25
   a0 <- 3
@@ -38,22 +40,22 @@ test_that('stan_crm output for logistic model matches DFCRM by Cheung', {
   expect_equal(x$recommended_dose, 4)
   beta_samp <- as.data.frame(x, pars = 'beta')
   # fooB$estimate
-  expect_equal(round(mean(beta_samp$beta), 2), 0.28)
+  expect_lt(abs(mean(beta_samp$beta) - 0.28), epsilon)
 
   # fooB$doses
   coded_doses <- (gtools::logit(skeleton) - a0) / exp(beta_mean)
-  expect_equal(round(coded_doses, 2), c(-5.94, -4.99, -4.10, -3.41, -2.80))
+  expect_true(all(abs(coded_doses - c(-5.94, -4.99, -4.10, -3.41, -2.80))),
+              epsilon)
 
   # Not given in the book but continuing the checking via the dfcrm package with
   # fooB$post.var
-  expect_equal(round(var(beta_samp$beta), 2), 0.11)
+  expect_lt(abs(var(beta_samp$beta) - 0.11), epsilon)
 
   # fooB$ptox
   beta_mean_post <- mean(beta_samp$beta)
-  expect_equal(
-    round(gtools::inv.logit(a0 + exp(beta_mean_post) * coded_doses), 2),
-    c(0.01, 0.03, 0.08, 0.18, 0.33)
-  )
+  prob_tox_post <- gtools::inv.logit(a0 + exp(beta_mean_post) * coded_doses)
+  expect_true(all(abs(prob_tox_post - c(0.01, 0.03, 0.08, 0.18, 0.33))),
+              epsilon)
   # Note that the estimated posterior probability of toxicity from dfcrm
   # is calculated by plugging the posterior estimate of beta into the assumed
   # dose-tox function. This differs from that calculated by trialr because

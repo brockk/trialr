@@ -10,6 +10,35 @@ crm_params(skeleton, target, a0 = NULL, alpha_mean = NULL,
   alpha_sd = NULL, beta_mean = NULL, beta_sd = NULL, beta_shape = NULL,
   beta_inverse_scale = NULL)
 }
+\arguments{
+\item{skeleton}{a vector of the prior guesses of toxicity at doses.
+This should be a monotonically-increasing vector of numbers between 0 and 1.}
+
+\item{target}{the target toxicity probability, a number between 0 and 1.
+This value would normally be one of the values in \code{skeleton}, but that
+is not a requirement.}
+
+\item{a0}{Value of fixed intercept parameter.
+Only required for certain models. See Details.}
+
+\item{alpha_mean}{Prior mean of intercept variable for normal prior.
+Only required for certain models. See Details.}
+
+\item{alpha_sd}{Prior standard deviation of intercept variable for normal prior.
+Only required for certain models. See Details.}
+
+\item{beta_mean}{Prior mean of gradient variable for normal prior.
+Only required for certain models. See Details.}
+
+\item{beta_sd}{Prior standard deviation of slope variable for normal prior.
+Only required for certain models. See Details.}
+
+\item{beta_shape}{Prior shape parameter of slope variable for gamma prior.
+Only required for certain models. See Details.}
+
+\item{beta_inverse_scale}{Prior inverse scale parameter of slope variable for
+gamma prior. Only required for certain models. See Details.}
+}
 \description{
 Container class for parameters to fit the CRM models in trialr.
 }
@@ -17,38 +46,6 @@ Container class for parameters to fit the CRM models in trialr.
 Different model parameterisations require that difference parameter values
 are specified.
 }
-\section{Slots}{
-
-\describe{
-\item{\code{skeleton}}{a vector of the prior guesses of toxicity at doses.
-This should be a monotonically-increasing vector of numbers between 0 and 1.}
-
-\item{\code{target}}{the target toxicity probability, a number between 0 and 1.
-This value would normally be one of the values in \code{skeleton}, but that
-is not a requirement.}
-
-\item{\code{a0}}{Value of fixed intercept parameter.
-Only required for certain models. See Details.}
-
-\item{\code{alpha_mean}}{Prior mean of intercept variable for normal prior.
-Only required for certain models. See Details.}
-
-\item{\code{alpha_sd}}{Prior standard deviation of intercept variable for normal prior.
-Only required for certain models. See Details.}
-
-\item{\code{beta_mean}}{Prior mean of gradient variable for normal prior.
-Only required for certain models. See Details.}
-
-\item{\code{beta_sd}}{Prior standard deviation of slope variable for normal prior.
-Only required for certain models. See Details.}
-
-\item{\code{beta_shape}}{Prior shape parameter of slope variable for gamma prior.
-Only required for certain models. See Details.}
-
-\item{\code{beta_inverse_scale}}{Prior inverse scale parameter of slope variable for
-gamma prior. Only required for certain models. See Details.}
-}}
-
 \section{Requirements of \code{empiric} model}{
 
 * beta_sd

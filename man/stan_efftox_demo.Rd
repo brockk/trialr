@@ -12,7 +12,7 @@ See \code{\link{efftox_parse_outcomes}} for a description of syntax and
 examples. Alternatively, you may provide \code{doses_given}, \code{eff} and
 \code{tox} parameters. See Details.}
 
-\item{...Extra}{parameters are passed to \code{rstan::sampling}. Commonly
+\item{...}{Extra parameters are passed to \code{rstan::sampling}. Commonly
 used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
 \code{control}. \code{\link[rstan:sampling]{sampling}}.}
 }

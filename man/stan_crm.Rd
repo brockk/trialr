@@ -55,7 +55,7 @@ gamma prior. Only required for certain models. See Details.}
 1:num_patients, where 1=toxicity and 0=no toxicity. Only required when
 \code{outcome_str} is not provided.}
 
-\item{...Extra}{parameters are passed to \code{rstan::sampling}. Commonly
+\item{...}{Extra parameters are passed to \code{rstan::sampling}. Commonly
 used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
 \code{control}. \code{\link[rstan:sampling]{sampling}}.}
 }
@@ -116,10 +116,10 @@ mod2 <- stan_efftox_demo('1N 2E 3B', seed = 123)
 }
 }
 \references{
-O’Quigley, J., Pepe, M., & Fisher, L. (1990).
+O'Quigley, J., Pepe, M., & Fisher, L. (1990).
   Continual reassessment method: a practical design for phase 1 clinical
   trials in cancer.
-  Biometrics, 46(1), 33–48. https://doi.org/10.2307/2531628
+  Biometrics, 46(1), 33-48. https://doi.org/10.2307/2531628
 }
 \seealso{
 \code{\link{crm_fit}}

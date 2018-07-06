@@ -10,78 +10,75 @@ efftox_params(real_doses, efficacy_hurdle, toxicity_hurdle, p_e, p_t, eff0,
   tox1, eff_star, tox_star, alpha_mean, alpha_sd, beta_mean, beta_sd,
   gamma_mean, gamma_sd, zeta_mean, zeta_sd, eta_mean, eta_sd, psi_mean, psi_sd)
 }
-\description{
-Container class for parameters to fit the EffTox model in trialr.
-}
-\section{Slots}{
-
-\describe{
-\item{\code{real_doses}}{a vector of numbers.The doses under investigation.
+\arguments{
+\item{real_doses}{a vector of numbers.The doses under investigation.
 They should be ordered from lowest to highest and be in consistent units.
 E.g., to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
 c(10, 20, 50).}
 
-\item{\code{efficacy_hurdle}}{Minimum acceptable efficacy probability.
+\item{efficacy_hurdle}{Minimum acceptable efficacy probability.
 A number between 0 and 1.}
 
-\item{\code{toxicity_hurdle}}{Maximum acceptable toxicity probability.
+\item{toxicity_hurdle}{Maximum acceptable toxicity probability.
 A number between 0 and 1.}
 
-\item{\code{p_e}}{Certainty required to infer a dose is acceptable with regards to
+\item{p_e}{Certainty required to infer a dose is acceptable with regards to
 being probably efficacious; a number between 0 and 1.}
 
-\item{\code{p_t}}{Certainty required to infer a dose is acceptable with regards to
+\item{p_t}{Certainty required to infer a dose is acceptable with regards to
 being probably tolerable; a number between 0 and 1.}
 
-\item{\code{eff0}}{Efficacy probability required when toxicity is impossible;
+\item{eff0}{Efficacy probability required when toxicity is impossible;
 a number between 0 and 1 (see Details).}
 
-\item{\code{tox1}}{Toxicity probability permitted when efficacy is guaranteed;
+\item{tox1}{Toxicity probability permitted when efficacy is guaranteed;
 a number between 0 and 1 (see Details).}
 
-\item{\code{eff_star}}{Efficacy probability of an equi-utility third point (see
+\item{eff_star}{Efficacy probability of an equi-utility third point (see
 Details).}
 
-\item{\code{tox_star}}{Toxicity probability of an equi-utility third point (see
+\item{tox_star}{Toxicity probability of an equi-utility third point (see
 Details).}
 
-\item{\code{alpha_mean}}{The prior normal mean of the intercept term in the toxicity
+\item{alpha_mean}{The prior normal mean of the intercept term in the toxicity
 logit model. A number.}
 
-\item{\code{alpha_sd}}{The prior normal standard deviation of the intercept term in
+\item{alpha_sd}{The prior normal standard deviation of the intercept term in
 the toxicity logit model. A number.}
 
-\item{\code{beta_mean}}{The prior normal mean of the slope term in the toxicity
+\item{beta_mean}{The prior normal mean of the slope term in the toxicity
 logit model. A number.}
 
-\item{\code{beta_sd}}{The prior normal standard deviation of the slope term in the
+\item{beta_sd}{The prior normal standard deviation of the slope term in the
 toxicity logit model. A number.}
 
-\item{\code{gamma_mean}}{The prior normal mean of the intercept term in the efficacy
+\item{gamma_mean}{The prior normal mean of the intercept term in the efficacy
 logit model. A number.}
 
-\item{\code{gamma_sd}}{The prior normal standard deviation of the intercept term in
+\item{gamma_sd}{The prior normal standard deviation of the intercept term in
 the efficacy logit model. A number.}
 
-\item{\code{zeta_mean}}{The prior normal mean of the slope term in the efficacy
+\item{zeta_mean}{The prior normal mean of the slope term in the efficacy
 logit model. A number.}
 
-\item{\code{zeta_sd}}{The prior normal standard deviation of the slope term in the
+\item{zeta_sd}{The prior normal standard deviation of the slope term in the
 efficacy logit model. A number.}
 
-\item{\code{eta_mean}}{The prior normal mean of the squared term coefficient in the
+\item{eta_mean}{The prior normal mean of the squared term coefficient in the
 efficacy logit model. A number.}
 
-\item{\code{eta_sd}}{The prior normal standard deviation of the squared term
+\item{eta_sd}{The prior normal standard deviation of the squared term
 coefficient in the efficacy logit model. A number.}
 
-\item{\code{psi_mean}}{The prior normal mean of the association term in the combined
+\item{psi_mean}{The prior normal mean of the association term in the combined
 efficacy-toxicity model. A number.}
 
-\item{\code{psi_sd}}{The prior normal standard deviation of the association term in
+\item{psi_sd}{The prior normal standard deviation of the association term in
 the combined efficacy-toxicity model. A number.}
-}}
-
+}
+\description{
+Container class for parameters to fit the EffTox model in trialr.
+}
 \seealso{
 \code{\link{stan_efftox}}
 \code{\link{stan_efftox_demo}}
