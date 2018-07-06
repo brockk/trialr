@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Container class for parameters to fit the CRM models in trialr. — crm_params-class • trialr</title>
+<title>Print efftox_fit object. — print.efftox_fit • trialr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Container class for parameters to fit the CRM models in trialr. — crm_params-class" />
+<meta property="og:title" content="Print efftox_fit object. — print.efftox_fit" />
 
-<meta property="og:description" content="Container class for parameters to fit the CRM models in trialr." />
+<meta property="og:description" content="Print efftox_fit object." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -127,109 +127,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Container class for parameters to fit the CRM models in trialr.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/CRM.R'><code>R/CRM.R</code></a></small>
-    <div class="hidden name"><code>crm_params-class.Rd</code></div>
+    <h1>Print efftox_fit object.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
+    <div class="hidden name"><code>print.efftox_fit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Container class for parameters to fit the CRM models in trialr.</p>
+    <p>Print efftox_fit object.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>crm_params</span>(<span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>alpha_mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>beta_inverse_scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for efftox_fit</span>
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>skeleton</th>
-      <td><p>a vector of the prior guesses of toxicity at doses.
-This should be a monotonically-increasing vector of numbers between 0 and 1.</p></td>
+      <th>x</th>
+      <td><p><code><a href='efftox_fit-class.html'>efftox_fit</a></code> object to convert.</p></td>
     </tr>
     <tr>
-      <th>target</th>
-      <td><p>the target toxicity probability, a number between 0 and 1.
-This value would normally be one of the values in <code>skeleton</code>, but that
-is not a requirement.</p></td>
-    </tr>
-    <tr>
-      <th>a0</th>
-      <td><p>Value of fixed intercept parameter.
-Only required for certain models. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>alpha_mean</th>
-      <td><p>Prior mean of intercept variable for normal prior.
-Only required for certain models. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>alpha_sd</th>
-      <td><p>Prior standard deviation of intercept variable for normal prior.
-Only required for certain models. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>beta_mean</th>
-      <td><p>Prior mean of gradient variable for normal prior.
-Only required for certain models. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>beta_sd</th>
-      <td><p>Prior standard deviation of slope variable for normal prior.
-Only required for certain models. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>beta_shape</th>
-      <td><p>Prior shape parameter of slope variable for gamma prior.
-Only required for certain models. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>beta_inverse_scale</th>
-      <td><p>Prior inverse scale parameter of slope variable for
-gamma prior. Only required for certain models. See Details.</p></td>
+      <th>...</th>
+      <td><p>Extra parameters, passed onwards.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Different model parameterisations require that difference parameter values
-are specified.</p>
-    
-    <h2 class="hasAnchor" id="requirements-of-empiric-model"><a class="anchor" href="#requirements-of-empiric-model"></a>Requirements of <code>empiric</code> model</h2>
-
-    
-    <p>* beta_sd</p>
-    
-    <h2 class="hasAnchor" id="requirements-of-logistic-model"><a class="anchor" href="#requirements-of-logistic-model"></a>Requirements of <code>logistic</code> model</h2>
-
-    
-    <p>* a0
-* beta_mean
-* beta_sd</p>
-    
-    <h2 class="hasAnchor" id="requirements-of-logistic-gamma-model"><a class="anchor" href="#requirements-of-logistic-gamma-model"></a>Requirements of <code>logistic_gamma</code> model</h2>
-
-    
-    <p>* a0
-* beta_shape
-* beta_inverse_scale</p>
-    
-    <h2 class="hasAnchor" id="requirements-of-logistics-model"><a class="anchor" href="#requirements-of-logistics-model"></a>Requirements of <code>logistics</code> model</h2>
-
-    
-    <p>* a0
-* alpha_mean
-* alpha_sd
-* beta_mean
-* beta_sd</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='stan_crm.html'>stan_crm</a></code>
-<code><a href='crm_process.html'>crm_process</a></code></p></div>
     
 
   </div>
@@ -237,19 +160,7 @@ are specified.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#requirements-of-empiric-model">Requirements of <code>empiric</code> model</a></li>
-
-      <li><a href="#requirements-of-logistic-model">Requirements of <code>logistic</code> model</a></li>
-
-      <li><a href="#requirements-of-logistic-gamma-model">Requirements of <code>logistic_gamma</code> model</a></li>
-
-      <li><a href="#requirements-of-logistics-model">Requirements of <code>logistics</code> model</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>

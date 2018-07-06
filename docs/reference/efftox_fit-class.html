@@ -140,46 +140,78 @@
 
     <pre class="usage"><span class='fu'>efftox_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>recommended_dose</span>, <span class='no'>prob_eff</span>, <span class='no'>prob_tox</span>, <span class='no'>prob_acc_eff</span>,
   <span class='no'>prob_acc_tox</span>, <span class='no'>utility</span>, <span class='no'>post_utility</span>, <span class='no'>acceptable</span>, <span class='no'>dat</span>, <span class='no'>fit</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dose_indices</th>
+      <td><p>A vector of integers representing the dose-levels under
+consideration.</p></td>
+    </tr>
+    <tr>
+      <th>recommended_dose</th>
+      <td><p>An integer representing the dose-level recommended
+for the next patient or cohort; or <code>NA</code> if stopping is recommended.</p></td>
+    </tr>
+    <tr>
+      <th>prob_eff</th>
+      <td><p>The posterior mean probabilities of efficacy at doses 1:n;
+a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>prob_tox</th>
+      <td><p>The posterior mean probabilities of toxicity at doses 1:n;
+a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>prob_acc_eff</th>
+      <td><p>The posterior mean probabilities that efficacy at the
+doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
+threshold; a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>prob_acc_tox</th>
+      <td><p>The posterior mean probabilities that toxicity at the
+doses is acceptable, i.e. that it is less than the maximum toxicity
+threshold; a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>utility</th>
+      <td><p>The utilities of doses 1:n, calculated by plugging the
+posterior mean probabilities of efficacy and toxicity into the utility
+formula, as advocated by Thall &amp; Cook. Contrast to <code>post_utility</code>;
+a vector of numbers.</p></td>
+    </tr>
+    <tr>
+      <th>post_utility</th>
+      <td><p>The posterior mean utilities of doses 1:n, calculated
+from the posterior distributions of the utilities. This is in contrast to
+<code>utility</code>, which uses plug-in posterior means of efficacy and toxicity,
+as advocated by Thall &amp; Cook; a vector of numbers.</p></td>
+    </tr>
+    <tr>
+      <th>acceptable</th>
+      <td><p>A vector of logical values to indicate whether doses 1:n
+are acceptable, according to the rules for acceptable efficacy &amp; toxicity,
+and rules on not skipping untested doses.</p></td>
+    </tr>
+    <tr>
+      <th>dat</th>
+      <td><p>Object <code><a href='efftox_params-class.html'>efftox_params</a></code> containing data passed to
+<code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>fit</th>
+      <td><p>An object of class <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-class'>stanfit</a></code>,
+containing the posterior samples.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>See <code>methods(class = "efftox_fit")</code> for an overview of available
 methods.</p>
-    
-    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
-
-    
-    <dl class='dl-horizontal'>
-<dt><code>dose_indices</code></dt><dd><p>A vector of integers representing the dose-levels under
-consideration.</p></dd>
-    <dt><code>recommended_dose</code></dt><dd><p>An integer representing the dose-level recommended
-for the next patient or cohort; or <code>NA</code> if stopping is recommended.</p></dd>
-    <dt><code>prob_eff</code></dt><dd><p>The posterior mean probabilities of efficacy at doses 1:n;
-a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>prob_tox</code></dt><dd><p>The posterior mean probabilities of toxicity at doses 1:n;
-a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>prob_acc_eff</code></dt><dd><p>The posterior mean probabilities that efficacy at the
-doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
-threshold; a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>prob_acc_tox</code></dt><dd><p>The posterior mean probabilities that toxicity at the
-doses is acceptable, i.e. that it is less than the maximum toxicity
-threshold; a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>utility</code></dt><dd><p>The utilities of doses 1:n, calculated by plugging the
-posterior mean probabilities of efficacy and toxicity into the utility
-formula, as advocated by Thall &amp; Cook. Contrast to <code>post_utility</code>;
-a vector of numbers.</p></dd>
-    <dt><code>post_utility</code></dt><dd><p>The posterior mean utilities of doses 1:n, calculated
-from the posterior distributions of the utilities. This is in contrast to
-<code>utility</code>, which uses plug-in posterior means of efficacy and toxicity,
-as advocated by Thall &amp; Cook; a vector of numbers.</p></dd>
-    <dt><code>acceptable</code></dt><dd><p>A vector of logical values to indicate whether doses 1:n
-are acceptable, according to the rules for acceptable efficacy &amp; toxicity,
-and rules on not skipping untested doses.</p></dd>
-    <dt><code>fit</code></dt><dd><p>An object of class <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-class'>stanfit</a></code>,
-containing the posterior samples.</p></dd>
-    <dt><code>dat</code></dt><dd><p>Object <code>efftox_params</code> containing data passed to
-<code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></dd>
-</dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -192,10 +224,9 @@ containing the posterior samples.</p></dd>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#slots">Slots</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

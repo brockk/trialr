@@ -141,56 +141,118 @@
     <pre class="usage"><span class='fu'>efftox_params</span>(<span class='no'>real_doses</span>, <span class='no'>efficacy_hurdle</span>, <span class='no'>toxicity_hurdle</span>, <span class='no'>p_e</span>, <span class='no'>p_t</span>, <span class='no'>eff0</span>,
   <span class='no'>tox1</span>, <span class='no'>eff_star</span>, <span class='no'>tox_star</span>, <span class='no'>alpha_mean</span>, <span class='no'>alpha_sd</span>, <span class='no'>beta_mean</span>, <span class='no'>beta_sd</span>,
   <span class='no'>gamma_mean</span>, <span class='no'>gamma_sd</span>, <span class='no'>zeta_mean</span>, <span class='no'>zeta_sd</span>, <span class='no'>eta_mean</span>, <span class='no'>eta_sd</span>, <span class='no'>psi_mean</span>, <span class='no'>psi_sd</span>)</pre>
-        
-    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
-
     
-    <dl class='dl-horizontal'>
-<dt><code>real_doses</code></dt><dd><p>a vector of numbers.The doses under investigation.
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>real_doses</th>
+      <td><p>a vector of numbers.The doses under investigation.
 They should be ordered from lowest to highest and be in consistent units.
 E.g., to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
-c(10, 20, 50).</p></dd>
-    <dt><code>efficacy_hurdle</code></dt><dd><p>Minimum acceptable efficacy probability.
-A number between 0 and 1.</p></dd>
-    <dt><code>toxicity_hurdle</code></dt><dd><p>Maximum acceptable toxicity probability.
-A number between 0 and 1.</p></dd>
-    <dt><code>p_e</code></dt><dd><p>Certainty required to infer a dose is acceptable with regards to
-being probably efficacious; a number between 0 and 1.</p></dd>
-    <dt><code>p_t</code></dt><dd><p>Certainty required to infer a dose is acceptable with regards to
-being probably tolerable; a number between 0 and 1.</p></dd>
-    <dt><code>eff0</code></dt><dd><p>Efficacy probability required when toxicity is impossible;
-a number between 0 and 1 (see Details).</p></dd>
-    <dt><code>tox1</code></dt><dd><p>Toxicity probability permitted when efficacy is guaranteed;
-a number between 0 and 1 (see Details).</p></dd>
-    <dt><code>eff_star</code></dt><dd><p>Efficacy probability of an equi-utility third point (see
-Details).</p></dd>
-    <dt><code>tox_star</code></dt><dd><p>Toxicity probability of an equi-utility third point (see
-Details).</p></dd>
-    <dt><code>alpha_mean</code></dt><dd><p>The prior normal mean of the intercept term in the toxicity
-logit model. A number.</p></dd>
-    <dt><code>alpha_sd</code></dt><dd><p>The prior normal standard deviation of the intercept term in
-the toxicity logit model. A number.</p></dd>
-    <dt><code>beta_mean</code></dt><dd><p>The prior normal mean of the slope term in the toxicity
-logit model. A number.</p></dd>
-    <dt><code>beta_sd</code></dt><dd><p>The prior normal standard deviation of the slope term in the
-toxicity logit model. A number.</p></dd>
-    <dt><code>gamma_mean</code></dt><dd><p>The prior normal mean of the intercept term in the efficacy
-logit model. A number.</p></dd>
-    <dt><code>gamma_sd</code></dt><dd><p>The prior normal standard deviation of the intercept term in
-the efficacy logit model. A number.</p></dd>
-    <dt><code>zeta_mean</code></dt><dd><p>The prior normal mean of the slope term in the efficacy
-logit model. A number.</p></dd>
-    <dt><code>zeta_sd</code></dt><dd><p>The prior normal standard deviation of the slope term in the
-efficacy logit model. A number.</p></dd>
-    <dt><code>eta_mean</code></dt><dd><p>The prior normal mean of the squared term coefficient in the
-efficacy logit model. A number.</p></dd>
-    <dt><code>eta_sd</code></dt><dd><p>The prior normal standard deviation of the squared term
-coefficient in the efficacy logit model. A number.</p></dd>
-    <dt><code>psi_mean</code></dt><dd><p>The prior normal mean of the association term in the combined
-efficacy-toxicity model. A number.</p></dd>
-    <dt><code>psi_sd</code></dt><dd><p>The prior normal standard deviation of the association term in
-the combined efficacy-toxicity model. A number.</p></dd>
-</dl>
+c(10, 20, 50).</p></td>
+    </tr>
+    <tr>
+      <th>efficacy_hurdle</th>
+      <td><p>Minimum acceptable efficacy probability.
+A number between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>toxicity_hurdle</th>
+      <td><p>Maximum acceptable toxicity probability.
+A number between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>p_e</th>
+      <td><p>Certainty required to infer a dose is acceptable with regards to
+being probably efficacious; a number between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>p_t</th>
+      <td><p>Certainty required to infer a dose is acceptable with regards to
+being probably tolerable; a number between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>eff0</th>
+      <td><p>Efficacy probability required when toxicity is impossible;
+a number between 0 and 1 (see Details).</p></td>
+    </tr>
+    <tr>
+      <th>tox1</th>
+      <td><p>Toxicity probability permitted when efficacy is guaranteed;
+a number between 0 and 1 (see Details).</p></td>
+    </tr>
+    <tr>
+      <th>eff_star</th>
+      <td><p>Efficacy probability of an equi-utility third point (see
+Details).</p></td>
+    </tr>
+    <tr>
+      <th>tox_star</th>
+      <td><p>Toxicity probability of an equi-utility third point (see
+Details).</p></td>
+    </tr>
+    <tr>
+      <th>alpha_mean</th>
+      <td><p>The prior normal mean of the intercept term in the toxicity
+logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>alpha_sd</th>
+      <td><p>The prior normal standard deviation of the intercept term in
+the toxicity logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>beta_mean</th>
+      <td><p>The prior normal mean of the slope term in the toxicity
+logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>beta_sd</th>
+      <td><p>The prior normal standard deviation of the slope term in the
+toxicity logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>gamma_mean</th>
+      <td><p>The prior normal mean of the intercept term in the efficacy
+logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>gamma_sd</th>
+      <td><p>The prior normal standard deviation of the intercept term in
+the efficacy logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>zeta_mean</th>
+      <td><p>The prior normal mean of the slope term in the efficacy
+logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>zeta_sd</th>
+      <td><p>The prior normal standard deviation of the slope term in the
+efficacy logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>eta_mean</th>
+      <td><p>The prior normal mean of the squared term coefficient in the
+efficacy logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>eta_sd</th>
+      <td><p>The prior normal standard deviation of the squared term
+coefficient in the efficacy logit model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>psi_mean</th>
+      <td><p>The prior normal mean of the association term in the combined
+efficacy-toxicity model. A number.</p></td>
+    </tr>
+    <tr>
+      <th>psi_sd</th>
+      <td><p>The prior normal standard deviation of the association term in
+the combined efficacy-toxicity model. A number.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -203,9 +265,8 @@ the combined efficacy-toxicity model. A number.</p></dd>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#slots">Slots</a></li>
-
       <li><a href="#see-also">See also</a></li>
           </ul>
 

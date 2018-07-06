@@ -210,8 +210,8 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 4.3e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.
+#&gt; Gradient evaluation took 4.9e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.49 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -228,12 +228,37 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.497674 seconds (Warm-up)
-#&gt;                0.357008 seconds (Sampling)
-#&gt;                0.854682 seconds (Total)
+#&gt;  Elapsed Time: 0.4992 seconds (Warm-up)
+#&gt;                0.368421 seconds (Sampling)
+#&gt;                0.867621 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
+#&gt; 
+#&gt; Gradient evaluation took 3.9e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#&gt; Adjust your expectations accordingly!
+#&gt; 
+#&gt; 
+#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; 
+#&gt;  Elapsed Time: 0.515728 seconds (Warm-up)
+#&gt;                0.356687 seconds (Sampling)
+#&gt;                0.872415 seconds (Total)
+#&gt; 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
 #&gt; 
 #&gt; Gradient evaluation took 3.7e-05 seconds
 #&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
@@ -253,40 +278,15 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.507801 seconds (Warm-up)
-#&gt;                0.363943 seconds (Sampling)
-#&gt;                0.871744 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
-#&gt; 
-#&gt; Gradient evaluation took 4.4e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.44 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.516644 seconds (Warm-up)
-#&gt;                0.3803 seconds (Sampling)
-#&gt;                0.896944 seconds (Total)
+#&gt;  Elapsed Time: 0.514183 seconds (Warm-up)
+#&gt;                0.388946 seconds (Sampling)
+#&gt;                0.903129 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.9e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -303,9 +303,9 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.482488 seconds (Warm-up)
-#&gt;                0.371847 seconds (Sampling)
-#&gt;                0.854335 seconds (Total)
+#&gt;  Elapsed Time: 0.48409 seconds (Warm-up)
+#&gt;                0.372428 seconds (Sampling)
+#&gt;                0.856518 seconds (Total)
 #&gt; </div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
 <span class='fu'>efftox_contour_plot</span>(<span class='no'>dat</span>, <span class='kw'>prob_eff</span> <span class='kw'>=</span> <span class='no'>decision</span>$<span class='no'>prob_eff</span>,
                     <span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='no'>decision</span>$<span class='no'>prob_tox</span>)</div><div class='input'><span class='fu'>title</span>(<span class='st'>'EffTox utility contours'</span>)</div><div class='img'><img src='efftox_contour_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># The same with ggplot2</span>

@@ -140,35 +140,58 @@
 
     <pre class="usage"><span class='fu'>crm_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>recommended_dose</span>, <span class='no'>prob_tox</span>, <span class='no'>median_prob_tox</span>,
   <span class='no'>modal_mtd_candidate</span>, <span class='no'>prob_mtd</span>, <span class='no'>dat</span>, <span class='no'>fit</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dose_indices</th>
+      <td><p>A vector of integers representing the dose-levels under
+consideration.</p></td>
+    </tr>
+    <tr>
+      <th>recommended_dose</th>
+      <td><p>An integer representing the dose-level recommended
+for the next patient or cohort; or <code>NA</code> if stopping is recommended.
+The recommended dose typically has associated probability of DLT closest to
+the target toxicity rate. Contrast to <code>modal_mtd_candidate</code>.</p></td>
+    </tr>
+    <tr>
+      <th>prob_tox</th>
+      <td><p>The posterior mean probabilities of toxicity at doses 1:n;
+a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>median_prob_tox</th>
+      <td><p>The posterior median probabilities of toxicity at doses
+1:n; a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>modal_mtd_candidate</th>
+      <td><p>An integer representing the dose-level most likely
+to be the MTD, i.e. the dose-level that maximises <code>prob_mtd</code>.</p></td>
+    </tr>
+    <tr>
+      <th>prob_mtd</th>
+      <td><p>The posterior probability that each dose is the MTD, by the
+chosen model; a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>dat</th>
+      <td><p>Object <code><a href='crm_params-class.html'>crm_params</a></code> containing data passed to
+<code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>fit</th>
+      <td><p>An object of class <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-class'>stanfit</a></code>,
+containing the posterior samples.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>See <code>methods(class = "crm_fit")</code> for an overview of available
 methods.</p>
-    
-    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
-
-    
-    <dl class='dl-horizontal'>
-<dt><code>dose_indices</code></dt><dd><p>A vector of integers representing the dose-levels under
-consideration.</p></dd>
-    <dt><code>recommended_dose</code></dt><dd><p>An integer representing the dose-level recommended
-for the next patient or cohort; or <code>NA</code> if stopping is recommended.
-The recommended dose typically has associated probability of DLT closest to
-the target toxicity rate. Contrast to <code>modal_mtd_candidate</code>.</p></dd>
-    <dt><code>prob_tox</code></dt><dd><p>The posterior mean probabilities of toxicity at doses 1:n;
-a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>median_prob_tox</code></dt><dd><p>The posterior median probabilities of toxicity at doses
-1:n; a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>modal_mtd_candidate</code></dt><dd><p>An integer representing the dose-level most likely
-to be the MTD, i.e. the dose-level that maximises <code>prob_mtd</code>.</p></dd>
-    <dt><code>prob_mtd</code></dt><dd><p>The posterior probability that each dose is the MTD, by the
-chosen model; a vector of numbers between 0 and 1.</p></dd>
-    <dt><code>dat</code></dt><dd><p>Object <code>crm_params</code> containing data passed to
-<code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></dd>
-    <dt><code>fit</code></dt><dd><p>An object of class <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-class'>stanfit</a></code>,
-containing the posterior samples.</p></dd>
-</dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -180,10 +203,9 @@ containing the posterior samples.</p></dd>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#slots">Slots</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

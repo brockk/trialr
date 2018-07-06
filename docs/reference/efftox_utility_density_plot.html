@@ -178,8 +178,8 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 4.4e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.44 seconds.
+#&gt; Gradient evaluation took 5.2e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -196,37 +196,12 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.508887 seconds (Warm-up)
-#&gt;                0.365031 seconds (Sampling)
-#&gt;                0.873918 seconds (Total)
+#&gt;  Elapsed Time: 0.514706 seconds (Warm-up)
+#&gt;                0.363168 seconds (Sampling)
+#&gt;                0.877874 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
-#&gt; 
-#&gt; Gradient evaluation took 3.7e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.507443 seconds (Warm-up)
-#&gt;                0.351179 seconds (Sampling)
-#&gt;                0.858622 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
 #&gt; 
 #&gt; Gradient evaluation took 3.8e-05 seconds
 #&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
@@ -246,9 +221,34 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.496336 seconds (Warm-up)
-#&gt;                0.356148 seconds (Sampling)
-#&gt;                0.852484 seconds (Total)
+#&gt;  Elapsed Time: 0.519585 seconds (Warm-up)
+#&gt;                0.354061 seconds (Sampling)
+#&gt;                0.873646 seconds (Total)
+#&gt; 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
+#&gt; 
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
+#&gt; Adjust your expectations accordingly!
+#&gt; 
+#&gt; 
+#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; 
+#&gt;  Elapsed Time: 0.50191 seconds (Warm-up)
+#&gt;                0.357554 seconds (Sampling)
+#&gt;                0.859464 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
@@ -271,9 +271,9 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.517869 seconds (Warm-up)
-#&gt;                0.36073 seconds (Sampling)
-#&gt;                0.878599 seconds (Total)
+#&gt;  Elapsed Time: 0.517086 seconds (Warm-up)
+#&gt;                0.35471 seconds (Sampling)
+#&gt;                0.871796 seconds (Total)
 #&gt; </div><div class='input'><span class='fu'>efftox_utility_density_plot</span>(<span class='no'>fit</span>) + <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'My doses'</span>)  <span class='co'># Too busy?</span></div><div class='img'><img src='efftox_utility_density_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Specify subset of doses to make plot less cluttered</span>
 <span class='fu'>efftox_utility_density_plot</span>(<span class='no'>fit</span>, <span class='kw'>doses</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>) + <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'My doses'</span>)</div><div class='img'><img src='efftox_utility_density_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
