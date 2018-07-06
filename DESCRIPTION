@@ -38,6 +38,10 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
+    magrittr,
+    tidyr,
+    dplyr,
+    ggridges,
     testthat
 URL: https://github.com/brockk/trialr
 BugReports: https://github.com/brockk/trialr/issues
