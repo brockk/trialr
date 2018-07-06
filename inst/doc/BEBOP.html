@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kristian Brock" />
 
-<meta name="date" content="2017-06-10" />
+<meta name="date" content="2018-07-06" />
 
 <title>BEBOP in PePS2</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">BEBOP in PePS2</h1>
 <h4 class="author"><em>Kristian Brock</em></h4>
-<h4 class="date"><em>2017-06-10</em></h4>
+<h4 class="date"><em>2018-07-06</em></h4>
 
 
 
@@ -259,14 +259,9 @@ dat &lt;-<span class="st"> </span><span class="kw">peps2_sc</span>()</code></pre
 </table>
 <p>We fit the data to the BEBOP model and obtain samples from the posterior distribution using <code>rstan</code>. The <code>BebopInPeps2</code> model is provided by <code>trialr</code> and compiled when the package is installed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">sampling</span>(stanmodels<span class="op">$</span>BebopInPeps2, <span class="dt">data =</span> dat)</code></pre></div>
+<pre><code>## trying deprecated constructor; please alert package maintainer</code></pre>
 <p>It is informative to view plots of posterior beliefs. Posterior samples of parameter values are available but they are less meaningful to us than the modelled efficacy rates, for example. View posterior distributions using code like</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rstan<span class="op">::</span><span class="kw">plot</span>(samp, <span class="dt">pars =</span> <span class="st">'prob_eff'</span>)</code></pre></div>
-<pre><code>## ci_level: 0.8 (80% intervals)</code></pre>
-<pre><code>## outer_level: 0.95 (95% intervals)</code></pre>
-<div class="figure">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAJACAMAAABSRCkEAAAAhFBMVEUAAAAiIiIzMzNNTU1NTW5NTY5NbqtNjqtNjshuTU1uTW5uTY5ubk1ubo5ubqtujo5uq8huq+SOTU2OTW6OTY6Obk2ObquOyMiOyOSOyP+pqamrbk2rbm6rjk2rq26r5OSr5P+yAB3Ijk3I///kq27k5Kvk////yI7/5Kv//8j//+T///90bMDtAAAACXBIWXMAAA7DAAAOwwHHb6hkAAATtElEQVR4nO3aa2OabLqGYSra6ppdycxaLXU6I0ijkf///9azYacSg7kEUc77A4miPRI93wckb5AzjDDBvX8A5rGHgBhpCIiRhoAYaQiIkYaAGGmGCOhLx8f96vWnGFSZDkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBJCQCASQkAgEkJAIBLyAAEFSXLLn3IUL/vzIB3emreXMH53534Vhl//2M3v0GxezV1ZGOV5am4ti8dIASUmH5NQ0vHf+KRy65kOIgZ0WJtQvtnNMi0C2oW3DMjU4+dmBY3iZX8eRA8o8huTjFt/bDlR7r4hoAkgZUCmkh8vbtEwOXxfh/ONOzqZL3bXz3W9nvjJXCduAXIz3/iA0nD+VyWg5HiCOqAg0abrK3KTmQ7SCMjNsohisd35O+LGrnpSd0/UElDk16MbBVT1E6j9EFA/SCMg8/6b9WNzWJfrztJWsNjWu6pn7VeLrducH8Lyk4Bms9mXX13nPJPbBRQo0/k3mMy0BBT7rQnAvvO7MqPY7zIHtPpMKCvWnfjjgHIOYU+N1AEVvZSHoJ1Ze/wd1a47BFQvHGI+BNQT0roC+YAurkA+lpZPYWJAp8OnsJEjjYDMipP5c6AoPzkHMrtStyIV42qya1TvAXEhceRI66cwF0DW4VNY/ytQzp8yxo00ArIXe6I6gOZ1IHuJKDp6XnG9cIiAbjyjeNmfBzk+B1KmDKi+TUATQK4JyC5JxVXDlr3l38LqWwQ0AYSAQCTkAf5/oBvPKF7250EICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQgjITJAkN34dRvHeDoJ0eOHeXsL43Z37VRh+/WM3v0Ozec1T82WZl1/cjDygxORjEkp6RfqYUSBiQIe1CeWb3SxTF5Dd2nQeJyBTj59bFjSK93YQRA8o8huTjFl/zIIU57twvrG3CajfGQVSBmQq+fHiFg2Tw/e1TcAenWwJZtfPdb2e+MnMChP5BcjNfOMC2oWLra/ongElV0xQBxRc87yj6e9XuTSjQBoBFQcfH8Viu/N3xI1d9fgjVXQWkJu7r0BXvflBNZ/uh4BcQO4MeL45rMt1x50LL7b1rupZ+5VbaBbb00NY8U/ZdIqAZrPZl199TnA+gwfU8jOcTa8vwvDTElDstyYH+87vyoxiv8sfl4rJinUnbgnI3DJ1PcwKxCFMQ+qAil4in4M/m3F3VLs6BVQsYA8TUL18fDofAspPViAf0MUVqDhcnQVU9cOnsN5nFEgjILPiZP4cKMpPzoHMrtQfmPwUn9ZbzoHSsOzsUQLiQqKEtH4KswGVh6mLn8LargMVz3qcgPhThoI0ArIXe6K8Cqh5HcheIoqOnpeG9YMbAVUnRw8VEMjnkeNzIGXq60DlbQKaAHJNQOXxqXlFqB7/t7DmLQKaAEJAIBLC/w8EIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQQEIiEEBCIhBAQiIQTUMxIkSV+vMQGdzBMGlJh8TEJJr0ivc4OA3l7C+N2d+1UYfv1jN79Ds3nNU/PFPNx+WRaPmW5Aph4/vRT0DAEd1iaUb3azTF1AdmsLIiA7BGTng4AivzHJmPXHLEiR+c6mk446oGSICeqAgkHAk7ndy/X+lAGZSn68uEXD5PB9Hc437uhkvthdP9f1euInMytM5BcgN/ONC8iOuZOA/ATVDOOdzO1ervenEZCbZRHFYrsLi6NRvasef6SK2gIy3blvioBms9mXX0NO0GmGeQfvHFC3l+J4ur7MLQG5M+D55rAu152lrWCxrXdV/exXi63bnB7CfEDukaxAUzuExX5bHIF2ZUax32W6qM+EsmLdiVsCsntNXgRk564L0MABFb1EPgcTkK3A3lHt6hrQfmWfMO6AhkEm9CnsaAXyAV1cgeoT5qOAXHYENMELiaYS89Zn/hwoyk/Ogcyu1K1IxbiabCytH+Mf4RA2GDKVP2UcfQqzAZWHqYufws5WoGoHAU0EaQRkL/ZEeRVQ8zqQvUQUHT0vDesHH50DZf5PGQQ0EeT4HEiZ+iS6vE1AE0CuCcguScVVw5a9/m9hzVsENAGEgEAkhP8fCERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQkYaUJAkff1ko3jZnwcZZUCJyccklPTy04ziZX8epENAby9h/O7O/SoMv/6xm9+h2bz6u+I8NbeWxWOuDcjU46eXgkbxsj8PIgZ0WJtQvtnNMi0DMt8Q0GQQPaDIb0wyLp98F4bu8eknAkrsBHVAQfLRdPynj5QBZjpIGZCp5MeLWzRMDt/X4Xzjjk7mi931c12vJ34yk0nkFyA3800RkHm0GFDVT/BxPwR0b6QRkJtlEcViu/N3xI1d9aTunqgloCz8x6oZ0Gw2+/Kr4wTXBxR0na4/A9NtWgIy739qQjisy3VnaStYbOtdVT/71WLrNmeHsP3KnlJzCJsM0ggo9luTg33nd2VGsd+1XzXOhLJi3YlPAzqs55u9GFC9rHy8ABHQvZE6oKKXyOdgAjKLjLuj2tUhoJ2pRgjID5/CHghpXYF8QBdXIP+J6+xTWBpW50ufD4gLiQ+ENAIyK07mz4Gi/OQcyOxK3YpUjKvJrlH9BMSfMh4Haf0UZgMqD1MXP4W1XQfSD2H9zihe9udBGgHZiz1RXgXUvA5kLxFFR89Lw/rBBDRh5PgcSJkqoOo2AU0AuSYguyQVVw1b9lZ/C6tuEdAEEAICkZBR/v9Avc4oXvbnQQgIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCCAhEQggIREIICERCni6gIEku/06jeNmfB+kQ0NtLGL+7c78Kw69/7OZ3aDavh3XovqZmuyweM2BAicnHJJT0q3w800HEgFwv3+xmmbpwbFD3C8jU4+dCQaN42Z8H0QOK/CZPTTZ5vquySQloCkgZkKnkx4tbNEwO39fhfOOOTuaL3fVzXa8nfjKzwkR+AXIz3/iAMtuSm14CSi5OUAcU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" alt="Posterior Prob(Efficacy) in the six PePS2 cohorts" />
-<p class="caption">Posterior Prob(Efficacy) in the six PePS2 cohorts</p>
-</div>
 <p>We see that the modelled rates of efficacy are highest in cohorts 3 and 6, but likely to be greater than the critical threshold of 10% in cohort 2 and perhaps cohort 5 as well. In contrast, there is not much evidence of clinical benefit in cohorts 1 and 4. This is confirmed by invoking the formally described analysis and associated decision rules.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">decision &lt;-<span class="st"> </span><span class="kw">peps2_process</span>(dat, samp)
 knitr<span class="op">::</span><span class="kw">kable</span>(
@@ -285,43 +280,43 @@ knitr<span class="op">::</span><span class="kw">kable</span>(
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.076</td>
-<td align="right">0.262</td>
+<td align="right">0.074</td>
+<td align="right">0.260</td>
 <td align="right">0.069</td>
 <td align="right">1</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="right">0.250</td>
-<td align="right">0.981</td>
+<td align="right">0.978</td>
 <td align="right">0.069</td>
 <td align="right">1</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="right">0.430</td>
-<td align="right">0.994</td>
+<td align="right">0.429</td>
+<td align="right">0.990</td>
 <td align="right">0.069</td>
 <td align="right">1</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="right">0.042</td>
-<td align="right">0.102</td>
+<td align="right">0.040</td>
+<td align="right">0.094</td>
 <td align="right">0.069</td>
 <td align="right">1</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="odd">
-<td align="right">0.150</td>
-<td align="right">0.742</td>
+<td align="right">0.149</td>
+<td align="right">0.726</td>
 <td align="right">0.069</td>
 <td align="right">1</td>
 <td align="left">TRUE</td>
 </tr>
 <tr class="even">
-<td align="right">0.288</td>
-<td align="right">0.946</td>
+<td align="right">0.284</td>
+<td align="right">0.945</td>
 <td align="right">0.069</td>
 <td align="right">1</td>
 <td align="left">TRUE</td>

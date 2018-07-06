@@ -1,6 +1,4 @@
 
-
-
 # EffTox
 
 #' @title Calculate the p-index for EffTox utility contours
@@ -30,6 +28,11 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
   # Calculate p for the efficacy/toxicity contours that will intersect points
   # (eff0, 0), (eff.star, tox.star), and (1, tox1)
 
+  if(any(eff0 <= 0, tox1 <= 0, eff_star <= 0, tox_star <= 0,
+         eff0 >= 1, tox1 >= 1, eff_star >= 1, tox_star >= 1)) {
+    stop('eff0, tox1, eff_star and tox_star must all be between 0 and 1.')
+  }
+
   .objective = function(p, eff0, tox1, eff_star, tox_star) {
     a <- ((1 - eff_star) / (1 - eff0))
     b <- tox_star / tox1
@@ -40,6 +43,91 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
                        eff0 = eff0, tox1 = tox1, eff_star = eff_star,
                        tox_star = tox_star)
   return(rt$root)
+}
+
+#' Container class for parameters to fit the EffTox model in trialr.
+#'
+#' @name efftox_params-class
+#' @aliases efftox_params
+#' @docType class
+#'
+#' @slot real_doses a vector of numbers.The doses under investigation.
+#' They should be ordered from lowest to highest and be in consistent units.
+#' E.g., to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
+#' c(10, 20, 50).
+#' @slot efficacy_hurdle Minimum acceptable efficacy probability.
+#' A number between 0 and 1.
+#' @slot toxicity_hurdle Maximum acceptable toxicity probability.
+#' A number between 0 and 1.
+#' @slot p_e Certainty required to infer a dose is acceptable with regards to
+#' being probably efficacious; a number between 0 and 1.
+#' @slot p_t Certainty required to infer a dose is acceptable with regards to
+#' being probably tolerable; a number between 0 and 1.
+#' @slot eff0 Efficacy probability required when toxicity is impossible;
+#' a number between 0 and 1 (see Details).
+#' @slot tox1 Toxicity probability permitted when efficacy is guaranteed;
+#' a number between 0 and 1 (see Details).
+#' @slot eff_star Efficacy probability of an equi-utility third point (see
+#' Details).
+#' @slot tox_star Toxicity probability of an equi-utility third point (see
+#' Details).
+#' @slot alpha_mean The prior normal mean of the intercept term in the toxicity
+#' logit model. A number.
+#' @slot alpha_sd The prior normal standard deviation of the intercept term in
+#' the toxicity logit model. A number.
+#' @slot beta_mean The prior normal mean of the slope term in the toxicity
+#' logit model. A number.
+#' @slot beta_sd The prior normal standard deviation of the slope term in the
+#' toxicity logit model. A number.
+#' @slot gamma_mean The prior normal mean of the intercept term in the efficacy
+#' logit model. A number.
+#' @slot gamma_sd The prior normal standard deviation of the intercept term in
+#' the efficacy logit model. A number.
+#' @slot zeta_mean The prior normal mean of the slope term in the efficacy
+#' logit model. A number.
+#' @slot zeta_sd The prior normal standard deviation of the slope term in the
+#' efficacy logit model. A number.
+#' @slot eta_mean The prior normal mean of the squared term coefficient in the
+#' efficacy logit model. A number.
+#' @slot eta_sd The prior normal standard deviation of the squared term
+#' coefficient in the efficacy logit model. A number.
+#' @slot psi_mean The prior normal mean of the association term in the combined
+#' efficacy-toxicity model. A number.
+#' @slot psi_sd The prior normal standard deviation of the association term in
+#' the combined efficacy-toxicity model. A number.
+#'
+#' @seealso
+#' \code{\link{stan_efftox}}
+#' \code{\link{stan_efftox_demo}}
+#' \code{\link{efftox_process}}
+efftox_params <- function(real_doses, efficacy_hurdle, toxicity_hurdle,
+                          p_e, p_t, eff0, tox1, eff_star, tox_star,
+                          alpha_mean, alpha_sd, beta_mean, beta_sd,
+                          gamma_mean, gamma_sd, zeta_mean, zeta_sd,
+                          eta_mean, eta_sd, psi_mean, psi_sd) {
+  # efftox_params class
+  version <- list(
+    trialr = utils::packageVersion("trialr"),
+    rstan = utils::packageVersion("rstan")
+  )
+
+  p <- efftox_solve_p(eff0, tox1, eff_star, tox_star)
+  x <- loo::nlist(real_doses, num_doses = length(real_doses),
+                  efficacy_hurdle, toxicity_hurdle,
+                  p_e, p_t, p, eff0, tox1, eff_star, tox_star,
+                  alpha_mean, alpha_sd, beta_mean, beta_sd, gamma_mean, gamma_sd,
+                  zeta_mean, zeta_sd, eta_mean, eta_sd, psi_mean, psi_sd, version
+  )
+
+  # Initialise with no patients observed
+  x$doses = c()
+  x$eff = c()
+  x$tox = c()
+  x$num_patients = 0
+
+  # Set type. This is, at heart, just a list.
+  class(x) <- c("efftox_params", "list")
+  return(x)
 }
 
 #' @title Get parameters to run the EffTox demo
@@ -63,36 +151,17 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 efftox_parameters_demo <- function() {
   # Demonstration from 'Effective sample size for computing prior
   # hyperparameters in Bayesian phase I-II dose-finding', Thall et al., 2014
-  eff0 = 0.5
-  tox1 = 0.65
-  eff_star = 0.7
-  tox_star = 0.25
-  p = efftox_solve_p(eff0, tox1, eff_star, tox_star)
-  x <- list(
-    num_doses = 5,
-    real_doses = c(1, 2, 4, 6.6, 10),
-    efficacy_hurdle = 0.5,
-    toxicity_hurdle = 0.3,
-    p_e = 0.1,
-    p_t = 0.1,
-    p = p,
-    eff0 = eff0,
-    tox1 = tox1,
-    eff_star = eff_star,
-    tox_star = tox_star,
+  x <- efftox_params(real_doses = c(1, 2, 4, 6.6, 10),
+                     efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                     p_e = 0.1, p_t = 0.1, eff0 = 0.5, tox1 = 0.65,
+                     eff_star = 0.7, tox_star = 0.25,
+                     alpha_mean = -7.9593, alpha_sd = 3.5487,
+                     beta_mean = 1.5482, beta_sd = 3.5018,
+                     gamma_mean = 0.7367, gamma_sd = 2.5423,
+                     zeta_mean = 3.4181, zeta_sd = 2.4406,
+                     eta_mean = 0, eta_sd = 0.2,
+                     psi_mean = 0, psi_sd = 1)
 
-    alpha_mean = -7.9593, alpha_sd = 3.5487,
-    beta_mean = 1.5482, beta_sd = 3.5018,
-    gamma_mean = 0.7367, gamma_sd = 2.5423,
-    zeta_mean = 3.4181, zeta_sd = 2.4406,
-    eta_mean = 0, eta_sd = 0.2,
-    psi_mean = 0, psi_sd = 1,
-
-    eff = c(),
-    tox = c(),
-    doses = c(),
-    num_patients = 0
-  )
   return(x)
 }
 
@@ -118,7 +187,8 @@ efftox_parameters_demo <- function() {
 #' u <- efftox_utility(p, 0.5, 0.65, prob_eff = 0.7, prob_tox = 0.25)
 #' round(u, 4) == 0
 #'
-#' u <- efftox_utility(p, 0.5, 0.65, prob_eff = c(0.6, 0.7, 0.8), prob_tox = c(0.1, 0.2, 0.3))
+#' u <- efftox_utility(p, 0.5, 0.65, prob_eff = c(0.6, 0.7, 0.8),
+#'                     prob_tox = c(0.1, 0.2, 0.3))
 #' round(u, 2) == c(0.04, 0.08, 0.12)
 #'
 #' @seealso \code{\link{efftox_solve_p}}
@@ -138,9 +208,9 @@ efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
 #'
 #' @param dat An instance of \code{\link{efftox_params}}, a list of EffTox
 #' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
-#' @param fit An instance of \code{rstan::stanmodel}, derived by sampling an
-#' EffTox model. Use \code{stan::sampling(stanmodels$EffTox, data = dat)}.
-#' @return An instance of \code{\link{efftox_analysis}}.
+#' @param fit An instance of \code{rstan::stanmodel}, derived by fitting the
+#' trialr EffTox model.
+#' @return An instance of \code{\link{efftox_fit}}.
 #' @export
 #'
 #' @examples
@@ -179,13 +249,10 @@ efftox_process <- function(dat, fit) {
     recommended_dose <- NA
   }
 
-  l <- list(dose_indices = dose_indices, recommended_dose = recommended_dose,
-            prob_eff = prob_eff, prob_tox = prob_tox,
-            prob_acc_eff = prob_acc_eff, prob_acc_tox = prob_acc_tox,
-            utility = utility, post_utility = post_utility,
-            acceptable = acceptable)
-  class(l) <- "efftox_analysis"
-  return(l)
+  x <- efftox_fit(dose_indices, recommended_dose, prob_eff, prob_tox,
+                  prob_acc_eff, prob_acc_tox, utility, post_utility,
+                  acceptable, dat, fit)
+  return(x)
 }
 
 
@@ -221,6 +288,7 @@ efftox_analysis_to_df <- function(x) {
 #' @title Run EffTox simulations
 #'
 #' @description Run EffTox simulations for assumed true efficacy and toxicity
+#' curves.
 #'
 #' @param dat An instance of \code{\link{efftox_params}}, a list of EffTox
 #' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
@@ -310,9 +378,10 @@ efftox_simulate <- function(dat, num_sims, first_dose, true_eff, true_tox,
               doses_given = doses_given))
 }
 
-#' @title Get the probability of toxicity for probability-of-efficacy and utility pairs
+#' @title Get the Prob(Tox) for Prob(Eff) and utility pairs
 #'
-#' @description Get the probability of toxicity for probability-of-efficacy and utility pairs
+#' @description Get the probability of toxicity for probability-of-efficacy and
+#' utility pairs
 #'
 #' @param eff Probability of efficacy; number between 0 and 1
 #' @param util Utility score; number
@@ -331,16 +400,19 @@ efftox_simulate <- function(dat, num_sims, first_dose, true_eff, true_tox,
 #' prob_tox <- efftox_get_tox(0.7, 0, p, eff0 = 0.5, tox1 = 0.65)
 #' round(prob_tox, 2) == 0.25
 #'
-#' prob_tox <- efftox_get_tox(0.7, seq(-0.5, 0.25, by = 0.25), p, eff0 = 0.5, tox1 = 0.65)
+#' prob_tox <- efftox_get_tox(0.7, seq(-0.5, 0.25, by = 0.25), p, eff0 = 0.5,
+#'                            tox1 = 0.65)
 #' round(prob_tox, 2) == c(0.57, 0.41, 0.25, 0.09)
 #'
 #' prob_tox <- efftox_get_tox(c(0.5, 0.7, 0.8), 0.25, p, eff0 = 0.5, tox1 = 0.65)
 #' round(prob_tox, 2) == c(NaN, 0.09, 0.22)
 #'
-#' prob_tox <- efftox_get_tox(c(0.5, 0.7, 0.8), c(-1, 0, 1), p, eff0 = 0.5, tox1 = 0.65)
+#' prob_tox <- efftox_get_tox(c(0.5, 0.7, 0.8), c(-1, 0, 1), p, eff0 = 0.5,
+#'                            tox1 = 0.65)
 #' round(prob_tox, 2) == c(0.63, 0.25, NaN)
 #'
-#' @note Various ways of vectorising the function are demonstrated in the examples
+#' @note Various ways of vectorising the function are demonstrated in the
+#' examples
 #'
 #' @seealso \code{\link{efftox_solve_p}}
 efftox_get_tox <- function(eff, util, p, eff0, tox1) {
@@ -389,10 +461,12 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
 #' dat$doses <- c(1, 2, 3)
 #' fit <- rstan::sampling(stanmodels$EffTox, data = dat)
 #' decision <- efftox_process(dat, fit)
-#' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
+#' efftox_contour_plot(dat, prob_eff = decision$prob_eff,
+#'                     prob_tox = decision$prob_tox)
 #' title('EffTox utility contours')
 #' # The same with ggplot2
-#' efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox,
+#' efftox_contour_plot(dat, prob_eff = decision$prob_eff,
+#'                     prob_tox = decision$prob_tox,
 #'                     use_ggplot = TRUE) +
 #'                     ggplot2::ggtitle('EffTox utility contours')
 #'
@@ -507,7 +581,7 @@ efftox_contour_plot <- function(dat,
 #'
 efftox_utility_density_plot <- function(fit, doses = NULL) {
   if(!('ggplot2' %in% utils::installed.packages()))
-    stop('THis function requires ggplot2 be installed.')
+    stop('This function requires ggplot2 be installed.')
 
   u <- rstan::extract(fit, par = 'utility')[[1]]
   df <- data.frame(Utility = as.numeric(u),
@@ -563,7 +637,7 @@ efftox_superiority <- function(fit) {
 #' given and outcomes observed. The format of the string is described in Brock
 #' et al. (2017). The letters E, T, N and B are used to represents patients that
 #' experienced (E)fficacy only, (T)oxicity only, (B)oth efficacy and toxicity,
-#' and (B)oth. These letters are concatenated after numerical dose-levels to
+#' and (N)either. These letters are concatenated after numerical dose-levels to
 #' convey the outcomes of cohorts of patients. For instance, \code{2ETB}
 #' represents a cohort of three patients that were treated at dose-level 2, and
 #' experienced efficacy, toxicity and both events, respectively. The results of
@@ -579,9 +653,11 @@ efftox_superiority <- function(fit) {
 #' @param as.list TRUE (be default) to return a \code{list};
 #' FALSE to return a \code{data.frame}
 #'
-#' @return a list with elements \code{eff}, \code{tox}, \code{doses} and
-#' \code{num_patients}. These elements are congruent with the same in
-#' \code{efftox_params}.
+#' @return If \code{as.list == TRUE}, a list with elements \code{eff}, \code{tox},
+#' \code{doses} and \code{num_patients}. These elements are congruent with those
+#' of the same name in \code{efftox_params}.
+#' If \code{as.list == FALSE}, a data.frame with columns \code{eff}, \code{tox},
+#' and \code{doses}.
 #'
 #' @export
 #'
@@ -591,8 +667,12 @@ efftox_superiority <- function(fit) {
 #' x$eff == c(0, 0, 1, 1, 1, 0, 0, 1, 1)
 #' sum(x$tox) == 3
 #'
-#' @references Brock et al. (submitted 2017), Implementing the EffTox
-#' Dose-Finding Design in the Matchpoint Trial.
+#' @references
+#' Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., & Yap, C.
+#' (2017). Implementing the EffTox dose-finding design in the Matchpoint trial.
+#' BMC Medical Research Methodology, 17(1), 112.
+#' https://doi.org/10.1186/s12874-017-0381-x
+#'
 efftox_parse_outcomes <- function(outcome_string, as.list = TRUE) {
 
   # Matching is done by regex.
@@ -610,7 +690,8 @@ efftox_parse_outcomes <- function(outcome_string, as.list = TRUE) {
 
   if(stringr::str_detect(outcome_string, valid_str_match)) {
     doses <- eff <- tox <- c()
-    cohort_strs <- stringr::str_extract_all(outcome_string, cohort_str_match)[[1]]
+    cohort_strs <- stringr::str_extract_all(
+      outcome_string, cohort_str_match)[[1]]
     for(cohort_str in cohort_strs) {
       c_dl <- as.integer(stringr::str_extract(cohort_str, dl_str_match))
       if(c_dl <= 0) stop('Dose-levels must be strictly positive integers.')
@@ -739,4 +820,335 @@ efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
     df[, paste0('D', k)] = dose_recs[, k]
   }
   return(df)
+}
+
+
+
+#
+#
+# New stuff
+#
+#
+
+
+
+
+
+
+#' Class of model fit by \pkg{trialr} using the EffTox dose-finding design.
+#'
+#' @name efftox_fit-class
+#' @aliases efftox_fit
+#' @docType class
+#'
+#' @details
+#' See \code{methods(class = "efftox_fit")} for an overview of available
+#' methods.
+#'
+#' @slot dose_indices A vector of integers representing the dose-levels under
+#' consideration.
+#' @slot recommended_dose An integer representing the dose-level recommended
+#' for the next patient or cohort; or \code{NA} if stopping is recommended.
+#' @slot prob_eff The posterior mean probabilities of efficacy at doses 1:n;
+#' a vector of numbers between 0 and 1.
+#' @slot prob_tox The posterior mean probabilities of toxicity at doses 1:n;
+#' a vector of numbers between 0 and 1.
+#' @slot prob_acc_eff The posterior mean probabilities that efficacy at the
+#' doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
+#' threshold; a vector of numbers between 0 and 1.
+#' @slot prob_acc_tox The posterior mean probabilities that toxicity at the
+#' doses is acceptable, i.e. that it is less than the maximum toxicity
+#' threshold; a vector of numbers between 0 and 1.
+#' @slot utility The utilities of doses 1:n, calculated by plugging the
+#' posterior mean probabilities of efficacy and toxicity into the utility
+#' formula, as advocated by Thall & Cook. Contrast to \code{post_utility};
+#' a vector of numbers.
+#' @slot post_utility The posterior mean utilities of doses 1:n, calculated
+#' from the posterior distributions of the utilities. This is in contrast to
+#' \code{utility}, which uses plug-in posterior means of efficacy and toxicity,
+#' as advocated by Thall & Cook; a vector of numbers.
+#' @slot acceptable A vector of logical values to indicate whether doses 1:n
+#' are acceptable, according to the rules for acceptable efficacy & toxicity,
+#' and rules on not skipping untested doses.
+#' @slot fit An object of class \code{\link[rstan:stanfit]{stanfit}},
+#' containing the posterior samples.
+#' @slot dat Object \link{\code{efftox_params}} containing data passed to
+#' \code{\link[rstan:sampling]{sampling}}.
+#'
+#' @seealso
+#' \code{\link{stan_efftox}}
+#' \code{\link{stan_efftox_demo}}
+#' \code{\link{efftox_process}}
+efftox_fit <- function(dose_indices, recommended_dose, prob_eff, prob_tox,
+                       prob_acc_eff, prob_acc_tox, utility, post_utility,
+                       acceptable, dat, fit) {
+  # efftox_fit class
+  version <- list(
+    trialr = utils::packageVersion("trialr"),
+    rstan = utils::packageVersion("rstan")
+  )
+  x <- loo::nlist(dose_indices, recommended_dose, prob_eff, prob_tox,
+                  prob_acc_eff, prob_acc_tox, utility, post_utility, acceptable,
+                  dat, fit, version)
+  class(x) <- "efftox_fit"
+  x
+}
+
+#' Fit an EffTox model
+#'
+#' Fit an EffTox model using Stan for full Bayesian inference.
+#'
+#' @param outcome_str A string representing the outcomes observed hitherto.
+#' See \code{\link{efftox_parse_outcomes}} for a description of syntax and
+#' examples. Alternatively, you may provide \code{doses_given}, \code{eff} and
+#' \code{tox} parameters. See Details.
+#' @param real_doses A vector of numbers.The doses under investigation. They
+#' should be ordered from lowest to highest and be in consistent units.
+#' E.g., #' to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
+#' c(10, 20, 50).
+#' @param efficacy_hurdle Minimum acceptable efficacy probability.
+#' A number between 0 and 1.
+#' @param toxicity_hurdle Maximum acceptable toxicity probability.
+#' A number between 0 and 1.
+#' @param p_e Certainty required to infer a dose is acceptable with regards to
+#' being probably efficacious; a number between 0 and 1.
+#' @param p_t Certainty required to infer a dose is acceptable with regards to
+#' being probably tolerable; a number between 0 and 1.
+#' @param eff0 Efficacy probability required when toxicity is impossible;
+#' a number between 0 and 1 (see Details).
+#' @param tox1 Toxicity probability permitted when efficacy is guaranteed;
+#' a number between 0 and 1 (see Details).
+#' @param eff_star Efficacy probability of an equi-utility third point (see
+#' Details).
+#' @param tox_star Toxicity probability of an equi-utility third point (see
+#' Details).
+#' @param alpha_mean The prior normal mean of the intercept term in the toxicity
+#' logit model. A number.
+#' @param alpha_sd The prior normal standard deviation of the intercept term in
+#' the toxicity logit model. A number.
+#' @param beta_mean The prior normal mean of the slope term in the toxicity
+#' logit model. A number.
+#' @param beta_sd The prior normal standard deviation of the slope term in the
+#' toxicity logit model. A number.
+#' @param gamma_mean The prior normal mean of the intercept term in the efficacy
+#' logit model. A number.
+#' @param gamma_sd The prior normal standard deviation of the intercept term in
+#' the efficacy logit model. A number.
+#' @param zeta_mean The prior normal mean of the slope term in the efficacy logit
+#' model. A number.
+#' @param zeta_sd The prior normal standard deviation of the slope term in the
+#' efficacy logit model. A number.
+#' @param eta_mean The prior normal mean of the squared term coefficient in the
+#' efficacy logit model. A number.
+#' @param eta_sd The prior normal standard deviation of the squared term
+#' coefficient in the efficacy logit model. A number.
+#' @param psi_mean The prior normal mean of the association term in the combined
+#' efficacy-toxicity model. A number.
+#' @param psi_sd The prior normal standard deviation of the association term in
+#' the combined efficacy-toxicity model. A number.
+#' @param doses_given A optional vector of dose-levels given to patients
+#' 1:num_patients, where 1=lowest dose, 2=second dose, etc. Only required when
+#' \code{outcome_str} is not provided.
+#' @param eff An optional vector of efficacy outcomes for patients
+#' 1:num_patients, where 1=efficacy and 0=no efficacy. Only required when
+#' \code{outcome_str} is not provided.
+#' @param tox An optional vector of toxicity outcomes for patients
+#' 1:num_patients, where 1=toxicity and 0=no toxicity. Only required when
+#' \code{outcome_str} is not provided.
+#' @param ...Extra parameters are passed to \code{rstan::sampling}. Commonly
+#' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
+#' \code{control}. \code{\link[rstan:sampling]{sampling}}.
+#'
+#' @details
+#' The quickest and easiest way to fit an EffTox model to some observed outcomes
+#' is to describe the outcomes using \pkg{trialr}'s syntax for efficacy-toxicity
+#' dose-finding outcomes. See \code{\link{efftox_parse_outcomes}} for full
+#' details and examples.
+#'
+#' Utility or attractivess scores are calculated in EffTox using L^p norms.
+#' Imagine the first quadrant of a scatter plot with prob_eff along the x-axis
+#' and prob_tox along the y-axis.
+#' The point (1, 0) (i.e. guaranteed efficacy & no toxicity) is the holy grail.
+#' The neutral contour intersects the points (eff0, 0), (1, tox1) and
+#' (eff_star, tox_star). A unique curve intersects these three points and
+#' identifies a value for p, the exponent in the L^p norm. On this neutral-
+#' utility contour, scores are equal to zero. A family of curves with different
+#' utility scores is defined that are "parallel" to this neutral curve.
+#' Points with probabilities of efficacy and toxicity that are nearer to (1, 0)
+#' will yield greater scores, and vice-versa.
+#'
+#' @return An object of class \code{\link{efftox_fit}}
+#'
+#' @author Kristian Brock \email{kristian.brock@@gmail.com}
+#'
+#' @references
+#'   Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
+#'     Trade-Offs. Biometrics, 60(3), 684–693.
+#'
+#'   Thall, P., Herrick, R., Nguyen, H., Venier, J., & Norris, J. (2014).
+#'     Effective sample size for computing prior hyperparameters in Bayesian
+#'     phase I-II dose-finding. Clinical Trials, 11(6), 657–666.
+#'     https://doi.org/10.1177/1740774514547397
+#'
+#'   Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., &
+#'     Yap, C. (2017). Implementing the EffTox dose-finding design in the
+#'     Matchpoint trial. BMC Medical Research Methodology, 17(1), 112.
+#'     https://doi.org/10.1186/s12874-017-0381-x
+#'
+#' @seealso
+#'   \code{\link{efftox_fit}}
+#'   \code{\link{stan_efftox_demo}}
+#'   \code{\link{efftox_process}}
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # This model is presented in Thall et al. (2014)
+#' mod1 <- stan_efftox('1N 2E 3B',
+#'                      real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
+#'                      efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+#'                      p_e = 0.1, p_t = 0.1,
+#'                      eff0 = 0.5, tox1 = 0.65,
+#'                      eff_star = 0.7, tox_star = 0.25,
+#'                      alpha_mean = -7.9593, alpha_sd = 3.5487,
+#'                      beta_mean = 1.5482, beta_sd = 3.5018,
+#'                      gamma_mean = 0.7367, gamma_sd = 2.5423,
+#'                      zeta_mean = 3.4181, zeta_sd = 2.4406,
+#'                      eta_mean = 0, eta_sd = 0.2,
+#'                      psi_mean = 0, psi_sd = 1, seed = 123)
+#'
+#' # Shorthand for the above is:
+#' mod2 <- stan_efftox_demo('1N 2E 3B', seed = 123)
+#'
+#' # the seed is passed to the Stan sampler. The usual Stan sampler params like
+#' # cores, iter, chains etc are passed on too via the ellipsis operator.
+#' }
+stan_efftox <- function(outcome_str = NULL,
+                        real_doses, efficacy_hurdle, toxicity_hurdle, p_e, p_t,
+                        eff0, tox1, eff_star, tox_star,
+                        alpha_mean, alpha_sd, beta_mean, beta_sd,
+                        gamma_mean, gamma_sd, zeta_mean, zeta_sd,
+                        eta_mean, eta_sd, psi_mean, psi_sd,
+                        doses_given = NULL,
+                        eff = NULL,
+                        tox = NULL,
+                        ...) {
+
+  # Create parameters object to pass to Stan
+  dat <- efftox_params(real_doses, efficacy_hurdle, toxicity_hurdle,
+                       p_e, p_t, eff0, tox1, eff_star, tox_star,
+                       alpha_mean, alpha_sd, beta_mean, beta_sd,
+                       gamma_mean, gamma_sd, zeta_mean, zeta_sd,
+                       eta_mean, eta_sd, psi_mean, psi_sd)
+
+  # Add outcomes
+  if(is.null(outcome_str)) {
+    if(length(doses_given) != length(efficacy))
+      stop('doses_given and efficacy vectors should have same length')
+    if(length(toxicity) != length(efficacy))
+      stop('toxicity and efficacy vectors should have same length')
+    dat$doses <- doses_given
+    dat$eff <- eff
+    dat$tox <- tox
+    dat$num_patients <- length(doses_given)
+  } else {
+    outcomes_df <- efftox_parse_outcomes(outcome_str, as.list = TRUE)
+    dat$num_patients <- outcomes_df$num_patients
+    dat$doses <- outcomes_df$doses
+    dat$eff <- outcomes_df$eff
+    dat$tox <- outcomes_df$tox
+  }
+
+  # Fit data to model using Stan
+  samp <- rstan::sampling(stanmodels$EffTox, data = dat, ...)
+  # Create useful output from posterior samples
+  decision <- efftox_process(dat, samp)
+
+  return(decision)
+}
+
+#' Fit the EffTox model presented in Thall et al. (2014)
+#'
+#' Fit the EffTox model presented in Thall et al. (2014) using Stan for full
+#' Bayesian inference.
+#'
+#' @param outcome_str A string representing the outcomes observed hitherto.
+#' See \code{\link{efftox_parse_outcomes}} for a description of syntax and
+#' examples. Alternatively, you may provide \code{doses_given}, \code{eff} and
+#' \code{tox} parameters. See Details.
+#' @param ...Extra parameters are passed to \code{rstan::sampling}. Commonly
+#' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
+#' \code{control}. \code{\link[rstan:sampling]{sampling}}.
+#'
+#' @return An object of class \code{\link{efftox_fit}}
+#'
+#' @author Kristian Brock \email{kristian.brock@@gmail.com}
+#'
+#' @references
+#'   Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
+#'     Trade-Offs. Biometrics, 60(3), 684–693.
+#'
+#'   Thall, P., Herrick, R., Nguyen, H., Venier, J., & Norris, J. (2014).
+#'     Effective sample size for computing prior hyperparameters in Bayesian
+#'     phase I-II dose-finding. Clinical Trials, 11(6), 657–666.
+#'     https://doi.org/10.1177/1740774514547397
+#'
+#'   Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., &
+#'     Yap, C. (2017). Implementing the EffTox dose-finding design in the
+#'     Matchpoint trial. BMC Medical Research Methodology, 17(1), 112.
+#'     https://doi.org/10.1186/s12874-017-0381-x
+#'
+#' @seealso
+#'   \code{\link{efftox_fit}}
+#'   \code{\link{stan_efftox}}
+#'   \code{\link{efftox_process}}
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # This model is presented in Thall et al. (2014)
+#' mod2 <- stan_efftox_demo('1N 2E 3B', seed = 123)
+#'
+#' # The seed is passed to the Stan sampler. The usual Stan sampler params like
+#' # cores, iter, chains etc are passed on too via the ellipsis operator.
+#' }
+stan_efftox_demo <- function(outcome_str, ...) {
+  stan_efftox(outcome_str,
+              real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
+              efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+              p_e = 0.1, p_t = 0.1,
+              eff0 = 0.5, tox1 = 0.65,
+              eff_star = 0.7, tox_star = 0.25,
+              alpha_mean = -7.9593, alpha_sd = 3.5487,
+              beta_mean = 1.5482, beta_sd = 3.5018,
+              gamma_mean = 0.7367, gamma_sd = 2.5423,
+              zeta_mean = 3.4181, zeta_sd = 2.4406,
+              eta_mean = 0, eta_sd = 0.2,
+              psi_mean = 0, psi_sd = 1, ...)
+}
+
+print.efftox_fit <- function(x) {
+  df <- efftox_analysis_to_df(x)
+  print(df)
+  if(sum(x$acceptable) == 0) {
+    cat('The model advocates stopping.')
+
+  } else {
+    cat(paste0('The model recommends selecting dose-level ',
+               x$recommended_dose, '.'))
+  }
+}
+
+as.data.frame.efftox_fit <- function(x, ...) {
+  as.data.frame(x$fit, ...)
+}
+
+plot.efftox_fit <- function(x,  pars = 'utility', ...) {
+  plot(x$fit, pars = pars, ...)
+}
+
+summary.efftox_fit <- function(x, ...) {
+  summary(x$fit, ...)
 }

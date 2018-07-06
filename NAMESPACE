@@ -1,23 +1,47 @@
 # exportPattern("^[[:alpha:]]+")
-export(efftox_solve_p)
-export(efftox_parameters_demo)
-export(efftox_utility)
-export(efftox_process)
+# Dose-finding
+export(df_parse_outcomes)
+# CRM
+export(crm_params)
+export(crm_fit)
+export(crm_process)
+export(print.crm_fit)
+export(as.data.frame.crm_fit)
+export(plot.crm_fit)
+export(stan_crm)
+# EffTox
 export(efftox_analysis_to_df)
-export(efftox_simulate)
-export(efftox_get_tox)
 export(efftox_contour_plot)
-export(efftox_utility_density_plot)
-export(efftox_superiority)
-export(efftox_parse_outcomes)
 export(efftox_dtps)
+export(efftox_fit)
+export(efftox_get_tox)
+export(efftox_params)
+export(efftox_parameters_demo)
+export(efftox_process)
+export(efftox_simulate)
+export(efftox_superiority)
+export(efftox_solve_p)
+export(efftox_utility)
+export(efftox_utility_density_plot)
+export(efftox_parse_outcomes)
+export(as.data.frame.efftox_fit)
+export(plot.efftox_fit)
+export(print.efftox_fit)
+export(stan_efftox)
+export(stan_efftox_demo)
+# P2TNE in PEPS2
 export(peps2_get_data)
 export(peps2_process)
 export(peps2_run_sims)
+# Aux
+export(ranBin2)
+# Thall hierarchical
+export(thallhierarchicalbinary_parameters_demo)
+
 export(stan_files)
 export(stanmodels)
-export(thallhierarchicalbinary_parameters_demo)
-export(ranBin2)
+
+
 
 useDynLib(trialr, .registration = TRUE)
 

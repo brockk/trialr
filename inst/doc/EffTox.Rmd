@@ -61,7 +61,7 @@ The MD Anderson Cancer Center publishes software [@EffTox] to perform calculatio
 However, the software is available for Windows in compiled-form only.
 Thus, trialists cannot run the software on Mac or Linux unless using a virtual machine.
 Furthermore, trialists may not easily alter the behaviour of the model.
-Brock et al. (submitted 2017) describe a clinical trial scenario where some alteration of the default model behaviour would have been preferable.
+@Brock2017a describe a clinical trial scenario where some alteration of the default model behaviour would have been preferable.
 It was this that prompted the author to write the open-source implementation provided in 'trialr'.
 
 # EffTox in `trialr`
@@ -77,105 +77,69 @@ $\text{Pr}\left\{ \pi_E(x, \boldsymbol{\theta}) > 0.5 | \mathcal{D} \right\} > 0
 Thus, we have $p_T = p_E = 0.1, \overline{\pi}_T = 0.3$ and $\underline{\pi}_E = 0.5$.
 
 The parameterisation for this trial is loaded by default in the MD Anderson EffTox app.
-It can be loaded in `trialr` using the command
+This particular is fit as a demonstration in `trialr`.
 
-```{r message=FALSE}
+First, let us introduce our syntax for describing outcomes in phase I/II dose-finding trials, first described by @Brock2017a.
+We use integers to denote the dose-level given to a patient or cohort of patients; and strings of the letters E, T, N & B to represent the outcomes of patients treated at that dose that experienced efficacy, toxicity, neither or both, respectively.
+Clusters of these characters can be concatinated to reflect the outcomes of successive cohorts.
+
+To study the method, let us imagine that we have treated six patients in two cohorts of three at dose-levels 1 and 2 respectively:
+
+| Patient | Dose-level | Toxicity | Efficacy |
+|:-------:|:----------:|:--------:|:--------:|
+|    1    |      1     |     0    |     0    |
+|    2    |      1     |     0    |     0    |
+|    3    |      1     |     0    |     1    |
+|    4    |      2     |     0    |     1    |
+|    5    |      2     |     0    |     1    |
+|    6    |      2     |     1    |     1    |
+
+We fit Thall and Cook's demonstration model to these outcomes, setting the random seed for reproducibility, using the call:
+
+```{r, message=FALSE, results = "hide"}
 library(trialr)
-dat <- efftox_parameters_demo()
+
+outcomes <- '1NNE 2EEB'
+mod <- stan_efftox_demo(outcomes, seed = 123)
 ```
-
-Their hinge points on the neutral utility curve are (0.5, 0), (1, 0.65) and (0.7, 0.25).
-The curvature parameter for the utility contours is calculated using
-
-```{r}
-p <- efftox_solve_p(eff0 = 0.5, tox1 = 0.65, eff_star = 0.7, tox_star = 0.25)
-p
+```{r, caption = 'ProbEff and ProbTox are the probabilities of efficacy and toxicity at each dose. ProbAccEff is the probability that the efficacy rate exceeds the desired threshold and ProbAccTox the probability that the toxicity rate is less than the threshold. All probabilities are posterior means.'}
+mod
 ```
-The utility curves in this particular example have curvature parameter $p \approx 0.977$.
-
-We fetched the `dat` object above by calling `efftox_parameters_demo`.
-That function is provided for convenience.
-It is just shorthand for 
-```{r}
-dat <- list(
-  num_doses = 5,
-  real_doses = c(1, 2, 4, 6.6, 10),
-  efficacy_hurdle = 0.5,
-  toxicity_hurdle = 0.3,
-  p_e = 0.1,
-  p_t = 0.1,
-  p = p,
-  eff0 = 0.5,
-  tox1 = 0.65,
-  eff_star = 0.7,
-  tox_star = 0.25,
-  
-  alpha_mean = -7.9593, alpha_sd = 3.5487,
-  beta_mean = 1.5482, beta_sd = 3.5018,
-  gamma_mean = 0.7367, gamma_sd = 2.5423,
-  zeta_mean = 3.4181, zeta_sd = 2.4406,
-  eta_mean = 0, eta_sd = 0.2,
-  psi_mean = 0, psi_sd = 1,
-  
-  eff = c(),
-  tox = c(),
-  doses = c(),
-  num_patients = 0
-)
-```
-Refer to the published paper for information on the normal priors. 
-
-To study the method, let us say that we have treated six patients in two cohorts of three at dose-levels 1 and 2 respectively. 
-Let us also say we observe no toxicities and one efficacy event in cohort 1, and one toxicity and two efficacies in cohort 2. 
-We record this information in the `dat` object that is eventually passed to `rstan` to perform posterior sampling.
-
-```{r}
-dat$doses = c(1, 1, 1, 2, 2, 2)
-dat$tox   = c(0, 0, 0, 0, 1, 0)
-dat$eff   = c(0, 1, 0, 0, 1, 1)
-dat$num_patients = 6
-```
-
-This completes the information required by EffTox to calculate the next dose.
-We invoke the prior-to-posterior analysis by calling the `rstan::sampling` function with the pre-compiled EffTox stanmodel^[The advice by the RStan team is that authors of packages that use RStan should provide static model files that are compiled when the package is installed.] in `trialr` and our data list.
-We set the seed for reproducibility.
-
-```{r, results = "hide"}
-samp <- rstan::sampling(stanmodels$EffTox, data = dat, seed = 123)
-```
-
-The call to `rstan:sampling` prints logging information to the standard out stream.
-It has been suppressed here for brevity.
-
-```{r}
-x <- efftox_process(dat, samp)
-```
-
-The call to `efftox_process` extracts the most pertinent information from the sampling
-object.
-
-```{r}
-x$recommended_dose
-```
-
-We see that dose-level 3 is recommended for the next cohort.
-
-```{r eval=FALSE}
-knitr::kable(efftox_analysis_to_df(x), digits = 3)
-```
-
-```{r echo=FALSE}
-knitr::kable(efftox_analysis_to_df(x), digits = 3, caption = 'ProbEff and ProbTox are the probabilities of efficacy and toxicity at each dose. ProbAccEff is the probability that the efficacy rate exceeds the desired threshold and ProbAccTox the probability that the toxicity rate is less than the threshold. All probabilities are posterior means.')
-```
-
-This confirms that dose-level 3 has maximal utility.
+We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities.
 We see that dose-levels 4 and 5 are unacceptable. 
 This is because dose-level 3 has not yet been given.
 No doses are inferred to be too toxic or inefficacious yet.
 
+More generally, the function `stan_efftox` can be used to fit EffTox models.
+The above call is simply short-hand for:
+```{r, results = "hide"}
+mod <- stan_efftox(outcomes,
+                   real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
+                   efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                   p_e = 0.1, p_t = 0.1,
+                   eff0 = 0.5, tox1 = 0.65,
+                   eff_star = 0.7, tox_star = 0.25,
+                   alpha_mean = -7.9593, alpha_sd = 3.5487,
+                   beta_mean = 1.5482, beta_sd = 3.5018,
+                   gamma_mean = 0.7367, gamma_sd = 2.5423,
+                   zeta_mean = 3.4181, zeta_sd = 2.4406,
+                   eta_mean = 0, eta_sd = 0.2,
+                   psi_mean = 0, psi_sd = 1, 
+                   seed = 123)
+```
+These are the parameters identified in @Thall2014.
+Refer to the published paper for information on the normal priors. 
+
+The `mod` object contains 
+```{r}
+mod$recommended_dose
+```
+
+This confirms that dose-level 3 is acceptable dose with maximal utility.
+
 We can produce contour plots.
 ```{r, fig.width = 6, fig.height = 6, fig.cap = "Utility contours after observing outcomes 1NEN 2NBE."}
-efftox_contour_plot(dat, prob_eff = x$prob_eff, prob_tox = x$prob_tox)
+efftox_contour_plot(mod$dat, prob_eff = mod$prob_eff, prob_tox = mod$prob_tox)
 title('EffTox utility contours')
 ```
 
@@ -189,13 +153,13 @@ For illustration, we will just plot the densities of the three acceptable doses.
 The package `ggplot2` is required.
 
 ```{r, fig.width = 6, fig.height = 6, fig.cap = "Utility densities after observing outcomes 1NEN 2NBE."}
-efftox_utility_density_plot(samp, doses = 1:3) +
+efftox_utility_density_plot(mod$fit, doses = 1:3) +
   ggplot2::ggtitle("EffTox dose utility densities")
 ```
 
 To further facilitate the analysis of dose utility, we provide means of calculating the dose superiority matrix.
 ```{r}
-knitr::kable(efftox_superiority(samp), digits = 2, row.names = TRUE)
+knitr::kable(efftox_superiority(mod$fit), digits = 2, row.names = TRUE)
 ```
 
 The element in row $i$ and column $j$ shows $\text{Prob(}u_j > u_i | \text{data)}$, where $u_k$ is the utility of dose $k$.
@@ -226,6 +190,7 @@ To analyse the dose after each patient for the first 9 patients, followed by ten
 Once again, we need a list of data to pass to the RStan sampler.
 
 ```{r}
+p <- efftox_solve_p(eff0 = 0.5, tox1 = 0.65, eff_star = 0.7, tox_star = 0.25)
 dat <- list(
   num_doses = 5,
   real_doses = c(1, 2, 4, 6.6, 10),

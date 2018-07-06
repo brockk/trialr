@@ -26,8 +26,7 @@ For illustration, let us assume that we have treated 6 patients at 3 dose-levels
 |    6    |   3    |      4     |  1  |
 
 ```{r}
-doses_given <- c(2, 2, 3, 3, 4, 4)
-dlt <- c(0, 0, 0, 0, 1, 1)
+outcomes <- '2NN 3NN 4TT'
 ```
 
 and that we are using the empiric CRM with the following prior to target the dose with Pr(DLT) closest to 25%:
@@ -44,30 +43,15 @@ library(trialr)
 
 and to fit the data to the model, we run:
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-dat <- list(
-  a0 = 3,
-  beta_sd = sqrt(1.34),
-  num_doses = length(skeleton),
-  skeleton = skeleton,
-  num_patients = length(doses_given),
-  tox = dlt,
-  doses = doses_given
-)
-samp <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
-                        data = dat, seed = 123)
+mod <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                beta_sd = sqrt(1.34), seed = 123)
+mod
 ```
 
 Recall that we set the random number generator seed in demonstrations for reproducibility.
-YOu may or may not choose to do this in a real analysis.
+You may or may not choose to do this in a real analysis.
 
-We learned [before](https://brockk.github.io/trialr/articles/CRM.html) that we can easily calculate the posterior probability of toxicity at each dose:
-
-```{r}
-prob_tox_samp <- as.data.frame(samp, 'prob_tox')
-colMeans(prob_tox_samp)
-```
-
-and infer that, in this instance, dose-level 2 is closest to our target toxicity rate of 25%.
+We saw [before](https://brockk.github.io/trialr/articles/CRM.html) that dose-level 2 is closest to our target toxicity rate of 25%.
 However, we will probably like to convey this information to the research world in a visually-appealing manner.
 This is simple with access to the posterior samples.
 
@@ -77,6 +61,7 @@ For ease of plotting with `ggplot2`, we recompose the posterior samples to a tal
 library(tidyr)
 library(dplyr)
 
+prob_tox_samp <- as.data.frame(mod, 'prob_tox')
 prob_tox_samp_tall <- prob_tox_samp %>%
   gather(Label, ProbTox) %>%
   mutate(
@@ -158,7 +143,6 @@ There are many vignettes illuminating the CRM in `trialr`:
 
 - [An introduction to CRM in 'trialr'](https://brockk.github.io/trialr/articles/CRM.html)
 - [Visualisation in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html)
-- [Posterior model choice](https://brockk.github.io/trialr/articles/CRM-model-choice.html)
 - Stopping in CRM
 - Case study using Levy, et al. (2006)
 - Simulation

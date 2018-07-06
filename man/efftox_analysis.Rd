@@ -37,6 +37,7 @@ The object is essentially a list with slots:
    \item \code{acceptable}, a vector of logical values to indicate whether
    doses 1:n are acceptable, according to the rules for acceptable efficacy &
    toxicity, and rules on not skipping untested doses.
+   \item \code{fit}, An object of class \code{\link[rstan:stanfit]{stanfit}},        containing the posterior samples.
   }
 }
 

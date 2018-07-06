@@ -74,51 +74,39 @@ Say that we have treated 6 patients at 3 dose-levels:
 |    5    |   3    |      4     |  1  |
 |    6    |   3    |      4     |  1  |
 
+These data can be conveyed using our scheme for representing phase I outcomes.
+We use integers to represent dose-levels given and the letters T and N to represent toxicity or no-toxicity for individual patients.
+These clusters can be strwen together to represent the outcomes of cohorts of patients.
+For instance, the outcomes above can be represented:
 ```{r}
-doses_given <- c(2, 2, 3, 3, 4, 4)
-dlt <- c(0, 0, 0, 0, 1, 1)
+outcomes <- '2NN 3NN 4TT'
 ```
 
-We update each of our CRM models in this scenario.
+We will update each of the CRM models implemented in `trialr` for this scenario.
 We then briefly compare the inferences at the end.
 
 ## Empiric model
-
-We collect the data required by the Stan routine in a list:
-
+The empiric model requires only that a prior normal standard deviation be specified for the slope parameter.
+We use a prior variance of $\beta$ equal to 1.34, as used by Cheung in his examples.
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-dat1 <- list(
-  a0 = 3,
-  beta_sd = sqrt(1.34),
-  num_doses = length(skeleton),
-  skeleton = skeleton,
-  num_patients = length(doses_given),
-  tox = dlt,
-  doses = doses_given
-)
+mod1 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                 model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
+mod1
 ```
-
-We fit the model to our observed data by calling `rstan::sampling`:
-
-```{r, results = "hide", warning=FALSE, message=FALSE}
-samp1 <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
-                         data = dat1, seed = 123)
-```
-
-We use a fixed intercept value of 3 and a prior variance of $\beta$ equal to 1.34, as used by Cheung in his examples.
 In this demonstration, we set the seed for reproducibility when sampling however, in the wild, you might not do this.
 
-We extract the samples of the posterior probability of DLT at each dose, stored as the series of parameters called `prob_tox`.
+We can extract the samples of the posterior probability of DLT at each dose, stored as the series of parameters called `prob_tox`.
 From there, all manner of inference is possible.
-We can, for example, calculate the posterior expected probability of DLT at each dose as the mean of each sample:
+For example, we can recreate the posterior expected probability of DLT at each dose shown above.
+It is simply the mean of each sample:
 
 ```{r}
-prob_tox_samp1 <- as.data.frame(samp1, 'prob_tox')
+prob_tox_samp1 <- as.data.frame(mod1, 'prob_tox')
 prob_tox1 <- colMeans(prob_tox_samp1)
 prob_tox1
 ```
 
-We see that dose-level 2 is closest to our toxicity target of 25%.
+This confirms that dose-level 2 is closest to our toxicity target of 25%.
 Having posterior samples is very liberating from an inferential point of view.
 For example, it is trivial to calculate the probability that the toxicity rate exceeds the target DLT probability at each dose:
 
@@ -132,101 +120,40 @@ This type of calculation is trivial because we have access to the posterior samp
 
 
 ## One parameter logisitic model with normal prior
-This model takes similar parameters to those used before:
-
-```{r}
-dat2 <- list(
-  a0 = 3,
-  beta_mean = 0,
-  beta_sd = sqrt(1.34),
-  num_doses = length(skeleton),
-  skeleton = skeleton,
-  num_patients = length(doses_given),
-  tox = dlt,
-  doses = doses_given
-)
-```
-
-We then fit the model to the data:
-
+This model requires that a fixed intercept value and parameters for the normal prior on the slope term are specified:
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-samp2 <- rstan::sampling(stanmodels$CrmOneParamLogisticNormalPrior,
-                         data = dat2, seed = 123)
-```
-
-and perform some simple post-processing, as before:
-```{r}
-prob_tox_samp2 <- as.data.frame(samp2, 'prob_tox')
-prob_tox2 <- colMeans(prob_tox_samp2)
-prob_tox2
+mod2 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                 model = 'logistic', a0 = 3, beta_mean = 0, beta_sd = sqrt(1.34), 
+                 seed = 123)
+mod2
 ```
 
 Once again, we see that dose-level 2 would be recommended for the next cohort because it is forecast to have rob(DLT) closest to the target, 25%.
 
 ## One parameter logisitic model with gamma prior
-This model requires slightly different parameters, on account of the gamma prior:
-
-```{r}
-dat3 <- list(a0 = 3,
-             beta_shape = 1,
-             beta_inverse_scale = 1,
-             num_doses = length(skeleton),
-             skeleton = skeleton,
-             num_patients = length(doses_given),
-             tox = dlt,
-             doses = doses_given
-)
+This model requires that a fixed intercept value and parameters for the gamma prior on the slope term are specified:
+```{r, results = "hide", warning=FALSE, message=FALSE}
+mod3 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                 model = 'logistic_gamma', 
+                 a0 = 3, beta_shape = 1, beta_inverse_scale = 1, 
+                 seed = 123)
+mod3
 ```
 
 This use of a Gamma(1, 1) prior is the same as an Exponential(1) prior.
 
-```{r, results = "hide", warning=FALSE, message=FALSE}
-samp3 <- rstan::sampling(stanmodels$CrmOneParamLogisticGammaPrior,
-                         data = dat3, seed = 123)
-```
-
-Performing the usual post-processing to estimate Pr(DLT):
-
-```{r}
-prob_tox_samp3 <- as.data.frame(samp3, 'prob_tox')
-prob_tox3 <- colMeans(prob_tox_samp3)
-prob_tox3
-```
-
 ## Two parameter logisitic model with normal priors
-We now have two parameters on which to specify priors.
-The other parameters stay the same:
-
-```{r}
-dat4 <- list(alpha_mean = 0,
-             alpha_sd = 1,
-             beta_mean = 0,
-             beta_sd = sqrt(1.34),
-             num_doses = length(skeleton),
-             skeleton = skeleton,
-             num_patients = length(doses_given),
-             tox = dlt,
-             doses = doses_given
-)
+This model requires that parameters for normal priors on the intercept and slope term are specified:
+```{r, results = "hide", warning=FALSE, message=FALSE}
+mod4 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                 model = 'logistic2', 
+                 alpha_mean = 0, alpha_sd = 1, beta_mean =  0, beta_sd = 1, 
+                 seed = 123)
+mod4
 ```
 
-The processes of sampling:
-```{r, results = "hide"}
-samp4 <- rstan::sampling(stanmodels$CrmTwoParamLogisticNormalPrior,
-                         data = dat4, seed = 123)
-```
-
-and post-processing:
-
-```{r}
-prob_tox_samp4 <- as.data.frame(samp4, 'prob_tox')
-prob_tox4 <- colMeans(prob_tox_samp4)
-prob_tox4
-```
-
-remain the same. 
-However, these estimates look different to the other methods.
-We compare in the next section.
+These estimates look different to the other methods, not least because we have estimated an extra parameter.
+We compare the inferences in the next section.
 
 ## Comparison
 Let's compare the posterior estimates of the dose-toxicity curve:
@@ -234,10 +161,10 @@ Let's compare the posterior estimates of the dose-toxicity curve:
 ```{r}
 post_curves <- data.frame(
   DoseLevel = 1:length(skeleton),
-  Empiric = prob_tox1,
-  Logit1N = prob_tox2,
-  Logit1G = prob_tox3,
-  Logit2N = prob_tox4
+  Empiric = mod1$prob_tox,
+  Logit1N = mod2$prob_tox,
+  Logit1G = mod3$prob_tox,
+  Logit2N = mod4$prob_tox
 )
 knitr::kable(post_curves, digits = 2)
 ```
@@ -249,7 +176,7 @@ Let's have a look at that graphically:
 ```{r, fig.width=7, fig.height=7}
 post_curves_tall <- data.frame(
   DoseLevel = rep(1:length(skeleton), times = 4),
-  ProbTox = c(prob_tox1, prob_tox2, prob_tox3, prob_tox4),
+  ProbTox = c(mod1$prob_tox, mod2$prob_tox, mod3$prob_tox, mod4$prob_tox),
   Model = rep(c('Empiric', 'Logit1N', 'Logit1G', 'Logit2N'), each = 5)
 )
 
@@ -262,7 +189,7 @@ ggplot(post_curves_tall, aes(x = DoseLevel, y = ProbTox, group = Model, col = Mo
 If we suspect that the difference in inference might be driven by our prior for $\alpha$ in the two-parameter model, we can look at a summary of the posterior samples for that parameter:
 
 ```{r}
-knitr::kable(rstan::summary(samp4, 'alpha')$summary, digits = 2)
+knitr::kable(rstan::summary(mod4$fit, 'alpha')$summary, digits = 2)
 ```
 
 The posterior mean is not near the tail of the $N(0, 1)$ prior distribution and the posterior 95% credible interval has relocated from prior guess of (-2, 2).
@@ -280,15 +207,11 @@ We can then tabulate the number of times that each dose is chosen, effectively c
 This is probably what we really want when we conduct an MTD-seeking clinical trial.
 
 ```{r}
-prob_mtd1 <- table(apply(prob_tox_samp1, 1, function(x) which.min(abs(x - target)))) / 
-  nrow(prob_tox_samp1) 
-prob_mtd4 <- table(apply(prob_tox_samp4, 1, function(x) which.min(abs(x - target)))) / 
-  nrow(prob_tox_samp4) 
 knitr::kable(
   data.frame(
     DoseLevel = 1:length(skeleton),
-    ProbMTD_Empiric = as.numeric(prob_mtd1),
-    ProbMTD_Logit2N = as.numeric(prob_mtd4)
+    ProbMTD_Empiric = as.numeric(mod1$prob_mtd),
+    ProbMTD_Logit2N = as.numeric(mod4$prob_mtd)
   ), digits = 2
 )
 ```
@@ -303,7 +226,6 @@ There are many vignettes illuminating the CRM in `trialr`:
 
 - [An introduction to CRM in 'trialr'](https://brockk.github.io/trialr/articles/CRM.html)
 - [Visualisation in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html)
-- [Posterior model choice](https://brockk.github.io/trialr/articles/CRM-model-choice.html)
 - Stopping in CRM
 - Case study using Levy, et al. (2006)
 - Simulation

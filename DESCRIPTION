@@ -26,8 +26,9 @@ Depends:
 Imports:
     rstan (>= 2.12.1),
     rstantools (>= 1.1.0),
+    loo (>= 1.1.0),
     gtools
-LinkingTo: 
+LinkingTo:
   StanHeaders (>= 2.12.0.1), 
   rstan (>= 2.12.1), 
   BH (>= 1.62.0.1), 
@@ -36,7 +37,8 @@ LinkingTo:
 Suggests:
     knitr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    testthat
 URL: https://github.com/brockk/trialr
 BugReports: https://github.com/brockk/trialr/issues
 RoxygenNote: 6.0.1

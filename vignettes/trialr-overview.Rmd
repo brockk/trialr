@@ -65,43 +65,24 @@ target <- 0.25
 skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
 ```
 
-Let us assume that we have already treated 6 patients at 3 doses:
-
-```{r}
-doses_given <- c(2, 2, 3, 3, 4, 4)
-dlt <- c(0, 0, 0, 0, 1, 1)
-```
-
-What dose should we give to the 7th patient?
-
+Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, havig only seen toxicity at dose-level 4.
+What dose should we give to the next patient or cohort?
 We can fit the data to the popular empiric model
 
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-dat <- list(
-  a0 = 3,
-  beta_sd = sqrt(1.34),
-  num_doses = length(skeleton),
-  skeleton = skeleton,
-  num_patients = length(doses_given),
-  tox = dlt,
-  doses = doses_given
-)
-samp1 <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
-                         data = dat, seed = 123)
+mod1 <- stan_crm(outcome_str = '2NN 3NN 4TT', skeleton = skeleton, 
+                 target = target, beta_sd = sqrt(1.34), seed = 123)
 ```
 
-We can extract the posterior etimates of the probability of toxicity at each dose and perform inference as the Bayesian method would suggest:
-
+The fitted model contains lots of useful of information:
 ```{r}
-prob_tox_samp <- as.data.frame(samp1, 'prob_tox')
-prob_tox <- colMeans(prob_tox_samp)
-prob_tox
+mod1
 ```
 
 ```{r, fig.width=7, fig.height=7}
 library(ggplot2)
 plot_df = data.frame(DoseLevel = 1:length(skeleton),
-                     ProbTox = prob_tox)
+                     ProbTox = mod1$prob_tox)
 ggplot(plot_df, aes(x = DoseLevel, y = ProbTox)) +
   geom_point() + geom_line() + ylim(0, 1) + 
   geom_hline(yintercept = target, col = 'orange', linetype = 'dashed') +
@@ -117,53 +98,38 @@ Further visualisation techniques are demonstrated in the [Visualisation in CRM](
 EffTox by @Thall2004 is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. 
 We present it briefly here but there is a much more thorough examination in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
 
-We include a convenience function to get parameters for the EffTox demo scenario of a study with five doses:
-
-```{r}
-dat <- efftox_parameters_demo()
-```
-
-but generally you would specify parameters in a list. See the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html) for full details.
-
-Let us add outcomes for 3 patients: 
+For demonstration, We fit the model parameterisation introduced by @Thall2014 to the following notional outcomes:
 
 | Patient | Dose-level | Toxicity | Efficacy |
 |:-------:|:----------:|:--------:|:--------:|
 |    1    |      1     |     0    |     0    |
-|    2    |      2     |     0    |     1    |
-|    3    |      3     |     1    |     1    |
+|    2    |      1     |     0    |     0    |
+|    3    |      1     |     0    |     1    |
+|    4    |      2     |     0    |     1    |
+|    5    |      2     |     0    |     1    |
+|    6    |      2     |     1    |     1    |
 
-```{r}
-dat$num_patients <- 3
-dat$eff <- c(0, 1, 1)
-dat$tox <- c(0, 0, 1)
-dat$doses <- c(1, 2, 3)
+```{r, results = "hide"}
+outcomes <- '1NNE 2EEB'
+mod <- stan_efftox_demo(outcomes, seed = 123)
 ```
 
-To get posterior samples, we invoke Stan the model on our `dat` object. 
-The EffTox model is include in `trialr` as `stanmodels$EffTox`.
-The `stanmodels` object is compiled when you install `trialr` and made available when you load the package.
-
-```{r, results = "hide", warning=FALSE, message=FALSE}
-set.seed(123)
-samp <- rstan::sampling(stanmodels$EffTox, data = dat, refresh = FALSE)
-```
-
-The `efftox_process` function is provided to perform the calculations on the posterior samples necessary to follow the design published by Thall & Cook:
 
 ```{r}
-decision <- efftox_process(dat, samp)
+mod
 ```
 
-For instance, after evaluation of our three patients, the dose advocated for the next group is dose-level 3: 
+In this instance, after evaluation of our six patients, the dose advocated for the next group is dose-level 3.
+This is contained in the fitted object:
+
 ```{r}
-decision$recommended_dose
+mod$recommended_dose
 ```
 
 This is not surprising because dose 3 has the highest utility score:
 
 ```{r}
-decision$utility
+mod$utility
 ```
 
 Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. 
@@ -174,7 +140,7 @@ For instance, it is illuminating to plot the posterior means of the probabilitie
 The five doses are shown in red. Doses closer to the lower-right corner have higher utility. 
 
 ```{r, fig.width=7, fig.height=7}
-efftox_contour_plot(dat, prob_eff = decision$prob_eff, prob_tox = decision$prob_tox)
+efftox_contour_plot(mod$dat, prob_eff = mod$prob_eff, prob_tox = mod$prob_tox)
 title('EffTox utility contours')
 ```
 

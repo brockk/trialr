@@ -4,16 +4,21 @@
 \alias{efftox_parse_outcomes}
 \title{Parse a string of EffTox outcomes to binary vector notation.}
 \usage{
-efftox_parse_outcomes(outcome_string)
+efftox_parse_outcomes(outcome_string, as.list = TRUE)
 }
 \arguments{
 \item{outcome_string}{character string, conveying doses given and outcomes
 observed.}
+
+\item{as.list}{TRUE (be default) to return a \code{list};
+FALSE to return a \code{data.frame}}
 }
 \value{
-a list with elements \code{eff}, \code{tox}, \code{doses} and
-\code{num_patients}. These elements are congruent with the same in
-\code{efftox_params}.
+If \code{as.list == TRUE}, a list with elements \code{eff}, \code{tox},
+\code{doses} and \code{num_patients}. These elements are congruent with those
+of the same name in \code{efftox_params}.
+If \code{as.list == FALSE}, a data.frame with columns \code{eff}, \code{tox},
+and \code{doses}.
 }
 \description{
 Parse a string of EffTox outcomes to the binary vector notation
@@ -21,7 +26,7 @@ required by Stan for model invocation. The outcome string describes the doses
 given and outcomes observed. The format of the string is described in Brock
 et al. (2017). The letters E, T, N and B are used to represents patients that
 experienced (E)fficacy only, (T)oxicity only, (B)oth efficacy and toxicity,
-and (B)oth. These letters are concatenated after numerical dose-levels to
+and (N)either. These letters are concatenated after numerical dose-levels to
 convey the outcomes of cohorts of patients. For instance, \code{2ETB}
 represents a cohort of three patients that were treated at dose-level 2, and
 experienced efficacy, toxicity and both events, respectively. The results of
@@ -40,6 +45,8 @@ sum(x$tox) == 3
 
 }
 \references{
-Brock et al. (submitted 2017), Implementing the EffTox
-Dose-Finding Design in the Matchpoint Trial.
+Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., & Yap, C.
+(2017). Implementing the EffTox dose-finding design in the Matchpoint trial.
+BMC Medical Research Methodology, 17(1), 112.
+https://doi.org/10.1186/s12874-017-0381-x
 }

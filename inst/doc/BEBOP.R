@@ -29,8 +29,8 @@ knitr::kable(
 ## ---- results = "hide"---------------------------------------------------
 samp <- rstan::sampling(stanmodels$BebopInPeps2, data = dat)
 
-## ---- fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=T----
-rstan::plot(samp, pars = 'prob_eff')
+## ---- fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=FALSE----
+#  rstan::plot(samp, pars = 'prob_eff')
 
 ## ---- eval=T-------------------------------------------------------------
 decision <- peps2_process(dat, samp)

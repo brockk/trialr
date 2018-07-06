@@ -1,7 +1,11 @@
 
-devtools::install_github("hadley/pkgdown")
+# devtools::install_github("hadley/pkgdown")
 
 pkgdown::build_site()
+
+
+
+# Formerly ----
 # Breaks:
 # Error in .Call("CPP_stanc280", model_code, model_cppname, allow_undefined,  (from stanmodels.R#31) :
 # "CPP_stanc280" not resolved from current namespace (rstan)

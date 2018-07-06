@@ -41,6 +41,7 @@ A list with named elements \code{recommended_dose},
 }
 \description{
 Run EffTox simulations for assumed true efficacy and toxicity
+curves.
 }
 \examples{
 dat <- efftox_parameters_demo()

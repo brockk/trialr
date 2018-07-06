@@ -10,11 +10,11 @@ efftox_process(dat, fit)
 \item{dat}{An instance of \code{\link{efftox_params}}, a list of EffTox
 parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.}
 
-\item{fit}{An instance of \code{rstan::stanmodel}, derived by sampling an
-EffTox model. Use \code{stan::sampling(stanmodels$EffTox, data = dat)}.}
+\item{fit}{An instance of \code{rstan::stanmodel}, derived by fitting the
+trialr EffTox model.}
 }
 \value{
-An instance of \code{\link{efftox_analysis}}.
+An instance of \code{\link{efftox_fit}}.
 }
 \description{
 Process RStan samples from an EffTox model to make inferences

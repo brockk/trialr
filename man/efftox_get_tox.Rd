@@ -2,7 +2,7 @@
 % Please edit documentation in R/EffTox.R
 \name{efftox_get_tox}
 \alias{efftox_get_tox}
-\title{Get the probability of toxicity for probability-of-efficacy and utility pairs}
+\title{Get the Prob(Tox) for Prob(Eff) and utility pairs}
 \usage{
 efftox_get_tox(eff, util, p, eff0, tox1)
 }
@@ -23,10 +23,12 @@ a number between 0 and 1}
 Probability(s) of toxicity
 }
 \description{
-Get the probability of toxicity for probability-of-efficacy and utility pairs
+Get the probability of toxicity for probability-of-efficacy and
+utility pairs
 }
 \note{
-Various ways of vectorising the function are demonstrated in the examples
+Various ways of vectorising the function are demonstrated in the
+examples
 }
 \examples{
 p <- efftox_solve_p(0.5, 0.65, 0.7, 0.25)
@@ -34,13 +36,15 @@ p <- efftox_solve_p(0.5, 0.65, 0.7, 0.25)
 prob_tox <- efftox_get_tox(0.7, 0, p, eff0 = 0.5, tox1 = 0.65)
 round(prob_tox, 2) == 0.25
 
-prob_tox <- efftox_get_tox(0.7, seq(-0.5, 0.25, by = 0.25), p, eff0 = 0.5, tox1 = 0.65)
+prob_tox <- efftox_get_tox(0.7, seq(-0.5, 0.25, by = 0.25), p, eff0 = 0.5,
+                           tox1 = 0.65)
 round(prob_tox, 2) == c(0.57, 0.41, 0.25, 0.09)
 
 prob_tox <- efftox_get_tox(c(0.5, 0.7, 0.8), 0.25, p, eff0 = 0.5, tox1 = 0.65)
 round(prob_tox, 2) == c(NaN, 0.09, 0.22)
 
-prob_tox <- efftox_get_tox(c(0.5, 0.7, 0.8), c(-1, 0, 1), p, eff0 = 0.5, tox1 = 0.65)
+prob_tox <- efftox_get_tox(c(0.5, 0.7, 0.8), c(-1, 0, 1), p, eff0 = 0.5,
+                           tox1 = 0.65)
 round(prob_tox, 2) == c(0.63, 0.25, NaN)
 
 }
