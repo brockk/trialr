@@ -1087,11 +1087,11 @@ stan_efftox <- function(outcome_str = NULL,
 #'
 #' @references
 #'   Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
-#'     Trade-Offs. Biometrics, 60(3), 684–693.
+#'     Trade-Offs. Biometrics, 60(3), 684-693.
 #'
 #'   Thall, P., Herrick, R., Nguyen, H., Venier, J., & Norris, J. (2014).
 #'     Effective sample size for computing prior hyperparameters in Bayesian
-#'     phase I-II dose-finding. Clinical Trials, 11(6), 657–666.
+#'     phase I-II dose-finding. Clinical Trials, 11(6), 657-666.
 #'     https://doi.org/10.1177/1740774514547397
 #'
 #'   Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., &
