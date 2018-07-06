@@ -27,7 +27,8 @@ Imports:
     rstan (>= 2.12.1),
     rstantools (>= 1.1.0),
     loo (>= 1.1.0),
-    gtools
+    gtools,
+    stringr
 LinkingTo:
   StanHeaders (>= 2.12.0.1), 
   rstan (>= 2.12.1), 

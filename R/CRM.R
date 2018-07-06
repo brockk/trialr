@@ -5,24 +5,24 @@
 #' @aliases crm_params
 #' @docType class
 #'
-#' @slot skeleton a vector of the prior guesses of toxicity at doses.
+#' @param skeleton a vector of the prior guesses of toxicity at doses.
 #' This should be a monotonically-increasing vector of numbers between 0 and 1.
-#' @slot target the target toxicity probability, a number between 0 and 1.
+#' @param target the target toxicity probability, a number between 0 and 1.
 #' This value would normally be one of the values in \code{skeleton}, but that
 #' is not a requirement.
-#' @slot a0 Value of fixed intercept parameter.
+#' @param a0 Value of fixed intercept parameter.
 #' Only required for certain models. See Details.
-#' @slot alpha_mean Prior mean of intercept variable for normal prior.
+#' @param alpha_mean Prior mean of intercept variable for normal prior.
 #' Only required for certain models. See Details.
-#' @slot alpha_sd Prior standard deviation of intercept variable for normal prior.
+#' @param alpha_sd Prior standard deviation of intercept variable for normal prior.
 #' Only required for certain models. See Details.
-#' @slot beta_mean Prior mean of gradient variable for normal prior.
+#' @param beta_mean Prior mean of gradient variable for normal prior.
 #' Only required for certain models. See Details.
-#' @slot beta_sd Prior standard deviation of slope variable for normal prior.
+#' @param beta_sd Prior standard deviation of slope variable for normal prior.
 #' Only required for certain models. See Details.
-#' @slot beta_shape Prior shape parameter of slope variable for gamma prior.
+#' @param beta_shape Prior shape parameter of slope variable for gamma prior.
 #' Only required for certain models. See Details.
-#' @slot beta_inverse_scale Prior inverse scale parameter of slope variable for
+#' @param beta_inverse_scale Prior inverse scale parameter of slope variable for
 #' gamma prior. Only required for certain models. See Details.
 #'
 #' @details
@@ -114,7 +114,7 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #' @param tox An optional vector of toxicity outcomes for patients
 #' 1:num_patients, where 1=toxicity and 0=no toxicity. Only required when
 #' \code{outcome_str} is not provided.
-#' @param ...Extra parameters are passed to \code{rstan::sampling}. Commonly
+#' @param ... Extra parameters are passed to \code{rstan::sampling}. Commonly
 #' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
 #' \code{control}. \code{\link[rstan:sampling]{sampling}}.
 #'
@@ -151,10 +151,10 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #' @author Kristian Brock \email{kristian.brock@@gmail.com}
 #'
 #' @references
-#'   O’Quigley, J., Pepe, M., & Fisher, L. (1990).
+#'   O'Quigley, J., Pepe, M., & Fisher, L. (1990).
 #'   Continual reassessment method: a practical design for phase 1 clinical
 #'   trials in cancer.
-#'   Biometrics, 46(1), 33–48. https://doi.org/10.2307/2531628
+#'   Biometrics, 46(1), 33-48. https://doi.org/10.2307/2531628
 #'
 #' @seealso
 #'   \code{\link{crm_fit}}
@@ -210,8 +210,8 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
 
   # Add outcomes
   if(is.null(outcome_str)) {
-    if(length(doses_given) != length(toxicity))
-      stop('doses_given and toxicity vectors should have same length')
+    if(length(doses_given) != length(tox))
+      stop('doses_given and tox vectors should have same length')
     dat$doses <- doses_given
     dat$tox <- tox
     dat$num_patients <- length(doses_given)
@@ -284,23 +284,23 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
 #' See \code{methods(class = "crm_fit")} for an overview of available
 #' methods.
 #'
-#' @slot dose_indices A vector of integers representing the dose-levels under
+#' @param dose_indices A vector of integers representing the dose-levels under
 #' consideration.
-#' @slot recommended_dose An integer representing the dose-level recommended
+#' @param recommended_dose An integer representing the dose-level recommended
 #' for the next patient or cohort; or \code{NA} if stopping is recommended.
 #' The recommended dose typically has associated probability of DLT closest to
 #' the target toxicity rate. Contrast to \code{modal_mtd_candidate}.
-#' @slot prob_tox The posterior mean probabilities of toxicity at doses 1:n;
+#' @param prob_tox The posterior mean probabilities of toxicity at doses 1:n;
 #' a vector of numbers between 0 and 1.
-#' @slot median_prob_tox The posterior median probabilities of toxicity at doses
+#' @param median_prob_tox The posterior median probabilities of toxicity at doses
 #' 1:n; a vector of numbers between 0 and 1.
-#' @slot modal_mtd_candidate An integer representing the dose-level most likely
+#' @param modal_mtd_candidate An integer representing the dose-level most likely
 #' to be the MTD, i.e. the dose-level that maximises \code{prob_mtd}.
-#' @slot prob_mtd The posterior probability that each dose is the MTD, by the
+#' @param prob_mtd The posterior probability that each dose is the MTD, by the
 #' chosen model; a vector of numbers between 0 and 1.
-#' @slot dat Object \link{\code{crm_params}} containing data passed to
+#' @param dat Object \code{\link{crm_params}} containing data passed to
 #' \code{\link[rstan:sampling]{sampling}}.
-#' @slot fit An object of class \code{\link[rstan:stanfit]{stanfit}},
+#' @param fit An object of class \code{\link[rstan:stanfit]{stanfit}},
 #' containing the posterior samples.
 #'
 #' @seealso
@@ -358,9 +358,9 @@ crm_process <- function(dat, fit) {
   prob_tox_samp <- rstan::extract(fit, 'prob_tox')[[1]]
   prob_tox <- colMeans(prob_tox_samp)
   recommended_dose <- which.min(abs(prob_tox - dat$target))
-  median_prob_tox <- apply(prob_tox_samp, 2, median)
+  median_prob_tox <- apply(prob_tox_samp, 2, stats::median)
   # Implied MTD
-  implied_mtd <- apply(prob_tox_samp, 1, function(x) which.min(abs(x - target)))
+  implied_mtd <- apply(prob_tox_samp, 1, function(x) which.min(abs(x - dat$target)))
   prob_mtd <- sapply(dose_indices, function(x) mean(implied_mtd == x))
   modal_mtd_candidate <- which.max(prob_mtd)
 
@@ -369,7 +369,14 @@ crm_process <- function(dat, fit) {
   return(x)
 }
 
-print.crm_fit <- function(x) {
+#' Print crm_fit object.
+#'
+#' @param x \code{\link{crm_fit}} object to convert.
+#' @param ... Extra parameters, passed onwards.
+#' @sdname print
+#' @method print crm_fit
+#' @S3method print crm_fit
+print.crm_fit <- function(x, ...) {
   # Patient-level data
   treated <- data.frame(
     Patient = 1:length(x$dat$doses),
@@ -402,15 +409,42 @@ print.crm_fit <- function(x) {
              x$modal_mtd_candidate, '.'))
 }
 
+#' Convert crm_fit object to \code{data.frame}.
+#'
+#' @param x \code{\link{crm_fit}} object to convert.
+#' @param ... Extra parameters, passed onwards.
+#'
+#' @return A \code{data.frame}
+#' @sdname as.data.frame
+#' @method as.data.frame crm_fit
+#' @S3method as.data.frame crm_fit
 as.data.frame.crm_fit <- function(x, ...) {
   as.data.frame(x$fit, ...)
 }
 
+#' Plot an crm_fit
+#'
+#' @param x \code{\link{crm_fit}} object to plot.
+#' @param pars Parameters to plot. Plots utility scores by default.
+#' @param ... Extra parameters, passed onwards.
+#'
+#' @return A plot
+#' @sdname plot
+#' @method plot crm_fit
+#' @S3method plot crm_fit
 plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
-  plot(x$fit, pars = pars, ...)
+  graphics::plot(x$fit, pars = pars, ...)
 }
 
+#' Obtain summary of an crm_fit
+#'
+#' @param x \code{\link{crm_fit}} object to summarise.
+#' @param ... Extra parameters, passed onwards.
+#'
+#' @return A summary object.
+#' @sdname summary
+#' @method summary crm_fit
+#' @S3method summary crm_fit
 summary.crm_fit <- function(x, ...) {
   summary(x$fit, ...)
 }
-

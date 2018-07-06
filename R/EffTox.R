@@ -51,49 +51,49 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 #' @aliases efftox_params
 #' @docType class
 #'
-#' @slot real_doses a vector of numbers.The doses under investigation.
+#' @param real_doses a vector of numbers.The doses under investigation.
 #' They should be ordered from lowest to highest and be in consistent units.
 #' E.g., to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
 #' c(10, 20, 50).
-#' @slot efficacy_hurdle Minimum acceptable efficacy probability.
+#' @param efficacy_hurdle Minimum acceptable efficacy probability.
 #' A number between 0 and 1.
-#' @slot toxicity_hurdle Maximum acceptable toxicity probability.
+#' @param toxicity_hurdle Maximum acceptable toxicity probability.
 #' A number between 0 and 1.
-#' @slot p_e Certainty required to infer a dose is acceptable with regards to
+#' @param p_e Certainty required to infer a dose is acceptable with regards to
 #' being probably efficacious; a number between 0 and 1.
-#' @slot p_t Certainty required to infer a dose is acceptable with regards to
+#' @param p_t Certainty required to infer a dose is acceptable with regards to
 #' being probably tolerable; a number between 0 and 1.
-#' @slot eff0 Efficacy probability required when toxicity is impossible;
+#' @param eff0 Efficacy probability required when toxicity is impossible;
 #' a number between 0 and 1 (see Details).
-#' @slot tox1 Toxicity probability permitted when efficacy is guaranteed;
+#' @param tox1 Toxicity probability permitted when efficacy is guaranteed;
 #' a number between 0 and 1 (see Details).
-#' @slot eff_star Efficacy probability of an equi-utility third point (see
+#' @param eff_star Efficacy probability of an equi-utility third point (see
 #' Details).
-#' @slot tox_star Toxicity probability of an equi-utility third point (see
+#' @param tox_star Toxicity probability of an equi-utility third point (see
 #' Details).
-#' @slot alpha_mean The prior normal mean of the intercept term in the toxicity
+#' @param alpha_mean The prior normal mean of the intercept term in the toxicity
 #' logit model. A number.
-#' @slot alpha_sd The prior normal standard deviation of the intercept term in
+#' @param alpha_sd The prior normal standard deviation of the intercept term in
 #' the toxicity logit model. A number.
-#' @slot beta_mean The prior normal mean of the slope term in the toxicity
+#' @param beta_mean The prior normal mean of the slope term in the toxicity
 #' logit model. A number.
-#' @slot beta_sd The prior normal standard deviation of the slope term in the
+#' @param beta_sd The prior normal standard deviation of the slope term in the
 #' toxicity logit model. A number.
-#' @slot gamma_mean The prior normal mean of the intercept term in the efficacy
+#' @param gamma_mean The prior normal mean of the intercept term in the efficacy
 #' logit model. A number.
-#' @slot gamma_sd The prior normal standard deviation of the intercept term in
+#' @param gamma_sd The prior normal standard deviation of the intercept term in
 #' the efficacy logit model. A number.
-#' @slot zeta_mean The prior normal mean of the slope term in the efficacy
+#' @param zeta_mean The prior normal mean of the slope term in the efficacy
 #' logit model. A number.
-#' @slot zeta_sd The prior normal standard deviation of the slope term in the
+#' @param zeta_sd The prior normal standard deviation of the slope term in the
 #' efficacy logit model. A number.
-#' @slot eta_mean The prior normal mean of the squared term coefficient in the
+#' @param eta_mean The prior normal mean of the squared term coefficient in the
 #' efficacy logit model. A number.
-#' @slot eta_sd The prior normal standard deviation of the squared term
+#' @param eta_sd The prior normal standard deviation of the squared term
 #' coefficient in the efficacy logit model. A number.
-#' @slot psi_mean The prior normal mean of the association term in the combined
+#' @param psi_mean The prior normal mean of the association term in the combined
 #' efficacy-toxicity model. A number.
-#' @slot psi_sd The prior normal standard deviation of the association term in
+#' @param psi_sd The prior normal standard deviation of the association term in
 #' the combined efficacy-toxicity model. A number.
 #'
 #' @seealso
@@ -845,34 +845,34 @@ efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
 #' See \code{methods(class = "efftox_fit")} for an overview of available
 #' methods.
 #'
-#' @slot dose_indices A vector of integers representing the dose-levels under
+#' @param dose_indices A vector of integers representing the dose-levels under
 #' consideration.
-#' @slot recommended_dose An integer representing the dose-level recommended
+#' @param recommended_dose An integer representing the dose-level recommended
 #' for the next patient or cohort; or \code{NA} if stopping is recommended.
-#' @slot prob_eff The posterior mean probabilities of efficacy at doses 1:n;
+#' @param prob_eff The posterior mean probabilities of efficacy at doses 1:n;
 #' a vector of numbers between 0 and 1.
-#' @slot prob_tox The posterior mean probabilities of toxicity at doses 1:n;
+#' @param prob_tox The posterior mean probabilities of toxicity at doses 1:n;
 #' a vector of numbers between 0 and 1.
-#' @slot prob_acc_eff The posterior mean probabilities that efficacy at the
+#' @param prob_acc_eff The posterior mean probabilities that efficacy at the
 #' doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
 #' threshold; a vector of numbers between 0 and 1.
-#' @slot prob_acc_tox The posterior mean probabilities that toxicity at the
+#' @param prob_acc_tox The posterior mean probabilities that toxicity at the
 #' doses is acceptable, i.e. that it is less than the maximum toxicity
 #' threshold; a vector of numbers between 0 and 1.
-#' @slot utility The utilities of doses 1:n, calculated by plugging the
+#' @param utility The utilities of doses 1:n, calculated by plugging the
 #' posterior mean probabilities of efficacy and toxicity into the utility
 #' formula, as advocated by Thall & Cook. Contrast to \code{post_utility};
 #' a vector of numbers.
-#' @slot post_utility The posterior mean utilities of doses 1:n, calculated
+#' @param post_utility The posterior mean utilities of doses 1:n, calculated
 #' from the posterior distributions of the utilities. This is in contrast to
 #' \code{utility}, which uses plug-in posterior means of efficacy and toxicity,
 #' as advocated by Thall & Cook; a vector of numbers.
-#' @slot acceptable A vector of logical values to indicate whether doses 1:n
+#' @param acceptable A vector of logical values to indicate whether doses 1:n
 #' are acceptable, according to the rules for acceptable efficacy & toxicity,
 #' and rules on not skipping untested doses.
-#' @slot fit An object of class \code{\link[rstan:stanfit]{stanfit}},
+#' @param fit An object of class \code{\link[rstan:stanfit]{stanfit}},
 #' containing the posterior samples.
-#' @slot dat Object \link{\code{efftox_params}} containing data passed to
+#' @param dat Object \code{\link{efftox_params}} containing data passed to
 #' \code{\link[rstan:sampling]{sampling}}.
 #'
 #' @seealso
@@ -955,7 +955,7 @@ efftox_fit <- function(dose_indices, recommended_dose, prob_eff, prob_tox,
 #' @param tox An optional vector of toxicity outcomes for patients
 #' 1:num_patients, where 1=toxicity and 0=no toxicity. Only required when
 #' \code{outcome_str} is not provided.
-#' @param ...Extra parameters are passed to \code{rstan::sampling}. Commonly
+#' @param ... Extra parameters are passed to \code{rstan::sampling}. Commonly
 #' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
 #' \code{control}. \code{\link[rstan:sampling]{sampling}}.
 #'
@@ -983,11 +983,11 @@ efftox_fit <- function(dose_indices, recommended_dose, prob_eff, prob_tox,
 #'
 #' @references
 #'   Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
-#'     Trade-Offs. Biometrics, 60(3), 684–693.
+#'     Trade-Offs. Biometrics, 60(3), 684-693.
 #'
 #'   Thall, P., Herrick, R., Nguyen, H., Venier, J., & Norris, J. (2014).
 #'     Effective sample size for computing prior hyperparameters in Bayesian
-#'     phase I-II dose-finding. Clinical Trials, 11(6), 657–666.
+#'     phase I-II dose-finding. Clinical Trials, 11(6), 657-666.
 #'     https://doi.org/10.1177/1740774514547397
 #'
 #'   Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., &
@@ -1044,10 +1044,10 @@ stan_efftox <- function(outcome_str = NULL,
 
   # Add outcomes
   if(is.null(outcome_str)) {
-    if(length(doses_given) != length(efficacy))
-      stop('doses_given and efficacy vectors should have same length')
-    if(length(toxicity) != length(efficacy))
-      stop('toxicity and efficacy vectors should have same length')
+    if(length(doses_given) != length(eff))
+      stop('doses_given and eff vectors should have same length')
+    if(length(toxicity) != length(eff))
+      stop('toxicity and eff vectors should have same length')
     dat$doses <- doses_given
     dat$eff <- eff
     dat$tox <- tox
@@ -1077,7 +1077,7 @@ stan_efftox <- function(outcome_str = NULL,
 #' See \code{\link{efftox_parse_outcomes}} for a description of syntax and
 #' examples. Alternatively, you may provide \code{doses_given}, \code{eff} and
 #' \code{tox} parameters. See Details.
-#' @param ...Extra parameters are passed to \code{rstan::sampling}. Commonly
+#' @param ... Extra parameters are passed to \code{rstan::sampling}. Commonly
 #' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
 #' \code{control}. \code{\link[rstan:sampling]{sampling}}.
 #'
@@ -1129,7 +1129,14 @@ stan_efftox_demo <- function(outcome_str, ...) {
               psi_mean = 0, psi_sd = 1, ...)
 }
 
-print.efftox_fit <- function(x) {
+#' Print efftox_fit object.
+#'
+#' @param x \code{\link{efftox_fit}} object to convert.
+#' @param ... Extra parameters, passed onwards.
+#' @sdname print
+#' @method print efftox_fit
+#' @S3method print efftox_fit
+print.efftox_fit <- function(x, ...) {
   df <- efftox_analysis_to_df(x)
   print(df)
   if(sum(x$acceptable) == 0) {
@@ -1141,14 +1148,42 @@ print.efftox_fit <- function(x) {
   }
 }
 
+#' Convert efftox_fit object to \code{data.frame}.
+#'
+#' @param x \code{\link{efftox_fit}} object to convert.
+#' @param ... Extra parameters, passed onwards.
+#'
+#' @return A \code{data.frame}
+#' @sdname as.data.frame
+#' @method as.data.frame efftox_fit
+#' @S3method as.data.frame efftox_fit
 as.data.frame.efftox_fit <- function(x, ...) {
   as.data.frame(x$fit, ...)
 }
 
+#' Plot an efftox_fit
+#'
+#' @param x \code{\link{efftox_fit}} object to plot.
+#' @param pars Parameters to plot. Plots utility scores by default.
+#' @param ... Extra parameters, passed onwards.
+#'
+#' @return A plot
+#' @sdname plot
+#' @method plot efftox_fit
+#' @S3method plot efftox_fit
 plot.efftox_fit <- function(x,  pars = 'utility', ...) {
-  plot(x$fit, pars = pars, ...)
+  graphics::plot(x$fit, pars = pars, ...)
 }
 
+#' Obtain summary of an efftox_fit
+#'
+#' @param x \code{\link{efftox_fit}} object to summarise.
+#' @param ... Extra parameters, passed onwards.
+#'
+#' @return A summary object.
+#' @sdname summary
+#' @method summary efftox_fit
+#' @S3method summary efftox_fit
 summary.efftox_fit <- function(x, ...) {
   summary(x$fit, ...)
 }
