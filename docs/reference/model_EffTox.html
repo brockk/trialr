@@ -68,7 +68,7 @@ a demonstration of the pertinent methods implemented in trial." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
       </span>
     </div>
 
@@ -178,8 +178,8 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 6.4e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.64 seconds.
+#&gt; Gradient evaluation took 6.6e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.66 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -196,9 +196,9 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.514272 seconds (Warm-up)
-#&gt;                0.355484 seconds (Sampling)
-#&gt;                0.869756 seconds (Total)
+#&gt;  Elapsed Time: 0.50935 seconds (Warm-up)
+#&gt;                0.351886 seconds (Sampling)
+#&gt;                0.861236 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
@@ -221,9 +221,9 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.49276 seconds (Warm-up)
-#&gt;                0.361635 seconds (Sampling)
-#&gt;                0.854395 seconds (Total)
+#&gt;  Elapsed Time: 0.489453 seconds (Warm-up)
+#&gt;                0.37268 seconds (Sampling)
+#&gt;                0.862133 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
@@ -246,15 +246,15 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.487089 seconds (Warm-up)
-#&gt;                0.351963 seconds (Sampling)
-#&gt;                0.839052 seconds (Total)
+#&gt;  Elapsed Time: 0.479903 seconds (Warm-up)
+#&gt;                0.35005 seconds (Sampling)
+#&gt;                0.829953 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 3.9e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -271,9 +271,9 @@ computing prior hyperparameters in Bayesian phase I-II dose-finding</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.505426 seconds (Warm-up)
-#&gt;                0.356316 seconds (Sampling)
-#&gt;                0.861742 seconds (Total)
+#&gt;  Elapsed Time: 0.496753 seconds (Warm-up)
+#&gt;                0.355851 seconds (Sampling)
+#&gt;                0.852604 seconds (Total)
 #&gt; </div><div class='input'><span class='co'># The fit object is quite crude. Post-process to perform useful inference:</span>
 <span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
 <span class='no'>decision</span>$<span class='no'>recommended_dose</span> <span class='kw'>==</span> <span class='fl'>3</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'># Dose-level 3 is recommended for the next cohort of patients.

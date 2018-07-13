@@ -31,7 +31,8 @@ Imports:
     stringr,
     dplyr,
     tidyr,
-    magrittr
+    magrittr,
+    ggplot2
 LinkingTo:
   StanHeaders (>= 2.12.0.1), 
   rstan (>= 2.12.1), 
@@ -41,10 +42,6 @@ LinkingTo:
 Suggests:
     knitr,
     rmarkdown,
-    ggplot2,
-    magrittr,
-    tidyr,
-    dplyr,
     ggridges,
     testthat
 URL: https://github.com/brockk/trialr

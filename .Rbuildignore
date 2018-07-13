@@ -10,3 +10,5 @@ contours\.png
 cran-comments\.md
 ^docs$
 ^_pkgdown\.yml$
+^README\.Rmd$
+^README-.*\.png$

@@ -1199,8 +1199,8 @@ plot.efftox_fit <- function(x,  pars = 'utility', ...) {
 #' @sdname summary
 #' @method summary efftox_fit
 #' @S3method summary efftox_fit
-summary.efftox_fit <- function(x, ...) {
-  rstan::summary(x$fit, ...)
+summary.efftox_fit <- function(object, ...) {
+  rstan::summary(object$fit, ...)
 }
 
 
@@ -1217,6 +1217,7 @@ summary.efftox_fit <- function(x, ...) {
 #' @export
 gather_samples.efftox_fit <- function(x, pars = 'utility') {
   df <- as.data.frame(x, pars)
+  Variable <- Value <- NULL
   df_tall <- df %>%
     tidyr::gather(Variable, Value) %>%
     dplyr::mutate(

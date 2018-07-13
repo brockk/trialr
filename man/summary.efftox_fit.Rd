@@ -4,12 +4,12 @@
 \alias{summary.efftox_fit}
 \title{Obtain summary of an efftox_fit}
 \usage{
-\method{summary}{efftox_fit}(x, ...)
+\method{summary}{efftox_fit}(object, ...)
 }
 \arguments{
-\item{x}{\code{\link{efftox_fit}} object to summarise.}
-
 \item{...}{Extra parameters, passed onwards.}
+
+\item{x}{\code{\link{efftox_fit}} object to summarise.}
 }
 \value{
 A summary object.

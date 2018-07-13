@@ -63,7 +63,7 @@ requires ggplot2 be installed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
       </span>
     </div>
 
@@ -178,8 +178,8 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 5.2e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.
+#&gt; Gradient evaluation took 4.2e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -196,9 +196,9 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.514706 seconds (Warm-up)
-#&gt;                0.363168 seconds (Sampling)
-#&gt;                0.877874 seconds (Total)
+#&gt;  Elapsed Time: 0.509317 seconds (Warm-up)
+#&gt;                0.357414 seconds (Sampling)
+#&gt;                0.866731 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
@@ -221,9 +221,9 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.519585 seconds (Warm-up)
-#&gt;                0.354061 seconds (Sampling)
-#&gt;                0.873646 seconds (Total)
+#&gt;  Elapsed Time: 0.505422 seconds (Warm-up)
+#&gt;                0.350251 seconds (Sampling)
+#&gt;                0.855673 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
@@ -246,15 +246,15 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.50191 seconds (Warm-up)
-#&gt;                0.357554 seconds (Sampling)
-#&gt;                0.859464 seconds (Total)
+#&gt;  Elapsed Time: 0.49349 seconds (Warm-up)
+#&gt;                0.365286 seconds (Sampling)
+#&gt;                0.858776 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -271,9 +271,9 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.517086 seconds (Warm-up)
-#&gt;                0.35471 seconds (Sampling)
-#&gt;                0.871796 seconds (Total)
+#&gt;  Elapsed Time: 0.513013 seconds (Warm-up)
+#&gt;                0.35216 seconds (Sampling)
+#&gt;                0.865173 seconds (Total)
 #&gt; </div><div class='input'><span class='fu'>efftox_utility_density_plot</span>(<span class='no'>fit</span>) + <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'My doses'</span>)  <span class='co'># Too busy?</span></div><div class='img'><img src='efftox_utility_density_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Specify subset of doses to make plot less cluttered</span>
 <span class='fu'>efftox_utility_density_plot</span>(<span class='no'>fit</span>, <span class='kw'>doses</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>) + <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'My doses'</span>)</div><div class='img'><img src='efftox_utility_density_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>

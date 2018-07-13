@@ -1,21 +1,18 @@
 ---
-title: "Overview of `trialr`"
-author: "Kristian Brock"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-bibliography: library.bib
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: github_document
 ---
 
-```{r setup, include = FALSE}
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.path = "README-"
 )
 ```
+
+# trialr
 
 `trialr` is a collection of Bayesian clinical trial designs implemented in Stan and R.
 
@@ -53,7 +50,7 @@ library(trialr)
 ```
 
 ## CRM
-The Continual Reassessment Method (CRM) was first published by O'Quigley _et al._ (1990).
+The Continual Reassessment Method (CRM) was first published by @OQuigley1990.
 It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose.
 There are many variations to suit different clinical scenarios and the design has enjoyed _relatively_ common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).
 
@@ -96,10 +93,10 @@ Further visualisation techniques are demonstrated in the [Visualisation in CRM](
 
 
 ## EffTox
-EffTox by Thall & Cook (2004) is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. 
+EffTox by @Thall2004 is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. 
 We present it briefly here but there is a much more thorough examination in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
 
-For demonstration, We fit the model parameterisation introduced by Thall _et al._ (2014) to the following notional outcomes:
+For demonstration, We fit the model parameterisation introduced by @Thall2014 to the following notional outcomes:
 
 | Patient | Dose-level | Toxicity | Efficacy |
 |:-------:|:----------:|:--------:|:--------:|
@@ -147,12 +144,12 @@ title('EffTox utility contours')
 
 This example continues in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
 
-There are many publications related to EffTox but the two most important are Thall & Cook (2004) and Thall _et al._ (2014).
+There are many publications related to EffTox but the two most important are @Thall2004 and @Thall2014.
 
 
 
 ## Hierachical analysis of response in related cohorts
-Sticking with Peter Thall's huge contribution to Bayesian clinical trials, Thall _et al._ (2003) described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.
+Sticking with Peter Thall's huge contribution to Bayesian clinical trials, @Thall2003 described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.
 
 We demonstrate the method for partially-pooling response rates to a single drug in various subtypes of sarcoma.
 The following convenience function returns the necessary data:
@@ -181,16 +178,51 @@ as.data.frame(samp, 'p') %>%
 The hierarchical model for binary responses is developed in [its own vignette](https://brockk.github.io/trialr/articles/HierarchicalBayesianResponse.html).
 
 ## BEBOP in PePS2
-Thall _et al._ (2008) introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information.
+@Thall2008 introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information.
 Brock, et al. simplified the method by removing the dose-finding components to leave a design that studies associated co-primary and toxicity outcomes in an arbitrary number of cohorts determined by the basline covariates.
 They refered to the simplifed design as BEBOP, for _Bayesian Evaluation of Bivariate binary Outcomes with Predictive variables_.
 
 The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer.
-A distinct feature of the trial is the availability of predictive baseline covariates, the most notwworthy of which is the PD-L1 tumour proportion score, shown by Garon _et al._ (2015) to be a predictive biomarker.
+A distinct feature of the trial is the availability of predictive baseline covariates, the most notwworthy of which is the PD-L1 tumour proportion score, shown by @Garon2015 to be a predictive biomarker.
 
 This example is demonstrated in the [BEBOP vignette](https://brockk.github.io/trialr/articles/BEBOP.html).
 
 
 
-# References
+## Installation
 
+You can install trialr from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("brockk/trialr")
+```
+
+If the latest CRAN build is what you seek then instead run:
+
+```{r cran-installation, eval = FALSE}
+install.packages("trialr")
+```
+It should go without saying that the CRAN release will be older than the github version.
+
+
+
+## Extending trialr and getting in touch
+
+If there is a published Bayesian design you want implemented in Stan, get in touch.
+Contact @brockk on github.
+
+
+## References
+
+Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the treatment of non-small-cell lung cancer.” The New England Journal of Medicine 372 (21): 2018–28. doi:10.1056/NEJMoa1501824.
+
+O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” Biometrics 46 (1): 33–48. doi:10.2307/2531628.
+
+Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-specific dose finding based on bivariate outcomes and covariates.” Biometrics 64 (4): 1126–36. doi:10.1111/j.1541-0420.2008.01009.x.
+
+Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” Statistics in Medicine 22 (5): 763–80. doi:10.1002/sim.1399.
+
+Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” Biometrics 60 (3): 684–93.
+
+Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” Clinical Trials 11 (6): 657–66. doi:10.1177/1740774514547397.

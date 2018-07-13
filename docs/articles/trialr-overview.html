@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@
 </h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-07-06</h4>
+            <h4 class="date">2018-07-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/trialr-overview.Rmd"><code>vignettes/trialr-overview.Rmd</code></a></small>
       <div class="hidden name"><code>trialr-overview.Rmd</code></div>
@@ -125,7 +125,7 @@
 <div id="crm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#crm" class="anchor"></a>CRM</h2>
-<p>The Continual Reassessment Method (CRM) was first published by <span class="citation">O’Quigley, Pepe, and Fisher (1990)</span>. It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. There are many variations to suit different clinical scenarios and the design has enjoyed <em>relatively</em> common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).</p>
+<p>The Continual Reassessment Method (CRM) was first published by O’Quigley <em>et al.</em> (1990). It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. There are many variations to suit different clinical scenarios and the design has enjoyed <em>relatively</em> common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).</p>
 <p>We will demonstrate the method using a notional trial example. In a scenario of five potential doses, let us assume that we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">target &lt;-<span class="st"> </span><span class="fl">0.25</span>
 skeleton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</code></pre></div>
@@ -165,8 +165,8 @@ plot_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class
 <div id="efftox" class="section level2">
 <h2 class="hasAnchor">
 <a href="#efftox" class="anchor"></a>EffTox</h2>
-<p>EffTox by <span class="citation">P. Thall and Cook (2004)</span> is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. We present it briefly here but there is a much more thorough examination in the <a href="https://brockk.github.io/trialr/articles/EffTox.html">EffTox vignette</a>.</p>
-<p>For demonstration, We fit the model parameterisation introduced by <span class="citation">P. Thall et al. (2014)</span> to the following notional outcomes:</p>
+<p>EffTox by Thall &amp; Cook (2004) is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. We present it briefly here but there is a much more thorough examination in the <a href="https://brockk.github.io/trialr/articles/EffTox.html">EffTox vignette</a>.</p>
+<p>For demonstration, We fit the model parameterisation introduced by Thall <em>et al.</em> (2014) to the following notional outcomes:</p>
 <table class="table">
 <thead><tr class="header">
 <th align="center">Patient</th>
@@ -217,6 +217,14 @@ plot_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class
 mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)
 <span class="co">#&gt; trying deprecated constructor; please alert package maintainer</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod
+<span class="co">#&gt;   Patient Dose Toxicity Efficacy</span>
+<span class="co">#&gt; 1       1    1        0        0</span>
+<span class="co">#&gt; 2       2    1        0        0</span>
+<span class="co">#&gt; 3       3    1        0        1</span>
+<span class="co">#&gt; 4       4    2        0        1</span>
+<span class="co">#&gt; 5       5    2        0        1</span>
+<span class="co">#&gt; 6       6    2        1        1</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt;   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox    Utility</span>
 <span class="co">#&gt; 1         1 0.4045039 0.08990953    0.33175    0.92700 -0.3397885</span>
 <span class="co">#&gt; 2         2 0.7917219 0.09875146    0.94575    0.92250  0.4237935</span>
@@ -229,6 +237,7 @@ mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_ef
 <span class="co">#&gt; 3       TRUE</span>
 <span class="co">#&gt; 4      FALSE</span>
 <span class="co">#&gt; 5      FALSE</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; The model recommends selecting dose-level 3.</span></code></pre></div>
 <p>In this instance, after evaluation of our six patients, the dose advocated for the next group is dose-level 3. This is contained in the fitted object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod<span class="op">$</span>recommended_dose
@@ -242,12 +251,12 @@ mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_ef
 <span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</code></pre></div>
 <p><img src="trialr-overview_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <p>This example continues in the <a href="https://brockk.github.io/trialr/articles/EffTox.html">EffTox vignette</a>.</p>
-<p>There are many publications related to EffTox but the two most important are <span class="citation">P. Thall and Cook (2004)</span> and <span class="citation">P. Thall et al. (2014)</span>.</p>
+<p>There are many publications related to EffTox but the two most important are Thall &amp; Cook (2004) and Thall <em>et al.</em> (2014).</p>
 </div>
 <div id="hierachical-analysis-of-response-in-related-cohorts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hierachical-analysis-of-response-in-related-cohorts" class="anchor"></a>Hierachical analysis of response in related cohorts</h2>
-<p>Sticking with Peter Thall’s huge contribution to Bayesian clinical trials, <span class="citation">P. F. Thall et al. (2003)</span> described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.</p>
+<p>Sticking with Peter Thall’s huge contribution to Bayesian clinical trials, Thall <em>et al.</em> (2003) described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.</p>
 <p>We demonstrate the method for partially-pooling response rates to a single drug in various subtypes of sarcoma. The following convenience function returns the necessary data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thallhierarchicalbinary_parameters_demo.html">thallhierarchicalbinary_parameters_demo</a></span>()
 dat
@@ -291,34 +300,14 @@ dat
 <div id="bebop-in-peps2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bebop-in-peps2" class="anchor"></a>BEBOP in PePS2</h2>
-<p><span class="citation">P. F. Thall, Nguyen, and Estey (2008)</span> introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information. Brock, et al. simplified the method by removing the dose-finding components to leave a design that studies associated co-primary and toxicity outcomes in an arbitrary number of cohorts determined by the basline covariates. They refered to the simplifed design as BEBOP, for <em>Bayesian Evaluation of Bivariate binary Outcomes with Predictive variables</em>.</p>
-<p>The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer. A distinct feature of the trial is the availability of predictive baseline covariates, the most notwworthy of which is the PD-L1 tumour proportion score, shown by <span class="citation">Garon et al. (2015)</span> to be a predictive biomarker.</p>
+<p>Thall <em>et al.</em> (2008) introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information. Brock, et al. simplified the method by removing the dose-finding components to leave a design that studies associated co-primary and toxicity outcomes in an arbitrary number of cohorts determined by the basline covariates. They refered to the simplifed design as BEBOP, for <em>Bayesian Evaluation of Bivariate binary Outcomes with Predictive variables</em>.</p>
+<p>The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer. A distinct feature of the trial is the availability of predictive baseline covariates, the most notwworthy of which is the PD-L1 tumour proportion score, shown by Garon <em>et al.</em> (2015) to be a predictive biomarker.</p>
 <p>This example is demonstrated in the <a href="https://brockk.github.io/trialr/articles/BEBOP.html">BEBOP vignette</a>.</p>
 </div>
 </div>
-<div id="references" class="section level1 unnumbered">
+<div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<div id="refs" class="references">
-<div id="ref-Garon2015">
-<p>Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the treatment of non-small-cell lung cancer.” <em>The New England Journal of Medicine</em> 372 (21): 2018–28. doi:<a href="https://doi.org/10.1056/NEJMoa1501824">10.1056/NEJMoa1501824</a>.</p>
-</div>
-<div id="ref-OQuigley1990">
-<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. doi:<a href="https://doi.org/10.2307/2531628">10.2307/2531628</a>.</p>
-</div>
-<div id="ref-Thall2008">
-<p>Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-specific dose finding based on bivariate outcomes and covariates.” <em>Biometrics</em> 64 (4): 1126–36. doi:<a href="https://doi.org/10.1111/j.1541-0420.2008.01009.x">10.1111/j.1541-0420.2008.01009.x</a>.</p>
-</div>
-<div id="ref-Thall2003">
-<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. doi:<a href="https://doi.org/10.1002/sim.1399">10.1002/sim.1399</a>.</p>
-</div>
-<div id="ref-Thall2004">
-<p>Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” <em>Biometrics</em> 60 (3): 684–93.</p>
-</div>
-<div id="ref-Thall2014">
-<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” <em>Clinical Trials</em> 11 (6): 657–66. doi:<a href="https://doi.org/10.1177/1740774514547397">10.1177/1740774514547397</a>.</p>
-</div>
-</div>
 </div>
   </div>
 

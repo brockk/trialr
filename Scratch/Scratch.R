@@ -124,7 +124,9 @@ mod2 %>%
 # Control commands etc ----
 sessionInfo()
 
-# Vignettes  -------
+
+# README & Vignettes  -------
+devtools::use_readme_rmd()
 # devtools::use_vignette("trialr-overview")
 # devtools::use_vignette("EffTox")
 # devtools::use_vignette("BEBOP")

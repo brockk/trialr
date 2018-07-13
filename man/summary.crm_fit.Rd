@@ -4,12 +4,12 @@
 \alias{summary.crm_fit}
 \title{Obtain summary of an crm_fit}
 \usage{
-\method{summary}{crm_fit}(x, ...)
+\method{summary}{crm_fit}(object, ...)
 }
 \arguments{
-\item{x}{\code{\link{crm_fit}} object to summarise.}
-
 \item{...}{Extra parameters, passed onwards.}
+
+\item{x}{\code{\link{crm_fit}} object to summarise.}
 }
 \value{
 A summary object.

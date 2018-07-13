@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fit the EffTox model presented in Thall et al. (2014) — stan_efftox_demo • trialr</title>
+<title>Extract tall data.frame of posterior variable samples. — gather_samples.efftox_fit • trialr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Fit the EffTox model presented in Thall et al. (2014) — stan_efftox_demo" />
+<meta property="og:title" content="Extract tall data.frame of posterior variable samples. — gather_samples.efftox_fit" />
 
-<meta property="og:description" content="Fit the EffTox model presented in Thall et al. (2014) using Stan for full
-Bayesian inference." />
+<meta property="og:description" content="Extract tall data.frame of posterior variable samples." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -128,70 +127,33 @@ Bayesian inference." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fit the EffTox model presented in Thall et al. (2014)</h1>
+    <h1>Extract tall data.frame of posterior variable samples.</h1>
     <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
-    <div class="hidden name"><code>stan_efftox_demo.Rd</code></div>
+    <div class="hidden name"><code>gather_samples.efftox_fit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Fit the EffTox model presented in Thall et al. (2014) using Stan for full
-Bayesian inference.</p>
+    <p>Extract tall data.frame of posterior variable samples.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>stan_efftox_demo</span>(<span class='no'>outcome_str</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>gather_samples.efftox_fit</span>(<span class='no'>x</span>, <span class='kw'>pars</span> <span class='kw'>=</span> <span class='st'>"utility"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outcome_str</th>
-      <td><p>A string representing the outcomes observed hitherto.
-See <code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code> for a description of syntax and
-examples. Alternatively, you may provide <code>doses_given</code>, <code>eff</code> and
-<code>tox</code> parameters. See Details.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Extra parameters are passed to <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>rstan::sampling</a></code>. Commonly
-used options are <code>iter</code>, <code>chains</code>, <code>warmup</code>, <code>cores</code>,
-<code>control</code>. <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></td>
+      <th>x</th>
+      <td><p><code><a href='efftox_fit-class.html'>efftox_fit</a></code> object.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code><a href='efftox_fit-class.html'>efftox_fit</a></code></p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Thall, P., &amp; Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
-    Trade-Offs. Biometrics, 60(3), 684-693.</p>
-<p>Thall, P., Herrick, R., Nguyen, H., Venier, J., &amp; Norris, J. (2014).
-    Effective sample size for computing prior hyperparameters in Bayesian
-    phase I-II dose-finding. Clinical Trials, 11(6), 657-666.
-    https://doi.org/10.1177/1740774514547397</p>
-<p>Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., &amp;
-    Yap, C. (2017). Implementing the EffTox dose-finding design in the
-    Matchpoint trial. BMC Medical Research Methodology, 17(1), 112.
-    https://doi.org/10.1186/s12874-017-0381-x</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='efftox_fit-class.html'>efftox_fit</a></code>
-  <code><a href='stan_efftox.html'>stan_efftox</a></code>
-  <code><a href='efftox_process.html'>efftox_process</a></code></p></div>
+    <p>data.frame</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># This model is presented in Thall et al. (2014)</span>
-<span class='no'>mod2</span> <span class='kw'>&lt;-</span> <span class='fu'>stan_efftox_demo</span>(<span class='st'>'1N 2E 3B'</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
-
-<span class='co'># The seed is passed to the Stan sampler. The usual Stan sampler params like</span>
-<span class='co'># cores, iter, chains etc are passed on too via the ellipsis operator.</span>
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -199,17 +161,7 @@ used options are <code>iter</code>, <code>chains</code>, <code>warmup</code>, <c
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    
-Kristian Brock <a href='mailto:kristian.brock@gmail.com'>kristian.brock@gmail.com</a>
+          </ul>
 
   </div>
 </div>

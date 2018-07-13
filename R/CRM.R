@@ -447,8 +447,8 @@ plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
 #' @sdname summary
 #' @method summary crm_fit
 #' @S3method summary crm_fit
-summary.crm_fit <- function(x, ...) {
-  rstan::summary(x$fit, ...)
+summary.crm_fit <- function(object, ...) {
+  rstan::summary(object$fit, ...)
 }
 
 
@@ -465,6 +465,7 @@ summary.crm_fit <- function(x, ...) {
 #' @export
 gather_samples.crm_fit <- function(x) {
   df <- as.data.frame(x, 'prob_tox')
+  Label <- ProbTox <- NULL
   df_tall <- df %>%
     tidyr::gather(Label, ProbTox) %>%
     dplyr::mutate(
