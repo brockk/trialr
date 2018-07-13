@@ -1129,6 +1129,7 @@ stan_efftox_demo <- function(outcome_str, ...) {
               psi_mean = 0, psi_sd = 1, ...)
 }
 
+# Generics ----
 #' Print efftox_fit object.
 #'
 #' @param x \code{\link{efftox_fit}} object to convert.
@@ -1137,8 +1138,22 @@ stan_efftox_demo <- function(outcome_str, ...) {
 #' @method print efftox_fit
 #' @S3method print efftox_fit
 print.efftox_fit <- function(x, ...) {
+  # Patient-level data
+  treated <- data.frame(
+    Patient = 1:length(x$dat$doses),
+    Dose = x$dat$doses,
+    Toxicity = x$dat$tox,
+    Efficacy = x$dat$eff
+  )
+  print(treated)
+  cat('\n')
+
+  # Dose-level data
   df <- efftox_analysis_to_df(x)
   print(df)
+  cat('\n')
+
+  # Extras
   if(sum(x$acceptable) == 0) {
     cat('The model advocates stopping.')
 
@@ -1172,7 +1187,7 @@ as.data.frame.efftox_fit <- function(x, ...) {
 #' @method plot efftox_fit
 #' @S3method plot efftox_fit
 plot.efftox_fit <- function(x,  pars = 'utility', ...) {
-  graphics::plot(x$fit, pars = pars, ...)
+  rstan::plot(x$fit, pars = pars, ...)
 }
 
 #' Obtain summary of an efftox_fit
@@ -1185,5 +1200,28 @@ plot.efftox_fit <- function(x,  pars = 'utility', ...) {
 #' @method summary efftox_fit
 #' @S3method summary efftox_fit
 summary.efftox_fit <- function(x, ...) {
-  summary(x$fit, ...)
+  rstan::summary(x$fit, ...)
+}
+
+
+# Not generic yet.... ----
+# tidybayes is not yet on CRAN but once it is, add it as an import and
+# implement as_sample_tibble.crm_fit(x).
+# However, for now:
+
+#' Extract tall data.frame of posterior variable samples.
+#'
+#' @param x \code{\link{efftox_fit}} object.
+#'
+#' @return data.frame
+#' @export
+gather_samples.efftox_fit <- function(x, pars = 'utility') {
+  df <- as.data.frame(x, pars)
+  df_tall <- df %>%
+    tidyr::gather(Variable, Value) %>%
+    dplyr::mutate(
+      DoseLevel = rep(1:ncol(df), each = nrow(df)),
+      Draw = rep(1:nrow(df), times = ncol(df))
+    )
+  df_tall
 }

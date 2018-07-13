@@ -369,6 +369,8 @@ crm_process <- function(dat, fit) {
   return(x)
 }
 
+
+# Generics ----
 #' Print crm_fit object.
 #'
 #' @param x \code{\link{crm_fit}} object to convert.
@@ -433,7 +435,7 @@ as.data.frame.crm_fit <- function(x, ...) {
 #' @method plot crm_fit
 #' @S3method plot crm_fit
 plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
-  graphics::plot(x$fit, pars = pars, ...)
+  rstan::plot(x$fit, pars = pars, ...)
 }
 
 #' Obtain summary of an crm_fit
@@ -446,5 +448,28 @@ plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
 #' @method summary crm_fit
 #' @S3method summary crm_fit
 summary.crm_fit <- function(x, ...) {
-  summary(x$fit, ...)
+  rstan::summary(x$fit, ...)
+}
+
+
+# Not generic yet.... ----
+# tidybayes is not yet on CRAN but once it is, add it as an import and
+# implement as_sample_tibble.crm_fit(x).
+# However, for now:
+
+#' Extract tall data.frame of posterior prob_tox samples.
+#'
+#' @param x \code{\link{crm_fit}} object.
+#'
+#' @return data.frame
+#' @export
+gather_samples.crm_fit <- function(x) {
+  df <- as.data.frame(x, 'prob_tox')
+  df_tall <- df %>%
+    tidyr::gather(Label, ProbTox) %>%
+    dplyr::mutate(
+      DoseLevel = rep(1:ncol(df), each = nrow(df)),
+      Draw = rep(1:nrow(df), times = ncol(df))
+    )
+  df_tall
 }

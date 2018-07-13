@@ -76,7 +76,7 @@ Say that we have treated 6 patients at 3 dose-levels:
 
 These data can be conveyed using our scheme for representing phase I outcomes.
 We use integers to represent dose-levels given and the letters T and N to represent toxicity or no-toxicity for individual patients.
-These clusters can be strwen together to represent the outcomes of cohorts of patients.
+These clusters can be strewn together to represent the outcomes of cohorts of patients.
 For instance, the outcomes above can be represented:
 ```{r}
 outcomes <- '2NN 3NN 4TT'

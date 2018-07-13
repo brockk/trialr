@@ -76,8 +76,12 @@ mod1 <- stan_crm(outcome_str = '1NNN 2NTN 2NNN 3TTN', skeleton = skeleton,
                  target = target, model = 'empiric', beta_sd = sqrt(1.34))
 class(mod1)
 mod1
-as.data.frame(mod1, 'prob_tox')
+print(mod1)
+head(as.data.frame(mod1, 'prob_tox'))
+summary(mod1)
+summary(mod1, 'prob_tox')
 plot(mod1)
+plot(mod1, pars = 'beta')
 
 # Example - p.21 Cheung (2011)
 library(dfcrm)
@@ -91,6 +95,22 @@ mod2 <- stan_crm(outcome_str = '3N 5N 5T 3N 4N', skeleton = skeleton,
                  target = target, model = 'logistic',
                  a0 = 3, beta_mean = 0, beta_sd = sqrt(1.34))
 mod2
+
+library(magrittr)
+library(ggplot2)
+mod2 %>%
+  gather_samples.crm_fit %>%
+  ggplot(aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
+  geom_violin(fill = 'orange') + ylim(0, 1) +
+  geom_hline(yintercept = target, col = 'red', linetype = 'dashed') +
+  labs(title = 'Pr(DLT) after 18 patients in Levy, et al. (2006)')
+
+mod2 %>%
+  gather_samples.crm_fit %>%
+  head %>%
+  filter(as.name(".iteration") <= 1)
+
+
 # TODO: Emulate Prob(too tox)
 # E.g.
 # apply(prob_tox_samp > target, 2, mean)

@@ -1,8 +1,8 @@
 Package: trialr
 Type: Package
 Title: Clinical Trial Designs in 'RStan'
-Version: 0.0.1
-Date: 2017-11-01
+Version: 0.0.2
+Date: 2018-07-12
 Authors@R: c(person("Kristian", "Brock", email = "kristian.brock@gmail.com", role = c("aut", "cre")),
              person("Trustees of", "Columbia University", role = "cph"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
@@ -13,11 +13,11 @@ Description: A showcase of Bayesian clinical trial designs, implemented in
     Given the emphasis on flexibility in Bayesian analysis,
     the implementations in a common language and style may serve as a cookbook
     to encourage the use of Bayesian methods in trials. Compiled 'RStan' models
-    are provided in addition to helper functions to perform simulations and
-    inference on observed trial outcomes. There is a preponderance of early
-    phase trial designs because this is where Bayesian methods are used most.
-    If there is a published Bayesian design you want implemented in 'Stan', get in
-    touch.
+    are provided in addition to helper classes and functions to perform 
+    simulations and inference on observed trial outcomes. 
+    There is a preponderance of early phase trial designs because this is where 
+    Bayesian methods are used most. If there is a published Bayesian design you
+    want implemented in 'Stan', get in touch.
 License: GPL-3
 Depends:
     R (>= 3.0.2),
@@ -28,7 +28,10 @@ Imports:
     rstantools (>= 1.1.0),
     loo (>= 1.1.0),
     gtools,
-    stringr
+    stringr,
+    dplyr,
+    tidyr,
+    magrittr
 LinkingTo:
   StanHeaders (>= 2.12.0.1), 
   rstan (>= 2.12.1), 

@@ -25,8 +25,10 @@ mod1
 mod1$recommended_dose
 mod1$utility
 
+plot(mod1)
+
 plot(mod1, pars = 'prob_eff') +
-  ggtitle('Utility of doses after outcomes: 1NBE')
+  ggplot2::labs(title = 'Utility of doses after outcomes: 1NBE')
 
 # Contour plot
 efftox_contour_plot(mod1$dat, prob_eff = mod1$prob_eff, prob_tox = mod1$prob_tox)
@@ -42,12 +44,11 @@ library(dplyr)
 library(ggplot2)
 
 mod1 %>%
-  as.data.frame(pars = 'utility') %>%
-  tidyr::gather('Var', 'Utility') %>%
-  mutate(Dose = factor(stringr::str_extract(Var, '\\d+'))) %>%
-  filter(Dose %in% 1:3) %>%
-  ggplot(aes(x = Utility, group = Dose)) +
-  geom_density(aes(fill = Dose))
+  gather_samples.efftox_fit('utility') %>%
+  filter(DoseLevel %in% 1:3) %>%
+  ggplot(aes(x = Value, group = DoseLevel)) +
+  geom_density(aes(fill = as.factor(DoseLevel))) +
+  labs(fill = 'Dose', title = '"EffTox dose utility densities"')
 
 library(ggridges)
 mod1 %>%
