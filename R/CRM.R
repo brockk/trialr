@@ -440,7 +440,7 @@ plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
 
 #' Obtain summary of an crm_fit
 #'
-#' @param x \code{\link{crm_fit}} object to summarise.
+#' @param object \code{\link{crm_fit}} object to summarise.
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A summary object.

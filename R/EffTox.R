@@ -1192,7 +1192,7 @@ plot.efftox_fit <- function(x,  pars = 'utility', ...) {
 
 #' Obtain summary of an efftox_fit
 #'
-#' @param x \code{\link{efftox_fit}} object to summarise.
+#' @param object \code{\link{efftox_fit}} object to summarise.
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A summary object.
@@ -1212,6 +1212,8 @@ summary.efftox_fit <- function(object, ...) {
 #' Extract tall data.frame of posterior variable samples.
 #'
 #' @param x \code{\link{efftox_fit}} object.
+#' @param pars One of 'utility', 'prob_tox', 'prob_eff', 'prob_acc_eff',
+#' or 'prob_acc_tox'
 #'
 #' @return data.frame
 #' @export
