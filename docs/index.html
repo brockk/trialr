@@ -135,9 +135,10 @@
 <p>We will demonstrate the method using a notional trial example. In a scenario of five potential doses, let us assume that we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">target &lt;-<span class="st"> </span><span class="fl">0.25</span>
 skeleton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</code></pre></div>
-<p>Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, havig only seen toxicity at dose-level 4. What dose should we give to the next patient or cohort? We can fit the data to the popular empiric model</p>
+<p>Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, having only seen toxicity at dose-level 4. What dose should we give to the next patient or cohort? We can fit the data to the popular empiric model</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_crm.html">stan_crm</a></span>(<span class="dt">outcome_str =</span> <span class="st">'2NN 3NN 4TT'</span>, <span class="dt">skeleton =</span> skeleton, 
-                 <span class="dt">target =</span> target, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), <span class="dt">seed =</span> <span class="dv">123</span>)</code></pre></div>
+                 <span class="dt">target =</span> target, <span class="dt">model =</span> <span class="st">'empiric'</span>, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), 
+                 <span class="dt">seed =</span> <span class="dv">123</span>)</code></pre></div>
 <p>The fitted model contains lots of useful of information:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1
 <span class="co">#&gt;   Patient Dose Toxicity</span>

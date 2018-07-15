@@ -8,6 +8,9 @@ gather_samples.efftox_fit(x, pars = "utility")
 }
 \arguments{
 \item{x}{\code{\link{efftox_fit}} object.}
+
+\item{pars}{One of 'utility', 'prob_tox', 'prob_eff', 'prob_acc_eff',
+or 'prob_acc_tox'}
 }
 \value{
 data.frame

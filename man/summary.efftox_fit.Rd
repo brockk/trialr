@@ -7,9 +7,9 @@
 \method{summary}{efftox_fit}(object, ...)
 }
 \arguments{
-\item{...}{Extra parameters, passed onwards.}
+\item{object}{\code{\link{efftox_fit}} object to summarise.}
 
-\item{x}{\code{\link{efftox_fit}} object to summarise.}
+\item{...}{Extra parameters, passed onwards.}
 }
 \value{
 A summary object.

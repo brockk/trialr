@@ -7,9 +7,9 @@
 \method{summary}{crm_fit}(object, ...)
 }
 \arguments{
-\item{...}{Extra parameters, passed onwards.}
+\item{object}{\code{\link{crm_fit}} object to summarise.}
 
-\item{x}{\code{\link{crm_fit}} object to summarise.}
+\item{...}{Extra parameters, passed onwards.}
 }
 \value{
 A summary object.

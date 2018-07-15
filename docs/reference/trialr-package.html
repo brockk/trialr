@@ -217,8 +217,8 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 <span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 4.3e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.
+#&gt; Gradient evaluation took 4.5e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -235,15 +235,15 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.475715 seconds (Warm-up)
-#&gt;                0.375186 seconds (Sampling)
-#&gt;                0.850901 seconds (Total)
+#&gt;  Elapsed Time: 0.491261 seconds (Warm-up)
+#&gt;                0.362625 seconds (Sampling)
+#&gt;                0.853886 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -260,9 +260,9 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.505408 seconds (Warm-up)
-#&gt;                0.358484 seconds (Sampling)
-#&gt;                0.863892 seconds (Total)
+#&gt;  Elapsed Time: 0.490799 seconds (Warm-up)
+#&gt;                0.355809 seconds (Sampling)
+#&gt;                0.846608 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
@@ -285,9 +285,9 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.525668 seconds (Warm-up)
-#&gt;                0.363193 seconds (Sampling)
-#&gt;                0.888861 seconds (Total)
+#&gt;  Elapsed Time: 0.516049 seconds (Warm-up)
+#&gt;                0.354003 seconds (Sampling)
+#&gt;                0.870052 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
@@ -310,9 +310,9 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.514608 seconds (Warm-up)
-#&gt;                0.371318 seconds (Sampling)
-#&gt;                0.885926 seconds (Total)
+#&gt;  Elapsed Time: 0.515681 seconds (Warm-up)
+#&gt;                0.36054 seconds (Sampling)
+#&gt;                0.876221 seconds (Total)
 #&gt; </div><div class='input'><span class='co'># Perform inference on posterior samples. E.g. posterior mean drug efficacy</span>
 <span class='fu'>colMeans</span>(<span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-method-extract'>extract</a></span>(<span class='no'>samp</span>, <span class='st'>'prob_eff'</span>)<span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; [1] 0.2180468 0.5951194 0.8998301 0.9563779 0.9720017</div><div class='input'>
 ## Not run
