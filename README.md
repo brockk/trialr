@@ -2,25 +2,48 @@ trialr - Clinical Trial Designs in `RStan`
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-trialr
-======
 
-`trialr` is a collection of Bayesian clinical trial designs implemented in Stan and R.
+# trialr
 
-Many notable Bayesian designs for clinical trials have been published. However, one of the factors that has constrained their adoption is availability of software. We present here some of the most popular, implemented and demonstrated in a consistent style, leveraging the powerful Stan environment.
+`trialr` is a collection of Bayesian clinical trial designs implemented
+in Stan and R.
 
-It should be stressed that Bayesian trialists are not generally without code. Often authors make available code with their design publication. There are also some fantastic packages that aid the use of certain designs. However, challenges to use still persist. The disparate methods are naturally presented in a style that appeals to the particular author. Features implemented in one package for one design may be missing in another. Sometimes the technology chosen may only be available on one particular operating system, or the chosen technology may have fallen into disuse.
+Many notable Bayesian designs for clinical trials have been published.
+However, one of the factors that has constrained their adoption is
+availability of software. We present here some of the most popular,
+implemented and demonstrated in a consistent style, leveraging the
+powerful Stan environment.
 
-`trialr` seeks to address these problems. Models are specified in [Stan](http://mc-stan.org/), a state-of-the-art environment for Bayesian analysis. It uses Hamiltonian Monte Carlo to take samples from the posterior distributions. This method is more efficient than Gibbs sampling, for instance, and reliable inference can be performed on a few thousand posterior samples. R, Stan and `trialr` are each available on Mac, Linux, and Windows, so all of the examples presented here should work on each operating system. Furthermore, Stan offers a very simple method to split the sampling across *n* cores, taking full advantage of the modern multicore processor in your computer (probably).
+It should be stressed that Bayesian trialists are not generally without
+code. Often authors make available code with their design publication.
+There are also some fantastic packages that aid the use of certain
+designs. However, challenges to use still persist. The disparate methods
+are naturally presented in a style that appeals to the particular
+author. Features implemented in one package for one design may be
+missing in another. Sometimes the technology chosen may only be
+available on one particular operating system, or the chosen technology
+may have fallen into disuse.
 
-The designs implemented in `trialr` are introduced briefly below, and developed more fully in vignettes. We focus on real-life usage, including:
+`trialr` seeks to address these problems. Models are specified in
+[Stan](http://mc-stan.org/), a state-of-the-art environment for Bayesian
+analysis. It uses Hamiltonian Monte Carlo to take samples from the
+posterior distributions. This method is more efficient than Gibbs
+sampling, for instance, and reliable inference can be performed on a few
+thousand posterior samples. R, Stan and `trialr` are each available on
+Mac, Linux, and Windows, so all of the examples presented here should
+work on each operating system. Furthermore, Stan offers a very simple
+method to split the sampling across *n* cores, taking full advantage of
+the modern multicore processor in your computer (probably).
 
--   fitting models to observed data using your prior;
--   processing posterior samples to produce useful inferences;
--   and visualising inferences using modern `ggplot` graphics.
+The designs implemented in `trialr` are introduced briefly below, and
+developed more fully in vignettes. We focus on real-life usage,
+including:
 
-Examples
-========
+  - fitting models to observed data using your prior;
+  - processing posterior samples to produce useful inferences;
+  - and visualising inferences using modern `ggplot` graphics.
+
+# Examples
 
 In all examples, we will need to load `trialr`
 
@@ -28,19 +51,29 @@ In all examples, we will need to load `trialr`
 library(trialr)
 ```
 
-CRM
----
+## CRM
 
-The Continual Reassessment Method (CRM) was first published by @OQuigley1990. It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. There are many variations to suit different clinical scenarios and the design has enjoyed *relatively* common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).
+The Continual Reassessment Method (CRM) was first published by
+@OQuigley1990. It assumes a smooth mathematical form for the
+dose-toxicity curve to conduct a dose-finding trial seeking a maximum
+tolerable dose. There are many variations to suit different clinical
+scenarios and the design has enjoyed *relatively* common use (although
+nowhere near as common as the ubiquitous and inferior 3+3 design).
 
-We will demonstrate the method using a notional trial example. In a scenario of five potential doses, let us assume that we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:
+We will demonstrate the method using a notional trial example. In a
+scenario of five potential doses, let us assume that we seek the dose
+with probability of toxicity closest to 25% where our prior guesses of
+the rates of toxicity can be represented:
 
 ``` r
 target <- 0.25
 skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
 ```
 
-Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, having only seen toxicity at dose-level 4. What dose should we give to the next patient or cohort? We can fit the data to the popular empiric model
+Let us assume that we have already treated 2 patients each at doses 2, 3
+and 4, having only seen toxicity at dose-level 4. What dose should we
+give to the next patient or cohort? We can fit the data to the popular
+empiric model
 
 ``` r
 mod1 <- stan_crm(outcome_str = '2NN 3NN 4TT', skeleton = skeleton, 
@@ -82,25 +115,33 @@ ggplot(plot_df, aes(x = DoseLevel, y = ProbTox)) +
   labs(title = 'Posterior dose-toxicity curve under empiric CRM model')
 ```
 
-![](README-unnamed-chunk-6-1.png)
+![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
-Several variants of the CRM [are implemented in 'trialr'](https://brockk.github.io/trialr/articles/CRM.html). Further visualisation techniques are demonstrated in the [Visualisation in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html) vignette.
+Several variants of the CRM [are implemented in
+‘trialr’](https://brockk.github.io/trialr/articles/CRM.html).
+Further visualisation techniques are demonstrated in the [Visualisation
+in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html)
+vignette.
 
-EffTox
-------
+## EffTox
 
-EffTox by @Thall2004 is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. We present it briefly here but there is a much more thorough examination in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
+EffTox by @Thall2004 is a dose-finding design that uses binary efficacy
+and toxicity outcomes to select a dose with a high utility score. We
+present it briefly here but there is a much more thorough examination in
+the [EffTox
+vignette](https://brockk.github.io/trialr/articles/EffTox.html).
 
-For demonstration, We fit the model parameterisation introduced by @Thall2014 to the following notional outcomes:
+For demonstration, We fit the model parameterisation introduced by
+@Thall2014 to the following notional outcomes:
 
 | Patient | Dose-level | Toxicity | Efficacy |
-|:-------:|:----------:|:--------:|:--------:|
-|    1    |      1     |     0    |     0    |
-|    2    |      1     |     0    |     0    |
-|    3    |      1     |     0    |     1    |
-|    4    |      2     |     0    |     1    |
-|    5    |      2     |     0    |     1    |
-|    6    |      2     |     1    |     1    |
+| :-----: | :--------: | :------: | :------: |
+|    1    |     1      |    0     |    0     |
+|    2    |     1      |    0     |    0     |
+|    3    |     1      |    0     |    1     |
+|    4    |     2      |    0     |    1     |
+|    5    |     2      |    0     |    1     |
+|    6    |     2      |    1     |    1     |
 
 ``` r
 outcomes <- '1NNE 2EEB'
@@ -134,7 +175,9 @@ mod
 #> The model recommends selecting dose-level 3.
 ```
 
-In this instance, after evaluation of our six patients, the dose advocated for the next group is dose-level 3. This is contained in the fitted object:
+In this instance, after evaluation of our six patients, the dose
+advocated for the next group is dose-level 3. This is contained in the
+fitted object:
 
 ``` r
 mod$recommended_dose
@@ -148,27 +191,38 @@ mod$utility
 #> [1] -0.3397885  0.4237935  0.5249445  0.4380717  0.3685257
 ```
 
-Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. See the papers for details.
+Sometimes, doses other than the maximal-utility dose will be recommended
+because of the dose-admissibility rules. See the papers for details.
 
-Functions are provided to create useful plots. For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours. The five doses are shown in red. Doses closer to the lower-right corner have higher utility.
+Functions are provided to create useful plots. For instance, it is
+illuminating to plot the posterior means of the probabilities of
+efficacy and toxicity at each of the doses on the trade-off contours.
+The five doses are shown in red. Doses closer to the lower-right corner
+have higher
+utility.
 
 ``` r
 efftox_contour_plot(mod$dat, prob_eff = mod$prob_eff, prob_tox = mod$prob_tox)
 title('EffTox utility contours')
 ```
 
-![](README-unnamed-chunk-11-1.png)
+![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
 
-This example continues in the [EffTox vignette](https://brockk.github.io/trialr/articles/EffTox.html).
+This example continues in the [EffTox
+vignette](https://brockk.github.io/trialr/articles/EffTox.html).
 
-There are many publications related to EffTox but the two most important are @Thall2004 and @Thall2014.
+There are many publications related to EffTox but the two most important
+are @Thall2004 and @Thall2014.
 
-Hierachical analysis of response in related cohorts
----------------------------------------------------
+## Hierachical analysis of response in related cohorts
 
-Sticking with Peter Thall's huge contribution to Bayesian clinical trials, @Thall2003 described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.
+Sticking with Peter Thall’s huge contribution to Bayesian clinical
+trials, @Thall2003 described a method for analysing treatment effects of
+a single intervention in several sub-types of a single disease.
 
-We demonstrate the method for partially-pooling response rates to a single drug in various subtypes of sarcoma. The following convenience function returns the necessary data:
+We demonstrate the method for partially-pooling response rates to a
+single drug in various subtypes of sarcoma. The following convenience
+function returns the necessary data:
 
 ``` r
 dat <- thallhierarchicalbinary_parameters_demo()
@@ -216,21 +270,32 @@ as.data.frame(samp, 'p') %>%
   labs(title = 'Partially-pooled analysis of response rate in 10 sarcoma subtypes')
 ```
 
-![](README-unnamed-chunk-14-1.png)
+![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
 
-The hierarchical model for binary responses is developed in [its own vignette](https://brockk.github.io/trialr/articles/HierarchicalBayesianResponse.html).
+The hierarchical model for binary responses is developed in [its own
+vignette](https://brockk.github.io/trialr/articles/HierarchicalBayesianResponse.html).
 
-BEBOP in PePS2
---------------
+## BEBOP in PePS2
 
-@Thall2008 introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information. Brock, et al. simplified the method by removing the dose-finding components to leave a design that studies associated co-primary and toxicity outcomes in an arbitrary number of cohorts determined by the basline covariates. They refered to the simplifed design as BEBOP, for *Bayesian Evaluation of Bivariate binary Outcomes with Predictive variables*.
+@Thall2008 introduced an extension of EffTox that allows dose-finding by
+efficacy and toxicity outcomes and adjusts for covariate information.
+Brock, et al. simplified the method by removing the dose-finding
+components to leave a design that studies associated co-primary and
+toxicity outcomes in an arbitrary number of cohorts determined by the
+basline covariates. They refered to the simplifed design as BEBOP, for
+*Bayesian Evaluation of Bivariate binary Outcomes with Predictive
+variables*.
 
-The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer. A distinct feature of the trial is the availability of predictive baseline covariates, the most notwworthy of which is the PD-L1 tumour proportion score, shown by @Garon2015 to be a predictive biomarker.
+The investigators implement the design is a phase II trial of
+pembrolizumab in non-small-cell lung cancer. A distinct feature of the
+trial is the availability of predictive baseline covariates, the most
+notwworthy of which is the PD-L1 tumour proportion score, shown by
+@Garon2015 to be a predictive biomarker.
 
-This example is demonstrated in the [BEBOP vignette](https://brockk.github.io/trialr/articles/BEBOP.html).
+This example is demonstrated in the [BEBOP
+vignette](https://brockk.github.io/trialr/articles/BEBOP.html).
 
-Installation
-------------
+## Installation
 
 You can install trialr from github with:
 
@@ -245,24 +310,40 @@ If the latest CRAN build is what you seek then instead run:
 install.packages("trialr")
 ```
 
-It should go without saying that the CRAN release will be older than the github version.
+It should go without saying that the CRAN release will be older than the
+github version.
 
-Extending trialr and getting in touch
--------------------------------------
+## Extending trialr and getting in touch
 
-If there is a published Bayesian design you want implemented in Stan, get in touch. Contact @brockk on github.
+If there is a published Bayesian design you want implemented in Stan,
+get in touch. Contact @brockk on github.
 
-References
-----------
+## References
 
-Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the treatment of non-small-cell lung cancer.” The New England Journal of Medicine 372 (21): 2018–28. <doi:10.1056/NEJMoa1501824>.
+Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S
+Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015.
+“Pembrolizumab for the treatment of non-small-cell lung cancer.” The
+New England Journal of Medicine 372 (21): 2018–28.
+<doi:10.1056/NEJMoa1501824>.
 
-O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” Biometrics 46 (1): 33–48. <doi:10.2307/2531628>.
+O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment
+method: a practical design for phase 1 clinical trials in cancer.”
+Biometrics 46 (1): 33–48. <doi:10.2307/2531628>.
 
-Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-specific dose finding based on bivariate outcomes and covariates.” Biometrics 64 (4): 1126–36. <doi:10.1111/j.1541-0420.2008.01009.x>.
+Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008.
+“Patient-specific dose finding based on bivariate outcomes and
+covariates.” Biometrics 64 (4): 1126–36.
+<doi:10.1111/j.1541-0420.2008.01009.x>.
 
-Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” Statistics in Medicine 22 (5): 763–80. <doi:10.1002/sim.1399>.
+Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin,
+Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian
+approaches to phase II trials in diseases with multiple subtypes.”
+Statistics in Medicine 22 (5): 763–80. <doi:10.1002/sim.1399>.
 
-Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” Biometrics 60 (3): 684–93.
+Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity
+Trade-Offs.” Biometrics 60 (3): 684–93.
 
-Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” Clinical Trials 11 (6): 657–66. <doi:10.1177/1740774514547397>.
+Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014.
+“Effective sample size for computing prior hyperparameters in Bayesian
+phase I-II dose-finding.” Clinical Trials 11 (6): 657–66.
+<doi:10.1177/1740774514547397>.
