@@ -134,12 +134,16 @@ devtools::use_readme_rmd()
 # devtools::use_vignette("CRM")
 # devtools::use_vignette("CRM-visualisation")
 # devtools::use_vignette("CRM-model-choice")
+devtools::use_build_ignore(c("Scratch", "exec_dev"))
+
 devtools::build_vignettes()
 # Documentation
 devtools::use_readme_rmd()
 roxygen2::roxygenise()
 # PkgDown
 pkgdown::build_site()
+
+
 
 # Help examples ----
 help('trialr')

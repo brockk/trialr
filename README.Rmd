@@ -1,4 +1,5 @@
 ---
+title: "trialr - Clinical Trial Designs in `RStan`"
 output: github_document
 ---
 

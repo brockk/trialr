@@ -12,3 +12,5 @@ cran-comments\.md
 ^_pkgdown\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
+^Scratch$
+^exec_dev$
