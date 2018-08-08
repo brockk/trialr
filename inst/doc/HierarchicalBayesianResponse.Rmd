@@ -86,6 +86,7 @@ Some distribution plots of the probabilities of efficacy in some subgroups may b
 ```{r, fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 3"}
 library(ggplot2)
 library(rstan)
+library(dplyr)
 
 as.data.frame(samp, 'p[3]') %>% 
   mutate(ProbResponse = `p[3]`) %>% 

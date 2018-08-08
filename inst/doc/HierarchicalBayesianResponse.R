@@ -16,6 +16,7 @@ knitr::kable(rstan::summary(samp, par = 'pg')$summary, digits = 3)
 ## ---- fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 3"----
 library(ggplot2)
 library(rstan)
+library(dplyr)
 
 as.data.frame(samp, 'p[3]') %>% 
   mutate(ProbResponse = `p[3]`) %>% 

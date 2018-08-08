@@ -138,6 +138,8 @@ devtools::build_vignettes()
 # Documentation
 devtools::use_readme_rmd()
 roxygen2::roxygenise()
+# PkgDown
+pkgdown::build_site()
 
 # Help examples ----
 help('trialr')

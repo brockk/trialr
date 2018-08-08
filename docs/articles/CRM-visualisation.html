@@ -98,7 +98,7 @@
 </h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-07-15</h4>
+            <h4 class="date">2018-08-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/CRM-visualisation.Rmd"><code>vignettes/CRM-visualisation.Rmd</code></a></small>
       <div class="hidden name"><code>CRM-visualisation.Rmd</code></div>
@@ -202,7 +202,7 @@ prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(p2 &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(prob_tox_samp_tall, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbTox, <span class="dt">group =</span> DoseLevel)) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_violin">geom_violin</a></span>(<span class="dt">fill =</span> <span class="st">'orange'</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/lims">ylim</a></span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'violin plot of Pr(DLT) under CRM'</span>))</code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
-<p>If you are a fan of post-punk UK music (and you have installed the <a href="https://cran.r-project.org/web/packages/ggridges/"><code>ggridges</code></a> package), you may however prefer to show this information using a ridge plot, aka a <a href="https://en.wikipedia.org/wiki/Unknown_Pleasures">joyplot</a></p>
+<p>If you are a fan of post-punk UK music (and you have installed the <a href="https://CRAN.R-project.org/package=ggridges"><code>ggridges</code></a> package), you may however prefer to show this information using a ridge plot, aka a <a href="https://en.wikipedia.org/wiki/Unknown_Pleasures">joyplot</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggridges)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(prob_tox_samp_tall <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">DoseLevel =</span> <span class="kw">factor</span>(DoseLevel)),
        <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbTox, <span class="dt">y =</span> DoseLevel, <span class="dt">fill =</span> DoseLevel)) <span class="op">+</span>

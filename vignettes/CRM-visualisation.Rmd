@@ -95,7 +95,7 @@ This inference is much more clear, however, using a violin-plot:
     geom_violin(fill = 'orange') + ylim(0, 1) + labs(title = 'violin plot of Pr(DLT) under CRM'))
 ```
 
-If you are a fan of post-punk UK music (and you have installed the [`ggridges`](https://cran.r-project.org/web/packages/ggridges/) package), you may however prefer to show this information using a ridge plot, aka a [joyplot](https://en.wikipedia.org/wiki/Unknown_Pleasures)
+If you are a fan of post-punk UK music (and you have installed the [`ggridges`](https://CRAN.R-project.org/package=ggridges) package), you may however prefer to show this information using a ridge plot, aka a [joyplot](https://en.wikipedia.org/wiki/Unknown_Pleasures)
 
 ```{r, fig.width=7, fig.height=7}
 library(ggridges)

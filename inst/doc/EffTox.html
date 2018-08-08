@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kristian Brock" />
 
-<meta name="date" content="2018-07-06" />
+<meta name="date" content="2018-08-08" />
 
 <title>EffTox in trialr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">EffTox in trialr</h1>
 <h4 class="author"><em>Kristian Brock</em></h4>
-<h4 class="date"><em>2018-07-06</em></h4>
+<h4 class="date"><em>2018-08-08</em></h4>
 
 
 
@@ -161,7 +161,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 outcomes &lt;-<span class="st"> '1NNE 2EEB'</span>
 mod &lt;-<span class="st"> </span><span class="kw">stan_efftox_demo</span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod</code></pre></div>
-<pre><code>##   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox    Utility
+<pre><code>##   Patient Dose Toxicity Efficacy
+## 1       1    1        0        0
+## 2       2    1        0        0
+## 3       3    1        0        1
+## 4       4    2        0        1
+## 5       5    2        0        1
+## 6       6    2        1        1
+## 
+##   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox    Utility
 ## 1         1 0.4045039 0.08990953    0.33175    0.92700 -0.3397885
 ## 2         2 0.7917219 0.09875146    0.94575    0.92250  0.4237935
 ## 3         3 0.9313427 0.21522248    0.98475    0.72900  0.5249445
@@ -173,6 +181,7 @@ mod &lt;-<span class="st"> </span><span class="kw">stan_efftox_demo</span>(outco
 ## 3       TRUE
 ## 4      FALSE
 ## 5      FALSE
+## 
 ## The model recommends selecting dose-level 3.</code></pre>
 <p>We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities. We see that dose-levels 4 and 5 are unacceptable. This is because dose-level 3 has not yet been given. No doses are inferred to be too toxic or inefficacious yet.</p>
 <p>More generally, the function <code>stan_efftox</code> can be used to fit EffTox models. The above call is simply short-hand for:</p>

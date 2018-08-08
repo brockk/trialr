@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kristian Brock" />
 
-<meta name="date" content="2018-07-06" />
+<meta name="date" content="2018-08-08" />
 
 <title>Hierarchical Bayesian Model for Binary Responses</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Hierarchical Bayesian Model for Binary Responses</h1>
 <h4 class="author"><em>Kristian Brock</em></h4>
-<h4 class="date"><em>2018-07-06</em></h4>
+<h4 class="date"><em>2018-08-08</em></h4>
 
 
 
@@ -283,6 +283,7 @@ dat</code></pre></div>
 <p>Some distribution plots of the probabilities of efficacy in some subgroups may be informative.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(rstan)
+<span class="kw">library</span>(dplyr)
 
 <span class="kw">as.data.frame</span>(samp, <span class="st">'p[3]'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[3]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
