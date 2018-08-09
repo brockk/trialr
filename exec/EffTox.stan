@@ -14,9 +14,10 @@ functions {
       real p_j;
       prob_eff = inv_logit(gamma + zeta * coded_doses[doses[j]] + eta * coded_doses_squ[doses[j]]);
       prob_tox = inv_logit(alpha + beta * coded_doses[doses[j]]);
-      p_j = prob_eff^eff[j] * (1 - prob_eff)^(1 - eff[j]) * prob_tox^tox[j] *
-              (1 - prob_tox)^(1 - tox[j]) + (-1)^(eff[j] + tox[j]) * prob_eff *
-              prob_tox * (1 - prob_eff) * (1 - prob_tox) * (exp(psi) - 1) / (exp(psi) + 1);
+      p_j = prob_eff^eff[j] * (1. - prob_eff)^(1. - eff[j]) * prob_tox^tox[j] *
+              (1. - prob_tox)^(1. - tox[j]) + (-1.)^(eff[j] + tox[j]) * prob_eff *
+              prob_tox * (1. - prob_eff) * (1. - prob_tox) *
+              (exp(psi) - 1.) / (exp(psi) + 1.);
       p = p + log(p_j);
     }
     return p;

@@ -1,4 +1,25 @@
 
+
+# Version 0.0.3
+
+## Test environments
+* ubuntu 14.04.5 on travis-ci, devel fork
+* local OS X install, R 3.5.0
+
+## R CMD check results on travis-ci
+0 errors | 0 warnings | 1 notes
+
+### NOTEs
+
+* checking installed package size ... NOTE
+  installed size is  7.7Mb
+  sub-directories of 1Mb or more:
+    libs   6.6Mb
+  
+  The package contains compiled RStan models, hence the directory size.
+  This note was also present in previous CRAN versions.
+
+
 # Version 0.0.2
 
 ## Test environments

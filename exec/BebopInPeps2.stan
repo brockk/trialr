@@ -5,7 +5,8 @@
 
 functions {
   real log_joint_pdf(int J, int[] eff, int[] tox, int[] x1, int[] x2, int[] x3,
-                     real alpha, real beta, real gamma, real zeta, real lambda, real psi) {
+                     real alpha, real beta, real gamma, real zeta, real lambda,
+                     real psi) {
     real p;
     p = 0;
     for(j in 1:J) {
@@ -15,8 +16,10 @@ functions {
       real p_delta;
       prob1 = inv_logit(alpha + beta*x1[j] + gamma*x2[j] + zeta*x3[j]);
       prob2 = inv_logit(lambda);
-      p_delta = prob1^eff[j] * (1-prob1)^(1-eff[j]) * prob2^tox[j] * (1-prob2)^(1-tox[j]) +
-        (-1)^(eff[j]+tox[j]) * prob1 * prob2 * (1-prob1) * (1-prob2) * (exp(psi)-1) / (exp(psi)+1);
+      p_delta = prob1^eff[j] * (1. - prob1)^(1. - eff[j]) * prob2^tox[j] *
+        (1. - prob2)^(1. - tox[j]) +
+        (-1.)^(eff[j] +tox[j]) * prob1 * prob2 * (1. - prob1) * (1. - prob2) *
+        (exp(psi) - 1.) / (exp(psi) + 1.);
       p = p + log(p_delta);
     }
     return p;

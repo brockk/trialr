@@ -1,4 +1,10 @@
 
+# trialr 0.0.3
+
+This release updates some Stan code that was generating C++ code that would 
+compile on Linux, Mac & Windows, but not Solaris.
+
+
 # trialr 0.0.2
 
 This release adds the Continual Reassessment Method (CRM) for dose-finding. 
