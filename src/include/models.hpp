@@ -84,7 +84,7 @@ log_joint_pdf(const int& J,
 
             stan::math::assign(prob1, inv_logit((((alpha + (beta * get_base1(x1,j,"x1",1))) + (gamma * get_base1(x2,j,"x2",1))) + (zeta * get_base1(x3,j,"x3",1)))));
             stan::math::assign(prob2, inv_logit(lambda));
-            stan::math::assign(p_delta, ((((pow(prob1,get_base1(eff,j,"eff",1)) * pow((1 - prob1),(1 - get_base1(eff,j,"eff",1)))) * pow(prob2,get_base1(tox,j,"tox",1))) * pow((1 - prob2),(1 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob1) * prob2) * (1 - prob1)) * (1 - prob2)) * (exp(psi) - 1)) / (exp(psi) + 1))));
+            stan::math::assign(p_delta, ((((pow(prob1,get_base1(eff,j,"eff",1)) * pow((1 - prob1),(1 - get_base1(eff,j,"eff",1)))) * pow(prob2,get_base1(tox,j,"tox",1))) * pow((1 - prob2),(1 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1.),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob1) * prob2) * (1 - prob1)) * (1 - prob2)) * (exp(psi) - 1)) / (exp(psi) + 1))));
             stan::math::assign(p, (p + log(p_delta)));
             }
         }
@@ -358,7 +358,7 @@ public:
         alpha = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(alpha);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable alpha: ") + e.what());
         }
 
@@ -371,7 +371,7 @@ public:
         beta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(beta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
         }
 
@@ -384,7 +384,7 @@ public:
         gamma = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(gamma);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable gamma: ") + e.what());
         }
 
@@ -397,7 +397,7 @@ public:
         zeta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(zeta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable zeta: ") + e.what());
         }
 
@@ -410,7 +410,7 @@ public:
         lambda = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(lambda);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable lambda: ") + e.what());
         }
 
@@ -423,7 +423,7 @@ public:
         psi = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(psi);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable psi: ") + e.what());
         }
 
@@ -1056,7 +1056,7 @@ public:
         beta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(beta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
         }
 
@@ -1598,7 +1598,7 @@ public:
         beta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(beta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
         }
 
@@ -2139,7 +2139,7 @@ public:
         beta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(beta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
         }
 
@@ -2688,7 +2688,7 @@ public:
         alpha = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(alpha);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable alpha: ") + e.what());
         }
 
@@ -2701,7 +2701,7 @@ public:
         beta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(beta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
         }
 
@@ -3084,7 +3084,7 @@ log_joint_pdf(const std::vector<T0__>& coded_doses,
 
             stan::math::assign(prob_eff, inv_logit(((gamma + (zeta * get_base1(coded_doses,get_base1(doses,j,"doses",1),"coded_doses",1))) + (eta * get_base1(coded_doses_squ,get_base1(doses,j,"doses",1),"coded_doses_squ",1)))));
             stan::math::assign(prob_tox, inv_logit((alpha + (beta * get_base1(coded_doses,get_base1(doses,j,"doses",1),"coded_doses",1)))));
-            stan::math::assign(p_j, ((((pow(prob_eff,get_base1(eff,j,"eff",1)) * pow((1 - prob_eff),(1 - get_base1(eff,j,"eff",1)))) * pow(prob_tox,get_base1(tox,j,"tox",1))) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob_eff) * prob_tox) * (1 - prob_eff)) * (1 - prob_tox)) * (exp(psi) - 1)) / (exp(psi) + 1))));
+            stan::math::assign(p_j, ((((pow(prob_eff,get_base1(eff,j,"eff",1)) * pow((1 - prob_eff),(1 - get_base1(eff,j,"eff",1)))) * pow(prob_tox,get_base1(tox,j,"tox",1))) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1.),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob_eff) * prob_tox) * (1 - prob_eff)) * (1 - prob_tox)) * (exp(psi) - 1)) / (exp(psi) + 1))));
             stan::math::assign(p, (p + log(p_j)));
             }
         }
@@ -3400,7 +3400,7 @@ public:
         alpha = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(alpha);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable alpha: ") + e.what());
         }
 
@@ -3413,7 +3413,7 @@ public:
         beta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(beta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
         }
 
@@ -3426,7 +3426,7 @@ public:
         gamma = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(gamma);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable gamma: ") + e.what());
         }
 
@@ -3439,7 +3439,7 @@ public:
         zeta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(zeta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable zeta: ") + e.what());
         }
 
@@ -3452,7 +3452,7 @@ public:
         eta = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(eta);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable eta: ") + e.what());
         }
 
@@ -3465,7 +3465,7 @@ public:
         psi = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(psi);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable psi: ") + e.what());
         }
 
@@ -4161,7 +4161,7 @@ public:
         mu = vals_r__[pos__++];
         try {
             writer__.scalar_unconstrain(mu);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable mu: ") + e.what());
         }
 
@@ -4174,7 +4174,7 @@ public:
         sigma = vals_r__[pos__++];
         try {
             writer__.scalar_lb_unconstrain(0.0,sigma);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable sigma: ") + e.what());
         }
 
@@ -4190,7 +4190,7 @@ public:
         for (int i0__ = 0U; i0__ < m; ++i0__)
             try {
             writer__.scalar_unconstrain(rho[i0__]);
-        } catch (const std::exception& e) { 
+        } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error transforming variable rho: ") + e.what());
         }
 
