@@ -136,12 +136,11 @@ devtools::use_readme_rmd()
 # devtools::use_vignette("CRM-model-choice")
 devtools::use_build_ignore(c("Scratch", "exec_dev"))
 
-devtools::build_vignettes()
+
 # Documentation
 devtools::use_readme_rmd()
-roxygen2::roxygenise()
-# PkgDown
-pkgdown::build_site()
+
+
 
 
 
@@ -165,6 +164,9 @@ help("peps2_run_sims")
 # devtools::check()
 devtools::check(manual = TRUE)
 devtools::build()
+roxygen2::roxygenise()
+devtools::build_vignettes()
+pkgdown::build_site()
 devtools::release()
 
 # RStan breaks? ----

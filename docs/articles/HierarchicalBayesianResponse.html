@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
       </span>
     </div>
 
@@ -55,10 +55,10 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
-      <a href="../articles/CRM-visualisation.html">Visualisation with CRM in `trialr`</a>
+      <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM.html">Continual Reassessment Method in `trialr`</a>
+      <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
       <a href="../articles/EffTox.html">EffTox in trialr</a>
@@ -67,7 +67,7 @@
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of `trialr`</a>
+      <a href="../articles/trialr-overview.html">Overview of trialr</a>
     </li>
   </ul>
 </li>
@@ -97,7 +97,7 @@
       <h1>Hierarchical Bayesian Model for Binary Responses</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-08-08</h4>
+            <h4 class="date">2018-08-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/HierarchicalBayesianResponse.Rmd"><code>vignettes/HierarchicalBayesianResponse.Rmd</code></a></small>
       <div class="hidden name"><code>HierarchicalBayesianResponse.Rmd</code></div>
@@ -129,13 +129,13 @@
 <h1 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h1>
 <p>We can learn about the parameters required by the <code>ThallHierarchicalBinary</code> model using</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(trialr)
-<span class="kw">help</span>(thallhierarchicalbinary_parameters)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(trialr)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">help</span>(thallhierarchicalbinary_parameters)</a></code></pre></div>
 <pre><code>## No documentation for 'thallhierarchicalbinary_parameters' in specified packages and libraries:
 ## you could try '??thallhierarchicalbinary_parameters'</code></pre>
 <p>We can get an example using</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thallhierarchicalbinary_parameters_demo.html">thallhierarchicalbinary_parameters_demo</a></span>()
-dat</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thallhierarchicalbinary_parameters_demo.html">thallhierarchicalbinary_parameters_demo</a></span>()</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">dat</a></code></pre></div>
 <pre><code>## $m
 ## [1] 10
 ## 
@@ -161,11 +161,11 @@ dat</code></pre></div>
 ## [1] 20</code></pre>
 <p>We have outcomes in 10 disease subgroups. The number of responses is stored in <code>x</code> and the number of patients in <code>n</code>. There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.</p>
 <p>We invoke the model by calling <code><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">rstan::sampling</a></code> on the included <code>ThallHierarchicalBinary</code> model. We set the seed for reproducble randomness.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">sampling</a></span>(stanmodels<span class="op">$</span>ThallHierarchicalBinary, <span class="dt">data =</span> dat, 
-                        <span class="dt">seed =</span> <span class="dv">123</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">sampling</a></span>(stanmodels<span class="op">$</span>ThallHierarchicalBinary, <span class="dt">data =</span> dat, </a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                        <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
 <pre><code>## trying deprecated constructor; please alert package maintainer</code></pre>
 <p>The probability that the efficacy probability in each subgroup exceeds the threshold is stored as <code>pg</code>. We extract that variable and use the <code>rstan::summary</code> function to make inference.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(rstan<span class="op">::</span><span class="kw">summary</span>(samp, <span class="dt">par =</span> <span class="st">'pg'</span>)<span class="op">$</span>summary, <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(rstan<span class="op">::</span><span class="kw">summary</span>(samp, <span class="dt">par =</span> <span class="st">'pg'</span>)<span class="op">$</span>summary, <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -315,15 +315,15 @@ dat</code></pre></div>
 </table>
 <p>Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least <span class="math inline">\(q = 70\)</span>% certainty that the probability of efficacy exceeds the target response rate of 30% On that basis, at this interim stage, we would be willing to approve the treatment in subgroups 3, 4, 5 and 8.</p>
 <p>Some distribution plots of the probabilities of efficacy in some subgroups may be informative.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(rstan)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
 <pre><code>## Loading required package: StanHeaders</code></pre>
 <pre><code>## rstan (Version 2.17.3, GitRev: 2e1f913d3ca3)</code></pre>
 <pre><code>## For execution on a local, multicore CPU with excess RAM we recommend calling
 ## options(mc.cores = parallel::detectCores()).
 ## To avoid recompilation of unchanged Stan programs, we recommend calling
 ## rstan_options(auto_write = TRUE)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: 'dplyr'</code></pre>
 <pre><code>## The following objects are masked from 'package:stats':
@@ -332,22 +332,22 @@ dat</code></pre></div>
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[3]'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[3]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_density">geom_density</a></span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 3'</span>)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[3]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[3]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_density">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 3'</span>)</a></code></pre></div>
 <div class="figure">
 <img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-5-1.png" alt="Prob(Response | D) in subgroup 3" width="576"><p class="caption">
 Prob(Response | D) in subgroup 3
 </p>
 </div>
 <p>We see that the inferred efficacy in subgroup 3 is very high.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[4]'</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[4]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_density">geom_density</a></span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 4'</span>)</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[4]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[4]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_density">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 4'</span>)</a></code></pre></div>
 <div class="figure">
 <img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-6-1.png" alt="Prob(Response | D) in subgroup 4" width="576"><p class="caption">
 Prob(Response | D) in subgroup 4
@@ -365,7 +365,7 @@ Prob(Response | D) in subgroup 4
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Thall2003">
-<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. doi:<a href="https://doi.org/10.1002/sim.1399">10.1002/sim.1399</a>.</p>
+<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. <a href="https://doi.org/10.1002/sim.1399" class="uri">https://doi.org/10.1002/sim.1399</a>.</p>
 </div>
 </div>
 </div>

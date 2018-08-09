@@ -63,7 +63,7 @@ next." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
       </span>
     </div>
 
@@ -89,10 +89,10 @@ next." />
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
-      <a href="../articles/CRM-visualisation.html">Visualisation with CRM in `trialr`</a>
+      <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM.html">Continual Reassessment Method in `trialr`</a>
+      <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
       <a href="../articles/EffTox.html">EffTox in trialr</a>
@@ -101,7 +101,7 @@ next." />
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of `trialr`</a>
+      <a href="../articles/trialr-overview.html">Overview of trialr</a>
     </li>
   </ul>
 </li>
@@ -178,8 +178,8 @@ trialr EffTox model.</p></td>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 4.6e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.46 seconds.
+#&gt; Gradient evaluation took 4.3e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.43 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -196,15 +196,15 @@ trialr EffTox model.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.518377 seconds (Warm-up)
-#&gt;                0.368894 seconds (Sampling)
-#&gt;                0.887271 seconds (Total)
+#&gt;  Elapsed Time: 0.541604 seconds (Warm-up)
+#&gt;                0.360633 seconds (Sampling)
+#&gt;                0.902237 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -221,15 +221,15 @@ trialr EffTox model.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.49469 seconds (Warm-up)
-#&gt;                0.353299 seconds (Sampling)
-#&gt;                0.847989 seconds (Total)
+#&gt;  Elapsed Time: 0.497466 seconds (Warm-up)
+#&gt;                0.356032 seconds (Sampling)
+#&gt;                0.853498 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -246,15 +246,15 @@ trialr EffTox model.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.52793 seconds (Warm-up)
-#&gt;                0.359913 seconds (Sampling)
-#&gt;                0.887843 seconds (Total)
+#&gt;  Elapsed Time: 0.532287 seconds (Warm-up)
+#&gt;                0.360725 seconds (Sampling)
+#&gt;                0.893012 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -271,9 +271,9 @@ trialr EffTox model.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.530404 seconds (Warm-up)
-#&gt;                0.357552 seconds (Sampling)
-#&gt;                0.887956 seconds (Total)
+#&gt;  Elapsed Time: 0.533144 seconds (Warm-up)
+#&gt;                0.358245 seconds (Sampling)
+#&gt;                0.891389 seconds (Total)
 #&gt; </div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_process</span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
 <span class='no'>decision</span>$<span class='no'>recommended_dose</span> <span class='kw'>==</span> <span class='fl'>3</span></div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>

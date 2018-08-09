@@ -1,5 +1,5 @@
 ---
-title: "Overview of `trialr`"
+title: "Overview of trialr"
 author: "Kristian Brock"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

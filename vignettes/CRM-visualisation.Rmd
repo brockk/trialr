@@ -1,5 +1,5 @@
 ---
-title: "Visualisation with CRM in `trialr`"
+title: "Visualisation with CRM"
 author: "Kristian Brock"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
       </span>
     </div>
 
@@ -98,10 +98,10 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
-      <a href="../articles/CRM-visualisation.html">Visualisation with CRM in `trialr`</a>
+      <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM.html">Continual Reassessment Method in `trialr`</a>
+      <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
       <a href="../articles/EffTox.html">EffTox in trialr</a>
@@ -110,7 +110,7 @@
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of `trialr`</a>
+      <a href="../articles/trialr-overview.html">Overview of trialr</a>
     </li>
   </ul>
 </li>
@@ -217,8 +217,8 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 <span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 4.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.48 seconds.
+#&gt; Gradient evaluation took 4.4e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.44 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -235,15 +235,15 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.492245 seconds (Warm-up)
-#&gt;                0.364051 seconds (Sampling)
-#&gt;                0.856296 seconds (Total)
+#&gt;  Elapsed Time: 0.483596 seconds (Warm-up)
+#&gt;                0.380639 seconds (Sampling)
+#&gt;                0.864235 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.6e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -260,15 +260,15 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.50377 seconds (Warm-up)
-#&gt;                0.3569 seconds (Sampling)
-#&gt;                0.86067 seconds (Total)
+#&gt;  Elapsed Time: 0.495638 seconds (Warm-up)
+#&gt;                0.353931 seconds (Sampling)
+#&gt;                0.849569 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
 #&gt; 
-#&gt; Gradient evaluation took 3.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Gradient evaluation took 3.7e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -285,15 +285,15 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.525007 seconds (Warm-up)
-#&gt;                0.357291 seconds (Sampling)
-#&gt;                0.882298 seconds (Total)
+#&gt;  Elapsed Time: 0.528262 seconds (Warm-up)
+#&gt;                0.36072 seconds (Sampling)
+#&gt;                0.888982 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 3.9e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#&gt; Gradient evaluation took 9.8e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.98 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -310,9 +310,9 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.522958 seconds (Warm-up)
-#&gt;                0.362226 seconds (Sampling)
-#&gt;                0.885184 seconds (Total)
+#&gt;  Elapsed Time: 0.523275 seconds (Warm-up)
+#&gt;                0.367684 seconds (Sampling)
+#&gt;                0.890959 seconds (Total)
 #&gt; </div><div class='input'><span class='co'># Perform inference on posterior samples. E.g. posterior mean drug efficacy</span>
 <span class='fu'>colMeans</span>(<span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-method-extract'>extract</a></span>(<span class='no'>samp</span>, <span class='st'>'prob_eff'</span>)<span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; [1] 0.2180468 0.5951194 0.8998301 0.9563779 0.9720017</div><div class='input'>
 ## Not run

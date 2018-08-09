@@ -79,7 +79,7 @@ See the accompanying vignette for a full description." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
       </span>
     </div>
 
@@ -105,10 +105,10 @@ See the accompanying vignette for a full description." />
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
-      <a href="../articles/CRM-visualisation.html">Visualisation with CRM in `trialr`</a>
+      <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM.html">Continual Reassessment Method in `trialr`</a>
+      <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
       <a href="../articles/EffTox.html">EffTox in trialr</a>
@@ -117,7 +117,7 @@ See the accompanying vignette for a full description." />
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of `trialr`</a>
+      <a href="../articles/trialr-overview.html">Overview of trialr</a>
     </li>
   </ul>
 </li>
@@ -298,8 +298,8 @@ association parameter.</p></td>
 <span class='no'>samp</span> <span class='kw'>=</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>BebopInPeps2</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 0.000193 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.93 seconds.
+#&gt; Gradient evaluation took 0.000192 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.92 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -316,15 +316,15 @@ association parameter.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.44422 seconds (Warm-up)
-#&gt;                2.53493 seconds (Sampling)
-#&gt;                4.97915 seconds (Total)
+#&gt;  Elapsed Time: 2.50343 seconds (Warm-up)
+#&gt;                2.60475 seconds (Sampling)
+#&gt;                5.10818 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 0.000177 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.77 seconds.
+#&gt; Gradient evaluation took 0.000186 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.86 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -341,15 +341,15 @@ association parameter.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.50308 seconds (Warm-up)
-#&gt;                2.44447 seconds (Sampling)
-#&gt;                4.94755 seconds (Total)
+#&gt;  Elapsed Time: 2.5754 seconds (Warm-up)
+#&gt;                2.52338 seconds (Sampling)
+#&gt;                5.09877 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 3).
 #&gt; 
-#&gt; Gradient evaluation took 0.000178 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.78 seconds.
+#&gt; Gradient evaluation took 0.000251 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 2.51 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -366,15 +366,15 @@ association parameter.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.44633 seconds (Warm-up)
-#&gt;                2.7803 seconds (Sampling)
-#&gt;                5.22663 seconds (Total)
+#&gt;  Elapsed Time: 2.4981 seconds (Warm-up)
+#&gt;                2.87424 seconds (Sampling)
+#&gt;                5.37234 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 4).
 #&gt; 
-#&gt; Gradient evaluation took 0.000176 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.76 seconds.
+#&gt; Gradient evaluation took 0.000185 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 1.85 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -391,9 +391,9 @@ association parameter.</p></td>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 2.50638 seconds (Warm-up)
-#&gt;                2.64888 seconds (Sampling)
-#&gt;                5.15526 seconds (Total)
+#&gt;  Elapsed Time: 2.57559 seconds (Warm-up)
+#&gt;                2.72244 seconds (Sampling)
+#&gt;                5.29803 seconds (Total)
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

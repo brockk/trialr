@@ -68,7 +68,7 @@ the probability model and a demonstration of the implementation in trial." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
       </span>
     </div>
 
@@ -94,10 +94,10 @@ the probability model and a demonstration of the implementation in trial." />
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
-      <a href="../articles/CRM-visualisation.html">Visualisation with CRM in `trialr`</a>
+      <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM.html">Continual Reassessment Method in `trialr`</a>
+      <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
       <a href="../articles/EffTox.html">EffTox in trialr</a>
@@ -106,7 +106,7 @@ the probability model and a demonstration of the implementation in trial." />
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of `trialr`</a>
+      <a href="../articles/trialr-overview.html">Overview of trialr</a>
     </li>
   </ul>
 </li>
@@ -171,8 +171,8 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 <span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>ThallHierarchicalBinary</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 1).
 #&gt; 
-#&gt; Gradient evaluation took 6.8e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.68 seconds.
+#&gt; Gradient evaluation took 6.5e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.65 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -189,15 +189,15 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 1.31427 seconds (Warm-up)
-#&gt;                0.550994 seconds (Sampling)
-#&gt;                1.86526 seconds (Total)
+#&gt;  Elapsed Time: 1.3629 seconds (Warm-up)
+#&gt;                0.570057 seconds (Sampling)
+#&gt;                1.93296 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 2).
 #&gt; 
-#&gt; Gradient evaluation took 3.7e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
+#&gt; Gradient evaluation took 3.2e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -214,15 +214,15 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 0.944121 seconds (Warm-up)
-#&gt;                0.519973 seconds (Sampling)
-#&gt;                1.46409 seconds (Total)
+#&gt;  Elapsed Time: 0.980987 seconds (Warm-up)
+#&gt;                0.534122 seconds (Sampling)
+#&gt;                1.51511 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 3).
 #&gt; 
-#&gt; Gradient evaluation took 3.3e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
+#&gt; Gradient evaluation took 3.2e-05 seconds
+#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
 #&gt; Adjust your expectations accordingly!
 #&gt; 
 #&gt; 
@@ -239,9 +239,9 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 1.05053 seconds (Warm-up)
-#&gt;                0.69382 seconds (Sampling)
-#&gt;                1.74435 seconds (Total)
+#&gt;  Elapsed Time: 1.10161 seconds (Warm-up)
+#&gt;                0.719601 seconds (Sampling)
+#&gt;                1.82121 seconds (Total)
 #&gt; 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 4).
@@ -264,9 +264,9 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 #&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; 
-#&gt;  Elapsed Time: 1.06351 seconds (Warm-up)
-#&gt;                0.742129 seconds (Sampling)
-#&gt;                1.80564 seconds (Total)
+#&gt;  Elapsed Time: 1.10866 seconds (Warm-up)
+#&gt;                0.767898 seconds (Sampling)
+#&gt;                1.87656 seconds (Total)
 #&gt; </div><div class='input'><span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'>plot</span>(<span class='no'>samp</span>, <span class='kw'>pars</span> <span class='kw'>=</span> <span class='st'>'p'</span>) <span class='co'># Plot the modelled response rates in the subtypes</span></div><div class='output co'>#&gt; <span class='message'>ci_level: 0.8 (80% intervals)</span></div><div class='output co'>#&gt; <span class='message'>outer_level: 0.95 (95% intervals)</span></div><div class='img'><img src='model_ThallHierarchicalBinary-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
