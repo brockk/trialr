@@ -1,4 +1,8 @@
 
+# trialr 0.0.4
+
+Updated to use rstan 2.18.1, which in-turn has been updated to use C++14.
+
 # trialr 0.0.3
 
 This release updates some Stan code that was generating C++ code that would 

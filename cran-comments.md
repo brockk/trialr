@@ -1,4 +1,21 @@
 
+# Version 0.0.4
+
+## Test environments
+* local Win install, R 3.5.1
+
+## R CMD check results on travis-ci
+X errors | X warnings | X notes
+
+### NOTEs
+
+* checking installed package size ... NOTE
+  installed size is  7.7Mb
+  sub-directories of 1Mb or more:
+    libs   6.6Mb
+  
+  The package contains compiled RStan models, hence the directory size.
+  This note was also present in previous CRAN versions.
 
 # Version 0.0.3
 
