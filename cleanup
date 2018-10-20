@@ -8,5 +8,3 @@ cat src/*.cc > src/Modules.cpp
 rm src/*.cc
 exit $?
 
-
-
