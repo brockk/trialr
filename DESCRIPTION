@@ -1,8 +1,8 @@
 Package: trialr
 Type: Package
 Title: Clinical Trial Designs in 'RStan'
-Version: 0.0.4
-Date: 2018-10-16
+Version: 0.0.3
+Date: 2018-08-09
 Authors@R: c(person("Kristian", "Brock", email = "kristian.brock@gmail.com", role = c("aut", "cre")),
              person("Trustees of", "Columbia University", role = "cph"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
@@ -20,11 +20,11 @@ Description: A showcase of Bayesian clinical trial designs, implemented in
     want implemented in 'Stan', get in touch.
 License: GPL-3
 Depends:
-    R (>= 3.4.0),
+    R (>= 3.0.2),
     Rcpp (>= 0.12.8),
     methods (>= 3.3.2)
 Imports:
-    rstan (>= 2.18.1),
+    rstan (>= 2.12.1),
     rstantools (>= 1.1.0),
     loo (>= 1.1.0),
     gtools,
@@ -34,9 +34,9 @@ Imports:
     magrittr,
     ggplot2
 LinkingTo:
-  StanHeaders (>= 2.18.0), 
-  rstan (>= 2.18.1), 
-  BH (>= 1.66), 
+  StanHeaders (>= 2.12.0.1), 
+  rstan (>= 2.12.1), 
+  BH (>= 1.62.0.1), 
   Rcpp (>= 0.12.8), 
   RcppEigen (>= 0.3.2.9.0)
 Suggests:
