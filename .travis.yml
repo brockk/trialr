@@ -8,15 +8,12 @@ r_github_packages:
 
 env:
   matrix:
-    - CXX_OLEVEL=2 CXX=clang++
+    - CXX_OLEVEL=2 CXX=g++-7
 
 before_install:
   - mkdir -p ~/.R/
   - echo "CXX14 = g++-7 -fPIC" >> ~/.R/Makevars
   - echo "CXX14FLAGS = -mtune=native -march=native -Wno-unused-variable -Wno-unused-function -Wno-unused-local-typedefs -Wno-ignored-attributes -Wno-deprecated-declarations -Wno-attributes -O3" >> ~/.R/Makevars
-  - export CLANG_EXTRA_ARG=""
-  - if [[ $CXX = "clang++" ]] ;  then export CLANG_EXTRA_ARG=" -Qunused-arguments -fcolor-diagnostics " ; fi
-  - sed -i.bak "s/ g++/ ${CXX}${CLANG_EXTRA_ARG}/" ~/.R/Makevars
   - sed -i.bak "s/O[0-3]/O$CXX_OLEVEL/" ~/.R/Makevars
 
 script:
