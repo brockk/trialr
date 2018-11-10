@@ -1,9 +1,34 @@
 
+# Version 0.0.5
+
+## Test environments
+* local Win install, R 3.5.1
+* local Mac install, R 3.5.0
+
+0 errors | 0 warnings | 2 notes
+
+## NOTEs
+
+* checking installed package size ... NOTE
+  installed size is  8.1Mb
+  sub-directories of 1Mb or more:
+    libs   6.5Mb
+  
+  The package contains compiled RStan models, hence the directory size.
+  This note was also present in previous CRAN versions.
+
+* checking for GNU extensions in Makefiles ... NOTE
+GNU make is a SystemRequirements.
+
+This is true. I understand that other packages in the Stan ecosystem 
+(e.g. rstanarm) use the same.
+
+
 # Version 0.0.4
 
 ## Test environments
 * local Win install, R 3.5.1
-* local Max install, R 3.5.0
+* local Mac install, R 3.5.0
 
 0 errors | 0 warnings | 2 notes
 

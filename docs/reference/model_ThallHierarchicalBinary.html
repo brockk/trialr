@@ -68,7 +68,7 @@ the probability model and a demonstration of the implementation in trial." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.5</span>
       </span>
     </div>
 
@@ -170,104 +170,80 @@ Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='thallhierarchicalbinary_parameters_demo.html'>thallhierarchicalbinary_parameters_demo</a></span>()
 <span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>ThallHierarchicalBinary</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 1).
-#&gt; 
-#&gt; Gradient evaluation took 6.5e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.65 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 1.3629 seconds (Warm-up)
-#&gt;                0.570057 seconds (Sampling)
-#&gt;                1.93296 seconds (Total)
-#&gt; 
+#&gt; Chain 1: Gradient evaluation took 6.2e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.62 seconds.
+#&gt; Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 1:  Elapsed Time: 0.191522 seconds (Warm-up)
+#&gt; Chain 1:                0.08204 seconds (Sampling)
+#&gt; Chain 1:                0.273562 seconds (Total)
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 2).
-#&gt; 
-#&gt; Gradient evaluation took 3.2e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.980987 seconds (Warm-up)
-#&gt;                0.534122 seconds (Sampling)
-#&gt;                1.51511 seconds (Total)
-#&gt; 
+#&gt; Chain 2: Gradient evaluation took 1e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+#&gt; Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 2:  Elapsed Time: 0.139783 seconds (Warm-up)
+#&gt; Chain 2:                0.078731 seconds (Sampling)
+#&gt; Chain 2:                0.218514 seconds (Total)
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 3).
-#&gt; 
-#&gt; Gradient evaluation took 3.2e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 1.10161 seconds (Warm-up)
-#&gt;                0.719601 seconds (Sampling)
-#&gt;                1.82121 seconds (Total)
-#&gt; 
+#&gt; Chain 3: Gradient evaluation took 1e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+#&gt; Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 3:  Elapsed Time: 0.172219 seconds (Warm-up)
+#&gt; Chain 3:                0.109722 seconds (Sampling)
+#&gt; Chain 3:                0.281941 seconds (Total)
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'ThallHierarchicalBinary' NOW (CHAIN 4).
-#&gt; 
-#&gt; Gradient evaluation took 3.3e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 1.10866 seconds (Warm-up)
-#&gt;                0.767898 seconds (Sampling)
-#&gt;                1.87656 seconds (Total)
-#&gt; </div><div class='input'><span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'>plot</span>(<span class='no'>samp</span>, <span class='kw'>pars</span> <span class='kw'>=</span> <span class='st'>'p'</span>) <span class='co'># Plot the modelled response rates in the subtypes</span></div><div class='output co'>#&gt; <span class='message'>ci_level: 0.8 (80% intervals)</span></div><div class='output co'>#&gt; <span class='message'>outer_level: 0.95 (95% intervals)</span></div><div class='img'><img src='model_ThallHierarchicalBinary-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; Chain 4: Gradient evaluation took 9e-06 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+#&gt; Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 4:  Elapsed Time: 0.158209 seconds (Warm-up)
+#&gt; Chain 4:                0.111505 seconds (Sampling)
+#&gt; Chain 4:                0.269714 seconds (Total)</div><div class='input'><span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'>plot</span>(<span class='no'>samp</span>, <span class='kw'>pars</span> <span class='kw'>=</span> <span class='st'>'p'</span>) <span class='co'># Plot the modelled response rates in the subtypes</span></div><div class='output co'>#&gt; <span class='message'>ci_level: 0.8 (80% intervals)</span></div><div class='output co'>#&gt; <span class='message'>outer_level: 0.95 (95% intervals)</span></div><div class='img'><img src='model_ThallHierarchicalBinary-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

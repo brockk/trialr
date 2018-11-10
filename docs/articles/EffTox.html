@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.5</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>EffTox in trialr</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-08-09</h4>
+            <h4 class="date">2018-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/EffTox.Rmd"><code>vignettes/EffTox.Rmd</code></a></small>
       <div class="hidden name"><code>EffTox.Rmd</code></div>
@@ -248,7 +248,7 @@ Utility contours after observing outcomes 1NEN 2NBE.
 <p>The blue stars show the location of the hinge points on the neutral-uility (u=0) contour. The red numbers show the posterior means of the five dose-levels. Doses that are closer to the lower-right corner have higher utility. We see that dose-level 3 has the highest utility.</p>
 <p>We can also produce posterior density plots of the dose utilities. For illustration, we will just plot the densities of the three acceptable doses. The package <code>ggplot2</code> is required.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_utility_density_plot.html">efftox_utility_density_plot</a></span>(mod<span class="op">$</span>fit, <span class="dt">doses =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
 <div class="figure">
 <img src="EffTox_files/figure-html/unnamed-chunk-6-1.png" alt="Utility densities after observing outcomes 1NEN 2NBE." width="576"><p class="caption">
 Utility densities after observing outcomes 1NEN 2NBE.
@@ -381,7 +381,7 @@ Utility densities after observing outcomes 1NEN 2NBE.
 <p>Herrick, R, C Norris, JD Cook, and J Venier. 2015. “EffTox.” MD Anderson Cancer Center. <a href="https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software%7B%5C_%7DId=2" class="uri">https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2</a>.</p>
 </div>
 <div id="ref-Monahan1997">
-<p>Monahan, John, and Alan Genz. 1997. “Spherical-Radial Integration Rules for Bayesian Computation.” <em>Journal of the American Statistical Association</em> 92 (438): 664–74. <a href="http://www.jstor.org/stable/2965714" class="uri">http://www.jstor.org/stable/2965714</a>.</p>
+<p>Monahan, John, and Alan Genz. 1997. “Spherical-Radial Integration Rules for Bayesian Computation.” <em>Journal of the American Statistical Association</em> 92 (438): 664–74. <a href="https://www.jstor.org/stable/2965714" class="uri">https://www.jstor.org/stable/2965714</a>.</p>
 </div>
 <div id="ref-OQuigley1990">
 <p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628" class="uri">https://doi.org/10.2307/2531628</a>.</p>

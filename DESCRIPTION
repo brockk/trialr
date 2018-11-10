@@ -1,8 +1,8 @@
 Package: trialr
 Type: Package
 Title: Clinical Trial Designs in 'RStan'
-Version: 0.0.4
-Date: 2018-10-16
+Version: 0.0.5
+Date: 2018-11-10
 Authors@R: c(person("Kristian", "Brock", email = "kristian.brock@gmail.com", role = c("aut", "cre")),
              person("Trustees of", "Columbia University", role = "cph"))
 Maintainer: Kristian Brock <kristian.brock@gmail.com>
@@ -19,6 +19,7 @@ Description: A showcase of Bayesian clinical trial designs, implemented in
     Bayesian methods are used most. If there is a published Bayesian design you
     want implemented in 'Stan', get in touch.
 License: GPL-3
+SystemRequirements: GNU make
 Depends:
     R (>= 3.4.0),
     Rcpp (>= 0.12.8),

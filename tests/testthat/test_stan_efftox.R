@@ -35,7 +35,7 @@ test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN"', {
   # N.b. their app uses numerical methods to approximate posterior parameters
   # (so there is variation) but does not allow a seed to be set for isolated
   # calculations (only simulations). Thus, the comparisons below are
-  epsilon <- 0.02
+  epsilon <- 0.03
 
   expect_true(all(abs(
     mod$prob_eff - c(0.05, 0.26, 0.72, 0.86, 0.91)) < epsilon))
@@ -57,7 +57,7 @@ test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN 3ETB"', {
   # N.b. their app uses numerical methods to approximate posterior parameters
   # (so there is variation) but does not allow a seed to be set for isolated
   # calculations (only simulations). Thus, the comparisons below are
-  epsilon <- 0.02
+  epsilon <- 0.03
 
   expect_true(all(abs(
     mod$prob_eff - c(0.06, 0.24, 0.71, 0.89, 0.94)) < epsilon))

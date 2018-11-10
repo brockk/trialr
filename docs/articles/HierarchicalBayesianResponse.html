@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.5</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Hierarchical Bayesian Model for Binary Responses</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-08-09</h4>
+            <h4 class="date">2018-11-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/HierarchicalBayesianResponse.Rmd"><code>vignettes/HierarchicalBayesianResponse.Rmd</code></a></small>
       <div class="hidden name"><code>HierarchicalBayesianResponse.Rmd</code></div>
@@ -191,7 +191,7 @@
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">4000.000</td>
+<td align="right">3535.715</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
@@ -204,7 +204,7 @@
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">4000.000</td>
+<td align="right">4071.151</td>
 <td align="right">0.999</td>
 </tr>
 <tr class="odd">
@@ -217,7 +217,7 @@
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">4000.000</td>
+<td align="right">3393.444</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
@@ -230,20 +230,20 @@
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2854.261</td>
+<td align="right">2862.118</td>
 <td align="right">1.002</td>
 </tr>
 <tr class="odd">
 <td>pg[5]</td>
 <td align="right">1.000</td>
-<td align="right">0.000</td>
+<td align="right">NaN</td>
 <td align="right">0.016</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">4000.000</td>
+<td align="right">NaN</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
@@ -256,7 +256,7 @@
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">3817.281</td>
+<td align="right">3784.143</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="odd">
@@ -282,7 +282,7 @@
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2515.477</td>
+<td align="right">2494.959</td>
 <td align="right">1.002</td>
 </tr>
 <tr class="odd">
@@ -295,7 +295,7 @@
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">4000.000</td>
+<td align="right">3791.936</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
@@ -308,7 +308,7 @@
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">3258.245</td>
+<td align="right">3320.298</td>
 <td align="right">1.000</td>
 </tr>
 </tbody>
@@ -318,12 +318,13 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
 <pre><code>## Loading required package: StanHeaders</code></pre>
-<pre><code>## rstan (Version 2.17.3, GitRev: 2e1f913d3ca3)</code></pre>
+<pre><code>## rstan (Version 2.18.1, GitRev: 2e1f913d3ca3)</code></pre>
 <pre><code>## For execution on a local, multicore CPU with excess RAM we recommend calling
 ## options(mc.cores = parallel::detectCores()).
 ## To avoid recompilation of unchanged Stan programs, we recommend calling
 ## rstan_options(auto_write = TRUE)</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a></code></pre></div>
+<pre><code>## Warning: package 'dplyr' was built under R version 3.5.1</code></pre>
 <pre><code>## 
 ## Attaching package: 'dplyr'</code></pre>
 <pre><code>## The following objects are masked from 'package:stats':
@@ -332,22 +333,22 @@
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[3]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[3]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_density">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 3'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[3]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[3]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 3'</span>)</a></code></pre></div>
 <div class="figure">
 <img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-5-1.png" alt="Prob(Response | D) in subgroup 3" width="576"><p class="caption">
 Prob(Response | D) in subgroup 3
 </p>
 </div>
 <p>We see that the inferred efficacy in subgroup 3 is very high.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[4]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[4]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_density">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 4'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[4]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[4]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 4'</span>)</a></code></pre></div>
 <div class="figure">
 <img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-6-1.png" alt="Prob(Response | D) in subgroup 4" width="576"><p class="caption">
 Prob(Response | D) in subgroup 4
