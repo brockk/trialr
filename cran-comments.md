@@ -3,19 +3,30 @@
 
 ## Test environments
 * local Win install, R 3.5.1
+* local Max install, R 3.5.0
 
-## R CMD check results on travis-ci
-X errors | X warnings | X notes
+0 errors | 0 warnings | 2 notes
 
 ### NOTEs
 
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Kristian Brock <kristian.brock@gmail.com>’
+
+Hopefully this NOTE is safe to ignore.
+
 * checking installed package size ... NOTE
-  installed size is  7.7Mb
+  installed size is  8.1Mb
   sub-directories of 1Mb or more:
-    libs   6.6Mb
+    libs   6.5Mb
   
   The package contains compiled RStan models, hence the directory size.
   This note was also present in previous CRAN versions.
+
+Furthermore, I am aware of an issue with rstan 2.18 / C++14 (and thus, this package too) on Solaris.
+Corresponding with the rstan maintainer, I gather a solution has been proposed but perhaps not yet accepted.
+
+
+
 
 # Version 0.0.3
 
@@ -35,6 +46,9 @@ X errors | X warnings | X notes
   
   The package contains compiled RStan models, hence the directory size.
   This note was also present in previous CRAN versions.
+
+
+
 
 
 # Version 0.0.2
