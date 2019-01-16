@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.6</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Overview of trialr</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-11-12</h4>
+            <h4 class="date">2019-01-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/trialr-overview.Rmd"><code>vignettes/trialr-overview.Rmd</code></a></small>
       <div class="hidden name"><code>trialr-overview.Rmd</code></div>
@@ -120,45 +120,45 @@
 <h1 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h1>
 <p>In all examples, we will need to load <code>trialr</code></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(trialr)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(trialr)</a></code></pre></div>
 <div id="crm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#crm" class="anchor"></a>CRM</h2>
 <p>The Continual Reassessment Method (CRM) was first published by O’Quigley <em>et al.</em> (1990). It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. There are many variations to suit different clinical scenarios and the design has enjoyed <em>relatively</em> common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).</p>
 <p>We will demonstrate the method using a notional trial example. In a scenario of five potential doses, let us assume that we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">skeleton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
+<a class="sourceLine" id="cb2-2" title="2">skeleton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</a></code></pre></div>
 <p>Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, having only seen toxicity at dose-level 4. What dose should we give to the next patient or cohort? We can fit the data to the popular empiric model</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(<span class="dt">outcome_str =</span> <span class="st">'2NN 3NN 4TT'</span>, <span class="dt">skeleton =</span> skeleton, </a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">                 <span class="dt">target =</span> target, <span class="dt">model =</span> <span class="st">'empiric'</span>, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), </a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">                 <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(<span class="dt">outcome_str =</span> <span class="st">'2NN 3NN 4TT'</span>, <span class="dt">skeleton =</span> skeleton, </a>
+<a class="sourceLine" id="cb3-2" title="2">                 <span class="dt">target =</span> target, <span class="dt">model =</span> <span class="st">'empiric'</span>, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), </a>
+<a class="sourceLine" id="cb3-3" title="3">                 <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
 <p>The fitted model contains lots of useful of information:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod1</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; 1       1    2        0</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; 2       2    2        0</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; 3       3    3        0</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; 4       4    3        0</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 5       5    4        1</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 6       6    4        1</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;   DoseLevel Skeleton N Tox   ProbTox ProbMTD</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; 1         1     0.05 0   0 0.1081169 0.21400</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 2         2     0.15 2   0 0.2159618 0.27175</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; 3         3     0.25 2   0 0.3098591 0.26575</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 4         4     0.40 2   2 0.4444842 0.20900</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; 5         5     0.60 0   0 0.6235105 0.03950</span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 2.</span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">plot_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton),</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                     <span class="dt">ProbTox =</span> mod1<span class="op">$</span>prob_tox)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(plot_df, <span class="kw"><a href="ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbTox)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/lims.html">ylim</a></span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span>(<span class="dt">yintercept =</span> target, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior dose-toxicity curve under empiric CRM model'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">mod1</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt;   Patient Dose Toxicity</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; 1       1    2        0</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; 2       2    2        0</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; 3       3    3        0</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; 4       4    3        0</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; 5       5    4        1</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; 6       6    4        1</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt;   DoseLevel Skeleton N Tox   ProbTox ProbMTD</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt; 1         1     0.05 0   0 0.1081169 0.21400</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt; 2         2     0.15 2   0 0.2159618 0.27175</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; 3         3     0.25 2   0 0.3098591 0.26575</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; 4         4     0.40 2   2 0.4444842 0.20900</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt; 5         5     0.60 0   0 0.6235105 0.03950</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
+<a class="sourceLine" id="cb4-18" title="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 2.</span></a>
+<a class="sourceLine" id="cb4-19" title="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb5-2" title="2">plot_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton),</a>
+<a class="sourceLine" id="cb5-3" title="3">                     <span class="dt">ProbTox =</span> mod1<span class="op">$</span>prob_tox)</a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(plot_df, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbTox)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span>(<span class="dt">yintercept =</span> target, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior dose-toxicity curve under empiric CRM model'</span>)</a></code></pre></div>
 <p><img src="trialr-overview_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 <p>Several variants of the CRM <a href="https://brockk.github.io/trialr/articles/CRM.html">are implemented in ‘trialr’</a>. Further visualisation techniques are demonstrated in the <a href="https://brockk.github.io/trialr/articles/CRM-visualisation.html">Visualisation in CRM</a> vignette.</p>
 </div>
@@ -213,42 +213,42 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">outcomes &lt;-<span class="st"> '1NNE 2EEB'</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; trying deprecated constructor; please alert package maintainer</span></a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">mod</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Efficacy</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; 1       1    1        0        0</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 2       2    1        0        0</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 3       3    1        0        1</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; 4       4    2        0        1</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; 5       5    2        0        1</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; 6       6    2        1        1</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox    Utility</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 1         1 0.4045039 0.08990953    0.33175    0.92700 -0.3397885</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; 2         2 0.7917219 0.09875146    0.94575    0.92250  0.4237935</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; 3         3 0.9313427 0.21522248    0.98475    0.72900  0.5249445</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; 4         4 0.9572788 0.30606939    0.98475    0.62925  0.4380717</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; 5         5 0.9657038 0.36255571    0.98350    0.57725  0.3685257</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;   Acceptable</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt; 1       TRUE</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; 2       TRUE</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt; 3       TRUE</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; 4      FALSE</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; 5      FALSE</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; The model recommends selecting dose-level 3.</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">outcomes &lt;-<span class="st"> '1NNE 2EEB'</span></a>
+<a class="sourceLine" id="cb6-2" title="2">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; trying deprecated constructor; please alert package maintainer</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">mod</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt;   Patient Dose Toxicity Efficacy</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; 1       1    1        0        0</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; 2       2    1        0        0</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; 3       3    1        0        1</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; 4       4    2        0        1</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; 5       5    2        0        1</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; 6       6    2        1        1</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt;   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox    Utility</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; 1         1 0.4045039 0.08990953    0.33175    0.92700 -0.3397885</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; 2         2 0.7917219 0.09875146    0.94575    0.92250  0.4237935</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; 3         3 0.9313427 0.21522248    0.98475    0.72900  0.5249445</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; 4         4 0.9572788 0.30606939    0.98475    0.62925  0.4380717</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt; 5         5 0.9657038 0.36255571    0.98350    0.57725  0.3685257</span></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="co">#&gt;   Acceptable</span></a>
+<a class="sourceLine" id="cb7-17" title="17"><span class="co">#&gt; 1       TRUE</span></a>
+<a class="sourceLine" id="cb7-18" title="18"><span class="co">#&gt; 2       TRUE</span></a>
+<a class="sourceLine" id="cb7-19" title="19"><span class="co">#&gt; 3       TRUE</span></a>
+<a class="sourceLine" id="cb7-20" title="20"><span class="co">#&gt; 4      FALSE</span></a>
+<a class="sourceLine" id="cb7-21" title="21"><span class="co">#&gt; 5      FALSE</span></a>
+<a class="sourceLine" id="cb7-22" title="22"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-23" title="23"><span class="co">#&gt; The model recommends selecting dose-level 3.</span></a></code></pre></div>
 <p>In this instance, after evaluation of our six patients, the dose advocated for the next group is dose-level 3. This is contained in the fitted object:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">mod<span class="op">$</span>recommended_dose</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [1] 3</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">mod<span class="op">$</span>recommended_dose</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">#&gt; [1] 3</span></a></code></pre></div>
 <p>This is not surprising because dose 3 has the highest utility score:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">mod<span class="op">$</span>utility</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; [1] -0.3397885  0.4237935  0.5249445  0.4380717  0.3685257</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">mod<span class="op">$</span>utility</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="co">#&gt; [1] -0.3397885  0.4237935  0.5249445  0.4380717  0.3685257</span></a></code></pre></div>
 <p>Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. See the papers for details.</p>
 <p>Functions are provided to create useful plots. For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours. The five doses are shown in red. Doses closer to the lower-right corner have higher utility.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(mod<span class="op">$</span>dat, <span class="dt">prob_eff =</span> mod<span class="op">$</span>prob_eff, <span class="dt">prob_tox =</span> mod<span class="op">$</span>prob_tox)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="../reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(mod<span class="op">$</span>dat, <span class="dt">prob_eff =</span> mod<span class="op">$</span>prob_eff, <span class="dt">prob_tox =</span> mod<span class="op">$</span>prob_tox)</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</a></code></pre></div>
 <p><img src="trialr-overview_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <p>This example continues in the <a href="https://brockk.github.io/trialr/articles/EffTox.html">EffTox vignette</a>.</p>
 <p>There are many publications related to EffTox but the two most important are Thall &amp; Cook (2004) and Thall <em>et al.</em> (2014).</p>
@@ -258,42 +258,42 @@
 <a href="#hierachical-analysis-of-response-in-related-cohorts" class="anchor"></a>Hierachical analysis of response in related cohorts</h2>
 <p>Sticking with Peter Thall’s huge contribution to Bayesian clinical trials, Thall <em>et al.</em> (2003) described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.</p>
 <p>We demonstrate the method for partially-pooling response rates to a single drug in various subtypes of sarcoma. The following convenience function returns the necessary data:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thallhierarchicalbinary_parameters_demo.html">thallhierarchicalbinary_parameters_demo</a></span>()</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">dat</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; $m</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; [1] 10</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; $x</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;  [1] 0 0 1 3 5 0 1 2 0 0</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; $n</span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt;  [1] 0 2 1 7 5 0 2 3 1 0</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; $target_resp</span></a>
-<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; [1] 0.3</span></a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; $mu_mean</span></a>
-<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; [1] -1.3863</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; $mu_sd</span></a>
-<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; [1] 3.162278</span></a>
-<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt; $tau_alpha</span></a>
-<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt; [1] 2</span></a>
-<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; $tau_beta</span></a>
-<a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; [1] 20</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thallhierarchicalbinary_parameters_demo.html">thallhierarchicalbinary_parameters_demo</a></span>()</a>
+<a class="sourceLine" id="cb11-2" title="2">dat</a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt; $m</span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">#&gt; [1] 10</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; $x</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt;  [1] 0 0 1 3 5 0 1 2 0 0</span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co">#&gt; $n</span></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt;  [1] 0 2 1 7 5 0 2 3 1 0</span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt; $target_resp</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt; [1] 0.3</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">#&gt; $mu_mean</span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">#&gt; [1] -1.3863</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-18" title="18"><span class="co">#&gt; $mu_sd</span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="co">#&gt; [1] 3.162278</span></a>
+<a class="sourceLine" id="cb11-20" title="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="co">#&gt; $tau_alpha</span></a>
+<a class="sourceLine" id="cb11-22" title="22"><span class="co">#&gt; [1] 2</span></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-24" title="24"><span class="co">#&gt; $tau_beta</span></a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="co">#&gt; [1] 20</span></a></code></pre></div>
 <p>Fitting the data to the model:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">sampling</a></span>(stanmodels<span class="op">$</span>ThallHierarchicalBinary, <span class="dt">data =</span> dat, </a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">                        <span class="dt">seed =</span> <span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; trying deprecated constructor; please alert package maintainer</span></a></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">as.data.frame</span>(samp, <span class="st">'p'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(Cohort, ProbResponse) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> Cohort, <span class="dt">y =</span> ProbResponse, <span class="dt">group =</span> Cohort)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span>(<span class="dt">yintercept =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled analysis of response rate in 10 sarcoma subtypes'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">sampling</a></span>(stanmodels<span class="op">$</span>ThallHierarchicalBinary, <span class="dt">data =</span> dat, </a>
+<a class="sourceLine" id="cb12-2" title="2">                        <span class="dt">seed =</span> <span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; trying deprecated constructor; please alert package maintainer</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="kw">as.data.frame</span>(samp, <span class="st">'p'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(Cohort, ProbResponse) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> Cohort, <span class="dt">y =</span> ProbResponse, <span class="dt">group =</span> Cohort)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span>(<span class="dt">yintercept =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled analysis of response rate in 10 sarcoma subtypes'</span>)</a></code></pre></div>
 <p><img src="trialr-overview_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 <p>The hierarchical model for binary responses is developed in <a href="https://brockk.github.io/trialr/articles/HierarchicalBayesianResponse.html">its own vignette</a>.</p>
 </div>

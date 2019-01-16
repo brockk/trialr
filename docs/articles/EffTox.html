@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.5</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.6</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>EffTox in trialr</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2018-11-12</h4>
+            <h4 class="date">2019-01-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/EffTox.Rmd"><code>vignettes/EffTox.Rmd</code></a></small>
       <div class="hidden name"><code>EffTox.Rmd</code></div>
@@ -127,7 +127,7 @@
 <p><span class="math inline">\(u(\pi_E, \pi_T) = 1 - \left( \left(\frac{1-\pi_E}{1-\pi_{1,E}^*}\right)^p + \left(\frac{\pi_T}{\pi_{2,T}^*}\right)^p \right) ^ \frac{1}{p}\)</span></p>
 <p>where <span class="math inline">\(p\)</span> is calculated to intersect the points <span class="math inline">\((\pi_{1,E}^*, 0)\)</span>, <span class="math inline">\((1, \pi_{2,T}^*)\)</span> and <span class="math inline">\((\pi_{3,E}^*, \pi_{3,T}^*)\)</span> in the efficacy-toxicity plain. I refer to these as <em>hinge points</em> but that is not common nomenclature.</p>
 <p>At the dose selection decision, the dose-level from the acceptable set with maximal utility is selected to be given to the next patient or cohort. If there are no acceptable doses, the trial stops and no dose is recommended.</p>
-<p>There are several published EffTox examples, including explanations and tips on parameter choices <span class="citation">(Thall and Cook 2004, <span class="citation">@Thall2006</span>, <span class="citation">@Thall2014</span>)</span>.</p>
+<p>There are several published EffTox examples, including explanations and tips on parameter choices <span class="citation">(Thall and Cook 2004, @Thall2006, @Thall2014)</span>.</p>
 <p>The MD Anderson Cancer Center publishes software <span class="citation">(Herrick et al. 2015)</span> to perform calculations and simulations for EffTox trials. However, the software is available for Windows in compiled-form only. Thus, trialists cannot run the software on Mac or Linux unless using a virtual machine. Furthermore, trialists may not easily alter the behaviour of the model. <span class="citation">Brock et al. (2017)</span> describe a clinical trial scenario where some alteration of the default model behaviour would have been preferable. It was this that prompted the author to write the open-source implementation provided in ‘trialr’.</p>
 </div>
 <div id="efftox-in-trialr" class="section level1">
@@ -189,11 +189,11 @@
 </tbody>
 </table>
 <p>We fit Thall and Cook’s demonstration model to these outcomes, setting the random seed for reproducibility, using the call:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(trialr)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">outcomes &lt;-<span class="st"> '1NNE 2EEB'</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mod</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(trialr)</a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">outcomes &lt;-<span class="st"> '1NNE 2EEB'</span></a>
+<a class="sourceLine" id="cb1-4" title="4">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">mod</a></code></pre></div>
 <pre><code>##   Patient Dose Toxicity Efficacy
 ## 1       1    1        0        0
 ## 2       2    1        0        0
@@ -218,28 +218,28 @@
 ## The model recommends selecting dose-level 3.</code></pre>
 <p>We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities. We see that dose-levels 4 and 5 are unacceptable. This is because dose-level 3 has not yet been given. No doses are inferred to be too toxic or inefficacious yet.</p>
 <p>More generally, the function <code>stan_efftox</code> can be used to fit EffTox models. The above call is simply short-hand for:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox.html">stan_efftox</a></span>(outcomes,</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">                   <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">6.6</span>, <span class="fl">10.0</span>),</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                   <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>, <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">                   <span class="dt">p_e =</span> <span class="fl">0.1</span>, <span class="dt">p_t =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">                   <span class="dt">eff0 =</span> <span class="fl">0.5</span>, <span class="dt">tox1 =</span> <span class="fl">0.65</span>,</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">                   <span class="dt">eff_star =</span> <span class="fl">0.7</span>, <span class="dt">tox_star =</span> <span class="fl">0.25</span>,</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">                   <span class="dt">alpha_mean =</span> <span class="fl">-7.9593</span>, <span class="dt">alpha_sd =</span> <span class="fl">3.5487</span>,</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">                   <span class="dt">beta_mean =</span> <span class="fl">1.5482</span>, <span class="dt">beta_sd =</span> <span class="fl">3.5018</span>,</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">                   <span class="dt">gamma_mean =</span> <span class="fl">0.7367</span>, <span class="dt">gamma_sd =</span> <span class="fl">2.5423</span>,</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">                   <span class="dt">zeta_mean =</span> <span class="fl">3.4181</span>, <span class="dt">zeta_sd =</span> <span class="fl">2.4406</span>,</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">                   <span class="dt">eta_mean =</span> <span class="dv">0</span>, <span class="dt">eta_sd =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">                   <span class="dt">psi_mean =</span> <span class="dv">0</span>, <span class="dt">psi_sd =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">                   <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox.html">stan_efftox</a></span>(outcomes,</a>
+<a class="sourceLine" id="cb4-2" title="2">                   <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">6.6</span>, <span class="fl">10.0</span>),</a>
+<a class="sourceLine" id="cb4-3" title="3">                   <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>, <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,</a>
+<a class="sourceLine" id="cb4-4" title="4">                   <span class="dt">p_e =</span> <span class="fl">0.1</span>, <span class="dt">p_t =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb4-5" title="5">                   <span class="dt">eff0 =</span> <span class="fl">0.5</span>, <span class="dt">tox1 =</span> <span class="fl">0.65</span>,</a>
+<a class="sourceLine" id="cb4-6" title="6">                   <span class="dt">eff_star =</span> <span class="fl">0.7</span>, <span class="dt">tox_star =</span> <span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb4-7" title="7">                   <span class="dt">alpha_mean =</span> <span class="fl">-7.9593</span>, <span class="dt">alpha_sd =</span> <span class="fl">3.5487</span>,</a>
+<a class="sourceLine" id="cb4-8" title="8">                   <span class="dt">beta_mean =</span> <span class="fl">1.5482</span>, <span class="dt">beta_sd =</span> <span class="fl">3.5018</span>,</a>
+<a class="sourceLine" id="cb4-9" title="9">                   <span class="dt">gamma_mean =</span> <span class="fl">0.7367</span>, <span class="dt">gamma_sd =</span> <span class="fl">2.5423</span>,</a>
+<a class="sourceLine" id="cb4-10" title="10">                   <span class="dt">zeta_mean =</span> <span class="fl">3.4181</span>, <span class="dt">zeta_sd =</span> <span class="fl">2.4406</span>,</a>
+<a class="sourceLine" id="cb4-11" title="11">                   <span class="dt">eta_mean =</span> <span class="dv">0</span>, <span class="dt">eta_sd =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb4-12" title="12">                   <span class="dt">psi_mean =</span> <span class="dv">0</span>, <span class="dt">psi_sd =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb4-13" title="13">                   <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
 <pre><code>## trying deprecated constructor; please alert package maintainer</code></pre>
 <p>These are the parameters identified in <span class="citation">Thall et al. (2014)</span>. Refer to the published paper for information on the normal priors.</p>
 <p>The <code>mod</code> object contains</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">mod<span class="op">$</span>recommended_dose</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">mod<span class="op">$</span>recommended_dose</a></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>This confirms that dose-level 3 is acceptable dose with maximal utility.</p>
 <p>We can produce contour plots.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(mod<span class="op">$</span>dat, <span class="dt">prob_eff =</span> mod<span class="op">$</span>prob_eff, <span class="dt">prob_tox =</span> mod<span class="op">$</span>prob_tox)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="../reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(mod<span class="op">$</span>dat, <span class="dt">prob_eff =</span> mod<span class="op">$</span>prob_eff, <span class="dt">prob_tox =</span> mod<span class="op">$</span>prob_tox)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</a></code></pre></div>
 <div class="figure">
 <img src="EffTox_files/figure-html/unnamed-chunk-5-1.png" alt="Utility contours after observing outcomes 1NEN 2NBE." width="576"><p class="caption">
 Utility contours after observing outcomes 1NEN 2NBE.
@@ -247,15 +247,15 @@ Utility contours after observing outcomes 1NEN 2NBE.
 </div>
 <p>The blue stars show the location of the hinge points on the neutral-uility (u=0) contour. The red numbers show the posterior means of the five dose-levels. Doses that are closer to the lower-right corner have higher utility. We see that dose-level 3 has the highest utility.</p>
 <p>We can also produce posterior density plots of the dose utilities. For illustration, we will just plot the densities of the three acceptable doses. The package <code>ggplot2</code> is required.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_utility_density_plot.html">efftox_utility_density_plot</a></span>(mod<span class="op">$</span>fit, <span class="dt">doses =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/efftox_utility_density_plot.html">efftox_utility_density_plot</a></span>(mod<span class="op">$</span>fit, <span class="dt">doses =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
 <div class="figure">
 <img src="EffTox_files/figure-html/unnamed-chunk-6-1.png" alt="Utility densities after observing outcomes 1NEN 2NBE." width="576"><p class="caption">
 Utility densities after observing outcomes 1NEN 2NBE.
 </p>
 </div>
 <p>To further facilitate the analysis of dose utility, we provide means of calculating the dose superiority matrix.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="../reference/efftox_superiority.html">efftox_superiority</a></span>(mod<span class="op">$</span>fit), <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">row.names =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="../reference/efftox_superiority.html">efftox_superiority</a></span>(mod<span class="op">$</span>fit), <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">row.names =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -318,45 +318,45 @@ Utility densities after observing outcomes 1NEN 2NBE.
 <p>The preferable dose is calculated after the evaluation of each cohort and the following cohort is treated at the dose recommended. We provide the desired cohort sizes as a vector of integers via the <code>cohort_sizes</code> parameter. In the Thall example, they treat a maximum of 39 patients in thirteen cohorts of 3, thus we use <code>cohort_sizes = rep(3, 13)</code>.</p>
 <p>In the <code>trialr</code> EffTox implementation, the cohort sizes need not be constant. We can specify different cohort sizes, an option not possible in the official EffTox software. For instance, the investigators might want to re-evaluate the ideal dose after every patient in the early trial stages, where information is scarce. However, once a certain number of patient outcomes have been observed, they might prefer to revert to cohorts of three to avoid unnecessarily frequent analyses. To analyse the dose after each patient for the first 9 patients, followed by ten cohorts of three, we could use <code>cohort_sizes = c(rep, 1, 9), rep(3, 10))</code>.</p>
 <p>Once again, we need a list of data to pass to the RStan sampler.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw"><a href="../reference/efftox_solve_p.html">efftox_solve_p</a></span>(<span class="dt">eff0 =</span> <span class="fl">0.5</span>, <span class="dt">tox1 =</span> <span class="fl">0.65</span>, <span class="dt">eff_star =</span> <span class="fl">0.7</span>, <span class="dt">tox_star =</span> <span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">dat &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="dt">num_doses =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">  <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="fl">6.6</span>, <span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>,</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">  <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">  <span class="dt">p_e =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">  <span class="dt">p_t =</span> <span class="fl">0.1</span>,</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">  <span class="dt">p =</span> p,</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">  <span class="dt">eff0 =</span> <span class="fl">0.5</span>,</a>
-<a class="sourceLine" id="cb11-11" data-line-number="11">  <span class="dt">tox1 =</span> <span class="fl">0.65</span>,</a>
-<a class="sourceLine" id="cb11-12" data-line-number="12">  <span class="dt">eff_star =</span> <span class="fl">0.7</span>,</a>
-<a class="sourceLine" id="cb11-13" data-line-number="13">  <span class="dt">tox_star =</span> <span class="fl">0.25</span>,</a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15">  <span class="dt">alpha_mean =</span> <span class="fl">-7.9593</span>, <span class="dt">alpha_sd =</span> <span class="fl">3.5487</span>,</a>
-<a class="sourceLine" id="cb11-16" data-line-number="16">  <span class="dt">beta_mean =</span> <span class="fl">1.5482</span>, <span class="dt">beta_sd =</span> <span class="fl">3.5018</span>,</a>
-<a class="sourceLine" id="cb11-17" data-line-number="17">  <span class="dt">gamma_mean =</span> <span class="fl">0.7367</span>, <span class="dt">gamma_sd =</span> <span class="fl">2.5423</span>,</a>
-<a class="sourceLine" id="cb11-18" data-line-number="18">  <span class="dt">zeta_mean =</span> <span class="fl">3.4181</span>, <span class="dt">zeta_sd =</span> <span class="fl">2.4406</span>,</a>
-<a class="sourceLine" id="cb11-19" data-line-number="19">  <span class="dt">eta_mean =</span> <span class="dv">0</span>, <span class="dt">eta_sd =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb11-20" data-line-number="20">  <span class="dt">psi_mean =</span> <span class="dv">0</span>, <span class="dt">psi_sd =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb11-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb11-22" data-line-number="22">  <span class="dt">doses =</span> <span class="kw">c</span>(),</a>
-<a class="sourceLine" id="cb11-23" data-line-number="23">  <span class="dt">tox   =</span> <span class="kw">c</span>(),</a>
-<a class="sourceLine" id="cb11-24" data-line-number="24">  <span class="dt">eff   =</span> <span class="kw">c</span>(),</a>
-<a class="sourceLine" id="cb11-25" data-line-number="25">  <span class="dt">num_patients =</span> <span class="dv">0</span></a>
-<a class="sourceLine" id="cb11-26" data-line-number="26">)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">p &lt;-<span class="st"> </span><span class="kw"><a href="../reference/efftox_solve_p.html">efftox_solve_p</a></span>(<span class="dt">eff0 =</span> <span class="fl">0.5</span>, <span class="dt">tox1 =</span> <span class="fl">0.65</span>, <span class="dt">eff_star =</span> <span class="fl">0.7</span>, <span class="dt">tox_star =</span> <span class="fl">0.25</span>)</a>
+<a class="sourceLine" id="cb11-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb11-3" title="3">  <span class="dt">num_doses =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb11-4" title="4">  <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="fl">6.6</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb11-5" title="5">  <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb11-6" title="6">  <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,</a>
+<a class="sourceLine" id="cb11-7" title="7">  <span class="dt">p_e =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb11-8" title="8">  <span class="dt">p_t =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb11-9" title="9">  <span class="dt">p =</span> p,</a>
+<a class="sourceLine" id="cb11-10" title="10">  <span class="dt">eff0 =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb11-11" title="11">  <span class="dt">tox1 =</span> <span class="fl">0.65</span>,</a>
+<a class="sourceLine" id="cb11-12" title="12">  <span class="dt">eff_star =</span> <span class="fl">0.7</span>,</a>
+<a class="sourceLine" id="cb11-13" title="13">  <span class="dt">tox_star =</span> <span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb11-14" title="14"></a>
+<a class="sourceLine" id="cb11-15" title="15">  <span class="dt">alpha_mean =</span> <span class="fl">-7.9593</span>, <span class="dt">alpha_sd =</span> <span class="fl">3.5487</span>,</a>
+<a class="sourceLine" id="cb11-16" title="16">  <span class="dt">beta_mean =</span> <span class="fl">1.5482</span>, <span class="dt">beta_sd =</span> <span class="fl">3.5018</span>,</a>
+<a class="sourceLine" id="cb11-17" title="17">  <span class="dt">gamma_mean =</span> <span class="fl">0.7367</span>, <span class="dt">gamma_sd =</span> <span class="fl">2.5423</span>,</a>
+<a class="sourceLine" id="cb11-18" title="18">  <span class="dt">zeta_mean =</span> <span class="fl">3.4181</span>, <span class="dt">zeta_sd =</span> <span class="fl">2.4406</span>,</a>
+<a class="sourceLine" id="cb11-19" title="19">  <span class="dt">eta_mean =</span> <span class="dv">0</span>, <span class="dt">eta_sd =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb11-20" title="20">  <span class="dt">psi_mean =</span> <span class="dv">0</span>, <span class="dt">psi_sd =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb11-21" title="21"></a>
+<a class="sourceLine" id="cb11-22" title="22">  <span class="dt">doses =</span> <span class="kw">c</span>(),</a>
+<a class="sourceLine" id="cb11-23" title="23">  <span class="dt">tox   =</span> <span class="kw">c</span>(),</a>
+<a class="sourceLine" id="cb11-24" title="24">  <span class="dt">eff   =</span> <span class="kw">c</span>(),</a>
+<a class="sourceLine" id="cb11-25" title="25">  <span class="dt">num_patients =</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb11-26" title="26">)</a></code></pre></div>
 <p>The elements in <code>dat</code> reflect the point from which each simulated trial iteration will commence. Note that <code>num_patients</code>, <code>doses</code>, <code>tox</code> and <code>eff</code> convey that no patients have yet been observed. This is not a constraint. Unlike the official EffTox software, users may simulate the commencement of a partially-observed EffTox trial by tailoring these four items. To simulate trials starting from a blank canvas, these four elemnts should be set as shown above.</p>
 <p>The following code will run a simulation.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">sims =<span class="st"> </span><span class="kw"><a href="../reference/efftox_simulate.html">efftox_simulate</a></span>(dat, <span class="dt">num_sims =</span> <span class="dv">100</span>, <span class="dt">first_dose =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">                       <span class="dt">true_eff =</span> <span class="kw">c</span>(<span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span>, <span class="fl">0.90</span>),</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">                       <span class="dt">true_tox =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>, <span class="fl">0.20</span>, <span class="fl">0.40</span>),</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">                       <span class="dt">cohort_sizes =</span> <span class="kw">rep</span>(<span class="dv">3</span>, <span class="dv">13</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2">sims =<span class="st"> </span><span class="kw"><a href="../reference/efftox_simulate.html">efftox_simulate</a></span>(dat, <span class="dt">num_sims =</span> <span class="dv">100</span>, <span class="dt">first_dose =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb12-3" title="3">                       <span class="dt">true_eff =</span> <span class="kw">c</span>(<span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span>, <span class="fl">0.90</span>),</a>
+<a class="sourceLine" id="cb12-4" title="4">                       <span class="dt">true_tox =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>, <span class="fl">0.20</span>, <span class="fl">0.40</span>),</a>
+<a class="sourceLine" id="cb12-5" title="5">                       <span class="dt">cohort_sizes =</span> <span class="kw">rep</span>(<span class="dv">3</span>, <span class="dv">13</span>))</a></code></pre></div>
 <p>The doses recommended at the end of each simulated trial are recorded in the <code>recommended_dose</code> slot of the <code>sims</code> object. For instance, infer from the simulated trials the probability that each dose will be recommended using</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">table</span>(sims<span class="op">$</span>recommended_dose) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(sims<span class="op">$</span>recommended_dose)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">table</span>(sims<span class="op">$</span>recommended_dose) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(sims<span class="op">$</span>recommended_dose)</a></code></pre></div>
 <p>Similarly, you can calculate the probability of each dose being given to a random patient using</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">table</span>(<span class="kw">unlist</span>(sims<span class="op">$</span>doses_given)) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(<span class="kw">unlist</span>(sims<span class="op">$</span>doses_given))</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">table</span>(<span class="kw">unlist</span>(sims<span class="op">$</span>doses_given)) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(<span class="kw">unlist</span>(sims<span class="op">$</span>doses_given))</a></code></pre></div>
 <p>and the mean number of patients being treated at each dose-level in each simulation</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">table</span>(<span class="kw">unlist</span>(sims<span class="op">$</span>doses_given)) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(sims<span class="op">$</span>recommended_dose)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">table</span>(<span class="kw">unlist</span>(sims<span class="op">$</span>doses_given)) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(sims<span class="op">$</span>recommended_dose)</a></code></pre></div>
 <div id="simulation-speed" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulation-speed" class="anchor"></a>Simulation speed</h2>
@@ -375,25 +375,25 @@ Utility densities after observing outcomes 1NEN 2NBE.
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Brock2017a">
-<p>Brock, Kristian, Lucinda Billingham, Mhairi Copland, Shamyla Siddique, Mirjana Sirovica, and Christina Yap. 2017. “Implementing the EffTox dose-finding design in the Matchpoint trial.” <em>BMC Medical Research Methodology</em> 17 (1). BMC Medical Research Methodology: 112. <a href="https://doi.org/10.1186/s12874-017-0381-x" class="uri">https://doi.org/10.1186/s12874-017-0381-x</a>.</p>
+<p>Brock, Kristian, Lucinda Billingham, Mhairi Copland, Shamyla Siddique, Mirjana Sirovica, and Christina Yap. 2017. “Implementing the EffTox dose-finding design in the Matchpoint trial.” <em>BMC Medical Research Methodology</em> 17 (1): 112. <a href="https://doi.org/10.1186/s12874-017-0381-x">https://doi.org/10.1186/s12874-017-0381-x</a>.</p>
 </div>
 <div id="ref-EffTox">
-<p>Herrick, R, C Norris, JD Cook, and J Venier. 2015. “EffTox.” MD Anderson Cancer Center. <a href="https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software%7B%5C_%7DId=2" class="uri">https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2</a>.</p>
+<p>Herrick, R, C Norris, JD Cook, and J Venier. 2015. “EffTox.” MD Anderson Cancer Center. <a href="https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software%7B%5C_%7DId=2">https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software{\_}Id=2</a>.</p>
 </div>
 <div id="ref-Monahan1997">
-<p>Monahan, John, and Alan Genz. 1997. “Spherical-Radial Integration Rules for Bayesian Computation.” <em>Journal of the American Statistical Association</em> 92 (438): 664–74. <a href="https://www.jstor.org/stable/2965714" class="uri">https://www.jstor.org/stable/2965714</a>.</p>
+<p>Monahan, John, and Alan Genz. 1997. “Spherical-Radial Integration Rules for Bayesian Computation.” <em>Journal of the American Statistical Association</em> 92 (438): 664–74. <a href="https://www.jstor.org/stable/2965714">https://www.jstor.org/stable/2965714</a>.</p>
 </div>
 <div id="ref-OQuigley1990">
-<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628" class="uri">https://doi.org/10.2307/2531628</a>.</p>
+<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
 </div>
 <div id="ref-Thall2004">
 <p>Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” <em>Biometrics</em> 60 (3): 684–93.</p>
 </div>
 <div id="ref-Thall2006">
-<p>Thall, PF, JD Cook, and EH Estey. 2006. “Adaptive dose selection using efficacy-toxicity trade-offs: illustrations and practical considerations.” <em>Journal of Biopharmaceutical Statistics</em> 16 (5): 623–38. <a href="https://doi.org/10.1080/10543400600860394" class="uri">https://doi.org/10.1080/10543400600860394</a>.</p>
+<p>Thall, PF, JD Cook, and EH Estey. 2006. “Adaptive dose selection using efficacy-toxicity trade-offs: illustrations and practical considerations.” <em>Journal of Biopharmaceutical Statistics</em> 16 (5): 623–38. <a href="https://doi.org/10.1080/10543400600860394">https://doi.org/10.1080/10543400600860394</a>.</p>
 </div>
 <div id="ref-Thall2014">
-<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” <em>Clinical Trials</em> 11 (6): 657–66. <a href="https://doi.org/10.1177/1740774514547397" class="uri">https://doi.org/10.1177/1740774514547397</a>.</p>
+<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” <em>Clinical Trials</em> 11 (6): 657–66. <a href="https://doi.org/10.1177/1740774514547397">https://doi.org/10.1177/1740774514547397</a>.</p>
 </div>
 </div>
 </div>
