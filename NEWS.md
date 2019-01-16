@@ -1,11 +1,18 @@
 
+# trialr 0.0.6
+
+Fixing some duplicated vignette titles
+
+
 # trialr 0.0.5
 
 Adding changes advised by rstan maintainer so that package may build on Solaris.
 
+
 # trialr 0.0.4
 
 Updated to use rstan 2.18.1, which in-turn has been updated to use C++14.
+
 
 # trialr 0.0.3
 
