@@ -25,7 +25,6 @@ Found the following (possibly) invalid URLs:
 
 Both of these URLs are valid. 
 
-
 * checking installed package size ... NOTE
   installed size is  8.1Mb
   sub-directories of 1Mb or more:
