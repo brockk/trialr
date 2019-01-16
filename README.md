@@ -6,7 +6,8 @@ trialr - Clinical Trial Designs in `RStan`
 # trialr
 
 `trialr` is a collection of Bayesian clinical trial designs implemented
-in Stan and R.
+in Stan and R. The documentation is available at
+<https://brockk.github.io/trialr/>
 
 Many notable Bayesian designs for clinical trials have been published.
 However, one of the factors that has constrained their adoption is
