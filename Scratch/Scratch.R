@@ -26,10 +26,12 @@ plot(samp, pars = 'pg')
 # Posterior Prob(Response)...
 # In group 4
 ggplot(data.frame(ProbResponse = extract(samp, 'p[4]')[[1]]),
-       aes(x = ProbResponse)) + geom_density() + ggtitle('Prob(Response) in Sub-group 4')
+       aes(x = ProbResponse)) + geom_density() +
+  ggtitle('Prob(Response) in Sub-group 4')
 
 ggplot(data.frame(ProbResponse = extract(samp, 'p[3]')[[1]]),
-       aes(x = ProbResponse)) + geom_density() + ggtitle('Prob(Response) in Sub-group 3')
+       aes(x = ProbResponse)) + geom_density() +
+  ggtitle('Prob(Response) in Sub-group 3')
 
 
 # BEBOP in PePS2 ------
@@ -76,7 +78,6 @@ mod1 <- stan_crm(outcome_str = '1NNN 2NTN 2NNN 3TTN', skeleton = skeleton,
                  target = target, model = 'empiric', beta_sd = sqrt(1.34))
 class(mod1)
 mod1
-print(mod1)
 head(as.data.frame(mod1, 'prob_tox'))
 summary(mod1)
 summary(mod1, 'prob_tox')
@@ -126,7 +127,7 @@ sessionInfo()
 
 
 # README & Vignettes  -------
-devtools::use_readme_rmd()
+# devtools::use_readme_rmd()
 # devtools::use_vignette("trialr-overview")
 # devtools::use_vignette("EffTox")
 # devtools::use_vignette("BEBOP")
@@ -134,11 +135,11 @@ devtools::use_readme_rmd()
 # devtools::use_vignette("CRM")
 # devtools::use_vignette("CRM-visualisation")
 # devtools::use_vignette("CRM-model-choice")
-devtools::use_build_ignore(c("Scratch", "exec_dev"))
+# devtools::use_build_ignore(c("Scratch", "exec_dev"))
 
 
 # Documentation
-devtools::use_readme_rmd()
+# devtools::use_readme_rmd()
 
 
 
