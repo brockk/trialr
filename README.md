@@ -7,7 +7,7 @@ trialr - Clinical Trial Designs in `RStan`
 
 [![cran
 version](httpa://www.r-pkg.org/badges/version/trialr)](https://cran.r-project.org/web/packages/trialr)
-[![downloads](https://cranlogs.r-pkg.org/badges/trialr)](https://cranlogs.r-pkg.org/badges/trialr)
+[![downloads](http://cranlogs.r-pkg.org/badges/trialr)](https://cranlogs.r-pkg.org/badges/trialr)
 [![total downloads](https://cranlogs.r-pkg.org/badges/grand-total/trialr)](https://cranlogs.r-pkg.org/badges/grand-total/trialr)
 
 `trialr` is a collection of Bayesian clinical trial designs implemented
