@@ -1,4 +1,43 @@
 
+# Version 0.0.7
+
+## Test environments
+* local Win install, R 3.5.1
+* local Mac install, R 3.5.2
+
+0 errors | 0 warnings | 3 notes
+
+## NOTEs
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Kristian Brock <kristian.brock@gmail.com>’
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/CRM.html
+          inst/doc/EffTox.html
+    Status: 403
+    Message: Forbidden
+  URL: https://www.jstor.org/stable/2965714
+    From: inst/doc/EffTox.html
+    Status: 403
+    Message: Forbidden
+
+Both of these URLs are valid. 
+
+* checking installed package size ... NOTE
+  installed size is  7.9Mb
+  sub-directories of 1Mb or more:
+    libs   6.5Mb
+  
+  The package contains compiled RStan models, hence the directory size.
+  This note was also present in previous CRAN versions.
+
+* checking for GNU extensions in Makefiles ... NOTE
+GNU make is a SystemRequirements.
+
+This is true. 
+
 # Version 0.0.6
 
 ## Test environments

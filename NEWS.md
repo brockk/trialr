@@ -1,4 +1,9 @@
 
+# trialr 0.0.7
+
+Making package work with staged installaton, with help from Tomas Kalibera.
+
+
 # trialr 0.0.6
 
 Fixing some duplicated vignette titles
