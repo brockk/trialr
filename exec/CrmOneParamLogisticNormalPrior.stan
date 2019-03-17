@@ -26,7 +26,7 @@ functions {
       real p_j;
       prob_tox = inv_logit(a0 + exp(beta) * codified_doses[doses[j]]);
       p_j = prob_tox^tox[j] * (1 - prob_tox)^(1 - tox[j]);
-      p = p + log(p_j);
+      p += log(p_j);
     }
     return p;
   }

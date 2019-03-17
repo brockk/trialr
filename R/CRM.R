@@ -380,12 +380,17 @@ crm_process <- function(dat, fit) {
 #' @S3method print crm_fit
 print.crm_fit <- function(x, ...) {
   # Patient-level data
-  treated <- data.frame(
-    Patient = 1:length(x$dat$doses),
-    Dose = x$dat$doses,
-    Toxicity = x$dat$tox
-  )
-  print(treated)
+  if(x$dat$num_patients > 0) {
+    treated <- data.frame(
+      Patient = 1:length(x$dat$doses),
+      Dose = x$dat$doses,
+      Toxicity = x$dat$tox
+    )
+    print(treated)
+
+  } else {
+    cat('No patients have been treated.')
+  }
   cat('\n')
 
   # Dose-level data

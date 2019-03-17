@@ -20,7 +20,7 @@ functions {
         (1. - prob2)^(1. - tox[j]) +
         (-1.)^(eff[j] +tox[j]) * prob1 * prob2 * (1. - prob1) * (1. - prob2) *
         (exp(psi) - 1.) / (exp(psi) + 1.);
-      p = p + log(p_delta);
+      p += log(p_delta);
     }
     return p;
   }

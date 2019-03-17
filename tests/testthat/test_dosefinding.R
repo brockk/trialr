@@ -1,8 +1,185 @@
-# Test df_parse_outcomes.
-# This function gets its own test script to keep things tidy.
 
-# Test some cases that should work ----
-# Regular case
+# Test parse_dose_finding_outcomes ----
+# Test some cases that should work
+
+# The empty string should not in fail
+test_that('Dose-finding outcomes "" parses correctly', {
+  x <- parse_dose_finding_outcomes('')
+
+  expect_true(is.list(x))
+  expect_equal(length(x), 0)
+})
+
+# A regular looking example
+test_that('Dose-finding outcomes "1NNN 3NTT" parse correctly', {
+  x <- parse_dose_finding_outcomes('1NNN 3NTT')
+
+  expect_true(is.list(x))
+  expect_equal(length(x), 2)
+
+  expect_equal(x[[1]]$dose, 1)
+  expect_equal(x[[1]]$outcomes, 'NNN')
+  expect_equal(x[[2]]$dose, 3)
+  expect_equal(x[[2]]$outcomes, 'NTT')
+})
+
+# An example with no spaces; I do not recommend this because it is hard to
+# read but it should work, nevertheless.
+test_that('Dose-finding outcomes "1N2T2N3T2N" parse correctly', {
+  x <- parse_dose_finding_outcomes('1N2T2N3T2N')
+
+  expect_true(is.list(x))
+  expect_equal(length(x), 5)
+
+  expect_equal(x[[1]]$dose, 1)
+  expect_equal(x[[1]]$outcomes, 'N')
+  expect_equal(x[[2]]$dose, 2)
+  expect_equal(x[[2]]$outcomes, 'T')
+  expect_equal(x[[3]]$dose, 2)
+  expect_equal(x[[3]]$outcomes, 'N')
+  expect_equal(x[[4]]$dose, 3)
+  expect_equal(x[[4]]$outcomes, 'T')
+  expect_equal(x[[5]]$dose, 2)
+  expect_equal(x[[5]]$outcomes, 'N')
+})
+
+# n=1 example
+test_that('Dose-finding outcomes "5T" parse correctly', {
+  x <- parse_dose_finding_outcomes('5T')
+
+  expect_true(is.list(x))
+  expect_equal(length(x), 1)
+
+  expect_equal(x[[1]]$dose, 5)
+  expect_equal(x[[1]]$outcomes, 'T')
+})
+
+# Irregular cohorts
+test_that('Dose-finding outcomes "1NTT 2T 2NTNNTN 3N" parse correctly', {
+  x <- parse_dose_finding_outcomes('1NTT 2T 2NTNNTN 3N')
+
+  expect_true(is.list(x))
+  expect_equal(length(x), 4)
+
+  expect_equal(x[[1]]$dose, 1)
+  expect_equal(x[[1]]$outcomes, 'NTT')
+  expect_equal(x[[2]]$dose, 2)
+  expect_equal(x[[2]]$outcomes, 'T')
+  expect_equal(x[[3]]$dose, 2)
+  expect_equal(x[[3]]$outcomes, 'NTNNTN')
+  expect_equal(x[[4]]$dose, 3)
+  expect_equal(x[[4]]$outcomes, 'N')
+})
+
+# Silly but valid dose-levels
+test_that('Dose-finding outcomes "96NTT 40T 1NTNNTN 174N" parse correctly', {
+  x <- parse_dose_finding_outcomes('96NTT 40T 1NTNNTN 174N')
+
+  expect_true(is.list(x))
+  expect_equal(length(x), 4)
+
+  expect_equal(x[[1]]$dose, 96)
+  expect_equal(x[[1]]$outcomes, 'NTT')
+  expect_equal(x[[2]]$dose, 40)
+  expect_equal(x[[2]]$outcomes, 'T')
+  expect_equal(x[[3]]$dose, 1)
+  expect_equal(x[[3]]$outcomes, 'NTNNTN')
+  expect_equal(x[[4]]$dose, 174)
+  expect_equal(x[[4]]$outcomes, 'N')
+})
+
+# Leading white-space
+test_that('Dose-finding outcomes " \t1NTT 2T 2NTNNTN 2N" parse correctly', {
+  x <- parse_dose_finding_outcomes(' \t1NTT 2T 2NTNNTN 2N')
+  expect_true(is.list(x))
+  expect_equal(length(x), 4)
+
+  expect_equal(x[[1]]$dose, 1)
+  expect_equal(x[[1]]$outcomes, 'NTT')
+  expect_equal(x[[2]]$dose, 2)
+  expect_equal(x[[2]]$outcomes, 'T')
+  expect_equal(x[[3]]$dose, 2)
+  expect_equal(x[[3]]$outcomes, 'NTNNTN')
+  expect_equal(x[[4]]$dose, 2)
+  expect_equal(x[[4]]$outcomes, 'N')
+})
+
+# Trailing white-space
+test_that('Dose-finding outcomes "1NTT 2T 2NTNNTN 2N \t" parse correctly', {
+  x <- parse_dose_finding_outcomes('1NTT 2T 2NTNNTN 2N \t')
+  expect_true(is.list(x))
+  expect_equal(length(x), 4)
+
+  expect_equal(x[[1]]$dose, 1)
+  expect_equal(x[[1]]$outcomes, 'NTT')
+  expect_equal(x[[2]]$dose, 2)
+  expect_equal(x[[2]]$outcomes, 'T')
+  expect_equal(x[[3]]$dose, 2)
+  expect_equal(x[[3]]$outcomes, 'NTNNTN')
+  expect_equal(x[[4]]$dose, 2)
+  expect_equal(x[[4]]$outcomes, 'N')
+})
+
+
+# Test some cases that should not work ----
+# A string that is not welcome here
+test_that('Dose-finding outcomes "12NTT Nigel Farage" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('12NTT Nigel Farage'))
+})
+
+# Decimal dose-levels
+test_that('Dose-finding outcomes " 1NTT 2.0T 2NTNNTN 2N" fail to parse', {
+  expect_error(parse_dose_finding_outcomes(' 1NTT 2.0T 2NTNNTN 2N'))
+})
+
+test_that('Dose-finding outcomes ".1NTT 2T 2NTNNTN 2N" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('.1NTT 2T 2NTNNTN 2N'))
+})
+
+# Negative dose-levels
+test_that('Dose-finding outcomes "12NTT 2T 2NTNNTN -1N" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('12NTT 2T 2NTNNTN -1N'))
+})
+
+test_that('Dose-finding outcomes "-12NTT 2T 2NTNNTN 1N" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('-12NTT 2T 2NTNNTN 1N'))
+})
+
+test_that('Dose-finding outcomes "12NTT 2T -2NTNNTN 1N" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('12NTT 2T -2NTNNTN 1N'))
+})
+
+# Zero dose-level
+test_that('Dose-finding outcomes "1T 0NN" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('1T 0NN'))
+})
+
+test_that('Dose-finding outcomes "0NNTTNNTT" fail to parse', {
+  expect_error(parse_dose_finding_outcomes('0NNTTNNTT'))
+})
+
+# Nothing but white-space
+test_that('Dose-finding outcomes " " fail to parse', {
+  expect_error(parse_dose_finding_outcomes(' '))
+})
+
+# Looks plausible
+test_that('Dose-finding outcomes "1NT TNT" fail to parse', {
+  expect_error(df_parse_outcomes('1NT TNT', as.list = FALSE))
+})
+
+test_that('Dose-finding outcomes "1NT T3NT" fail to parse', {
+  expect_error(df_parse_outcomes('1NT T3NT', as.list = FALSE))
+})
+
+test_that('Dose-finding outcomes "1NT 3TNT 4" fail to parse', {
+  expect_error(df_parse_outcomes('1NT 3TNT 4', as.list = FALSE))
+})
+
+
+# Test df_parse_outcomes ----
+
+# Test some cases that should work
 test_that('Dose-finding outcomes "1NNN 3NTT" parse correctly', {
   x <- df_parse_outcomes('1NNN 3NTT', as.list = FALSE)
   expect_true(is.data.frame(x))
@@ -167,13 +344,13 @@ test_that('Dose-finding outcomes " " fail to parse to list', {
 })
 
 # Nothing
-test_that('Dose-finding outcomes "" fail to parse', {
-  expect_error(df_parse_outcomes('', as.list = FALSE))
-})
-
-test_that('Dose-finding outcomes "" fail to parse to list', {
-  expect_error(df_parse_outcomes('', as.list = TRUE))
-})
+# test_that('Dose-finding outcomes "" fail to parse', {
+#   expect_error(df_parse_outcomes('', as.list = FALSE))
+# })
+#
+# test_that('Dose-finding outcomes "" fail to parse to list', {
+#   expect_error(df_parse_outcomes('', as.list = TRUE))
+# })
 
 # Looks plausible
 test_that('Dose-finding outcomes "1NT TNT" fail to parse', {

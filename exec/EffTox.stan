@@ -18,7 +18,7 @@ functions {
               (1. - prob_tox)^(1. - tox[j]) + (-1.)^(eff[j] + tox[j]) * prob_eff *
               prob_tox * (1. - prob_eff) * (1. - prob_tox) *
               (exp(psi) - 1.) / (exp(psi) + 1.);
-      p = p + log(p_j);
+      p += log(p_j);
     }
     return p;
   }
