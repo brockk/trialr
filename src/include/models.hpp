@@ -81,7 +81,7 @@ log_joint_pdf(const int& J,
             stan::math::assign(prob1, inv_logit((((alpha + (beta * get_base1(x1,j,"x1",1))) + (gamma * get_base1(x2,j,"x2",1))) + (zeta * get_base1(x3,j,"x3",1)))));
             stan::math::assign(prob2, inv_logit(lambda));
             stan::math::assign(p_delta, ((((pow(prob1,get_base1(eff,j,"eff",1)) * pow((1.0 - prob1),(1.0 - get_base1(eff,j,"eff",1)))) * pow(prob2,get_base1(tox,j,"tox",1))) * pow((1.0 - prob2),(1.0 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1.0),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob1) * prob2) * (1.0 - prob1)) * (1.0 - prob2)) * (stan::math::exp(psi) - 1.0)) / (stan::math::exp(psi) + 1.0))));
-            stan::math::assign(p, stan::model::deep_copy((p + stan::math::log(p_delta))));
+            stan::math::assign(p, (p + stan::math::log(p_delta)));
             }
         }
         return stan::math::promote_scalar<fun_return_scalar_t__>(p);
@@ -922,18 +922,19 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_CrmEmpiricNormalPrior");
-    reader.add_event(82, 80, "end", "model_CrmEmpiricNormalPrior");
+    reader.add_event(90, 88, "end", "model_CrmEmpiricNormalPrior");
     return reader;
 }
 
-template <typename T3__, typename T4__>
-typename boost::math::tools::promote_args<T3__, T4__>::type
+template <typename T3__, typename T4__, typename T5__>
+typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
 log_joint_pdf(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& skeleton,
-                  const T4__& beta, std::ostream* pstream__) {
-    typedef typename boost::math::tools::promote_args<T3__, T4__>::type local_scalar_t__;
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& skeleton,
+                  const T5__& beta, std::ostream* pstream__) {
+    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__>::type local_scalar_t__;
     typedef local_scalar_t__ fun_return_scalar_t__;
     const static bool propto__ = true;
     (void) propto__;
@@ -966,8 +967,8 @@ log_joint_pdf(const int& num_patients,
 
 
             stan::math::assign(prob_tox, pow(get_base1(skeleton,get_base1(doses,j,"doses",1),"skeleton",1),stan::math::exp(beta)));
-            stan::math::assign(p_j, (pow(prob_tox,get_base1(tox,j,"tox",1)) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))));
-            stan::math::assign(p, stan::model::deep_copy((p + stan::math::log(p_j))));
+            stan::math::assign(p_j, (pow((get_base1(weights,j,"weights",1) * prob_tox),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * prob_tox)),(1 - get_base1(tox,j,"tox",1)))));
+            stan::math::assign(p, (p + stan::math::log(p_j)));
             }
         }
         return stan::math::promote_scalar<fun_return_scalar_t__>(p);
@@ -981,14 +982,15 @@ log_joint_pdf(const int& num_patients,
 
 
 struct log_joint_pdf_functor__ {
-    template <typename T3__, typename T4__>
-        typename boost::math::tools::promote_args<T3__, T4__>::type
+    template <typename T3__, typename T4__, typename T5__>
+        typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
     operator()(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& skeleton,
-                  const T4__& beta, std::ostream* pstream__) const {
-        return log_joint_pdf(num_patients, tox, doses, skeleton, beta, pstream__);
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& skeleton,
+                  const T5__& beta, std::ostream* pstream__) const {
+        return log_joint_pdf(num_patients, tox, doses, weights, skeleton, beta, pstream__);
     }
 };
 
@@ -1000,6 +1002,7 @@ private:
     int num_patients;
     vector<int> tox;
     vector<int> doses;
+    vector<double> weights;
 public:
     model_CrmEmpiricNormalPrior(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
@@ -1081,6 +1084,16 @@ public:
             for (size_t i_0__ = 0; i_0__ < doses_limit_0__; ++i_0__) {
                 doses[i_0__] = vals_i__[pos__++];
             }
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            context__.validate_dims("data initialization", "weights", "double", context__.to_vec(num_patients));
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            weights = std::vector<double>(num_patients,double(0));
+            vals_r__ = context__.vals_r("weights");
+            pos__ = 0;
+            size_t weights_limit_0__ = num_patients;
+            for (size_t i_0__ = 0; i_0__ < weights_limit_0__; ++i_0__) {
+                weights[i_0__] = vals_r__[pos__++];
+            }
 
             // validate, data variables
             check_greater_or_equal(function__,"beta_sd",beta_sd,0);
@@ -1106,6 +1119,7 @@ public:
             // validate, set parameter ranges
             num_params_r__ = 0U;
             param_ranges_i__.clear();
+            ++num_params_r__;
             ++num_params_r__;
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
@@ -1138,6 +1152,19 @@ public:
             writer__.scalar_unconstrain(beta);
         } catch (const std::exception& e) { 
             throw std::runtime_error(std::string("Error transforming variable beta: ") + e.what());
+        }
+
+        if (!(context__.contains_r("thing")))
+            throw std::runtime_error("variable thing missing");
+        vals_r__ = context__.vals_r("thing");
+        pos__ = 0U;
+        context__.validate_dims("initialization", "thing", "double", context__.to_vec());
+        double thing(0);
+        thing = vals_r__[pos__++];
+        try {
+            writer__.scalar_unconstrain(thing);
+        } catch (const std::exception& e) { 
+            throw std::runtime_error(std::string("Error transforming variable thing: ") + e.what());
         }
 
         params_r__ = writer__.data_r();
@@ -1180,6 +1207,13 @@ public:
             else
                 beta = in__.scalar_constrain();
 
+            local_scalar_t__ thing;
+            (void) thing;  // dummy to suppress unused var warning
+            if (jacobian__)
+                thing = in__.scalar_constrain(lp__);
+            else
+                thing = in__.scalar_constrain();
+
 
             // transformed parameters
             validate_non_negative_index("prob_tox", "num_doses", num_doses);
@@ -1215,7 +1249,8 @@ public:
             // model body
 
             lp_accum__.add(normal_log(beta,0,beta_sd));
-            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,skeleton,beta, pstream__));
+            lp_accum__.add(normal_log(thing,sum(weights),0.001));
+            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,weights,skeleton,beta, pstream__));
 
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
@@ -1243,6 +1278,7 @@ public:
     void get_param_names(std::vector<std::string>& names__) const {
         names__.resize(0);
         names__.push_back("beta");
+        names__.push_back("thing");
         names__.push_back("prob_tox");
         names__.push_back("log_lik");
     }
@@ -1251,6 +1287,8 @@ public:
     void get_dims(std::vector<std::vector<size_t> >& dimss__) const {
         dimss__.resize(0);
         std::vector<size_t> dims__;
+        dims__.resize(0);
+        dimss__.push_back(dims__);
         dims__.resize(0);
         dimss__.push_back(dims__);
         dims__.resize(0);
@@ -1277,7 +1315,9 @@ public:
         (void) function__;  // dummy to suppress unused var warning
         // read-transform, write parameters
         double beta = in__.scalar_constrain();
+        double thing = in__.scalar_constrain();
         vars__.push_back(beta);
+        vars__.push_back(thing);
 
         // declare and define transformed parameters
         double lp__ = 0.0;
@@ -1336,7 +1376,7 @@ public:
                 stan::math::assign(p_j, pow(get_base1(skeleton,get_base1(doses,j,"doses",1),"skeleton",1),stan::math::exp(beta)));
                 stan::model::assign(log_lik, 
                             stan::model::cons_list(stan::model::index_uni(j), stan::model::nil_index_list()), 
-                            stan::math::log((pow(p_j,get_base1(tox,j,"tox",1)) * pow((1 - p_j),(1 - get_base1(tox,j,"tox",1))))), 
+                            stan::math::log((pow((get_base1(weights,j,"weights",1) * p_j),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * p_j)),(1 - get_base1(tox,j,"tox",1))))), 
                             "assigning variable log_lik");
                 }
             }
@@ -1385,6 +1425,9 @@ public:
         param_name_stream__.str(std::string());
         param_name_stream__ << "beta";
         param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "thing";
+        param_names__.push_back(param_name_stream__.str());
 
         if (!include_gqs__ && !include_tparams__) return;
 
@@ -1412,6 +1455,9 @@ public:
         std::stringstream param_name_stream__;
         param_name_stream__.str(std::string());
         param_name_stream__ << "beta";
+        param_names__.push_back(param_name_stream__.str());
+        param_name_stream__.str(std::string());
+        param_name_stream__ << "thing";
         param_names__.push_back(param_name_stream__.str());
 
         if (!include_gqs__ && !include_tparams__) return;
@@ -1460,19 +1506,20 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_CrmOneParamLogisticGammaPrior");
-    reader.add_event(97, 95, "end", "model_CrmOneParamLogisticGammaPrior");
+    reader.add_event(105, 103, "end", "model_CrmOneParamLogisticGammaPrior");
     return reader;
 }
 
-template <typename T3__, typename T4__, typename T5__>
-typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
+template <typename T3__, typename T4__, typename T5__, typename T6__>
+typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type
 log_joint_pdf(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& codified_doses,
-                  const T4__& a0,
-                  const T5__& beta, std::ostream* pstream__) {
-    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__>::type local_scalar_t__;
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& codified_doses,
+                  const T5__& a0,
+                  const T6__& beta, std::ostream* pstream__) {
+    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type local_scalar_t__;
     typedef local_scalar_t__ fun_return_scalar_t__;
     const static bool propto__ = true;
     (void) propto__;
@@ -1505,8 +1552,8 @@ log_joint_pdf(const int& num_patients,
 
 
             stan::math::assign(prob_tox, inv_logit((a0 + (beta * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
-            stan::math::assign(p_j, (pow(prob_tox,get_base1(tox,j,"tox",1)) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))));
-            stan::math::assign(p, stan::model::deep_copy((p + stan::math::log(p_j))));
+            stan::math::assign(p_j, (pow((get_base1(weights,j,"weights",1) * prob_tox),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * prob_tox)),(1 - get_base1(tox,j,"tox",1)))));
+            stan::math::assign(p, (p + stan::math::log(p_j)));
             }
         }
         return stan::math::promote_scalar<fun_return_scalar_t__>(p);
@@ -1520,15 +1567,16 @@ log_joint_pdf(const int& num_patients,
 
 
 struct log_joint_pdf_functor__ {
-    template <typename T3__, typename T4__, typename T5__>
-        typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
+    template <typename T3__, typename T4__, typename T5__, typename T6__>
+        typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type
     operator()(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& codified_doses,
-                  const T4__& a0,
-                  const T5__& beta, std::ostream* pstream__) const {
-        return log_joint_pdf(num_patients, tox, doses, codified_doses, a0, beta, pstream__);
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& codified_doses,
+                  const T5__& a0,
+                  const T6__& beta, std::ostream* pstream__) const {
+        return log_joint_pdf(num_patients, tox, doses, weights, codified_doses, a0, beta, pstream__);
     }
 };
 
@@ -1542,6 +1590,7 @@ private:
     int num_patients;
     vector<int> tox;
     vector<int> doses;
+    vector<double> weights;
     vector<double> codified_doses;
 public:
     model_CrmOneParamLogisticGammaPrior(stan::io::var_context& context__,
@@ -1633,6 +1682,16 @@ public:
             size_t doses_limit_0__ = num_patients;
             for (size_t i_0__ = 0; i_0__ < doses_limit_0__; ++i_0__) {
                 doses[i_0__] = vals_i__[pos__++];
+            }
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            context__.validate_dims("data initialization", "weights", "double", context__.to_vec(num_patients));
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            weights = std::vector<double>(num_patients,double(0));
+            vals_r__ = context__.vals_r("weights");
+            pos__ = 0;
+            size_t weights_limit_0__ = num_patients;
+            for (size_t i_0__ = 0; i_0__ < weights_limit_0__; ++i_0__) {
+                weights[i_0__] = vals_r__[pos__++];
             }
 
             // validate, data variables
@@ -1779,7 +1838,7 @@ public:
             // model body
 
             lp_accum__.add(gamma_log(beta,beta_shape,beta_inverse_scale));
-            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,codified_doses,a0,beta, pstream__));
+            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,weights,codified_doses,a0,beta, pstream__));
 
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
@@ -1900,7 +1959,7 @@ public:
                 stan::math::assign(p_j, inv_logit((a0 + (beta * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
                 stan::model::assign(log_lik, 
                             stan::model::cons_list(stan::model::index_uni(j), stan::model::nil_index_list()), 
-                            stan::math::log((pow(p_j,get_base1(tox,j,"tox",1)) * pow((1 - p_j),(1 - get_base1(tox,j,"tox",1))))), 
+                            stan::math::log((pow((get_base1(weights,j,"weights",1) * p_j),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * p_j)),(1 - get_base1(tox,j,"tox",1))))), 
                             "assigning variable log_lik");
                 }
             }
@@ -2024,19 +2083,20 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_CrmOneParamLogisticNormalPrior");
-    reader.add_event(97, 95, "end", "model_CrmOneParamLogisticNormalPrior");
+    reader.add_event(105, 103, "end", "model_CrmOneParamLogisticNormalPrior");
     return reader;
 }
 
-template <typename T3__, typename T4__, typename T5__>
-typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
+template <typename T3__, typename T4__, typename T5__, typename T6__>
+typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type
 log_joint_pdf(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& codified_doses,
-                  const T4__& a0,
-                  const T5__& beta, std::ostream* pstream__) {
-    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__>::type local_scalar_t__;
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& codified_doses,
+                  const T5__& a0,
+                  const T6__& beta, std::ostream* pstream__) {
+    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type local_scalar_t__;
     typedef local_scalar_t__ fun_return_scalar_t__;
     const static bool propto__ = true;
     (void) propto__;
@@ -2069,8 +2129,8 @@ log_joint_pdf(const int& num_patients,
 
 
             stan::math::assign(prob_tox, inv_logit((a0 + (stan::math::exp(beta) * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
-            stan::math::assign(p_j, (pow(prob_tox,get_base1(tox,j,"tox",1)) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))));
-            stan::math::assign(p, stan::model::deep_copy((p + stan::math::log(p_j))));
+            stan::math::assign(p_j, (pow((get_base1(weights,j,"weights",1) * prob_tox),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * prob_tox)),(1 - get_base1(tox,j,"tox",1)))));
+            stan::math::assign(p, (p + stan::math::log(p_j)));
             }
         }
         return stan::math::promote_scalar<fun_return_scalar_t__>(p);
@@ -2084,15 +2144,16 @@ log_joint_pdf(const int& num_patients,
 
 
 struct log_joint_pdf_functor__ {
-    template <typename T3__, typename T4__, typename T5__>
-        typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
+    template <typename T3__, typename T4__, typename T5__, typename T6__>
+        typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type
     operator()(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& codified_doses,
-                  const T4__& a0,
-                  const T5__& beta, std::ostream* pstream__) const {
-        return log_joint_pdf(num_patients, tox, doses, codified_doses, a0, beta, pstream__);
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& codified_doses,
+                  const T5__& a0,
+                  const T6__& beta, std::ostream* pstream__) const {
+        return log_joint_pdf(num_patients, tox, doses, weights, codified_doses, a0, beta, pstream__);
     }
 };
 
@@ -2106,6 +2167,7 @@ private:
     int num_patients;
     vector<int> tox;
     vector<int> doses;
+    vector<double> weights;
     vector<double> codified_doses;
 public:
     model_CrmOneParamLogisticNormalPrior(stan::io::var_context& context__,
@@ -2197,6 +2259,16 @@ public:
             size_t doses_limit_0__ = num_patients;
             for (size_t i_0__ = 0; i_0__ < doses_limit_0__; ++i_0__) {
                 doses[i_0__] = vals_i__[pos__++];
+            }
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            context__.validate_dims("data initialization", "weights", "double", context__.to_vec(num_patients));
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            weights = std::vector<double>(num_patients,double(0));
+            vals_r__ = context__.vals_r("weights");
+            pos__ = 0;
+            size_t weights_limit_0__ = num_patients;
+            for (size_t i_0__ = 0; i_0__ < weights_limit_0__; ++i_0__) {
+                weights[i_0__] = vals_r__[pos__++];
             }
 
             // validate, data variables
@@ -2342,7 +2414,7 @@ public:
             // model body
 
             lp_accum__.add(normal_log(beta,beta_mean,beta_sd));
-            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,codified_doses,a0,beta, pstream__));
+            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,weights,codified_doses,a0,beta, pstream__));
 
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
@@ -2463,7 +2535,7 @@ public:
                 stan::math::assign(p_j, inv_logit((a0 + (stan::math::exp(beta) * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
                 stan::model::assign(log_lik, 
                             stan::model::cons_list(stan::model::index_uni(j), stan::model::nil_index_list()), 
-                            stan::math::log((pow(p_j,get_base1(tox,j,"tox",1)) * pow((1 - p_j),(1 - get_base1(tox,j,"tox",1))))), 
+                            stan::math::log((pow((get_base1(weights,j,"weights",1) * p_j),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * p_j)),(1 - get_base1(tox,j,"tox",1))))), 
                             "assigning variable log_lik");
                 }
             }
@@ -2587,19 +2659,20 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_CrmTwoParamLogisticNormalPrior");
-    reader.add_event(101, 99, "end", "model_CrmTwoParamLogisticNormalPrior");
+    reader.add_event(108, 106, "end", "model_CrmTwoParamLogisticNormalPrior");
     return reader;
 }
 
-template <typename T3__, typename T4__, typename T5__>
-typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
+template <typename T3__, typename T4__, typename T5__, typename T6__>
+typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type
 log_joint_pdf(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& codified_doses,
-                  const T4__& alpha,
-                  const T5__& beta, std::ostream* pstream__) {
-    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__>::type local_scalar_t__;
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& codified_doses,
+                  const T5__& alpha,
+                  const T6__& beta, std::ostream* pstream__) {
+    typedef typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type local_scalar_t__;
     typedef local_scalar_t__ fun_return_scalar_t__;
     const static bool propto__ = true;
     (void) propto__;
@@ -2632,8 +2705,8 @@ log_joint_pdf(const int& num_patients,
 
 
             stan::math::assign(prob_tox, inv_logit((alpha + (stan::math::exp(beta) * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
-            stan::math::assign(p_j, (pow(prob_tox,get_base1(tox,j,"tox",1)) * pow((1 - prob_tox),(1 - get_base1(tox,j,"tox",1)))));
-            stan::math::assign(p, stan::model::deep_copy((p + stan::math::log(p_j))));
+            stan::math::assign(p_j, (pow((get_base1(weights,j,"weights",1) * prob_tox),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * prob_tox)),(1 - get_base1(tox,j,"tox",1)))));
+            stan::math::assign(p, (p + stan::math::log(p_j)));
             }
         }
         return stan::math::promote_scalar<fun_return_scalar_t__>(p);
@@ -2647,15 +2720,16 @@ log_joint_pdf(const int& num_patients,
 
 
 struct log_joint_pdf_functor__ {
-    template <typename T3__, typename T4__, typename T5__>
-        typename boost::math::tools::promote_args<T3__, T4__, T5__>::type
+    template <typename T3__, typename T4__, typename T5__, typename T6__>
+        typename boost::math::tools::promote_args<T3__, T4__, T5__, T6__>::type
     operator()(const int& num_patients,
                   const std::vector<int>& tox,
                   const std::vector<int>& doses,
-                  const std::vector<T3__>& codified_doses,
-                  const T4__& alpha,
-                  const T5__& beta, std::ostream* pstream__) const {
-        return log_joint_pdf(num_patients, tox, doses, codified_doses, alpha, beta, pstream__);
+                  const std::vector<T3__>& weights,
+                  const std::vector<T4__>& codified_doses,
+                  const T5__& alpha,
+                  const T6__& beta, std::ostream* pstream__) const {
+        return log_joint_pdf(num_patients, tox, doses, weights, codified_doses, alpha, beta, pstream__);
     }
 };
 
@@ -2670,6 +2744,7 @@ private:
     int num_patients;
     vector<int> tox;
     vector<int> doses;
+    vector<double> weights;
     vector<double> codified_doses;
 public:
     model_CrmTwoParamLogisticNormalPrior(stan::io::var_context& context__,
@@ -2766,6 +2841,16 @@ public:
             size_t doses_limit_0__ = num_patients;
             for (size_t i_0__ = 0; i_0__ < doses_limit_0__; ++i_0__) {
                 doses[i_0__] = vals_i__[pos__++];
+            }
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            context__.validate_dims("data initialization", "weights", "double", context__.to_vec(num_patients));
+            validate_non_negative_index("weights", "num_patients", num_patients);
+            weights = std::vector<double>(num_patients,double(0));
+            vals_r__ = context__.vals_r("weights");
+            pos__ = 0;
+            size_t weights_limit_0__ = num_patients;
+            for (size_t i_0__ = 0; i_0__ < weights_limit_0__; ++i_0__) {
+                weights[i_0__] = vals_r__[pos__++];
             }
 
             // validate, data variables
@@ -2934,7 +3019,7 @@ public:
 
             lp_accum__.add(normal_log(alpha,alpha_mean,alpha_sd));
             lp_accum__.add(normal_log(beta,beta_mean,beta_sd));
-            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,codified_doses,alpha,beta, pstream__));
+            lp_accum__.add(log_joint_pdf(num_patients,tox,doses,weights,codified_doses,alpha,beta, pstream__));
 
         } catch (const std::exception& e) {
             stan::lang::rethrow_located(e, current_statement_begin__, prog_reader__());
@@ -3060,7 +3145,7 @@ public:
                 stan::math::assign(p_j, inv_logit((alpha + (stan::math::exp(beta) * get_base1(codified_doses,get_base1(doses,j,"doses",1),"codified_doses",1)))));
                 stan::model::assign(log_lik, 
                             stan::model::cons_list(stan::model::index_uni(j), stan::model::nil_index_list()), 
-                            stan::math::log((pow(p_j,get_base1(tox,j,"tox",1)) * pow((1 - p_j),(1 - get_base1(tox,j,"tox",1))))), 
+                            stan::math::log((pow((get_base1(weights,j,"weights",1) * p_j),get_base1(tox,j,"tox",1)) * pow((1 - (get_base1(weights,j,"weights",1) * p_j)),(1 - get_base1(tox,j,"tox",1))))), 
                             "assigning variable log_lik");
                 }
             }
@@ -3248,7 +3333,7 @@ log_joint_pdf(const std::vector<T0__>& coded_doses,
             stan::math::assign(prob_eff, inv_logit(((gamma + (zeta * get_base1(coded_doses,get_base1(doses,j,"doses",1),"coded_doses",1))) + (eta * get_base1(coded_doses_squ,get_base1(doses,j,"doses",1),"coded_doses_squ",1)))));
             stan::math::assign(prob_tox, inv_logit((alpha + (beta * get_base1(coded_doses,get_base1(doses,j,"doses",1),"coded_doses",1)))));
             stan::math::assign(p_j, ((((pow(prob_eff,get_base1(eff,j,"eff",1)) * pow((1.0 - prob_eff),(1.0 - get_base1(eff,j,"eff",1)))) * pow(prob_tox,get_base1(tox,j,"tox",1))) * pow((1.0 - prob_tox),(1.0 - get_base1(tox,j,"tox",1)))) + ((((((pow(-(1.0),(get_base1(eff,j,"eff",1) + get_base1(tox,j,"tox",1))) * prob_eff) * prob_tox) * (1.0 - prob_eff)) * (1.0 - prob_tox)) * (stan::math::exp(psi) - 1.0)) / (stan::math::exp(psi) + 1.0))));
-            stan::math::assign(p, stan::model::deep_copy((p + stan::math::log(p_j))));
+            stan::math::assign(p, (p + stan::math::log(p_j)));
             }
         }
         return stan::math::promote_scalar<fun_return_scalar_t__>(p);

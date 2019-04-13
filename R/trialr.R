@@ -1,9 +1,8 @@
 
 #' trialr: clinical trial designs in R and Stan
 #'
-#' trialr collects in one place Bayesian clinical trial designs.
-#' Generally, Bayesian models are implemented in Stan and helper
-#' functions are provided in R.
+#' trialr collects in one place Bayesian clinical trial designs and methods.
+#' Models are implemented in Stan and helper functions are provided in R.
 #'
 #' \pkg{trialr} currently implements:
 #' \enumerate{

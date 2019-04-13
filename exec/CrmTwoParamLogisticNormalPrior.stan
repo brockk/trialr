@@ -19,7 +19,7 @@
 // New York: Chapman & Hall / CRC Press.
 
 functions {
-  real log_joint_pdf(int num_patients, int[] tox, int[] doses,
+  real log_joint_pdf(int num_patients, int[] tox, int[] doses, real[] weights,
                      real[] codified_doses, real alpha, real beta) {
     real p;
     p = 0;
@@ -27,7 +27,8 @@ functions {
       real prob_tox;
       real p_j;
       prob_tox = inv_logit(alpha + exp(beta) * codified_doses[doses[j]]);
-      p_j = prob_tox^tox[j] * (1 - prob_tox)^(1 - tox[j]);
+      p_j = (weights[j] * prob_tox)^tox[j] *
+              (1 - weights[j] * prob_tox)^(1 - tox[j]);
       p += log(p_j);
     }
     return p;
@@ -56,6 +57,10 @@ data {
   // Dose-levels are 1-based indices of real_doses.
   // E.g. 1 means 1st dose in real_doses was given.
   int<lower=1, upper=num_doses> doses[num_patients];
+  // Weights given to observations j=1, .., num_patients.
+  // Weights between 0 and 1 suggest use of TITE-CRM.
+  // However, weights can take whatever real value you want.
+  real weights[num_patients];
 }
 
 transformed data {
@@ -86,7 +91,8 @@ transformed parameters {
 model {
   target += normal_lpdf(alpha | alpha_mean, alpha_sd);
   target += normal_lpdf(beta | beta_mean, beta_sd);
-  target += log_joint_pdf(num_patients, tox, doses, codified_doses, alpha, beta);
+  target += log_joint_pdf(num_patients, tox, doses, weights, codified_doses,
+                          alpha, beta);
 }
 
 generated quantities {
@@ -94,6 +100,7 @@ generated quantities {
   for (j in 1:num_patients) {
     real p_j;
     p_j = inv_logit(alpha + exp(beta) * codified_doses[doses[j]]);
-    log_lik[j] = log(p_j^tox[j] * (1 - p_j)^(1 - tox[j]));
+    log_lik[j] = log((weights[j] * p_j)^tox[j] *
+                  (1 - weights[j] * p_j)^(1 - tox[j]));
   }
 }

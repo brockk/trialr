@@ -49,6 +49,8 @@
 #' * beta_mean
 #' * beta_sd
 #'
+#' @export
+#'
 #' @seealso
 #' \code{\link{stan_crm}}
 #' \code{\link{crm_process}}
@@ -68,9 +70,10 @@ crm_params <- function(skeleton, target, a0 = NULL,
                   beta_mean, beta_sd, beta_shape, beta_inverse_scale)
 
   # Initialise with no patients observed
-  x$doses = c()
-  x$tox = c()
   x$num_patients = 0
+  x$doses = integer(length = 0)
+  x$tox = integer(length = 0)
+  x$weights = numeric(length = 0)
 
   # Set type. This is, at heart, just a list.
   class(x) <- c("crm_params", "list")
@@ -114,6 +117,11 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #' @param tox An optional vector of toxicity outcomes for patients
 #' 1:num_patients, where 1=toxicity and 0=no toxicity. Only required when
 #' \code{outcome_str} is not provided.
+#' @param weights An optional vector of numeric weights for the observations
+#' for patients 1:num_patients, thus facilitating the TITE-CRM design.
+#' Can be used with \code{outcome_str}, or with \code{doses_given} and
+#' \code{tox}. It is generally tider to specify \code{doses_given},
+#' \code{tox} and \code{weights} when a TITE-CRM analysis is desired.
 #' @param ... Extra parameters are passed to \code{rstan::sampling}. Commonly
 #' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
 #' \code{control}. \code{\link[rstan:sampling]{sampling}}.
@@ -139,7 +147,7 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #' * beta_shape
 #' * beta_inverse_scale
 #'
-#' @section Requirements of \code{logistics} model:
+#' @section Requirements of \code{logistic2} model:
 #' * a0
 #' * alpha_mean
 #' * alpha_sd
@@ -164,16 +172,25 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #'
 #' @examples
 #' \dontrun{
-#' # This model is presented in Thall et al. (2014)
+#' # CRM example
 #' mod1 <- stan_crm('1N 2N 3T', skeleton = c(0.1, 0.2, 0.35, 0.6),
 #'                  target = 0.2, model = 'empiric', beta_sd = sqrt(1.34),
 #'                  seed = 123)
 #'
-#' # Shorthand for the above is:
-#' mod2 <- stan_efftox_demo('1N 2E 3B', seed = 123)
+#' mod2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
+#'                  target = 0.2, model = 'logistic', a0 = 3, beta_mean = 0,
+#'                  beta_sd = sqrt(1.34), seed = 123)
 #'
-#' # the seed is passed to the Stan sampler. The usual Stan sampler params like
+#' # The seed is passed to the Stan sampler. The usual Stan sampler params like
 #' # cores, iter, chains etc are passed on too via the ellipsis operator.
+#'
+#' # TITE-CRM example, p.124 of Dose Finding by the CRM, Cheung (2010)
+#' mod3 <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
+#'                 doses_given = c(3, 3, 3, 3),
+#'                 tox = c(0, 0, 0, 0),
+#'                 weights = c(73, 66, 35, 28) / 126,
+#'                 model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
+#' mod3$recommended_dose
 #' }
 stan_crm <- function(outcome_str = NULL, skeleton, target,
                      model = c('empiric', 'logistic', 'logistic_gamma',
@@ -184,6 +201,7 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
                      beta_shape = NULL, beta_inverse_scale = NULL,
                      doses_given = NULL,
                      tox = NULL,
+                     weights = NULL,
                      ...) {
 
   model <- match.arg(model)
@@ -212,6 +230,7 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
   if(is.null(outcome_str)) {
     if(length(doses_given) != length(tox))
       stop('doses_given and tox vectors should have same length')
+
     dat$doses <- doses_given
     dat$tox <- tox
     dat$num_patients <- length(doses_given)
@@ -221,6 +240,11 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
     dat$doses <- outcomes_df$doses
     dat$tox <- outcomes_df$tox
   }
+  # Add weights if specified; infer all to be 1 if not.
+  if(is.null(weights))
+    dat$weights <- rep(1, dat$num_patients)
+  else
+    dat$weights <- weights
 
   # Fit data to model using Stan, after performing model-specific checks.
   if(model == 'empiric') {
@@ -303,6 +327,8 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
 #' @param fit An object of class \code{\link[rstan:stanfit]{stanfit}},
 #' containing the posterior samples.
 #'
+#' @export
+#'
 #' @seealso
 #' \code{\link{stan_crm}}
 #' \code{\link{crm_process}}
@@ -331,6 +357,7 @@ crm_fit <- function(dose_indices, recommended_dose, prob_tox, median_prob_tox,
 #' @param fit An instance of \code{rstan::stanmodel}, derived by fitting one of
 #' the trialr CRM models.
 #' @return An instance of \code{\link{crm_fit}}.
+#'
 #' @export
 #'
 #' @examples
@@ -384,7 +411,8 @@ print.crm_fit <- function(x, ...) {
     treated <- data.frame(
       Patient = 1:length(x$dat$doses),
       Dose = x$dat$doses,
-      Toxicity = x$dat$tox
+      Toxicity = x$dat$tox,
+      Weight = x$dat$weights
     )
     print(treated)
 
@@ -400,9 +428,10 @@ print.crm_fit <- function(x, ...) {
     N = sapply(1:x$dat$num_doses, function(i) sum(x$dat$doses == i)),
     Tox = sapply(1:x$dat$num_doses, function(i) sum(x$dat$tox[x$dat$doses == i])),
     ProbTox = x$prob_tox,
+    MedianProbTox = x$median_prob_tox,
     ProbMTD = x$prob_mtd
   )
-  print(df)
+  print(df, digits = 3)
   cat('\n')
 
   # Extras
@@ -451,7 +480,7 @@ plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
 #' @return A summary object.
 #' @sdname summary
 #' @method summary crm_fit
-#' @S3method summary crm_fit
+#' @export
 summary.crm_fit <- function(object, ...) {
   rstan::summary(object$fit, ...)
 }

@@ -17,6 +17,7 @@
 #' @param tox_star Toxicity probability of an equi-utility third point
 #'
 #' @return The p-index
+#'
 #' @export
 #'
 #' @examples
@@ -96,6 +97,8 @@ efftox_solve_p <- function(eff0, tox1, eff_star, tox_star) {
 #' @param psi_sd The prior normal standard deviation of the association term in
 #' the combined efficacy-toxicity model. A number.
 #'
+#' @export
+#'
 #' @seealso
 #' \code{\link{stan_efftox}}
 #' \code{\link{stan_efftox_demo}}
@@ -136,6 +139,7 @@ efftox_params <- function(real_doses, efficacy_hurdle, toxicity_hurdle,
 #' to demonstrate EffTox in Thall et al. 2014.
 #'
 #' @return a \code{list} of parameters, described in \code{efftox_params}
+#'
 #' @export
 #'
 #' @examples
@@ -179,6 +183,7 @@ efftox_parameters_demo <- function() {
 #' @param prob_tox Probability of toxicity; number between 0 and 1
 #'
 #' @return Utility value(s)
+#'
 #' @export
 #'
 #' @examples
@@ -211,6 +216,7 @@ efftox_utility <- function(p, eff0, tox1, prob_eff, prob_tox) {
 #' @param fit An instance of \code{rstan::stanmodel}, derived by fitting the
 #' trialr EffTox model.
 #' @return An instance of \code{\link{efftox_fit}}.
+#'
 #' @export
 #'
 #' @examples
@@ -264,6 +270,7 @@ efftox_process <- function(dat, fit) {
 #' @param x An \code{\link{efftox_analysis}}
 #'
 #' @return a \code{data.frame}
+#'
 #' @export
 #'
 #' @examples
@@ -313,6 +320,7 @@ efftox_analysis_to_df <- function(x) {
 #'
 #' @return A list with named elements \code{recommended_dose},
 #' \code{efficacies}, \code{toxicities}, and \code{doses_given}.
+#'
 #' @export
 #'
 #' @examples
@@ -392,6 +400,7 @@ efftox_simulate <- function(dat, num_sims, first_dose, true_eff, true_tox,
 #' a number between 0 and 1
 #'
 #' @return Probability(s) of toxicity
+#'
 #' @export
 #'
 #' @examples
@@ -449,6 +458,7 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
 #'
 #' @return if \code{use_ggplot = TRUE}, an instance of \code{ggplot}; else no
 #' object is returned. Omit assignment in either case to just view the plot.
+#'
 #' @export
 #'
 #' @examples
@@ -564,6 +574,7 @@ efftox_contour_plot <- function(dat,
 #' \code{doses = 1:3}
 #'
 #' @return an instance of \code{ggplot}. Omit assignment to just view the plot.
+#'
 #' @export
 #'
 #' @note This function requires that ggplot2 be installed.
@@ -611,6 +622,7 @@ efftox_utility_density_plot <- function(fit, doses = NULL) {
 #' @return n by n matrix, where n is number of doses under investigation.
 #' The item in row i, col j is the posterior probability that the utility of
 #' dose j exceeds that of dose i.
+#'
 #' @export
 #'
 #' @examples
@@ -734,6 +746,7 @@ efftox_parse_outcomes <- function(outcome_string, as.list = TRUE) {
 #' @param ... extra params passed to \code{rstan::sampling}.
 #'
 #' @return dose pathways in a \code{data.frame}.
+#'
 #' @export
 #'
 #' @examples
@@ -874,6 +887,8 @@ efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
 #' containing the posterior samples.
 #' @param dat Object \code{\link{efftox_params}} containing data passed to
 #' \code{\link[rstan:sampling]{sampling}}.
+#'
+#' @export
 #'
 #' @seealso
 #' \code{\link{stan_efftox}}

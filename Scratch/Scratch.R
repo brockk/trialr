@@ -184,3 +184,6 @@ devtools::release()
 # Tests ----
 devtools::use_testthat()
 devtools::test()
+
+# roxygen2::roxygenise(clean=TRUE)
+devtools::install(local = FALSE)
