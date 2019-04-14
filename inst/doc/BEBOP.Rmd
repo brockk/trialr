@@ -65,14 +65,14 @@ The statistical design uses the common Bayesian tool of borrowing strength acros
 The cohorts in the PePS2 trial are 
 
 ```{r, echo=FALSE}
-knitr::kable(data.frame(i = 1:6, 
-                        Pretreated = c(F,F,F,T,T,T),
-                        PDL1 = c('Low', 'Medium', 'High', 'Low', 'Medium', 'High'),
-                        x1 = rep(c(0,1), each=3),
-                        x2 = c(1,0,0,1,0,0),
-                        x3 = c(0,1,0,0,1,0)
-                        )
-             )
+knitr::kable(data.frame(
+  i = 1:6, 
+  Pretreated = c(F, F, F, T, T, T),
+  PDL1 = c('Low', 'Medium', 'High', 'Low', 'Medium', 'High'),
+  x1 = rep(c(0, 1), each = 3),
+  x2 = c(1, 0, 0, 1, 0, 0),
+  x3 = c(0, 1, 0, 0, 1, 0)
+))
 ```
 
 The trial uses a sample size of 60. 
@@ -110,21 +110,21 @@ We fit the data to the BEBOP model and obtain samples from the posterior distrib
 The ```BebopInPeps2``` model is provided by ```trialr``` and compiled when the package is installed.
 
 ```{r, results = "hide"}
-samp <- rstan::sampling(stanmodels$BebopInPeps2, data = dat)
+fit <- stan_peps2(dat$eff, dat$tox, dat$cohorts)
 ```
 
 It is informative to view plots of posterior beliefs. 
 Posterior samples of parameter values are available but they are less meaningful to us than the modelled efficacy rates, for example.
 View posterior distributions using code like
 ```{r, fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=FALSE}
-rstan::plot(samp, pars = 'prob_eff')
+rstan::plot(fit, pars = 'prob_eff')
 ```
 
 We see that the modelled rates of efficacy are highest in cohorts 3 and 6, but likely to be greater than the critical threshold of 10% in cohort 2 and perhaps cohort 5 as well.
 In contrast, there is not much evidence of clinical benefit in cohorts 1 and 4.
 This is confirmed by invoking the formally described analysis and associated decision rules.
 ```{r, eval=T}
-decision <- peps2_process(dat, samp)
+decision <- peps2_process(fit)
 knitr::kable(
   with(decision, data.frame(ProbEff, ProbAccEff, ProbTox, ProbAccTox, Accept)), 
   digits = 3
@@ -139,11 +139,24 @@ We see that in this simulated iteration, the treatment would be approved in all 
 We can perform the simulations on a greater number of iterations to learn about the operating characteristics of the design.
 ```{r, eval=FALSE}
 set.seed(123)
-sims <- peps2_run_sims(num_sims = 10, sample_data_func = peps2_sc,
-                       summarise_func = peps2_process)
+run_sims <- function(num_sims = 10, sample_data_func = peps2_sc,
+                     summarise_func = peps2_process, ...) {
+  sims <- list()
+  for(i in 1:num_sims) {
+    print(i)
+    dat <- sample_data_func()
+    fit <- stan_peps2(dat$eff, dat$tox, dat$cohorts, ...)
+    sim <- summarise_func(fit)
+    sims[[i]] <- sim
+  }
+  return(sims)
+}
+
+sims <- run_sims(num_sims = 10, sample_data_func = peps2_sc,
+                 summarise_func = peps2_process)
 ```
 
-In ```peps2_run_sims```, the second and third args are delegates to simulate trial outcomes and post-process the ```rstan``` sample respectively.
+In ```run_sims```, the second and third args are delegates to simulate trial outcomes and post-process the ```rstan``` sample respectively.
 The outcome samping delelgate is called without arguments.
 The post-process delegate is called with first argument the object returned by the outcome sampling delegate (e.g. ```dat``` above), and second argument the posterior sample from ```rstan``` (e.g. ```samp``` above).
 The objects returned by the post-process delegate form the items in the ```sims``` object that are returned to the user by ```peps2_run_sims```. 

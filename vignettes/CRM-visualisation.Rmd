@@ -81,8 +81,11 @@ Boxplots would be a traditional way of visualising the distributions of the prob
 ```{r, fig.width=7, fig.height=7}
 library(ggplot2)
 
-(p1 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
-  geom_boxplot() + ylim(0, 1) + labs(title = 'boxplot of Pr(DLT) under CRM'))
+prob_tox_samp_tall %>% 
+  ggplot(aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
+  geom_boxplot() + 
+  ylim(0, 1) + 
+  labs(title = 'boxplot of Pr(DLT) under CRM')
 ```
 
 However, boxplots give only limited information on the distributions.
@@ -91,17 +94,23 @@ The boxplots suggest some wide tails.
 This inference is much more clear, however, using a violin-plot:
 
 ```{r, fig.width=7, fig.height=7}
-(p2 <- ggplot(prob_tox_samp_tall, aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
-    geom_violin(fill = 'orange') + ylim(0, 1) + labs(title = 'violin plot of Pr(DLT) under CRM'))
+prob_tox_samp_tall %>% 
+  ggplot(aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
+  geom_violin(fill = 'orange') + 
+  ylim(0, 1) + 
+  labs(title = 'violin plot of Pr(DLT) under CRM')
 ```
 
 If you are a fan of post-punk UK music (and you have installed the [`ggridges`](https://CRAN.R-project.org/package=ggridges) package), you may however prefer to show this information using a ridge plot, aka a [joyplot](https://en.wikipedia.org/wiki/Unknown_Pleasures)
 
-```{r, fig.width=7, fig.height=7}
+```{r, fig.width=7, fig.height=7, message=FALSE}
 library(ggridges)
-ggplot(prob_tox_samp_tall %>% mutate(DoseLevel = factor(DoseLevel)),
-       aes(x = ProbTox, y = DoseLevel, fill = DoseLevel)) +
-  geom_density_ridges() + theme(legend.position = 'none') +
+
+prob_tox_samp_tall %>% 
+  mutate(DoseLevel = factor(DoseLevel)) %>% 
+  ggplot(aes(x = ProbTox, y = DoseLevel, fill = DoseLevel)) +
+  geom_density_ridges() + 
+  theme(legend.position = 'none') +
   labs(title = 'joyplot of Pr(DLT) under CRM')
 ```
 
@@ -118,7 +127,8 @@ library(magrittr)
 
 apply(prob_tox_samp, 1, function(x) which.min(abs(x - target))) %>% 
   data.frame(Dose = .) %>% 
-  ggplot() + stat_count(aes(x = Dose, y = ..prop.., group = 1)) +
+  ggplot() + 
+  stat_count(aes(x = Dose, y = ..prop.., group = 1)) +
   labs(title = 'Posterior probability that each dose is the MTD',
        y = 'Prob(MTD)')
 ```
@@ -131,7 +141,8 @@ We might also like to visualise the probability that the toxicity rate at each d
 ```{r, fig.width=7, fig.height=7}
 colMeans(prob_tox_samp > target) %>% 
   data.frame(ProbToxic = ., DoseLevel = 1:length(skeleton)) %>%
-  ggplot(aes(x = DoseLevel, y = ProbToxic)) + geom_col() + 
+  ggplot(aes(x = DoseLevel, y = ProbToxic)) + 
+  geom_col() + 
   labs(title = 'Posterior probability that each dose is too toxic',
        y = 'Prob(Tox > target)')
 ```

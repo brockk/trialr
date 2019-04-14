@@ -1,12 +1,12 @@
 ## ---- echo=FALSE---------------------------------------------------------
-knitr::kable(data.frame(i = 1:6, 
-                        Pretreated = c(F,F,F,T,T,T),
-                        PDL1 = c('Low', 'Medium', 'High', 'Low', 'Medium', 'High'),
-                        x1 = rep(c(0,1), each=3),
-                        x2 = c(1,0,0,1,0,0),
-                        x3 = c(0,1,0,0,1,0)
-                        )
-             )
+knitr::kable(data.frame(
+  i = 1:6, 
+  Pretreated = c(F, F, F, T, T, T),
+  PDL1 = c('Low', 'Medium', 'High', 'Low', 'Medium', 'High'),
+  x1 = rep(c(0, 1), each = 3),
+  x2 = c(1, 0, 0, 1, 0, 0),
+  x3 = c(0, 1, 0, 0, 1, 0)
+))
 
 ## ----message=FALSE-------------------------------------------------------
 library(trialr)
@@ -27,13 +27,13 @@ knitr::kable(
 )
 
 ## ---- results = "hide"---------------------------------------------------
-samp <- rstan::sampling(stanmodels$BebopInPeps2, data = dat)
+fit <- stan_peps2(dat$eff, dat$tox, dat$cohorts)
 
 ## ---- fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=FALSE----
-#  rstan::plot(samp, pars = 'prob_eff')
+#  rstan::plot(fit, pars = 'prob_eff')
 
 ## ---- eval=T-------------------------------------------------------------
-decision <- peps2_process(dat, samp)
+decision <- peps2_process(fit)
 knitr::kable(
   with(decision, data.frame(ProbEff, ProbAccEff, ProbTox, ProbAccTox, Accept)), 
   digits = 3
@@ -41,8 +41,21 @@ knitr::kable(
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  set.seed(123)
-#  sims <- peps2_run_sims(num_sims = 10, sample_data_func = peps2_sc,
-#                         summarise_func = peps2_process)
+#  run_sims <- function(num_sims = 10, sample_data_func = peps2_sc,
+#                       summarise_func = peps2_process, ...) {
+#    sims <- list()
+#    for(i in 1:num_sims) {
+#      print(i)
+#      dat <- sample_data_func()
+#      fit <- stan_peps2(dat$eff, dat$tox, dat$cohorts, ...)
+#      sim <- summarise_func(fit)
+#      sims[[i]] <- sim
+#    }
+#    return(sims)
+#  }
+#  
+#  sims <- run_sims(num_sims = 10, sample_data_func = peps2_sc,
+#                   summarise_func = peps2_process)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  apply(sapply(sims, function(x) x$Accept), 1, mean)

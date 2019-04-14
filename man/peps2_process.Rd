@@ -4,13 +4,10 @@
 \alias{peps2_process}
 \title{Process RStan samples from a BEBOP model fit to PePS2 data}
 \usage{
-peps2_process(dat, fit, min_eff = 0.1, max_tox = 0.3, eff_cert = 0.7,
+peps2_process(fit, min_eff = 0.1, max_tox = 0.3, eff_cert = 0.7,
   tox_cert = 0.9)
 }
 \arguments{
-\item{dat}{An instance of \code{\link{peps2_params}}, a list of PePS2
-data and parameters. An example is yielded by \code{\link{peps2_get_data}}.}
-
 \item{fit}{An instance of \code{rstan::stanmodel}, derived by fitting data to
 the BEBOP in PePS2 model.
 Use \code{stan::sampling(stanmodels$BebopInPeps2, data = dat)}.}
@@ -66,7 +63,7 @@ dat <- peps2_get_data(num_patients = 60,
                       prob_tox = rep(0.1, 6),
                       eff_tox_or = rep(1, 6))
 samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
-decision <- peps2_process(dat, samp)
+decision <- peps2_process(samp)
 decision$Accept   # Accept in cohort 2, 3, 5, 6 but not 1, 4
 decision$ProbEff  # The probability of efficacy is driving that decision
 

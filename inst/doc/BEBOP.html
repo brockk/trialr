@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kristian Brock" />
 
-<meta name="date" content="2019-01-16" />
+<meta name="date" content="2019-04-14" />
 
 <title>BEBOP in PePS2</title>
 
@@ -37,7 +37,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(title);
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -278,14 +278,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">BEBOP in PePS2</h1>
 <h4 class="author"><em>Kristian Brock</em></h4>
-<h4 class="date"><em>2019-01-16</em></h4>
+<h4 class="date"><em>2019-04-14</em></h4>
 
 
 
 <div id="introducing-the-bebop-design" class="section level1">
 <h1>Introducing the BEBOP design</h1>
-<p>The BEBOP phase II trial methodology incorporates predictive baseline information to study co-primary efficacy and toxicity outcomes. BEBOP stands for Bayesian Evaluation of Bivariate Binary Outcomes and Predictive Information. It was developed for the PePS2 trial, investigating pembrolizumab in non-small-cell lung cancer (NSCLC) patients with performance status 2 (PS2). A major factor in the PePS2 trial is the data on PS0 / 1 NSCLC patients published by <span class="citation">Garon et al. (2015)</span>, showing that patients with greater PD-L1 tumour proportion scores are more likely to achieve an objective response. They introduce this predictive biomarker and validate a three-level categorisation Low, Medium and High PD-L1 score. There was also a suggestion (albeit not shown to be <em>statistically significant</em>) that previously untreated patients are more likely to have a response. These same variables will likely be predictive of response in the PS2 population. Brock et al. (publication in submission) developed BEBOP to make efficient use of this information.</p>
-<p>BEBOP re-uses the probability model at the core of the EffTox design <span class="citation">(Thall and Cook 2004, @Thall2014)</span>. Let <span class="math inline">\(x\)</span> represent a vector of predictive baseline variables and <span class="math inline">\(\boldsymbol{\theta}\)</span> a vector of parameters. The marginal probabilities of efficacy and toxicity are estimated using general functions <span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta})\)</span> and <span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta})\)</span> to be specified by the user.</p>
+<p>The BEBOP phase II trial methodology incorporates predictive baseline information to study co-primary efficacy and toxicity outcomes. BEBOP stands for Bayesian Evaluation of Bivariate Binary Outcomes and Predictive Information. It was developed for the PePS2 trial, investigating pembrolizumab in non-small-cell lung cancer (NSCLC) patients with performance status 2 (PS2). A major factor in the PePS2 trial is the data on PS0 / 1 NSCLC patients published by <span class="citation">Garon et al. (2015)</span>, showing that patients with greater PD-L1 tumour proportion scores are more likely to achieve an objective response. They introduce this predictive biomarker and validate a three-level categorisation Low, Medium and High PD-L1 score. There was also a suggestion (albeit not shown to be <em>statistically significant</em>) that previously untreated patients are more likely to have a response. These same variables will likely be predictive of response in the PS2 population. Brock et al. (publication in submission) developed BEBOP to make efficient use of this information.</p>
+<p>BEBOP re-uses the probability model at the core of the EffTox design <span class="citation">(Thall and Cook 2004, <span class="citation">@Thall2014</span>)</span>. Let <span class="math inline">\(x\)</span> represent a vector of predictive baseline variables and <span class="math inline">\(\boldsymbol{\theta}\)</span> a vector of parameters. The marginal probabilities of efficacy and toxicity are estimated using general functions <span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta})\)</span> and <span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta})\)</span> to be specified by the user.</p>
 <p>In PePS2, we have <span class="math inline">\(x_{i1} = 1\)</span> if a patient has been previously treated. To convey PD-L1 expression, the authors use <span class="math inline">\(x_{i2} = 1\)</span> and <span class="math inline">\(x_{i3} = 0\)</span> if a patient has a Low PD-L1 score; <span class="math inline">\(x_{i2} = 0\)</span> and <span class="math inline">\(x_{i3} = 1\)</span> if a patient has a Medium PD-L1 score; and <span class="math inline">\(x_{i2} = 0\)</span> and <span class="math inline">\(x_{i3} = 0\)</span> if a patient has a High PD-L1 score. Thus, we have <span class="math inline">\(x_i = (x_{i1}, x_{i2}, x_{i3})\)</span>. The marginal efficacy and toxicity functions in PePS2 take the form</p>
 <p><span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta}) = \alpha + \beta x_{i1} + \gamma x_{i2} + \zeta x_{i3}\)</span></p>
 <p><span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta}) = \lambda\)</span></p>
@@ -366,22 +366,22 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>The trial uses a sample size of 60. Let us simulate a set of outcomes with the following efficacy and toxicity rates</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(trialr)</a>
-<a class="sourceLine" id="cb1-2" title="2">peps2_sc &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">peps2_get_data</span>(<span class="dt">num_patients =</span> <span class="dv">60</span>,</a>
-<a class="sourceLine" id="cb1-3" title="3">                                      <span class="dt">prob_eff =</span> <span class="kw">c</span>(<span class="fl">0.167</span>, <span class="fl">0.192</span>, <span class="fl">0.5</span>, <span class="fl">0.091</span>, <span class="fl">0.156</span>, <span class="fl">0.439</span>),</a>
-<a class="sourceLine" id="cb1-4" title="4">                                      <span class="dt">prob_tox =</span> <span class="kw">rep</span>(<span class="fl">0.1</span>, <span class="dv">6</span>),</a>
-<a class="sourceLine" id="cb1-5" title="5">                                      <span class="dt">eff_tox_or =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>))</a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb1-8" title="8">dat &lt;-<span class="st"> </span><span class="kw">peps2_sc</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(trialr)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">peps2_sc &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">peps2_get_data</span>(<span class="dt">num_patients =</span> <span class="dv">60</span>,</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                                      <span class="dt">prob_eff =</span> <span class="kw">c</span>(<span class="fl">0.167</span>, <span class="fl">0.192</span>, <span class="fl">0.5</span>, <span class="fl">0.091</span>, <span class="fl">0.156</span>, <span class="fl">0.439</span>),</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">                                      <span class="dt">prob_tox =</span> <span class="kw">rep</span>(<span class="fl">0.1</span>, <span class="dv">6</span>),</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">                                      <span class="dt">eff_tox_or =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>))</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">dat &lt;-<span class="st"> </span><span class="kw">peps2_sc</span>()</a></code></pre></div>
 <p>In this example, we have used efficacy rates that increase in PD-L1 and are slightly higher in previously-uintreated patients. We use the uniform toxicity rate of 10% across all cohorts, and no association between efficacy and toxicity events, represented by odds-ratios equal to 1.</p>
 <p>The <code>dat</code> object contains, for example, the prior parameters</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">c</span>(dat<span class="op">$</span>alpha_mean, dat<span class="op">$</span>alpha_sd)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">c</span>(dat<span class="op">$</span>alpha_mean, dat<span class="op">$</span>alpha_sd)</a></code></pre></div>
 <pre><code>## [1] -2.2  2.0</code></pre>
 <p>and simulated predictive variables and efficacy and toxicity outcomes</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
-<a class="sourceLine" id="cb4-2" title="2">  <span class="kw">head</span>(<span class="kw">with</span>(dat, <span class="kw">data.frame</span>(eff, tox, x1, x2, x3)), <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb4-3" title="3">)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw">head</span>(<span class="kw">with</span>(dat, <span class="kw">data.frame</span>(eff, tox, x1, x2, x3)), <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -466,16 +466,15 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>We fit the data to the BEBOP model and obtain samples from the posterior distribution using <code>rstan</code>. The <code>BebopInPeps2</code> model is provided by <code>trialr</code> and compiled when the package is installed.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">sampling</span>(stanmodels<span class="op">$</span>BebopInPeps2, <span class="dt">data =</span> dat)</a></code></pre></div>
-<pre><code>## trying deprecated constructor; please alert package maintainer</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan_peps2</span>(dat<span class="op">$</span>eff, dat<span class="op">$</span>tox, dat<span class="op">$</span>cohorts)</a></code></pre></div>
 <p>It is informative to view plots of posterior beliefs. Posterior samples of parameter values are available but they are less meaningful to us than the modelled efficacy rates, for example. View posterior distributions using code like</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">rstan<span class="op">::</span><span class="kw">plot</span>(samp, <span class="dt">pars =</span> <span class="st">&#39;prob_eff&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">rstan<span class="op">::</span><span class="kw">plot</span>(fit, <span class="dt">pars =</span> <span class="st">'prob_eff'</span>)</a></code></pre></div>
 <p>We see that the modelled rates of efficacy are highest in cohorts 3 and 6, but likely to be greater than the critical threshold of 10% in cohort 2 and perhaps cohort 5 as well. In contrast, there is not much evidence of clinical benefit in cohorts 1 and 4. This is confirmed by invoking the formally described analysis and associated decision rules.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">decision &lt;-<span class="st"> </span><span class="kw">peps2_process</span>(dat, samp)</a>
-<a class="sourceLine" id="cb8-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
-<a class="sourceLine" id="cb8-3" title="3">  <span class="kw">with</span>(decision, <span class="kw">data.frame</span>(ProbEff, ProbAccEff, ProbTox, ProbAccTox, Accept)), </a>
-<a class="sourceLine" id="cb8-4" title="4">  <span class="dt">digits =</span> <span class="dv">3</span></a>
-<a class="sourceLine" id="cb8-5" title="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">decision &lt;-<span class="st"> </span><span class="kw">peps2_process</span>(fit)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="kw">with</span>(decision, <span class="kw">data.frame</span>(ProbEff, ProbAccEff, ProbTox, ProbAccTox, Accept)), </a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="dt">digits =</span> <span class="dv">3</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -533,12 +532,25 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </table>
 <p>ProbAccEff is the posterior probability that the efficacy rate in a cohort is greater than the 10% threshold. ProbAccTox is the probability that toxicity is less than 30%. The treatment is acceptable in a cohort if it is sufficiently efficacious and non-toxic. We see that in this simulated iteration, the treatment would be approved in all cohorts except 1 and 4.</p>
 <p>We can perform the simulations on a greater number of iterations to learn about the operating characteristics of the design.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb9-2" title="2">sims &lt;-<span class="st"> </span><span class="kw">peps2_run_sims</span>(<span class="dt">num_sims =</span> <span class="dv">10</span>, <span class="dt">sample_data_func =</span> peps2_sc,</a>
-<a class="sourceLine" id="cb9-3" title="3">                       <span class="dt">summarise_func =</span> peps2_process)</a></code></pre></div>
-<p>In <code>peps2_run_sims</code>, the second and third args are delegates to simulate trial outcomes and post-process the <code>rstan</code> sample respectively. The outcome samping delelgate is called without arguments. The post-process delegate is called with first argument the object returned by the outcome sampling delegate (e.g. <code>dat</code> above), and second argument the posterior sample from <code>rstan</code> (e.g. <code>samp</code> above). The objects returned by the post-process delegate form the items in the <code>sims</code> object that are returned to the user by <code>peps2_run_sims</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">run_sims &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">num_sims =</span> <span class="dv">10</span>, <span class="dt">sample_data_func =</span> peps2_sc,</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                     <span class="dt">summarise_func =</span> peps2_process, ...) {</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">  sims &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>num_sims) {</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">    <span class="kw">print</span>(i)</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">    dat &lt;-<span class="st"> </span><span class="kw">sample_data_func</span>()</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">    fit &lt;-<span class="st"> </span><span class="kw">stan_peps2</span>(dat<span class="op">$</span>eff, dat<span class="op">$</span>tox, dat<span class="op">$</span>cohorts, ...)</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">    sim &lt;-<span class="st"> </span><span class="kw">summarise_func</span>(fit)</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">    sims[[i]] &lt;-<span class="st"> </span>sim</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">  }</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">  <span class="kw">return</span>(sims)</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">sims &lt;-<span class="st"> </span><span class="kw">run_sims</span>(<span class="dt">num_sims =</span> <span class="dv">10</span>, <span class="dt">sample_data_func =</span> peps2_sc,</a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">                 <span class="dt">summarise_func =</span> peps2_process)</a></code></pre></div>
+<p>In <code>run_sims</code>, the second and third args are delegates to simulate trial outcomes and post-process the <code>rstan</code> sample respectively. The outcome samping delelgate is called without arguments. The post-process delegate is called with first argument the object returned by the outcome sampling delegate (e.g. <code>dat</code> above), and second argument the posterior sample from <code>rstan</code> (e.g. <code>samp</code> above). The objects returned by the post-process delegate form the items in the <code>sims</code> object that are returned to the user by <code>peps2_run_sims</code>.</p>
 <p>Thus, the probaility of approving the treatment using the statistical design in this scenario can be calculated using</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">apply</span>(<span class="kw">sapply</span>(sims, <span class="cf">function</span>(x) x<span class="op">$</span>Accept), <span class="dv">1</span>, mean)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">apply</span>(<span class="kw">sapply</span>(sims, <span class="cf">function</span>(x) x<span class="op">$</span>Accept), <span class="dv">1</span>, mean)</a></code></pre></div>
 </div>
 <div id="trialr" class="section level1">
 <h1>trialr</h1>

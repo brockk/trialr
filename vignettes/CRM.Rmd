@@ -21,27 +21,27 @@ The Continual Reassessment Method (CRM) is the elder statesman of adaptive clini
 Originally published by @OQuigley1990, it assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose.
 It is a truly seminal design, with many variants appearing over the years to handle different clinical scenarios, such as seperate groups, late-onset toxicity, efficacy and toxicity outcomes, and more.
 
-In this vignette, we focus on the original Bayesian MTD-seeking design in one homogeneous group.
+In this vignette, we focus on the original Bayesian design that seeks the _maximum tolerated dose_ (MTD) in an homogeneous patient group.
 Let $x_i$ be a standardised dose-level. 
 The probability of _dose-limiting toxicity_ (DLT) at dose $x_i$ is estimated to be $F(x_i, \theta)$, where $F$ is a smooth mathematical function, and $\theta$ is a general vector of parameters.
 Even within this simple scenario, there are variants that use different forms for $F$, and different distributions on $\theta$.
 
 The CRM variants currently implemented in `trialr` for MTD-finding in a single homogeneous group are:
 
-| Slot in `trialr::stanmodels` | Link Function | Parameters |
+| `model` | Link Function | Parameters |
 | ------------- |:-------------:| -----:|
-| `CrmEmpiricNormalPrior` | $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$ | normal prior on $\beta$; |
-| `CrmOneParamLogisticNormalPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
-| `CrmOneParamLogisticGammaPrior` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
-| `CrmTwoParamLogisticNormalPrior` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)})$ | normal priors on $\alpha$ and $\beta$ |
+| `empiric` | $F(x_i, \beta)$ = $x_i^{\exp{\beta}}$ | normal prior on $\beta$; |
+| `logistic` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \exp{(\beta)} x_i}))$ | $a_0$ fixed and a normal prior on $\beta$ |
+| `logistic_gamma` | $F(x_i, \beta) = 1 / (1 + \exp{(-a_0 - \beta x_i)})$ | $a_0$ fixed and a gamma prior on $\beta$ |
+| `logistic2` | $F(x_i, \alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)})$ | normal priors on $\alpha$ and $\beta$ |
 
-These models are compiled when you install `trialr` and stored in the `stanmodels` object.
-For instance, to fit the empiric model you would use `stanmodels$CrmEmpiricNormalPrior`.
+These models are compiled when you install `trialr` and accessed via the `stan_crm` function.
+For instance, to fit the empiric model one would use `model = 'empiric'`.
 Examples are given below.
 
 Where necessary, the slope parameter $\beta$ is exponentiated to ensure a positive value.
 One of the core assumptions of the CRM and dose-escalation methods in general, is that the probability of toxicity increases with dose.
-If a negative value for $\beta$ is implausible, it makes sense to reflect this in the model.
+If a negative value for $\beta$ is non-sensical, we should reflect that in the model parameterisation.
 In the model with gamma prior, this step is not necessary because the prior constrains the values to be positive.
 
 Other CRM variants could easily be added in future, if requested.
@@ -74,7 +74,7 @@ Say that we have treated 6 patients at 3 dose-levels:
 |    5    |   3    |      4     |  1  |
 |    6    |   3    |      4     |  1  |
 
-These data can be conveyed using our scheme for representing phase I outcomes.
+These data can be conveyed using a simple nomenclature for phase I outcomes.
 We use integers to represent dose-levels given and the letters T and N to represent toxicity or no-toxicity for individual patients.
 These clusters can be strewn together to represent the outcomes of cohorts of patients.
 For instance, the outcomes above can be represented:
@@ -91,6 +91,9 @@ We use a prior variance of $\beta$ equal to 1.34, as used by Cheung in his examp
 ```{r, results = "hide", warning=FALSE, message=FALSE}
 mod1 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
                  model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
+```
+
+```{r}
 mod1
 ```
 In this demonstration, we set the seed for reproducibility when sampling however, in the wild, you might not do this.
@@ -125,10 +128,13 @@ This model requires that a fixed intercept value and parameters for the normal p
 mod2 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
                  model = 'logistic', a0 = 3, beta_mean = 0, beta_sd = sqrt(1.34), 
                  seed = 123)
+```
+
+```{r}
 mod2
 ```
 
-Once again, we see that dose-level 2 would be recommended for the next cohort because it is forecast to have rob(DLT) closest to the target, 25%.
+Once again, we see that dose-level 2 would be recommended for the next cohort because it is forecast to have Pr(DLT) closest to the target, 25%.
 
 ## One parameter logisitic model with gamma prior
 This model requires that a fixed intercept value and parameters for the gamma prior on the slope term are specified:
@@ -137,6 +143,9 @@ mod3 <- stan_crm(outcomes, skeleton = skeleton, target = target,
                  model = 'logistic_gamma', 
                  a0 = 3, beta_shape = 1, beta_inverse_scale = 1, 
                  seed = 123)
+```
+
+```{r}
 mod3
 ```
 
@@ -149,6 +158,9 @@ mod4 <- stan_crm(outcomes, skeleton = skeleton, target = target,
                  model = 'logistic2', 
                  alpha_mean = 0, alpha_sd = 1, beta_mean =  0, beta_sd = 1, 
                  seed = 123)
+```
+
+```{r}
 mod4
 ```
 
@@ -197,13 +209,15 @@ The prior on $\alpha$ does not appear to be unduly driving the divergence from t
 
 ## Are we interested in Pr(DLT) or Pr(MTD)?
 The traditional method of inference using the CRM has been to estimate the expected dose-toxicity curve and infer the suggested dose by identifying which is estimated to have toxicity rate closest to the target.
+This has partly been for computational convenience.
+Without MCMC, it has been simple to estimate the posterior mean(s) of the model parameter(s) and plug these into $F(.)$.
 
 However, with Stan we can take a different approach. 
 We have many possible realities sampled from the posterior distributions.
 For instance, each Stan-fit samples many possible dose-toxicity curves, in accordance with the model and priors specified and the data observed.
 With each sampled dose-toxicity curve we can calculate the dose that is closest to the target.
-Each sampled curve advocates a single dose.
-We can then tabulate the number of times that each dose is chosen, effectively creating the posterior probability that each dose is the MTD.
+Thus, each posterior dose-toxicity curves identifies a candidate MTD.
+The frequency with which the doses occur reflects the posterior probability that each dose is the MTD.
 This is probably what we really want when we conduct an MTD-seeking clinical trial.
 
 ```{r}

@@ -1,6 +1,4 @@
 
-# EffTox
-
 #' @title Calculate the p-index for EffTox utility contours
 #'
 #' @description
@@ -247,7 +245,7 @@ efftox_process <- function(dat, fit) {
   lowest <- min(dat$doses)
   highest <- max(dat$doses)
   in_range <- sapply(dose_indices,
-                    function(x) (x >= lowest - 1) & (x <= highest + 1))
+                     function(x) (x >= lowest - 1) & (x <= highest + 1))
   acceptable <- (prob_acc_eff > dat$p_e) & (prob_acc_tox > dat$p_t) & in_range
   if(sum(acceptable) > 0) {
     recommended_dose <- which.max(ifelse(acceptable, utility, NA))  # 2
@@ -503,7 +501,7 @@ efftox_contour_plot <- function(dat,
                     util_vals = rep(util_vals, each = length(eff_vals)))
 
     plt <- ggplot2::ggplot(df, ggplot2::aes(x = eff_vals, y = tox_vals,
-                            group = as.factor(util_vals))) +
+                                            group = as.factor(util_vals))) +
       ggplot2::geom_line(size = 0.5, alpha = 0.25) +
       ggplot2::xlim(0, 1) + ggplot2::ylim(0, 1) +
       ggplot2::xlab('Prob(Efficacy)') + ggplot2::ylab('Prob(Toxicity)')
@@ -536,7 +534,7 @@ efftox_contour_plot <- function(dat,
     return(plt)
   } else {
     graphics::plot(NULL, ylim = c(0, 1), xlim = c(0, 1), ylab = 'Prob(Toxicity)',
-         xlab = 'Prob(Efficacy)')
+                   xlab = 'Prob(Efficacy)')
 
     for(u in util_vals) {
       tox_vals = efftox_get_tox(eff_vals, u, dat$p, dat$eff0, dat$tox1)
@@ -834,19 +832,6 @@ efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
   }
   return(df)
 }
-
-
-
-#
-#
-# New stuff
-#
-#
-
-
-
-
-
 
 #' Class of model fit by \pkg{trialr} using the EffTox dose-finding design.
 #'
@@ -1149,9 +1134,8 @@ stan_efftox_demo <- function(outcome_str, ...) {
 #'
 #' @param x \code{\link{efftox_fit}} object to convert.
 #' @param ... Extra parameters, passed onwards.
-#' @sdname print
 #' @method print efftox_fit
-#' @S3method print efftox_fit
+#' @export
 print.efftox_fit <- function(x, ...) {
   # Patient-level data
   treated <- data.frame(
@@ -1184,9 +1168,8 @@ print.efftox_fit <- function(x, ...) {
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A \code{data.frame}
-#' @sdname as.data.frame
 #' @method as.data.frame efftox_fit
-#' @S3method as.data.frame efftox_fit
+#' @export
 as.data.frame.efftox_fit <- function(x, ...) {
   as.data.frame(x$fit, ...)
 }
@@ -1198,9 +1181,8 @@ as.data.frame.efftox_fit <- function(x, ...) {
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A plot
-#' @sdname plot
 #' @method plot efftox_fit
-#' @S3method plot efftox_fit
+#' @export
 plot.efftox_fit <- function(x,  pars = 'utility', ...) {
   rstan::plot(x$fit, pars = pars, ...)
 }
@@ -1211,9 +1193,8 @@ plot.efftox_fit <- function(x,  pars = 'utility', ...) {
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A summary object.
-#' @sdname summary
 #' @method summary efftox_fit
-#' @S3method summary efftox_fit
+#' @export
 summary.efftox_fit <- function(object, ...) {
   rstan::summary(object$fit, ...)
 }

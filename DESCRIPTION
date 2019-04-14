@@ -1,16 +1,7 @@
 Package: trialr
-Type: Package
+Version: 0.0.8
+Date: 2019-03-17
 Title: Clinical Trial Designs in 'RStan'
-Version: 0.0.7
-Date: 2019-02-24
-Authors@R: c(
-  person("Kristian", "Brock", 
-         email = "kristian.brock@gmail.com", 
-         role = c("aut", "cre"),
-         comment = c(ORCID = "0000-0002-3921-0166")),
-  person("Trustees of", "Columbia University", 
-         role = "cph"))
-Maintainer: Kristian Brock <kristian.brock@gmail.com>
 Description: A showcase of Bayesian clinical trial designs, implemented in 
     'RStan' and R. Some designs are implemented in R for the first
     time (e.g. 'EffTox' by Thall and Cook, 2004, 
@@ -23,34 +14,42 @@ Description: A showcase of Bayesian clinical trial designs, implemented in
     There is a preponderance of early phase trial designs because this is where 
     Bayesian methods are used most. If there is a published Bayesian design you
     want implemented in 'Stan', get in touch.
-License: GPL-3
-SystemRequirements: GNU make
+Authors@R: c(
+  person("Kristian", "Brock", 
+         email = "kristian.brock@gmail.com", 
+         role = c("aut", "cre"),
+         comment = c(ORCID = "0000-0002-3921-0166")),
+  person("Trustees of", "Columbia University", 
+         role = "cph"))
+Maintainer: Kristian Brock <kristian.brock@gmail.com>
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
 Depends:
-    R (>= 3.4.0),
-    Rcpp (>= 0.12.8),
-    methods (>= 3.3.2)
+  R (>= 3.4.0), 
+  methods,Rcpp (>= 1.0.1)
 Imports:
-    rstan (>= 2.18.1),
-    rstantools (>= 1.1.0),
-    loo (>= 1.1.0),
-    gtools,
-    stringr,
-    dplyr,
-    tidyr,
-    magrittr,
-    ggplot2
+  rstan (>= 2.18.2), 
+  rstantools (>= 1.5.1),
+  loo (>= 1.1.0),
+  dplyr,
+  tidyr
 LinkingTo:
-  StanHeaders (>= 2.18.0), 
-  rstan (>= 2.18.1), 
-  BH (>= 1.66), 
-  Rcpp (>= 0.12.8), 
-  RcppEigen (>= 0.3.2.9.0)
-Suggests:
+  StanHeaders (>= 2.18.1), 
+  rstan (>= 2.18.2), 
+  BH (>= 1.69.0-1), 
+  Rcpp (>= 1.0.1), 
+  RcppEigen (>= 0.3.3.5.0)
+SystemRequirements: GNU make
+NeedsCompilation: yes
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
+URL: https://github.com/brockk/trialr
+BugReports: https://github.com/brockk/trialr/issues
+Suggests: 
+    testthat,
     knitr,
     rmarkdown,
     ggridges,
-    testthat
-URL: https://github.com/brockk/trialr
-BugReports: https://github.com/brockk/trialr/issues
-RoxygenNote: 6.0.1
-VignetteBuilder: knitr
+    covr

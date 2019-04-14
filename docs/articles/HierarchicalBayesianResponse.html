@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.6</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Hierarchical Bayesian Model for Binary Responses</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-01-16</h4>
+            <h4 class="date">2019-04-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/HierarchicalBayesianResponse.Rmd"><code>vignettes/HierarchicalBayesianResponse.Rmd</code></a></small>
       <div class="hidden name"><code>HierarchicalBayesianResponse.Rmd</code></div>
@@ -119,7 +119,7 @@
 <p>The model is compiled in <code>trialr</code> under the <code>ThallHierarchicalBinary</code> slot of the <code>stanmodels</code> object.</p>
 <p>Statistically, the authors assume that in a trial of <span class="math inline">\(k\)</span> disease subtypes, the treatment effects are drawn from the same common normal distribution</p>
 <p><span class="math inline">\(\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)\)</span></p>
-<p>As is the convention in BUGS, the authors define normal distributions by a precision parameter <span class="math inline">\(\tau\)</span> as opposed to the standard deviation parameter <span class="math inline">\(\sigma\)</span> used here. We have re-specified the model to comply with the Stan convention of using standard deviation. The authors use a normal hyperprior on <span class="math inline">\(\mu\)</span>, and a gamma hyperprior on <span class="math inline">\(\tau\)</span>, equivalent to an inverse gamma hyperprior on <span class="math inline">\(\sigma\)</span>.</p>
+<p>As is the convention in BUGS, the authors define normal distributions by a precision parameter <span class="math inline">\(\tau\)</span> as opposed to the standard deviation parameter <span class="math inline">\(\sigma\)</span> used here. We have re-specified the model to comply with the Stan convention of using standard deviation. The authors use a normal hyperprior on <span class="math inline">\(\mu\)</span>, and a gamma hyperprior on <span class="math inline">\(\tau\)</span>, equivalent to an inverse gamma hyperprior on <span class="math inline">\(\sigma^2\)</span>.</p>
 <p>We observe <span class="math inline">\(x_i\)</span> responses in <span class="math inline">\(n_i\)</span> patients in disease sub-type <span class="math inline">\(i\)</span>. The rate of response in subtype <span class="math inline">\(i\)</span> is modelled as <span class="math inline">\(p_i = \text{logit}^{-1}(\rho_i)\)</span>. Each <span class="math inline">\(x_i\)</span> is assumed to be binomially distributed with success parameter <span class="math inline">\(p_i\)</span>. In Stan, that relationship is described as <code>x ~ binomial_logit(n, rho);</code></p>
 <p>The treatment is judged to be worthy of further investigation in cohort <span class="math inline">\(i\)</span> if</p>
 <p><span class="math inline">\(\text{Pr}\left\{ p_i &gt; \theta | \mathcal{D} \right\} &gt; q\)</span></p>
@@ -128,44 +128,77 @@
 <div id="example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h1>
-<p>We can learn about the parameters required by the <code>ThallHierarchicalBinary</code> model using</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(trialr)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">help</span>(thallhierarchicalbinary_parameters)</a></code></pre></div>
-<pre><code>## No documentation for 'thallhierarchicalbinary_parameters' in specified packages and libraries:
-## you could try '??thallhierarchicalbinary_parameters'</code></pre>
-<p>We can get an example using</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thallhierarchicalbinary_parameters_demo.html">thallhierarchicalbinary_parameters_demo</a></span>()</a>
-<a class="sourceLine" id="cb3-2" title="2">dat</a></code></pre></div>
-<pre><code>## $m
-## [1] 10
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(trialr)</a></code></pre></div>
+<p>We reproduce Thall <em>etl al.</em>’s example. We have outcomes in 10 disease subgroups. The number of responses is stored in <code>group_responses</code> and the number of patients in <code>group_sizes</code>. There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mod0 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_hierarchical_response_thall.html">stan_hierarchical_response_thall</a></span>(</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">group_responses =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">group_sizes =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span> ,<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">mu_mean =</span> <span class="fl">-1.3863</span>,</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">mu_sd =</span> <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.1</span>),</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">tau_alpha =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">tau_beta =</span> <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mod0</a></code></pre></div>
+<pre><code>## Inference for Stan model: ThallHierarchicalBinary.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
-## $x
-##  [1] 0 0 1 3 5 0 1 2 0 0
+##                     mean se_mean   sd   2.5%    25%    50%    75%  97.5%
+## mu                 -0.07    0.03 1.38  -2.82  -0.94  -0.04   0.84   2.57
+## sigma2             12.04    0.29 9.57   3.29   6.19   9.30  14.37  37.00
+## rho[1]             -0.06    0.06 3.69  -7.69  -2.22   0.05   2.22   7.22
+## rho[2]             -2.98    0.06 2.50  -9.09  -4.22  -2.54  -1.26   0.74
+## rho[3]              2.36    0.05 2.67  -1.89   0.62   1.93   3.69   8.68
+## rho[4]             -0.28    0.01 0.78  -1.84  -0.77  -0.28   0.24   1.24
+## rho[5]              3.69    0.05 2.26   0.55   2.11   3.28   4.79   9.30
+## rho[6]             -0.11    0.07 3.71  -7.83  -2.29  -0.01   2.16   6.99
+## rho[7]              0.03    0.02 1.49  -3.05  -0.91   0.02   1.00   2.92
+## rho[8]              0.76    0.02 1.31  -1.73  -0.12   0.73   1.54   3.51
+## rho[9]             -2.36    0.06 2.80  -9.27  -3.85  -1.96  -0.46   2.08
+## rho[10]            -0.13    0.06 3.77  -7.92  -2.41  -0.06   2.13   7.18
+## sigma               3.28    0.03 1.13   1.81   2.49   3.05   3.79   6.08
+## prob_response[1]    0.50    0.01 0.38   0.00   0.10   0.51   0.90   1.00
+## prob_response[2]    0.15    0.00 0.18   0.00   0.01   0.07   0.22   0.68
+## prob_response[3]    0.78    0.00 0.25   0.13   0.65   0.87   0.98   1.00
+## prob_response[4]    0.44    0.00 0.17   0.14   0.32   0.43   0.56   0.78
+## prob_response[5]    0.92    0.00 0.10   0.63   0.89   0.96   0.99   1.00
+## prob_response[6]    0.50    0.01 0.38   0.00   0.09   0.50   0.90   1.00
+## prob_response[7]    0.51    0.00 0.27   0.05   0.29   0.50   0.73   0.95
+## prob_response[8]    0.64    0.00 0.23   0.15   0.47   0.67   0.82   0.97
+## prob_response[9]    0.24    0.00 0.26   0.00   0.02   0.12   0.39   0.89
+## prob_response[10]   0.49    0.01 0.38   0.00   0.08   0.49   0.89   1.00
+## lp__              -34.20    0.13 3.55 -42.28 -36.29 -33.70 -31.63 -28.61
+##                   n_eff Rhat
+## mu                 2481    1
+## sigma2             1102    1
+## rho[1]             3665    1
+## rho[2]             1681    1
+## rho[3]             2507    1
+## rho[4]             4260    1
+## rho[5]             1916    1
+## rho[6]             2846    1
+## rho[7]             4357    1
+## rho[8]             3463    1
+## rho[9]             2507    1
+## rho[10]            4045    1
+## sigma              1125    1
+## prob_response[1]   3533    1
+## prob_response[2]   3833    1
+## prob_response[3]   4308    1
+## prob_response[4]   4324    1
+## prob_response[5]   4377    1
+## prob_response[6]   3403    1
+## prob_response[7]   4570    1
+## prob_response[8]   3766    1
+## prob_response[9]   4315    1
+## prob_response[10]  3858    1
+## lp__                805    1
 ## 
-## $n
-##  [1] 0 2 1 7 5 0 2 3 1 0
-## 
-## $target_resp
-## [1] 0.3
-## 
-## $mu_mean
-## [1] -1.3863
-## 
-## $mu_sd
-## [1] 3.162278
-## 
-## $tau_alpha
-## [1] 2
-## 
-## $tau_beta
-## [1] 20</code></pre>
-<p>We have outcomes in 10 disease subgroups. The number of responses is stored in <code>x</code> and the number of patients in <code>n</code>. There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.</p>
-<p>We invoke the model by calling <code><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">rstan::sampling</a></code> on the included <code>ThallHierarchicalBinary</code> model. We set the seed for reproducble randomness.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">samp &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">sampling</a></span>(stanmodels<span class="op">$</span>ThallHierarchicalBinary, <span class="dt">data =</span> dat, </a>
-<a class="sourceLine" id="cb5-2" title="2">                        <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<pre><code>## trying deprecated constructor; please alert package maintainer</code></pre>
-<p>The probability that the efficacy probability in each subgroup exceeds the threshold is stored as <code>pg</code>. We extract that variable and use the <code>rstan::summary</code> function to make inference.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(rstan<span class="op">::</span><span class="kw">summary</span>(samp, <span class="dt">par =</span> <span class="st">'pg'</span>)<span class="op">$</span>summary, <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
+## Samples were drawn using NUTS(diag_e) at Sun Apr 14 09:43:49 2019.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p>The probability of response in each subgroup is calculated under <code>prob_response</code>. We can use the generic summary function from rstan to get a nice summary:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(rstan<span class="op">::</span><span class="kw">summary</span>(mod0, <span class="dt">par =</span> <span class="st">'prob_response'</span>)<span class="op">$</span>summary, <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -182,148 +215,156 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>pg[1]</td>
-<td align="right">0.542</td>
-<td align="right">0.008</td>
-<td align="right">0.498</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3535.715</td>
-<td align="right">1.000</td>
-</tr>
-<tr class="even">
-<td>pg[2]</td>
-<td align="right">0.088</td>
-<td align="right">0.004</td>
-<td align="right">0.284</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4071.151</td>
+<td>prob_response[1]</td>
+<td align="right">0.503</td>
+<td align="right">0.006</td>
+<td align="right">0.379</td>
+<td align="right">0.000</td>
+<td align="right">0.098</td>
+<td align="right">0.513</td>
+<td align="right">0.902</td>
 <td align="right">0.999</td>
-</tr>
-<tr class="odd">
-<td>pg[3]</td>
-<td align="right">0.946</td>
-<td align="right">0.004</td>
-<td align="right">0.225</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3393.444</td>
-<td align="right">1.000</td>
-</tr>
-<tr class="even">
-<td>pg[4]</td>
-<td align="right">0.748</td>
-<td align="right">0.008</td>
-<td align="right">0.434</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">2862.118</td>
-<td align="right">1.002</td>
-</tr>
-<tr class="odd">
-<td>pg[5]</td>
-<td align="right">1.000</td>
-<td align="right">NaN</td>
-<td align="right">0.016</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">NaN</td>
-<td align="right">1.000</td>
-</tr>
-<tr class="even">
-<td>pg[6]</td>
-<td align="right">0.516</td>
-<td align="right">0.008</td>
-<td align="right">0.500</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3784.143</td>
-<td align="right">1.000</td>
-</tr>
-<tr class="odd">
-<td>pg[7]</td>
-<td align="right">0.708</td>
-<td align="right">0.008</td>
-<td align="right">0.455</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3087.661</td>
+<td align="right">3533.043</td>
 <td align="right">1.001</td>
 </tr>
 <tr class="even">
-<td>pg[8]</td>
-<td align="right">0.905</td>
-<td align="right">0.006</td>
-<td align="right">0.294</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">2494.959</td>
-<td align="right">1.002</td>
+<td>prob_response[2]</td>
+<td align="right">0.150</td>
+<td align="right">0.003</td>
+<td align="right">0.183</td>
+<td align="right">0.000</td>
+<td align="right">0.015</td>
+<td align="right">0.073</td>
+<td align="right">0.221</td>
+<td align="right">0.678</td>
+<td align="right">3832.701</td>
+<td align="right">1.000</td>
 </tr>
 <tr class="odd">
-<td>pg[9]</td>
-<td align="right">0.158</td>
-<td align="right">0.006</td>
-<td align="right">0.365</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">3791.936</td>
+<td>prob_response[3]</td>
+<td align="right">0.777</td>
+<td align="right">0.004</td>
+<td align="right">0.248</td>
+<td align="right">0.131</td>
+<td align="right">0.651</td>
+<td align="right">0.873</td>
+<td align="right">0.976</td>
+<td align="right">1.000</td>
+<td align="right">4307.607</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
-<td>pg[10]</td>
-<td align="right">0.544</td>
-<td align="right">0.009</td>
-<td align="right">0.498</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3320.298</td>
+<td>prob_response[4]</td>
+<td align="right">0.439</td>
+<td align="right">0.003</td>
+<td align="right">0.168</td>
+<td align="right">0.137</td>
+<td align="right">0.316</td>
+<td align="right">0.431</td>
+<td align="right">0.559</td>
+<td align="right">0.775</td>
+<td align="right">4324.014</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="odd">
+<td>prob_response[5]</td>
+<td align="right">0.923</td>
+<td align="right">0.002</td>
+<td align="right">0.101</td>
+<td align="right">0.635</td>
+<td align="right">0.892</td>
+<td align="right">0.964</td>
+<td align="right">0.992</td>
+<td align="right">1.000</td>
+<td align="right">4376.841</td>
+<td align="right">1.001</td>
+</tr>
+<tr class="even">
+<td>prob_response[6]</td>
+<td align="right">0.496</td>
+<td align="right">0.007</td>
+<td align="right">0.380</td>
+<td align="right">0.000</td>
+<td align="right">0.092</td>
+<td align="right">0.496</td>
+<td align="right">0.897</td>
+<td align="right">0.999</td>
+<td align="right">3403.481</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="odd">
+<td>prob_response[7]</td>
+<td align="right">0.505</td>
+<td align="right">0.004</td>
+<td align="right">0.266</td>
+<td align="right">0.045</td>
+<td align="right">0.286</td>
+<td align="right">0.504</td>
+<td align="right">0.731</td>
+<td align="right">0.949</td>
+<td align="right">4569.750</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="even">
+<td>prob_response[8]</td>
+<td align="right">0.637</td>
+<td align="right">0.004</td>
+<td align="right">0.230</td>
+<td align="right">0.151</td>
+<td align="right">0.471</td>
+<td align="right">0.674</td>
+<td align="right">0.824</td>
+<td align="right">0.971</td>
+<td align="right">3765.846</td>
+<td align="right">1.001</td>
+</tr>
+<tr class="odd">
+<td>prob_response[9]</td>
+<td align="right">0.236</td>
+<td align="right">0.004</td>
+<td align="right">0.264</td>
+<td align="right">0.000</td>
+<td align="right">0.021</td>
+<td align="right">0.123</td>
+<td align="right">0.388</td>
+<td align="right">0.889</td>
+<td align="right">4315.023</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="even">
+<td>prob_response[10]</td>
+<td align="right">0.492</td>
+<td align="right">0.006</td>
+<td align="right">0.380</td>
+<td align="right">0.000</td>
+<td align="right">0.083</td>
+<td align="right">0.486</td>
+<td align="right">0.894</td>
+<td align="right">0.999</td>
+<td align="right">3857.960</td>
 <td align="right">1.000</td>
 </tr>
 </tbody>
 </table>
-<p>Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least <span class="math inline">\(q = 70\)</span>% certainty that the probability of efficacy exceeds the target response rate of 30% On that basis, at this interim stage, we would be willing to approve the treatment in subgroups 3, 4, 5 and 8.</p>
+<p>Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least <span class="math inline">\(q = 70\)</span>% certainty that the probability of efficacy exceeds the target response rate of 30%.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">colMeans</span>(<span class="kw">as.data.frame</span>(mod0, <span class="dt">pars =</span> <span class="st">'prob_response'</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.3</span>)</a></code></pre></div>
+<pre><code>##  prob_response[1]  prob_response[2]  prob_response[3]  prob_response[4] 
+##           0.61450           0.17500           0.92625           0.77525 
+##  prob_response[5]  prob_response[6]  prob_response[7]  prob_response[8] 
+##           0.99925           0.59650           0.73600           0.89650 
+##  prob_response[9] prob_response[10] 
+##           0.31325           0.59375</code></pre>
+<p>On that basis, at this interim stage, we would be eager to approve the treatment in subgroups 3, 5 and 8. Subgroups 4 and 7 are close to the boundary.</p>
 <p>Some distribution plots of the probabilities of efficacy in some subgroups may be informative.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
 <pre><code>## Loading required package: StanHeaders</code></pre>
-<pre><code>## rstan (Version 2.18.1, GitRev: 2e1f913d3ca3)</code></pre>
+<pre><code>## rstan (Version 2.18.2, GitRev: 2e1f913d3ca3)</code></pre>
 <pre><code>## For execution on a local, multicore CPU with excess RAM we recommend calling
 ## options(mc.cores = parallel::detectCores()).
 ## To avoid recompilation of unchanged Stan programs, we recommend calling
 ## rstan_options(auto_write = TRUE)</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">library</span>(dplyr)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: 'dplyr'</code></pre>
 <pre><code>## The following objects are masked from 'package:stats':
@@ -332,28 +373,17 @@
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[3]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[3]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb16-5" title="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 3'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">plot</span>(mod0, <span class="dt">pars =</span> <span class="st">'prob_response'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_abline">geom_vline</a></span>(<span class="dt">xintercept =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled analysis of response rate in 10 sarcoma subtypes'</span>)</a></code></pre></div>
+<pre><code>## ci_level: 0.8 (80% intervals)</code></pre>
+<pre><code>## outer_level: 0.95 (95% intervals)</code></pre>
 <div class="figure">
-<img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-5-1.png" alt="Prob(Response | D) in subgroup 3" width="576"><p class="caption">
+<img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-6-1.png" alt="Prob(Response | D) in subgroup 3" width="576"><p class="caption">
 Prob(Response | D) in subgroup 3
 </p>
 </div>
-<p>We see that the inferred efficacy in subgroup 3 is very high.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">as.data.frame</span>(samp, <span class="st">'p[4]'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-2" title="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbResponse =</span> <span class="st">`</span><span class="dt">p[4]</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-3" title="3"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> ProbResponse)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-4" title="4"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-5" title="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Prob(Response | D) in Sub-group 4'</span>)</a></code></pre></div>
-<div class="figure">
-<img src="HierarchicalBayesianResponse_files/figure-html/unnamed-chunk-6-1.png" alt="Prob(Response | D) in subgroup 4" width="576"><p class="caption">
-Prob(Response | D) in subgroup 4
-</p>
-</div>
-<p>In contrast, efficacy is subject to more uncertainty in subgroup 4, but the majority of the mass clearly lies to the right of 30%.</p>
+<p>We see that the inferred efficacy in subgroup 5 is very high. In contrast, efficacy is subject to more uncertainty in subgroup 4, but the majority of the mass clearly lies to the right of 30%.</p>
 </div>
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">

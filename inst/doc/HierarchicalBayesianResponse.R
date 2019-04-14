@@ -1,33 +1,30 @@
 ## ----message=FALSE-------------------------------------------------------
 library(trialr)
-help(thallhierarchicalbinary_parameters)
-
-## ------------------------------------------------------------------------
-dat <- thallhierarchicalbinary_parameters_demo()
-dat
 
 ## ---- results = "hide"---------------------------------------------------
-samp <- rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat, 
-                        seed = 123)
+mod0 <- stan_hierarchical_response_thall(
+  group_responses = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0), 
+  group_sizes = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0), 
+  mu_mean = -1.3863,
+  mu_sd = sqrt(1 / 0.1),
+  tau_alpha = 2,
+  tau_beta = 20)
 
 ## ------------------------------------------------------------------------
-knitr::kable(rstan::summary(samp, par = 'pg')$summary, digits = 3)
+mod0
+
+## ------------------------------------------------------------------------
+knitr::kable(rstan::summary(mod0, par = 'prob_response')$summary, digits = 3)
+
+## ------------------------------------------------------------------------
+colMeans(as.data.frame(mod0, pars = 'prob_response') > 0.3)
 
 ## ---- fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 3"----
 library(ggplot2)
 library(rstan)
 library(dplyr)
 
-as.data.frame(samp, 'p[3]') %>% 
-  mutate(ProbResponse = `p[3]`) %>% 
-  ggplot(aes(x = ProbResponse)) + 
-  geom_density() + 
-  ggtitle('Prob(Response | D) in Sub-group 3')
-
-## ---- fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 4"----
-as.data.frame(samp, 'p[4]') %>% 
-  mutate(ProbResponse = `p[4]`) %>% 
-  ggplot(aes(x = ProbResponse)) + 
-  geom_density() + 
-  ggtitle('Prob(Response | D) in Sub-group 4')
+plot(mod0, pars = 'prob_response') + 
+  geom_vline(xintercept = 0.3, col = 'orange', linetype = 'dashed') +
+  labs(title = 'Partially-pooled analysis of response rate in 10 sarcoma subtypes')
 

@@ -7,7 +7,8 @@
 stan_crm(outcome_str = NULL, skeleton, target, model = c("empiric",
   "logistic", "logistic_gamma", "logistic2"), a0 = NULL, alpha_mean = NULL,
   alpha_sd = NULL, beta_mean = NULL, beta_sd = NULL, beta_shape = NULL,
-  beta_inverse_scale = NULL, doses_given = NULL, tox = NULL, ...)
+  beta_inverse_scale = NULL, doses_given = NULL, tox = NULL,
+  weights = NULL, ...)
 }
 \arguments{
 \item{outcome_str}{A string representing the outcomes observed hitherto.
@@ -55,9 +56,15 @@ gamma prior. Only required for certain models. See Details.}
 1:num_patients, where 1=toxicity and 0=no toxicity. Only required when
 \code{outcome_str} is not provided.}
 
+\item{weights}{An optional vector of numeric weights for the observations
+for patients 1:num_patients, thus facilitating the TITE-CRM design.
+Can be used with \code{outcome_str}, or with \code{doses_given} and
+\code{tox}. It is generally tider to specify \code{doses_given},
+\code{tox} and \code{weights} when a TITE-CRM analysis is desired.}
+
 \item{...}{Extra parameters are passed to \code{rstan::sampling}. Commonly
-used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
-\code{control}. \code{\link[rstan:sampling]{sampling}}.}
+used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores}, and
+\code{control}.}
 }
 \value{
 An object of class \code{\link{crm_fit}}
@@ -92,7 +99,7 @@ are specified.
 * beta_inverse_scale
 }
 
-\section{Requirements of \code{logistics} model}{
+\section{Requirements of \code{logistic2} model}{
 
 * a0
 * alpha_mean
@@ -103,16 +110,25 @@ are specified.
 
 \examples{
 \dontrun{
-# This model is presented in Thall et al. (2014)
+# CRM example
 mod1 <- stan_crm('1N 2N 3T', skeleton = c(0.1, 0.2, 0.35, 0.6),
                  target = 0.2, model = 'empiric', beta_sd = sqrt(1.34),
                  seed = 123)
 
-# Shorthand for the above is:
-mod2 <- stan_efftox_demo('1N 2E 3B', seed = 123)
+mod2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
+                 target = 0.2, model = 'logistic', a0 = 3, beta_mean = 0,
+                 beta_sd = sqrt(1.34), seed = 123)
 
-# the seed is passed to the Stan sampler. The usual Stan sampler params like
+# The seed is passed to the Stan sampler. The usual Stan sampler params like
 # cores, iter, chains etc are passed on too via the ellipsis operator.
+
+# TITE-CRM example, p.124 of Dose Finding by the CRM, Cheung (2010)
+mod3 <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
+                doses_given = c(3, 3, 3, 3),
+                tox = c(0, 0, 0, 0),
+                weights = c(73, 66, 35, 28) / 126,
+                model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
+mod3$recommended_dose
 }
 }
 \references{
@@ -124,6 +140,7 @@ O'Quigley, J., Pepe, M., & Fisher, L. (1990).
 \seealso{
 \code{\link{crm_fit}}
   \code{\link{crm_process}}
+  \code{\link[rstan:sampling]{sampling}}.
 }
 \author{
 Kristian Brock \email{kristian.brock@gmail.com}

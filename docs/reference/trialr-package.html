@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Clinical Trial Designs in 'RStan' — trialr-package • trialr</title>
+<title>The 'trialr' package. — trialr-package • trialr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,20 +30,10 @@
 
 
 
-<meta property="og:title" content="Clinical Trial Designs in 'RStan' — trialr-package" />
+<meta property="og:title" content="The 'trialr' package. — trialr-package" />
 
-<meta property="og:description" content="A showcase of Bayesian clinical trial designs, implemented in 
-    'RStan' and R. Some designs are implemented in R for the first
-    time (e.g. 'EffTox' by Thall and Cook, 2004, 
-    &amp;lt;https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software_Id=2&amp;gt;). 
-    Given the emphasis on flexibility in Bayesian analysis,
-    the implementations in a common language and style may serve as a cookbook
-    to encourage the use of Bayesian methods in trials. Compiled 'RStan' models
-    are provided in addition to helper classes and functions to perform 
-    simulations and inference on observed trial outcomes. 
-    There is a preponderance of early phase trial designs because this is where 
-    Bayesian methods are used most. If there is a published Bayesian design you
-    want implemented in 'Stan', get in touch." />
+<meta property="og:description" content="trialr collects in one place Bayesian clinical trial designs and methods.
+Models are implemented in Stan and helper functions are provided in R." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -72,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.6</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
       </span>
     </div>
 
@@ -138,197 +128,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Clinical Trial Designs in 'RStan'</h1>
-    
+    <h1>The 'trialr' package.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/trialr-package.R'><code>R/trialr-package.R</code></a></small>
     <div class="hidden name"><code>trialr-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A showcase of Bayesian clinical trial designs, implemented in 
-    'RStan' and R. Some designs are implemented in R for the first
-    time (e.g. 'EffTox' by Thall and Cook, 2004, 
-    &lt;https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software_Id=2&gt;). 
-    Given the emphasis on flexibility in Bayesian analysis,
-    the implementations in a common language and style may serve as a cookbook
-    to encourage the use of Bayesian methods in trials. Compiled 'RStan' models
-    are provided in addition to helper classes and functions to perform 
-    simulations and inference on observed trial outcomes. 
-    There is a preponderance of early phase trial designs because this is where 
-    Bayesian methods are used most. If there is a published Bayesian design you
-    want implemented in 'Stan', get in touch.</p>
+    <p>trialr collects in one place Bayesian clinical trial designs and methods.
+Models are implemented in Stan and helper functions are provided in R.</p>
     
     </div>
 
         
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>trialr</code> is a collection of Bayesian clinical trial designs implemented
-in <code>rstan</code> and R.
-Bayesian designs are being used more commonly in clinical trials however
-software implementation remains a frequent challenge.
-<code>rstan</code> is the R implementation of Stan, a probabilistic programming
-language that performs full Bayesian statistical inference using MCMC sampling.
-It allows the statistician to focus on specifying the model (the good bit)
-without having to worry about the prior-to-posterior analysis (the nuisance bit).
-<code>trialr</code> seeks to be a showcase of published examples of Bayesian clinical
-trial designs, implemented in a common language and style, and brought together
-in a single R package.</p>
-<p>Clinical trial designs currently implemented:</p>
-<p>- EffTox, a design for seamless phase I-II dose-finding, published by Thall &amp;
-Cook 2004</p>
-<p>- Hierarchical model for a phase II trial of a treatment in a disease with
-multiple sub-types using binary response outcomes, published by Thall et al 2003</p>
-<p>- BEBOP, a stratified medicine design for studying efficacy and toxicity in
-phase II that incorporates predictive baseline information, as developed for the
-PePS2 trial and submitted for publication by Brock, et al. 2017</p>
-<p>Index:  This package was not yet installed at build time.<br /></p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Thall, PF, and JD Cook. 2004. "Dose-Finding Based on Efficacy-Toxicity
-Trade-Offs". Biometrics 60 (3): 684-93.</p>
-<p>Thall, Herrick, Nguyen, Venier, and Norris. 2014. "Effective sample size for
-computing prior hyperparameters in Bayesian phase I-II dose-finding".
-Clinical Trials 11 (6): 657-66. doi:10.1177/1740774514547397.</p>
-<p>Thall, Wathen, Bekele, Champlin, Baker, &amp; Benjamin. 2003. "Hierarchical Bayesian
-approaches to phase II trials in diseases with multiple subtypes".
-Statistics in Medicine, 22(5), 763-780. https://doi.org/10.1002/sim.1399</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'></div>
-    <div class='dont-index'><p><code><a href='model_EffTox.html'>model_EffTox</a></code></p>
-<p><code><a href='model_ThallHierarchicalBinary.html'>model_ThallHierarchicalBinary</a></code></p>
-<p><code><a href='model_BebopInPeps2.html'>model_BebopInPeps2</a></code></p></div>
+    <p>Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>trialr</span>)
-
-<span class='co'># EffTox usage</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()
-<span class='co'># Add some outcomes</span>
-<span class='no'>dat</span>$<span class='no'>num_patients</span> <span class='kw'>&lt;-</span> <span class='fl'>3</span>
-<span class='no'>dat</span>$<span class='no'>eff</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>tox</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>doses</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
-<span class='co'># Use rstan to obtain samples from the posterior distributions</span>
-<span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
-#&gt; Chain 1: Gradient evaluation took 1.6e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
-#&gt; Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 1:  Elapsed Time: 0.079358 seconds (Warm-up)
-#&gt; Chain 1:                0.059177 seconds (Sampling)
-#&gt; Chain 1:                0.138535 seconds (Total)
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
-#&gt; Chain 2: Gradient evaluation took 1.4e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
-#&gt; Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 2:  Elapsed Time: 0.082657 seconds (Warm-up)
-#&gt; Chain 2:                0.058672 seconds (Sampling)
-#&gt; Chain 2:                0.141329 seconds (Total)
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
-#&gt; Chain 3: Gradient evaluation took 1.5e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
-#&gt; Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 3:  Elapsed Time: 0.085881 seconds (Warm-up)
-#&gt; Chain 3:                0.059142 seconds (Sampling)
-#&gt; Chain 3:                0.145023 seconds (Total)
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
-#&gt; Chain 4: Gradient evaluation took 1.2e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
-#&gt; Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 4:  Elapsed Time: 0.084478 seconds (Warm-up)
-#&gt; Chain 4:                0.062136 seconds (Sampling)
-#&gt; Chain 4:                0.146614 seconds (Total)</div><div class='input'><span class='co'># Perform inference on posterior samples. E.g. posterior mean drug efficacy</span>
-<span class='fu'>colMeans</span>(<span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-method-extract'>extract</a></span>(<span class='no'>samp</span>, <span class='st'>'prob_eff'</span>)<span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; [1] 0.2180468 0.5951194 0.8998301 0.9563779 0.9720017</div><div class='input'>
-## Not run
-## Hierarchical model for responses in a disease with multiple subtypes
-# dat <- thallhierarchicalbinary_parameters_demo()
-# samp <- rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat)
-# rstan::plot(samp, pars = 'p')  # Plot the modelled response rates in the ten subtypes
-
-## BEBOP in PePS2 usage
-# set.seed(123)
-# dat <- peps2_get_data(num_patients = 60,
-#                      prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
-#                      prob_tox = rep(0.1, 6),
-#                      eff_tox_or = rep(1, 6))
-# samp <- rstan::sampling(stanmodels$BebopInPeps2, data = dat)
-# decision <- peps2_process(dat, samp)
-# decision$Accept   # Accept in cohort 2, 3, 5, 6 but not 1 or 4
-# decision$ProbEff  # The probability of efficacy is driving that decision
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
-      <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    
-  NA
-
-
-  Maintainer: Kristian Brock &lt;kristian.brock@gmail.com&gt;
-
+          </ul>
 
   </div>
 </div>

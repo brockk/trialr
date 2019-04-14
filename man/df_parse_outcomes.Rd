@@ -35,10 +35,10 @@ extends our previous example, where the next cohort of two were treated at
 dose-level 1 and neither experienced toxicity. See examples.
 }
 \examples{
-x = efftox_parse_outcomes('1NNE 2EEN 3TBB')
-x$num_patients == 9
-x$eff == c(0, 0, 1, 1, 1, 0, 0, 1, 1)
-sum(x$tox) == 3
+x = df_parse_outcomes('1NNN 2NTN 3TTT')
+x$num_patients
+x$tox
+sum(x$tox)
 
 }
 \references{

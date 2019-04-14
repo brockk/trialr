@@ -62,7 +62,7 @@ into a data.frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.6</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@ into a data.frame." />
 
     <div class="ref-description">
     
-    <p>Convenient function to turn an <code><a href='efftox_analysis.html'>efftox_analysis</a></code>
+    <p>Convenient function to turn an <code>efftox_analysis</code>
 into a <code>data.frame</code>.</p>
     
     </div>
@@ -147,7 +147,7 @@ into a <code>data.frame</code>.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An <code><a href='efftox_analysis.html'>efftox_analysis</a></code></p></td>
+      <td><p>An <code>efftox_analysis</code></p></td>
     </tr>
     </table>
     
@@ -162,10 +162,14 @@ into a <code>data.frame</code>.</p>
 <span class='no'>dat</span>$<span class='no'>eff</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
 <span class='no'>dat</span>$<span class='no'>tox</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>)
 <span class='no'>dat</span>$<span class='no'>doses</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; <span class='message'>trying deprecated constructor; please alert package maintainer</span></div><div class='output co'>#&gt; 
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
-#&gt; Chain 1: Gradient evaluation took 4e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
+#&gt; Chain 1: 
+#&gt; Chain 1: Gradient evaluation took 3.9e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#&gt; Chain 1: Adjust your expectations accordingly!
+#&gt; Chain 1: 
+#&gt; Chain 1: 
 #&gt; Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
 #&gt; Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
 #&gt; Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -178,13 +182,19 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 1:  Elapsed Time: 0.089119 seconds (Warm-up)
-#&gt; Chain 1:                0.062909 seconds (Sampling)
-#&gt; Chain 1:                0.152028 seconds (Total)
+#&gt; Chain 1: 
+#&gt; Chain 1:  Elapsed Time: 0.083184 seconds (Warm-up)
+#&gt; Chain 1:                0.058331 seconds (Sampling)
+#&gt; Chain 1:                0.141515 seconds (Total)
+#&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
-#&gt; Chain 2: Gradient evaluation took 1.4e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#&gt; Chain 2: 
+#&gt; Chain 2: Gradient evaluation took 1.2e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#&gt; Chain 2: Adjust your expectations accordingly!
+#&gt; Chain 2: 
+#&gt; Chain 2: 
 #&gt; Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
 #&gt; Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
 #&gt; Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -197,13 +207,19 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 2:  Elapsed Time: 0.090568 seconds (Warm-up)
-#&gt; Chain 2:                0.059433 seconds (Sampling)
-#&gt; Chain 2:                0.150001 seconds (Total)
+#&gt; Chain 2: 
+#&gt; Chain 2:  Elapsed Time: 0.08316 seconds (Warm-up)
+#&gt; Chain 2:                0.059316 seconds (Sampling)
+#&gt; Chain 2:                0.142476 seconds (Total)
+#&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
+#&gt; Chain 3: 
 #&gt; Chain 3: Gradient evaluation took 1.1e-05 seconds
 #&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#&gt; Chain 3: Adjust your expectations accordingly!
+#&gt; Chain 3: 
+#&gt; Chain 3: 
 #&gt; Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
 #&gt; Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
 #&gt; Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -216,13 +232,19 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 3:  Elapsed Time: 0.085984 seconds (Warm-up)
-#&gt; Chain 3:                0.064871 seconds (Sampling)
-#&gt; Chain 3:                0.150855 seconds (Total)
+#&gt; Chain 3: 
+#&gt; Chain 3:  Elapsed Time: 0.082176 seconds (Warm-up)
+#&gt; Chain 3:                0.057814 seconds (Sampling)
+#&gt; Chain 3:                0.13999 seconds (Total)
+#&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
-#&gt; Chain 4: Gradient evaluation took 1.3e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#&gt; Chain 4: 
+#&gt; Chain 4: Gradient evaluation took 1.1e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#&gt; Chain 4: Adjust your expectations accordingly!
+#&gt; Chain 4: 
+#&gt; Chain 4: 
 #&gt; Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
 #&gt; Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
 #&gt; Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
@@ -235,9 +257,11 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 4:  Elapsed Time: 0.083088 seconds (Warm-up)
-#&gt; Chain 4:                0.060263 seconds (Sampling)
-#&gt; Chain 4:                0.143351 seconds (Total)</div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
+#&gt; Chain 4: 
+#&gt; Chain 4:  Elapsed Time: 0.079837 seconds (Warm-up)
+#&gt; Chain 4:                0.057853 seconds (Sampling)
+#&gt; Chain 4:                0.13769 seconds (Total)
+#&gt; Chain 4: </div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
 <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_analysis_to_df</span>(<span class='no'>decision</span>)
 <span class='fu'>round</span>(<span class='no'>df</span>$<span class='no'>Utility</span>, <span class='fl'>2</span>) <span class='kw'>==</span> <span class='fu'>c</span>(-<span class='fl'>0.64</span>, <span class='fl'>0.04</span>, <span class='fl'>0.24</span>, -<span class='fl'>0.05</span>, -<span class='fl'>0.19</span>)</div><div class='output co'>#&gt; [1]  TRUE  TRUE  TRUE FALSE FALSE</div><div class='input'>
 </div></pre>

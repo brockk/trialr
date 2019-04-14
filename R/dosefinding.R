@@ -30,13 +30,14 @@
 #' @export
 #'
 #' @examples
-#' x = parse_dose_finding_outcomes('1NNE 2EEN 3TB')
-#' length(x) == 3  # TRUE
-#' x[[1]]$dose == 1  # TRUE
-#' x[[1]]$outcomes == 'NNE'  # TRUE
-#' nchar(x[[3]]$outcomes) == 3  # FALSE
-#' nchar(x[[3]]$outcomes) == 2  # TRUE
-#' x[[3]]$outcomes == 'TB'  # TRUE
+#' x = parse_dose_finding_outcomes('1NNN 2NNT 3TT')
+#' length(x)
+#' x[[1]]$dose
+#' x[[1]]$outcomes
+#' x[[2]]$dose
+#' x[[2]]$outcomes
+#' x[[3]]$dose
+#' x[[3]]$outcomes
 #'
 #' @references
 #' Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., & Yap, C.
@@ -110,10 +111,10 @@ parse_dose_finding_outcomes <- function(outcome_string) {
 #' @export
 #'
 #' @examples
-#' x = efftox_parse_outcomes('1NNE 2EEN 3TBB')
-#' x$num_patients == 9
-#' x$eff == c(0, 0, 1, 1, 1, 0, 0, 1, 1)
-#' sum(x$tox) == 3
+#' x = df_parse_outcomes('1NNN 2NTN 3TTT')
+#' x$num_patients
+#' x$tox
+#' sum(x$tox)
 #'
 #' @references
 #' Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., & Yap, C.

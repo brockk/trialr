@@ -32,7 +32,7 @@ $\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)$
 
 As is the convention in BUGS, the authors define normal distributions by a precision parameter $\tau$ as opposed to the standard deviation parameter $\sigma$ used here.
 We have re-specified the model to comply with the Stan convention of using standard deviation.
-The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$, equivalent to an inverse gamma hyperprior on $\sigma$.
+The authors use a normal hyperprior on $\mu$, and a gamma hyperprior on $\tau$, equivalent to an inverse gamma hyperprior on $\sigma^2$.
 
 We observe $x_i$ responses in $n_i$ patients in disease sub-type $i$.
 The rate of response in subtype $i$ is modelled as $p_i = \text{logit}^{-1}(\rho_i)$.
@@ -48,38 +48,42 @@ where $\theta$ is the minimum required response rate, and $q$ is the required ce
 In their provided example, @Thall2003 use $\theta = 0.3$.
 
 # Example
-We can learn about the parameters required by the `ThallHierarchicalBinary` model using
 ```{r message=FALSE}
 library(trialr)
-help(thallhierarchicalbinary_parameters)
 ```
 
-We can get an example using
-```{r}
-dat <- thallhierarchicalbinary_parameters_demo()
-dat
-```
-
+We reproduce Thall _etl al._'s example.
 We have outcomes in 10 disease subgroups.
-The number of responses is stored in `x` and the number of patients in `n`.
+The number of responses is stored in `group_responses` and the number of patients in `group_sizes`.
 There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.
 
-We invoke the model by calling `rstan::sampling` on the included `ThallHierarchicalBinary` model.
-We set the seed for reproducble randomness.
 ```{r, results = "hide"}
-samp <- rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat, 
-                        seed = 123)
+mod0 <- stan_hierarchical_response_thall(
+  group_responses = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0), 
+  group_sizes = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0), 
+  mu_mean = -1.3863,
+  mu_sd = sqrt(1 / 0.1),
+  tau_alpha = 2,
+  tau_beta = 20)
 ```
-
-The probability that the efficacy probability in each subgroup exceeds the threshold is stored as `pg`.
-We extract that variable and use the `rstan::summary` function to make inference.
 
 ```{r}
-knitr::kable(rstan::summary(samp, par = 'pg')$summary, digits = 3)
+mod0
 ```
 
-Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least $q = 70$% certainty that the probability of efficacy exceeds the target response rate of 30%
-On that basis, at this interim stage, we would be willing to approve the treatment in subgroups 3, 4, 5 and 8.
+The probability of response in each subgroup is calculated under `prob_response`.
+We can use the generic summary function from rstan to get a nice summary:
+```{r}
+knitr::kable(rstan::summary(mod0, par = 'prob_response')$summary, digits = 3)
+```
+
+Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least $q = 70$% certainty that the probability of efficacy exceeds the target response rate of 30%.
+```{r}
+colMeans(as.data.frame(mod0, pars = 'prob_response') > 0.3)
+```
+
+On that basis, at this interim stage, we would be eager to approve the treatment in subgroups 3, 5 and 8.
+Subgroups 4 and 7 are close to the boundary.
 
 Some distribution plots of the probabilities of efficacy in some subgroups may be informative.
 
@@ -88,23 +92,12 @@ library(ggplot2)
 library(rstan)
 library(dplyr)
 
-as.data.frame(samp, 'p[3]') %>% 
-  mutate(ProbResponse = `p[3]`) %>% 
-  ggplot(aes(x = ProbResponse)) + 
-  geom_density() + 
-  ggtitle('Prob(Response | D) in Sub-group 3')
+plot(mod0, pars = 'prob_response') + 
+  geom_vline(xintercept = 0.3, col = 'orange', linetype = 'dashed') +
+  labs(title = 'Partially-pooled analysis of response rate in 10 sarcoma subtypes')
 ```
 
-We see that the inferred efficacy in subgroup 3 is very high.
-
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 4"}
-as.data.frame(samp, 'p[4]') %>% 
-  mutate(ProbResponse = `p[4]`) %>% 
-  ggplot(aes(x = ProbResponse)) + 
-  geom_density() + 
-  ggtitle('Prob(Response | D) in Sub-group 4')
-```
-
+We see that the inferred efficacy in subgroup 5 is very high.
 In contrast, efficacy is subject to more uncertainty in subgroup 4, but the majority of the mass clearly lies to the right of 30%.
 
 # trialr

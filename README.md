@@ -5,9 +5,10 @@ trialr - Clinical Trial Designs in `RStan`
 
 # trialr
 
-[![cran version](http://www.r-pkg.org/badges/version/trialr)](https://cran.r-project.org/web/packages/trialr)
-[![downloads](http://cranlogs.r-pkg.org/badges/trialr)](https://cranlogs.r-pkg.org/badges/trialr)
-[![total downloads](https://cranlogs.r-pkg.org/badges/grand-total/trialr)](https://cranlogs.r-pkg.org/badges/grand-total/trialr)
+[![cran
+version](http://www.r-pkg.org/badges/version/trialr)](https://cran.r-project.org/web/packages/trialr)
+<https://cranlogs.r-pkg.org/badges/trialr>
+<https://cranlogs.r-pkg.org/badges/grand-total/trialr>
 
 `trialr` is a collection of Bayesian clinical trial designs implemented
 in Stan and R. The documentation is available at
@@ -90,20 +91,20 @@ The fitted model contains lots of useful of information:
 
 ``` r
 mod1
-#>   Patient Dose Toxicity
-#> 1       1    2        0
-#> 2       2    2        0
-#> 3       3    3        0
-#> 4       4    3        0
-#> 5       5    4        1
-#> 6       6    4        1
+#>   Patient Dose Toxicity Weight
+#> 1       1    2        0      1
+#> 2       2    2        0      1
+#> 3       3    3        0      1
+#> 4       4    3        0      1
+#> 5       5    4        1      1
+#> 6       6    4        1      1
 #> 
-#>   DoseLevel Skeleton N Tox   ProbTox ProbMTD
-#> 1         1     0.05 0   0 0.1081169 0.21400
-#> 2         2     0.15 2   0 0.2159618 0.27175
-#> 3         3     0.25 2   0 0.3098591 0.26575
-#> 4         4     0.40 2   2 0.4444842 0.20900
-#> 5         5     0.60 0   0 0.6235105 0.03950
+#>   DoseLevel Skeleton N Tox ProbTox MedianProbTox ProbMTD
+#> 1         1     0.05 0   0   0.108        0.0726  0.2140
+#> 2         2     0.15 2   0   0.216        0.1900  0.2717
+#> 3         3     0.25 2   0   0.310        0.2972  0.2657
+#> 4         4     0.40 2   2   0.444        0.4484  0.2090
+#> 5         5     0.60 0   0   0.624        0.6395  0.0395
 #> 
 #> The model targets a toxicity level of 0.25.
 #> The dose with estimated toxicity probability closest to target is 2.
@@ -151,7 +152,6 @@ For demonstration, We fit the model parameterisation introduced by
 ``` r
 outcomes <- '1NNE 2EEB'
 mod <- stan_efftox_demo(outcomes, seed = 123)
-#> trying deprecated constructor; please alert package maintainer
 ```
 
 ``` r
@@ -229,49 +229,89 @@ We demonstrate the method for partially-pooling response rates to a
 single drug in various subtypes of sarcoma. The following convenience
 function returns the necessary data:
 
-``` r
-dat <- thallhierarchicalbinary_parameters_demo()
-dat
-#> $m
-#> [1] 10
-#> 
-#> $x
-#>  [1] 0 0 1 3 5 0 1 2 0 0
-#> 
-#> $n
-#>  [1] 0 2 1 7 5 0 2 3 1 0
-#> 
-#> $target_resp
-#> [1] 0.3
-#> 
-#> $mu_mean
-#> [1] -1.3863
-#> 
-#> $mu_sd
-#> [1] 3.162278
-#> 
-#> $tau_alpha
-#> [1] 2
-#> 
-#> $tau_beta
-#> [1] 20
-```
-
 Fitting the data to the model:
 
 ``` r
-samp <- rstan::sampling(stanmodels$ThallHierarchicalBinary, data = dat, 
-                        seed = 123)
-#> trying deprecated constructor; please alert package maintainer
+mod0 <- stan_hierarchical_response_thall(
+  group_responses = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0), 
+  group_sizes = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0), 
+  mu_mean = -1.3863,
+  mu_sd = sqrt(1 / 0.1),
+  tau_alpha = 2,
+  tau_beta = 20)
+```
+
+The returned object is the same type as the fits returned by rstan:
+
+``` r
+mod0
+#> Inference for Stan model: ThallHierarchicalBinary.
+#> 4 chains, each with iter=2000; warmup=1000; thin=1; 
+#> post-warmup draws per chain=1000, total post-warmup draws=4000.
+#> 
+#>                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%
+#> mu                 -0.05    0.03  1.38  -2.85  -0.89  -0.03   0.82   2.63
+#> sigma2             11.96    0.33 10.35   3.35   6.21   9.15  14.15  37.99
+#> rho[1]             -0.02    0.07  3.84  -7.80  -2.25   0.03   2.24   7.56
+#> rho[2]             -2.96    0.06  2.49  -8.93  -4.20  -2.52  -1.26   0.59
+#> rho[3]              2.28    0.05  2.67  -1.88   0.44   1.96   3.59   8.53
+#> rho[4]             -0.30    0.01  0.78  -1.84  -0.82  -0.29   0.22   1.22
+#> rho[5]              3.62    0.05  2.24   0.58   2.06   3.23   4.68   9.11
+#> rho[6]             -0.12    0.06  3.67  -7.74  -2.31  -0.04   2.09   7.25
+#> rho[7]             -0.02    0.02  1.49  -2.99  -0.96  -0.05   0.90   3.02
+#> rho[8]              0.75    0.02  1.26  -1.58  -0.08   0.68   1.51   3.43
+#> rho[9]             -2.32    0.06  2.74  -8.93  -3.68  -1.95  -0.48   1.88
+#> rho[10]            -0.02    0.06  3.59  -7.27  -2.19  -0.02   2.13   7.01
+#> sigma               3.26    0.04  1.14   1.83   2.49   3.02   3.76   6.16
+#> prob_response[1]    0.50    0.01  0.38   0.00   0.09   0.51   0.90   1.00
+#> prob_response[2]    0.15    0.00  0.18   0.00   0.01   0.07   0.22   0.64
+#> prob_response[3]    0.77    0.00  0.26   0.13   0.61   0.88   0.97   1.00
+#> prob_response[4]    0.43    0.00  0.17   0.14   0.31   0.43   0.56   0.77
+#> prob_response[5]    0.92    0.00  0.10   0.64   0.89   0.96   0.99   1.00
+#> prob_response[6]    0.49    0.01  0.38   0.00   0.09   0.49   0.89   1.00
+#> prob_response[7]    0.49    0.00  0.26   0.05   0.28   0.49   0.71   0.95
+#> prob_response[8]    0.64    0.00  0.22   0.17   0.48   0.66   0.82   0.97
+#> prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.13   0.38   0.87
+#> prob_response[10]   0.50    0.01  0.38   0.00   0.10   0.50   0.89   1.00
+#> lp__              -34.05    0.12  3.53 -42.58 -35.93 -33.62 -31.49 -28.70
+#>                   n_eff Rhat
+#> mu                 2222    1
+#> sigma2              997    1
+#> rho[1]             3188    1
+#> rho[2]             1721    1
+#> rho[3]             2446    1
+#> rho[4]             3753    1
+#> rho[5]             1963    1
+#> rho[6]             3218    1
+#> rho[7]             4347    1
+#> rho[8]             4196    1
+#> rho[9]             2109    1
+#> rho[10]            3619    1
+#> sigma              1018    1
+#> prob_response[1]   4008    1
+#> prob_response[2]   4496    1
+#> prob_response[3]   4859    1
+#> prob_response[4]   3822    1
+#> prob_response[5]   4683    1
+#> prob_response[6]   3848    1
+#> prob_response[7]   4207    1
+#> prob_response[8]   4644    1
+#> prob_response[9]   3702    1
+#> prob_response[10]  3870    1
+#> lp__                866    1
+#> 
+#> Samples were drawn using NUTS(diag_e) at Sun Apr  7 19:34:36 2019.
+#> For each parameter, n_eff is a crude measure of effective sample size,
+#> and Rhat is the potential scale reduction factor on split chains (at 
+#> convergence, Rhat=1).
 ```
 
 ``` r
-library(dplyr)
-library(tidyr)
-as.data.frame(samp, 'p') %>% 
-  gather(Cohort, ProbResponse) %>% 
-  ggplot(aes(x = Cohort, y = ProbResponse, group = Cohort)) + 
-  geom_boxplot() + geom_hline(yintercept = 0.3, col = 'orange', linetype = 'dashed') +
+library(rstan)
+library(ggplot2)
+
+plot(mod0, pars = 'prob_response') + 
+  geom_vline(xintercept = 0.3, col = 'orange', linetype = 'dashed') +
   labs(title = 'Partially-pooled analysis of response rate in 10 sarcoma subtypes')
 ```
 

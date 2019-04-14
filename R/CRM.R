@@ -1,4 +1,3 @@
-
 #' Container class for parameters to fit the CRM models in trialr.
 #'
 #' @name crm_params-class
@@ -123,8 +122,8 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #' \code{tox}. It is generally tider to specify \code{doses_given},
 #' \code{tox} and \code{weights} when a TITE-CRM analysis is desired.
 #' @param ... Extra parameters are passed to \code{rstan::sampling}. Commonly
-#' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores},
-#' \code{control}. \code{\link[rstan:sampling]{sampling}}.
+#' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores}, and
+#' \code{control}.
 #'
 #' @details
 #' The quickest and easiest way to fit a CRM model to some observed outcomes
@@ -167,6 +166,7 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #' @seealso
 #'   \code{\link{crm_fit}}
 #'   \code{\link{crm_process}}
+#'   \code{\link[rstan:sampling]{sampling}}.
 #'
 #' @export
 #'
@@ -402,9 +402,8 @@ crm_process <- function(dat, fit) {
 #'
 #' @param x \code{\link{crm_fit}} object to convert.
 #' @param ... Extra parameters, passed onwards.
-#' @sdname print
 #' @method print crm_fit
-#' @S3method print crm_fit
+#' @export
 print.crm_fit <- function(x, ...) {
   # Patient-level data
   if(x$dat$num_patients > 0) {
@@ -439,7 +438,7 @@ print.crm_fit <- function(x, ...) {
              x$dat$target, '.'))
   cat('\n')
   cat(paste0('The dose with estimated toxicity probability closest to target is ',
-               x$recommended_dose, '.'))
+             x$recommended_dose, '.'))
   cat('\n')
   cat(paste0('The dose most likely to be the MTD is ',
              x$modal_mtd_candidate, '.'))
@@ -451,9 +450,8 @@ print.crm_fit <- function(x, ...) {
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A \code{data.frame}
-#' @sdname as.data.frame
 #' @method as.data.frame crm_fit
-#' @S3method as.data.frame crm_fit
+#' @export
 as.data.frame.crm_fit <- function(x, ...) {
   as.data.frame(x$fit, ...)
 }
@@ -465,9 +463,8 @@ as.data.frame.crm_fit <- function(x, ...) {
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A plot
-#' @sdname plot
 #' @method plot crm_fit
-#' @S3method plot crm_fit
+#' @export
 plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
   rstan::plot(x$fit, pars = pars, ...)
 }
@@ -478,7 +475,6 @@ plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
 #' @param ... Extra parameters, passed onwards.
 #'
 #' @return A summary object.
-#' @sdname summary
 #' @method summary crm_fit
 #' @export
 summary.crm_fit <- function(object, ...) {
@@ -496,6 +492,7 @@ summary.crm_fit <- function(object, ...) {
 #' @param x \code{\link{crm_fit}} object.
 #'
 #' @return data.frame
+#'
 #' @export
 gather_samples.crm_fit <- function(x) {
   df <- as.data.frame(x, 'prob_tox')
