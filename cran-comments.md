@@ -2,17 +2,33 @@
 # Version 0.1.0
 
 ## Test environments
-* local Win install, R 3.6.0 RC
 * local Mac install, R 3.5.2
+* WinBuilder R-devel
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 3 notes
 
 ## NOTEs
 
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Kristian Brock <kristian.brock@gmail.com>’
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/CRM.html
+          inst/doc/EffTox.html
+    Status: 403
+    Message: Forbidden
+  URL: https://www.jstor.org/stable/2965714
+    From: inst/doc/EffTox.html
+    Status: 403
+    Message: Forbidden
+
+Both of these URLs are valid. 
+
 * checking installed package size ... NOTE
-  installed size is  XMb
+  installed size is  x.xMb
   sub-directories of 1Mb or more:
-    libs   YMb
+    libs   x.xMb
   
   The package contains compiled RStan models, hence the directory size.
   This note was also present in previous CRAN versions.
