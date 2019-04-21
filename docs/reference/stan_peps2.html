@@ -80,7 +80,7 @@ See the accompanying vignette for a full description." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -112,13 +112,13 @@ See the accompanying vignette for a full description." />
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -185,9 +185,14 @@ See the accompanying vignette for a full description.</p>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tox</th>
+      <th>eff</th>
       <td><p>A vector of efficacy outcomes for the patients, where 1=efficacy
 and 0=no efficacy.</p></td>
+    </tr>
+    <tr>
+      <th>tox</th>
+      <td><p>A vector of toxicity outcomes for the patients, where 1=toxicity
+and 0=no toxicity.</p></td>
     </tr>
     <tr>
       <th>cohorts</th>
@@ -259,11 +264,6 @@ association parameter.</p></td>
       <td><p>Extra parameters are passed to <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>rstan::sampling</a></code>. Commonly
 used options are <code>iter</code>, <code>chains</code>, <code>warmup</code>, <code>cores</code>, and
 <code>control</code>.</p></td>
-    </tr>
-    <tr>
-      <th>tox</th>
-      <td><p>A vector of toxicity outcomes for the patients, where 1=toxicity
-and 0=no toxicity.</p></td>
     </tr>
     </table>
     

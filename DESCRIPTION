@@ -1,6 +1,6 @@
 Package: trialr
-Version: 0.0.8
-Date: 2019-03-17
+Version: 0.1.0
+Date: 2019-04-2117
 Title: Clinical Trial Designs in 'RStan'
 Description: A showcase of Bayesian clinical trial designs, implemented in 
     'RStan' and R. Some designs are implemented in R for the first
@@ -34,7 +34,11 @@ Imports:
   rstantools (>= 1.5.1),
   loo (>= 1.1.0),
   dplyr,
-  tidyr
+  tidyr,
+  magrittr,
+  stringr,
+  ggplot2,
+  gtools
 LinkingTo:
   StanHeaders (>= 2.18.1), 
   rstan (>= 2.18.2), 
@@ -43,7 +47,7 @@ LinkingTo:
   RcppEigen (>= 0.3.3.5.0)
 SystemRequirements: GNU make
 NeedsCompilation: yes
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 URL: https://github.com/brockk/trialr
 BugReports: https://github.com/brockk/trialr/issues

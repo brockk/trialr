@@ -17,22 +17,7 @@ trialr EffTox model.}
 An instance of \code{\link{efftox_fit}}.
 }
 \description{
-Process RStan samples from an EffTox model to make inferences
-about dose-acceptability, dose-utility and which dose should be recommended
-next.
-}
-\examples{
-dat <- efftox_parameters_demo()
-dat$num_patients <- 3
-dat$eff <- c(0, 1, 1)
-dat$tox <- c(0, 0, 1)
-dat$doses <- c(1, 2, 3)
-fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-decision <- efftox_process(dat, fit)
-decision$recommended_dose == 3
-}
-\seealso{
-\code{\link{efftox_params}}
-
-\code{\link{efftox_parameters_demo}}
+Internal function to process rstan samples from an EffTox model
+to make inferences about dose-acceptability, dose-utility and which dose
+should be recommended next.
 }

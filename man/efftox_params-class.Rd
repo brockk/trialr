@@ -82,5 +82,4 @@ Container class for parameters to fit the EffTox model in trialr.
 \seealso{
 \code{\link{stan_efftox}}
 \code{\link{stan_efftox_demo}}
-\code{\link{efftox_process}}
 }

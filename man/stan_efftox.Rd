@@ -160,7 +160,6 @@ Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
 \seealso{
 \code{\link{efftox_fit}}
   \code{\link{stan_efftox_demo}}
-  \code{\link{efftox_process}}
 }
 \author{
 Kristian Brock \email{kristian.brock@gmail.com}

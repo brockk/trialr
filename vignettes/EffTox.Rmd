@@ -1,5 +1,5 @@
 ---
-title: "EffTox in trialr"
+title: "EffTox"
 author: "Kristian Brock"
 date: "`r Sys.Date()`"
 output: 
@@ -7,7 +7,7 @@ output:
     fig_caption: yes
 bibliography: library.bib
 vignette: >
-  %\VignetteIndexEntry{EffTox in trialr}
+  %\VignetteIndexEntry{EffTox}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,9 +27,11 @@ $\text{logit } \pi_T = \alpha + \beta x$
 
 $\text{logit } \pi_E = \gamma + \zeta x + \eta x^2$
 
-and the joint probability is modelled using the function
+Let $(Y_j, Z_j)$ be random variables each taking values $\{0, 1\}$ respresenting the presence of efficacy and toxicity in patient $j$. 
 
-$\pi_{a,b} = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}$.
+Then the efficacy and toxicity events are associated by the joint probability function
+
+$Pr(Y = a, Z = b) = \pi_{a,b}(\pi_E, \pi_T) = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}$.
 
 Normal priors are specified for the elements of the parameter vector $\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \eta, \psi)$.
 
@@ -55,14 +57,14 @@ I refer to these as _hinge points_ but that is not common nomenclature.
 At the dose selection decision, the dose-level from the acceptable set with maximal utility is selected to be given to the next patient or cohort.
 If there are no acceptable doses, the trial stops and no dose is recommended.
 
-There are several published EffTox examples, including explanations and tips on parameter choices  [@Thall2004, @Thall2006, @Thall2014].
+There are several published EffTox examples, including explanations and tips on parameter choices  [@Thall2004; @Thall2006; @Thall2014].
 
 The MD Anderson Cancer Center publishes software [@EffTox] to perform calculations and simulations for EffTox trials.
 However, the software is available for Windows in compiled-form only.
 Thus, trialists cannot run the software on Mac or Linux unless using a virtual machine.
 Furthermore, trialists may not easily alter the behaviour of the model.
 @Brock2017a describe a clinical trial scenario where some alteration of the default model behaviour would have been preferable.
-It was this that prompted the author to write the open-source implementation provided in 'trialr'.
+It was this that prompted the author to write the open-source implementation provided in `trialr`.
 
 # EffTox in `trialr`
 We will work with the advanced prostate cancer example given in @Thall2014.
@@ -77,7 +79,7 @@ $\text{Pr}\left\{ \pi_E(x, \boldsymbol{\theta}) > 0.5 | \mathcal{D} \right\} > 0
 Thus, we have $p_T = p_E = 0.1, \overline{\pi}_T = 0.3$ and $\underline{\pi}_E = 0.5$.
 
 The parameterisation for this trial is loaded by default in the MD Anderson EffTox app.
-This particular is fit as a demonstration in `trialr`.
+This particular scenario is fit as a demonstration in `trialr`.
 
 First, let us introduce our syntax for describing outcomes in phase I/II dose-finding trials, first described by @Brock2017a.
 We use integers to denote the dose-level given to a patient or cohort of patients; and strings of the letters E, T, N & B to represent the outcomes of patients treated at that dose that experienced efficacy, toxicity, neither or both, respectively.
@@ -100,11 +102,14 @@ We fit Thall and Cook's demonstration model to these outcomes, setting the rando
 library(trialr)
 
 outcomes <- '1NNE 2EEB'
-mod <- stan_efftox_demo(outcomes, seed = 123)
+fit <- stan_efftox_demo(outcomes, seed = 123)
 ```
+
 ```{r, caption = 'ProbEff and ProbTox are the probabilities of efficacy and toxicity at each dose. ProbAccEff is the probability that the efficacy rate exceeds the desired threshold and ProbAccTox the probability that the toxicity rate is less than the threshold. All probabilities are posterior means.'}
-mod
+fit
 ```
+
+As with the CRM models, the default `print` method for EffTox models tabulates patient data and then dose-level data.
 We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities.
 We see that dose-levels 4 and 5 are unacceptable. 
 This is because dose-level 3 has not yet been given.
@@ -113,7 +118,7 @@ No doses are inferred to be too toxic or inefficacious yet.
 More generally, the function `stan_efftox` can be used to fit EffTox models.
 The above call is simply short-hand for:
 ```{r, results = "hide"}
-mod <- stan_efftox(outcomes,
+fit <- stan_efftox(outcomes,
                    real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
                    efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
                    p_e = 0.1, p_t = 0.1,
@@ -130,20 +135,20 @@ mod <- stan_efftox(outcomes,
 These are the parameters identified in @Thall2014.
 Refer to the published paper for information on the normal priors. 
 
-The `mod` object contains 
+The `fit` object contains 
 ```{r}
-mod$recommended_dose
+fit$recommended_dose
 ```
 
 This confirms that dose-level 3 is acceptable dose with maximal utility.
 
 We can produce contour plots.
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Utility contours after observing outcomes 1NEN 2NBE."}
-efftox_contour_plot(mod$dat, prob_eff = mod$prob_eff, prob_tox = mod$prob_tox)
+```{r, fig.width = 7, fig.height = 7, fig.cap = "Utility contours after observing outcomes 1NEN 2NBE."}
+efftox_contour_plot(fit)
 title('EffTox utility contours')
 ```
 
-The blue stars show the location of the hinge points on the neutral-uility (u=0) contour.
+The blue points show the location of the hinge points on the neutral-uility (u=0) contour.
 The red numbers show the posterior means of the five dose-levels.
 Doses that are closer to the lower-right corner have higher utility.
 We see that dose-level 3 has the highest utility.
@@ -152,14 +157,14 @@ We can also produce posterior density plots of the dose utilities.
 For illustration, we will just plot the densities of the three acceptable doses.
 The package `ggplot2` is required.
 
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Utility densities after observing outcomes 1NEN 2NBE."}
-efftox_utility_density_plot(mod$fit, doses = 1:3) +
+```{r, fig.width = 7, fig.height = 7, fig.cap = "Utility densities after observing outcomes 1NEN 2NBE."}
+efftox_utility_density_plot(fit, doses = 1:3) +
   ggplot2::ggtitle("EffTox dose utility densities")
 ```
 
 To further facilitate the analysis of dose utility, we provide means of calculating the dose superiority matrix.
 ```{r}
-knitr::kable(efftox_superiority(mod$fit), digits = 2, row.names = TRUE)
+knitr::kable(efftox_superiority(fit), digits = 2, row.names = TRUE)
 ```
 
 The element in row $i$ and column $j$ shows $\text{Prob(}u_j > u_i | \text{data)}$, where $u_k$ is the utility of dose $k$.
@@ -277,10 +282,9 @@ Striking the balance between speed and flexibility is difficult.
 Sometimes a slow, flexibile method will be preferable to a fast, fixed method.
 It pays to hone parameters on small exploratory batches and commit to large jobs when ready.
 
+
 # trialr
-`trialr` is available at https://github.com/brockk/trialr
-
-
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
 
 
 # References

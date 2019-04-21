@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -61,13 +61,13 @@
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -97,7 +97,7 @@
       <h1>Continual Reassessment Method</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-04-14</h4>
+            <h4 class="date">2019-04-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/CRM.Rmd"><code>vignettes/CRM.Rmd</code></a></small>
       <div class="hidden name"><code>CRM.Rmd</code></div>
@@ -106,8 +106,13 @@
 
     
     
-<p>The Continual Reassessment Method (CRM) is the elder statesman of adaptive clinical trials. Originally published by <span class="citation">O’Quigley, Pepe, and Fisher (1990)</span>, it assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. It is a truly seminal design, with many variants appearing over the years to handle different clinical scenarios, such as seperate groups, late-onset toxicity, efficacy and toxicity outcomes, and more.</p>
-<p>In this vignette, we focus on the original Bayesian design that seeks the <em>maximum tolerated dose</em> (MTD) in an homogeneous patient group. Let <span class="math inline">\(x_i\)</span> be a standardised dose-level. The probability of <em>dose-limiting toxicity</em> (DLT) at dose <span class="math inline">\(x_i\)</span> is estimated to be <span class="math inline">\(F(x_i, \theta)\)</span>, where <span class="math inline">\(F\)</span> is a smooth mathematical function, and <span class="math inline">\(\theta\)</span> is a general vector of parameters. Even within this simple scenario, there are variants that use different forms for <span class="math inline">\(F\)</span>, and different distributions on <span class="math inline">\(\theta\)</span>.</p>
+<p>The Continual Reassessment Method (CRM) is the elder statesman of adaptive clinical trials. Originally published by <span class="citation">O’Quigley, Pepe, and Fisher (1990)</span>, it assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose (MTD). It is a truly seminal design, with many variants appearing over the years to handle different clinical scenarios, such as seperate groups, late-onset toxicity, efficacy and toxicity outcomes, and more.</p>
+<p>In this vignette, we focus on the original Bayesian design that seeks the MTD in an homogeneous patient group. Let <span class="math inline">\(x_i\)</span> be a standardised dose-level. The probability of <em>dose-limiting toxicity</em> (DLT) at dose <span class="math inline">\(x_i\)</span> is estimated to be <span class="math inline">\(F(x_i, \theta)\)</span>, where <span class="math inline">\(F\)</span> is a smooth mathematical function, and <span class="math inline">\(\theta\)</span> is a general vector of parameters. Even within this simple scenario, there are variants that use different forms for <span class="math inline">\(F\)</span>, and different distributions on <span class="math inline">\(\theta\)</span>.</p>
+<p>Let <span class="math inline">\(Y_i\)</span> be a random variable taking values <span class="math inline">\(\{0, 1\}\)</span> reflecting the absence and presence of DLT respectively in patient <span class="math inline">\(i\)</span>. A patient administered dose <span class="math inline">\(x_i\)</span> has estimated probability of toxicity <span class="math inline">\(F(x_i, \theta)\)</span> so that the likelihood component arising from patient <span class="math inline">\(i\)</span> is</p>
+<p><span class="math display">\[ F(x_i, \theta)^{Y_i} (1 - F(x_i, \theta))^{1-Y_i} \]</span></p>
+<p>After the evaluation of <span class="math inline">\(J\)</span> patients, the aggregate likelihood is:</p>
+<p><span class="math display">\[ L_J(\theta) = \prod_{i=1}^J \left\{ F(x_i, \theta) \right\}^{Y_i} \left\{ 1 - F(x_i, \theta) \right\}^{1-Y_i} \]</span></p>
+<p>This quantity can either be maximised with respect to <span class="math inline">\(\theta\)</span> to obtain maximum likelihood estimate, or augmented with priors and analysed in a Bayesian way. CRM was originally published as a Bayesian design and that is the approach we take here in <code>trialr</code> using Stan.</p>
 <p>The CRM variants currently implemented in <code>trialr</code> for MTD-finding in a single homogeneous group are:</p>
 <table class="table">
 <colgroup>
@@ -216,9 +221,9 @@
 <h2 class="hasAnchor">
 <a href="#empiric-model" class="anchor"></a>Empiric model</h2>
 <p>The empiric model requires only that a prior normal standard deviation be specified for the slope parameter. We use a prior variance of <span class="math inline">\(\beta\)</span> equal to 1.34, as used by Cheung in his examples.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fit1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">                 <span class="dt">model =</span> <span class="st">'empiric'</span>, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mod1</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">fit1</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Weight</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; 1       1    2        0      1</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; 2       2    2        0      1</span></a>
@@ -239,7 +244,7 @@
 <a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a></code></pre></div>
 <p>In this demonstration, we set the seed for reproducibility when sampling however, in the wild, you might not do this.</p>
 <p>We can extract the samples of the posterior probability of DLT at each dose, stored as the series of parameters called <code>prob_tox</code>. From there, all manner of inference is possible. For example, we can recreate the posterior expected probability of DLT at each dose shown above. It is simply the mean of each sample:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">prob_tox_samp1 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mod1, <span class="st">'prob_tox'</span>)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">prob_tox_samp1 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(fit1, <span class="st">'prob_tox'</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">prob_tox1 &lt;-<span class="st"> </span><span class="kw">colMeans</span>(prob_tox_samp1)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">prob_tox1</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; prob_tox[1] prob_tox[2] prob_tox[3] prob_tox[4] prob_tox[5] </span></a>
@@ -254,10 +259,10 @@
 <h2 class="hasAnchor">
 <a href="#one-parameter-logisitic-model-with-normal-prior" class="anchor"></a>One parameter logisitic model with normal prior</h2>
 <p>This model requires that a fixed intercept value and parameters for the normal prior on the slope term are specified:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">mod2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">fit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">                 <span class="dt">model =</span> <span class="st">'logistic'</span>, <span class="dt">a0 =</span> <span class="dv">3</span>, <span class="dt">beta_mean =</span> <span class="dv">0</span>, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), </a>
 <a class="sourceLine" id="cb8-3" data-line-number="3">                 <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">mod2</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">fit2</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Weight</span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; 1       1    2        0      1</span></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; 2       2    2        0      1</span></a>
@@ -282,11 +287,11 @@
 <h2 class="hasAnchor">
 <a href="#one-parameter-logisitic-model-with-gamma-prior" class="anchor"></a>One parameter logisitic model with gamma prior</h2>
 <p>This model requires that a fixed intercept value and parameters for the gamma prior on the slope term are specified:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">mod3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">fit3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">                 <span class="dt">model =</span> <span class="st">'logistic_gamma'</span>, </a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">                 <span class="dt">a0 =</span> <span class="dv">3</span>, <span class="dt">beta_shape =</span> <span class="dv">1</span>, <span class="dt">beta_inverse_scale =</span> <span class="dv">1</span>, </a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">                 <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">mod3</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">fit3</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Weight</span></a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; 1       1    2        0      1</span></a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; 2       2    2        0      1</span></a>
@@ -311,11 +316,11 @@
 <h2 class="hasAnchor">
 <a href="#two-parameter-logisitic-model-with-normal-priors" class="anchor"></a>Two parameter logisitic model with normal priors</h2>
 <p>This model requires that parameters for normal priors on the intercept and slope term are specified:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">mod4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">fit4 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">                 <span class="dt">model =</span> <span class="st">'logistic2'</span>, </a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">                 <span class="dt">alpha_mean =</span> <span class="dv">0</span>, <span class="dt">alpha_sd =</span> <span class="dv">1</span>, <span class="dt">beta_mean =</span>  <span class="dv">0</span>, <span class="dt">beta_sd =</span> <span class="dv">1</span>, </a>
 <a class="sourceLine" id="cb12-4" data-line-number="4">                 <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">mod4</a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">fit4</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Weight</span></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; 1       1    2        0      1</span></a>
 <a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; 2       2    2        0      1</span></a>
@@ -342,10 +347,10 @@
 <p>Let’s compare the posterior estimates of the dose-toxicity curve:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">post_curves &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">  <span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton),</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">  <span class="dt">Empiric =</span> mod1<span class="op">$</span>prob_tox,</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">  <span class="dt">Logit1N =</span> mod2<span class="op">$</span>prob_tox,</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">  <span class="dt">Logit1G =</span> mod3<span class="op">$</span>prob_tox,</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">  <span class="dt">Logit2N =</span> mod4<span class="op">$</span>prob_tox</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">  <span class="dt">Empiric =</span> fit1<span class="op">$</span>prob_tox,</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">  <span class="dt">Logit1N =</span> fit2<span class="op">$</span>prob_tox,</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">  <span class="dt">Logit1G =</span> fit3<span class="op">$</span>prob_tox,</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">  <span class="dt">Logit2N =</span> fit4<span class="op">$</span>prob_tox</a>
 <a class="sourceLine" id="cb14-7" data-line-number="7">)</a>
 <a class="sourceLine" id="cb14-8" data-line-number="8">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(post_curves, <span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
 <table class="table">
@@ -397,7 +402,7 @@
 <p>It is perhaps no surprise that the three single-parameter models (<code>Empiric</code>, <code>Logit1N</code>, &amp; <code>Logit1G</code>) provide very similar estimates and agree that the dose closest to the target is dose-level 2. In contrast, the two-parameter model estimates a more convex curve, and proposes dose-level 3 for the next patient(s). Let’s have a look at that graphically:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">post_curves_tall &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="dt">DoseLevel =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton), <span class="dt">times =</span> <span class="dv">4</span>),</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">  <span class="dt">ProbTox =</span> <span class="kw">c</span>(mod1<span class="op">$</span>prob_tox, mod2<span class="op">$</span>prob_tox, mod3<span class="op">$</span>prob_tox, mod4<span class="op">$</span>prob_tox),</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  <span class="dt">ProbTox =</span> <span class="kw">c</span>(fit1<span class="op">$</span>prob_tox, fit2<span class="op">$</span>prob_tox, fit3<span class="op">$</span>prob_tox, fit4<span class="op">$</span>prob_tox),</a>
 <a class="sourceLine" id="cb15-4" data-line-number="4">  <span class="dt">Model =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'Empiric'</span>, <span class="st">'Logit1N'</span>, <span class="st">'Logit1G'</span>, <span class="st">'Logit2N'</span>), <span class="dt">each =</span> <span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb15-5" data-line-number="5">)</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"></a>
@@ -407,7 +412,7 @@
 <a class="sourceLine" id="cb15-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_abline">geom_hline</a></span>(<span class="dt">yintercept =</span> target, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>)</a></code></pre></div>
 <p><img src="CRM_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
 <p>If we suspect that the difference in inference might be driven by our prior for <span class="math inline">\(\alpha\)</span> in the two-parameter model, we can look at a summary of the posterior samples for that parameter:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(rstan<span class="op">::</span><span class="kw">summary</span>(mod4<span class="op">$</span>fit, <span class="st">'alpha'</span>)<span class="op">$</span>summary, <span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(rstan<span class="op">::</span><span class="kw">summary</span>(fit4<span class="op">$</span>fit, <span class="st">'alpha'</span>)<span class="op">$</span>summary, <span class="dt">digits =</span> <span class="dv">2</span>)</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -446,8 +451,8 @@
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2">  <span class="kw">data.frame</span>(</a>
 <a class="sourceLine" id="cb17-3" data-line-number="3">    <span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton),</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">    <span class="dt">ProbMTD_Empiric =</span> <span class="kw">as.numeric</span>(mod1<span class="op">$</span>prob_mtd),</a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">    <span class="dt">ProbMTD_Logit2N =</span> <span class="kw">as.numeric</span>(mod4<span class="op">$</span>prob_mtd)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">    <span class="dt">ProbMTD_Empiric =</span> <span class="kw">as.numeric</span>(fit1<span class="op">$</span>prob_mtd),</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">    <span class="dt">ProbMTD_Logit2N =</span> <span class="kw">as.numeric</span>(fit4<span class="op">$</span>prob_mtd)</a>
 <a class="sourceLine" id="cb17-6" data-line-number="6">  ), <span class="dt">digits =</span> <span class="dv">2</span></a>
 <a class="sourceLine" id="cb17-7" data-line-number="7">)</a></code></pre></div>
 <table class="table">
@@ -484,20 +489,26 @@
 </tr>
 </tbody>
 </table>
-<p>The empiric model (model 1) is actually relatively ambivalent between the first four dose-levels, assigning each roughly the same probability of being the MTD. The other one-parameter models are similar (not shown). In contrast, the two-parameter model is actually more confident in its choice of dose-level 3. However, none of the models is particularly confident and this should not surprise us as we have only observed 6 patients.</p>
+<p>The empiric model (<code>fit1</code>) is actually relatively ambivalent between the first four dose-levels, assigning each roughly the same probability of being the MTD. The other one-parameter models are similar (not shown). In contrast, the two-parameter model (<code>fit4</code>) is actually more confident in its choice of dose-level 3. However, none of the models is particularly confident and this should not surprise us as we have only observed 6 patients.</p>
 </div>
 <div id="other-crm-vignettes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-crm-vignettes" class="anchor"></a>Other CRM vignettes</h2>
 <p>There are many vignettes illuminating the CRM in <code>trialr</code>:</p>
 <ul>
-<li><a href="https://brockk.github.io/trialr/articles/CRM.html">An introduction to CRM in ‘trialr’</a></li>
-<li><a href="https://brockk.github.io/trialr/articles/CRM-visualisation.html">Visualisation in CRM</a></li>
+<li><a href="CRM.html">An introduction to CRM in ‘trialr’</a></li>
+<li><a href="CRM-visualisation.html">Visualisation in CRM</a></li>
+<li><a href="TITE-CRM.html">TITE-CRM</a></li>
 <li>Stopping in CRM</li>
 <li>Case study using Levy, et al. (2006)</li>
 <li>Simulation</li>
 </ul>
 </div>
+</div>
+<div id="trialr" class="section level1">
+<h1 class="hasAnchor">
+<a href="#trialr" class="anchor"></a>trialr</h1>
+<p><code>trialr</code> is available at <a href="https://github.com/brockk/trialr" class="uri">https://github.com/brockk/trialr</a> and <a href="https://CRAN.R-project.org/package=trialr" class="uri">https://CRAN.R-project.org/package=trialr</a></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
@@ -529,6 +540,7 @@
       <li><a href="#other-crm-vignettes">Other CRM vignettes</a></li>
       </ul>
 </li>
+      <li><a href="#trialr">trialr</a></li>
       <li><a href="#references">References</a></li>
       </ul>
 </div>

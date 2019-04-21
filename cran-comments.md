@@ -1,4 +1,29 @@
 
+# Version 0.1.0
+
+## Test environments
+* local Win install, R 3.6.0 RC
+* local Mac install, R 3.5.2
+
+0 errors | 0 warnings | 2 notes
+
+## NOTEs
+
+* checking installed package size ... NOTE
+  installed size is  XMb
+  sub-directories of 1Mb or more:
+    libs   YMb
+  
+  The package contains compiled RStan models, hence the directory size.
+  This note was also present in previous CRAN versions.
+
+* checking for GNU extensions in Makefiles ... NOTE
+GNU make is a SystemRequirements.
+
+This is true. 
+
+
+
 # Version 0.0.7
 
 ## Test environments

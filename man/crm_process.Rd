@@ -17,29 +17,8 @@ the trialr CRM models.}
 An instance of \code{\link{crm_fit}}.
 }
 \description{
-Process RStan samples from a CRM model to make inferences
-about dose-toxicity and which dose should be recommended next.
+Internal function to process rstan samples from a CRM model to
+make inferences about dose-toxicity and which dose should be recommended next.
 Typically, this function is not required to be called explicitly by the user
 because \code{\link{stan_crm}} will call it implicitly.
-}
-\examples{
-\dontrun{
-dat <- list(
-  num_doses = 5,
-  skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55),
-  target = 0.25,
-  beta_sd = sqrt(1.34),
-  num_patients = 3,
-  doses = c(1, 2, 3),
-  tox = c(0, 0, 1)
-)
-samp <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
-                        data = dat, seed = 123)
-decision <- crm_process(dat, samp)
-}
-
-}
-\seealso{
-\code{\link{stan_crm}}
-\code{\link{crm_params}}
 }

@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EffTox in trialr • trialr</title>
+<title>EffTox • trialr</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="EffTox in trialr">
+<script src="../pkgdown.js"></script><meta property="og:title" content="EffTox">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -61,13 +61,13 @@
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -94,10 +94,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>EffTox in trialr</h1>
+      <h1>EffTox</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-04-14</h4>
+            <h4 class="date">2019-04-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/EffTox.Rmd"><code>vignettes/EffTox.Rmd</code></a></small>
       <div class="hidden name"><code>EffTox.Rmd</code></div>
@@ -115,8 +115,9 @@
 <p>The codified doses are used as the sole explanatory variables in logit models for the marginal probabilities of toxicity and efficacy:</p>
 <p><span class="math inline">\(\text{logit } \pi_T = \alpha + \beta x\)</span></p>
 <p><span class="math inline">\(\text{logit } \pi_E = \gamma + \zeta x + \eta x^2\)</span></p>
-<p>and the joint probability is modelled using the function</p>
-<p><span class="math inline">\(\pi_{a,b} = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}\)</span>.</p>
+<p>Let <span class="math inline">\((Y_j, Z_j)\)</span> be random variables each taking values <span class="math inline">\(\{0, 1\}\)</span> respresenting the presence of efficacy and toxicity in patient <span class="math inline">\(j\)</span>.</p>
+<p>Then the efficacy and toxicity events are associated by the joint probability function</p>
+<p><span class="math inline">\(Pr(Y = a, Z = b) = \pi_{a,b}(\pi_E, \pi_T) = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}\)</span>.</p>
 <p>Normal priors are specified for the elements of the parameter vector <span class="math inline">\(\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \eta, \psi)\)</span>.</p>
 <p>At each dose update decision, the dose <span class="math inline">\(x\)</span> is acceptable if</p>
 <p><span class="math inline">\(\text{Pr}\left\{ \pi_T(x, \boldsymbol{\theta}) &lt; \overline{\pi}_T | \mathcal{D} \right\} &gt; p_T\)</span></p>
@@ -127,8 +128,8 @@
 <p><span class="math inline">\(u(\pi_E, \pi_T) = 1 - \left( \left(\frac{1-\pi_E}{1-\pi_{1,E}^*}\right)^p + \left(\frac{\pi_T}{\pi_{2,T}^*}\right)^p \right) ^ \frac{1}{p}\)</span></p>
 <p>where <span class="math inline">\(p\)</span> is calculated to intersect the points <span class="math inline">\((\pi_{1,E}^*, 0)\)</span>, <span class="math inline">\((1, \pi_{2,T}^*)\)</span> and <span class="math inline">\((\pi_{3,E}^*, \pi_{3,T}^*)\)</span> in the efficacy-toxicity plain. I refer to these as <em>hinge points</em> but that is not common nomenclature.</p>
 <p>At the dose selection decision, the dose-level from the acceptable set with maximal utility is selected to be given to the next patient or cohort. If there are no acceptable doses, the trial stops and no dose is recommended.</p>
-<p>There are several published EffTox examples, including explanations and tips on parameter choices <span class="citation">(Thall and Cook 2004, <span class="citation">@Thall2006</span>, <span class="citation">@Thall2014</span>)</span>.</p>
-<p>The MD Anderson Cancer Center publishes software <span class="citation">(Herrick et al. 2015)</span> to perform calculations and simulations for EffTox trials. However, the software is available for Windows in compiled-form only. Thus, trialists cannot run the software on Mac or Linux unless using a virtual machine. Furthermore, trialists may not easily alter the behaviour of the model. <span class="citation">Brock et al. (2017)</span> describe a clinical trial scenario where some alteration of the default model behaviour would have been preferable. It was this that prompted the author to write the open-source implementation provided in ‘trialr’.</p>
+<p>There are several published EffTox examples, including explanations and tips on parameter choices <span class="citation">(Thall and Cook 2004; Thall, Cook, and Estey 2006; Thall et al. 2014)</span>.</p>
+<p>The MD Anderson Cancer Center publishes software <span class="citation">(Herrick et al. 2015)</span> to perform calculations and simulations for EffTox trials. However, the software is available for Windows in compiled-form only. Thus, trialists cannot run the software on Mac or Linux unless using a virtual machine. Furthermore, trialists may not easily alter the behaviour of the model. <span class="citation">Brock et al. (2017)</span> describe a clinical trial scenario where some alteration of the default model behaviour would have been preferable. It was this that prompted the author to write the open-source implementation provided in <code>trialr</code>.</p>
 </div>
 <div id="efftox-in-trialr" class="section level1">
 <h1 class="hasAnchor">
@@ -139,7 +140,7 @@
 <p>and</p>
 <p><span class="math inline">\(\text{Pr}\left\{ \pi_E(x, \boldsymbol{\theta}) &gt; 0.5 | \mathcal{D} \right\} &gt; 0.1\)</span></p>
 <p>Thus, we have <span class="math inline">\(p_T = p_E = 0.1, \overline{\pi}_T = 0.3\)</span> and <span class="math inline">\(\underline{\pi}_E = 0.5\)</span>.</p>
-<p>The parameterisation for this trial is loaded by default in the MD Anderson EffTox app. This particular is fit as a demonstration in <code>trialr</code>.</p>
+<p>The parameterisation for this trial is loaded by default in the MD Anderson EffTox app. This particular scenario is fit as a demonstration in <code>trialr</code>.</p>
 <p>First, let us introduce our syntax for describing outcomes in phase I/II dose-finding trials, first described by <span class="citation">Brock et al. (2017)</span>. We use integers to denote the dose-level given to a patient or cohort of patients; and strings of the letters E, T, N &amp; B to represent the outcomes of patients treated at that dose that experienced efficacy, toxicity, neither or both, respectively. Clusters of these characters can be concatinated to reflect the outcomes of successive cohorts.</p>
 <p>To study the method, let us imagine that we have treated six patients in two cohorts of three at dose-levels 1 and 2 respectively:</p>
 <table class="table">
@@ -192,8 +193,8 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(trialr)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">outcomes &lt;-<span class="st"> '1NNE 2EEB'</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">mod</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" data-line-number="4">fit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">fit</a></code></pre></div>
 <pre><code>##   Patient Dose Toxicity Efficacy
 ## 1       1    1        0        0
 ## 2       2    1        0        0
@@ -216,9 +217,9 @@
 ## 5      FALSE
 ## 
 ## The model recommends selecting dose-level 3.</code></pre>
-<p>We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities. We see that dose-levels 4 and 5 are unacceptable. This is because dose-level 3 has not yet been given. No doses are inferred to be too toxic or inefficacious yet.</p>
+<p>As with the CRM models, the default <code>print</code> method for EffTox models tabulates patient data and then dose-level data. We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities. We see that dose-levels 4 and 5 are unacceptable. This is because dose-level 3 has not yet been given. No doses are inferred to be too toxic or inefficacious yet.</p>
 <p>More generally, the function <code>stan_efftox</code> can be used to fit EffTox models. The above call is simply short-hand for:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox.html">stan_efftox</a></span>(outcomes,</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox.html">stan_efftox</a></span>(outcomes,</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">                   <span class="dt">real_doses =</span> <span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">6.6</span>, <span class="fl">10.0</span>),</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">                   <span class="dt">efficacy_hurdle =</span> <span class="fl">0.5</span>, <span class="dt">toxicity_hurdle =</span> <span class="fl">0.3</span>,</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">                   <span class="dt">p_e =</span> <span class="fl">0.1</span>, <span class="dt">p_t =</span> <span class="fl">0.1</span>,</a>
@@ -232,29 +233,29 @@
 <a class="sourceLine" id="cb4-12" data-line-number="12">                   <span class="dt">psi_mean =</span> <span class="dv">0</span>, <span class="dt">psi_sd =</span> <span class="dv">1</span>, </a>
 <a class="sourceLine" id="cb4-13" data-line-number="13">                   <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
 <p>These are the parameters identified in <span class="citation">Thall et al. (2014)</span>. Refer to the published paper for information on the normal priors.</p>
-<p>The <code>mod</code> object contains</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mod<span class="op">$</span>recommended_dose</a></code></pre></div>
+<p>The <code>fit</code> object contains</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">fit<span class="op">$</span>recommended_dose</a></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>This confirms that dose-level 3 is acceptable dose with maximal utility.</p>
 <p>We can produce contour plots.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(mod<span class="op">$</span>dat, <span class="dt">prob_eff =</span> mod<span class="op">$</span>prob_eff, <span class="dt">prob_tox =</span> mod<span class="op">$</span>prob_tox)</a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(fit)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</a></code></pre></div>
 <div class="figure">
-<img src="EffTox_files/figure-html/unnamed-chunk-5-1.png" alt="Utility contours after observing outcomes 1NEN 2NBE." width="576"><p class="caption">
+<img src="EffTox_files/figure-html/unnamed-chunk-5-1.png" alt="Utility contours after observing outcomes 1NEN 2NBE." width="672"><p class="caption">
 Utility contours after observing outcomes 1NEN 2NBE.
 </p>
 </div>
-<p>The blue stars show the location of the hinge points on the neutral-uility (u=0) contour. The red numbers show the posterior means of the five dose-levels. Doses that are closer to the lower-right corner have higher utility. We see that dose-level 3 has the highest utility.</p>
+<p>The blue points show the location of the hinge points on the neutral-uility (u=0) contour. The red numbers show the posterior means of the five dose-levels. Doses that are closer to the lower-right corner have higher utility. We see that dose-level 3 has the highest utility.</p>
 <p>We can also produce posterior density plots of the dose utilities. For illustration, we will just plot the densities of the three acceptable doses. The package <code>ggplot2</code> is required.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_utility_density_plot.html">efftox_utility_density_plot</a></span>(mod<span class="op">$</span>fit, <span class="dt">doses =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">+</span></a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_utility_density_plot.html">efftox_utility_density_plot</a></span>(fit, <span class="dt">doses =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
 <div class="figure">
-<img src="EffTox_files/figure-html/unnamed-chunk-6-1.png" alt="Utility densities after observing outcomes 1NEN 2NBE." width="576"><p class="caption">
+<img src="EffTox_files/figure-html/unnamed-chunk-6-1.png" alt="Utility densities after observing outcomes 1NEN 2NBE." width="672"><p class="caption">
 Utility densities after observing outcomes 1NEN 2NBE.
 </p>
 </div>
 <p>To further facilitate the analysis of dose utility, we provide means of calculating the dose superiority matrix.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="../reference/efftox_superiority.html">efftox_superiority</a></span>(mod<span class="op">$</span>fit), <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">row.names =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(<span class="kw"><a href="../reference/efftox_superiority.html">efftox_superiority</a></span>(fit), <span class="dt">digits =</span> <span class="dv">2</span>, <span class="dt">row.names =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -367,7 +368,7 @@ Utility densities after observing outcomes 1NEN 2NBE.
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">
 <a href="#trialr" class="anchor"></a>trialr</h1>
-<p><code>trialr</code> is available at <a href="https://github.com/brockk/trialr" class="uri">https://github.com/brockk/trialr</a></p>
+<p><code>trialr</code> is available at <a href="https://github.com/brockk/trialr" class="uri">https://github.com/brockk/trialr</a> and <a href="https://CRAN.R-project.org/package=trialr" class="uri">https://CRAN.R-project.org/package=trialr</a></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

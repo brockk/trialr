@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="EffTox analysis to data.frame — efftox_analysis_to_df" />
 
-<meta property="og:description" content="Convenient function to turn an efftox_analysis
+<meta property="og:description" content="Convenient function to turn an efftox_fit
 into a data.frame." />
 <meta name="twitter:card" content="summary" />
 
@@ -62,7 +62,7 @@ into a data.frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -94,13 +94,13 @@ into a data.frame." />
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -135,7 +135,7 @@ into a data.frame." />
 
     <div class="ref-description">
     
-    <p>Convenient function to turn an <code>efftox_analysis</code>
+    <p>Convenient function to turn an <code><a href='efftox_fit-class.html'>efftox_fit</a></code>
 into a <code>data.frame</code>.</p>
     
     </div>
@@ -147,7 +147,7 @@ into a <code>data.frame</code>.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An <code>efftox_analysis</code></p></td>
+      <td><p>An instance of <code><a href='efftox_fit-class.html'>efftox_fit</a></code></p></td>
     </tr>
     </table>
     
@@ -155,18 +155,17 @@ into a <code>data.frame</code>.</p>
 
     <p>a <code>data.frame</code></p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='stan_efftox.html'>stan_efftox</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()
-<span class='no'>dat</span>$<span class='no'>num_patients</span> <span class='kw'>&lt;-</span> <span class='fl'>3</span>
-<span class='no'>dat</span>$<span class='no'>eff</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>tox</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>doses</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; 
+    <pre class="examples"><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stan_efftox_demo.html'>stan_efftox_demo</a></span>(<span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='st'>'1N 2E 3B'</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 3.9e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.39 seconds.
+#&gt; Chain 1: Gradient evaluation took 3.8e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -183,15 +182,15 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.083184 seconds (Warm-up)
-#&gt; Chain 1:                0.058331 seconds (Sampling)
-#&gt; Chain 1:                0.141515 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.082552 seconds (Warm-up)
+#&gt; Chain 1:                0.060157 seconds (Sampling)
+#&gt; Chain 1:                0.142709 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.2e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.3e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -208,9 +207,9 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.08316 seconds (Warm-up)
-#&gt; Chain 2:                0.059316 seconds (Sampling)
-#&gt; Chain 2:                0.142476 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.082538 seconds (Warm-up)
+#&gt; Chain 2:                0.05867 seconds (Sampling)
+#&gt; Chain 2:                0.141208 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
@@ -233,15 +232,15 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.082176 seconds (Warm-up)
-#&gt; Chain 3:                0.057814 seconds (Sampling)
-#&gt; Chain 3:                0.13999 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.082796 seconds (Warm-up)
+#&gt; Chain 3:                0.058553 seconds (Sampling)
+#&gt; Chain 3:                0.141349 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 1.1e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
+#&gt; Chain 4: Gradient evaluation took 1.2e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -258,12 +257,16 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.079837 seconds (Warm-up)
-#&gt; Chain 4:                0.057853 seconds (Sampling)
-#&gt; Chain 4:                0.13769 seconds (Total)
-#&gt; Chain 4: </div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
-<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_analysis_to_df</span>(<span class='no'>decision</span>)
-<span class='fu'>round</span>(<span class='no'>df</span>$<span class='no'>Utility</span>, <span class='fl'>2</span>) <span class='kw'>==</span> <span class='fu'>c</span>(-<span class='fl'>0.64</span>, <span class='fl'>0.04</span>, <span class='fl'>0.24</span>, -<span class='fl'>0.05</span>, -<span class='fl'>0.19</span>)</div><div class='output co'>#&gt; [1]  TRUE  TRUE  TRUE FALSE FALSE</div><div class='input'>
+#&gt; Chain 4:  Elapsed Time: 0.079985 seconds (Warm-up)
+#&gt; Chain 4:                0.057538 seconds (Sampling)
+#&gt; Chain 4:                0.137523 seconds (Total)
+#&gt; Chain 4: </div><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_analysis_to_df</span>(<span class='no'>fit</span>)
+<span class='no'>df</span></div><div class='output co'>#&gt;   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox     Utility Acceptable
+#&gt; 1         1 0.2202708 0.04472665    0.15150    0.95825 -0.63505664       TRUE
+#&gt; 2         2 0.5919815 0.08858842    0.64250    0.91500  0.03847398       TRUE
+#&gt; 3         3 0.8956561 0.35312834    0.97075    0.51500  0.23764423       TRUE
+#&gt; 4         4 0.9524847 0.62238038    0.98600    0.24975 -0.06007982       TRUE
+#&gt; 5         5 0.9675750 0.73738683    0.98625    0.17500 -0.20528309      FALSE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -272,6 +275,8 @@ into a <code>data.frame</code>.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

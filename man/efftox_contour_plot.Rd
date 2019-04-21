@@ -4,25 +4,27 @@
 \alias{efftox_contour_plot}
 \title{Plot EffTox utility contours}
 \usage{
-efftox_contour_plot(dat, use_ggplot = FALSE, prob_eff = NULL,
-  prob_tox = NULL, num_points = 1000, util_vals = seq(-3, 3, by = 0.2))
+efftox_contour_plot(fit, use_ggplot = FALSE, prob_eff = fit$prob_eff,
+  prob_tox = fit$prob_tox, num_points = 1000, util_vals = seq(-3, 3, by =
+  0.2))
 }
 \arguments{
-\item{dat}{An instance of \code{\link{efftox_params}}, a list of EffTox
-parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.}
+\item{fit}{An instance of \code{\link{efftox_fit}}.}
 
 \item{use_ggplot}{logical, TRUE to use ggplot2. Defaults to FALSE to use
 standard R graphics.}
 
-\item{prob_eff}{an optional vector of numbers between 0 and 1, containing the
+\item{prob_eff}{vector of numbers between 0 and 1, containing the
 efficacy probabilities of extra points to add to the plot as points,
 e.g. the posterior mean efficacy probabilities of the doses under
-investigation. Paired with prob_tox, thus they should be the same length.}
+investigation. Paired with prob_tox, thus they should be the same length.
+Defaults to the values fitted by the model. Use NULL to supress.}
 
-\item{prob_tox}{an optional vector of numbers between 0 and 1, containing the
+\item{prob_tox}{vector of numbers between 0 and 1, containing the
 toxicity probabilities of extra points to add to the plot as points,
 e.g. the posterior mean toxicity probabilities of the doses under
-investigation. Paired with prob_eff, thus they should be the same length.}
+investigation. Paired with prob_eff, thus they should be the same length.
+Defaults to the values fitted by the model. Use NULL to supress.}
 
 \item{num_points}{integer for number of points to calculate on each curve.
 The default is 1000 and this should be plenty.}
@@ -43,27 +45,14 @@ Prob(Efficacy) vs Prob(Toxicity) points can be added; these are shown as
 red numerals, enumerated in the order provided.
 }
 \examples{
-dat <- efftox_parameters_demo()
-efftox_contour_plot(dat)
-# Add posterior beliefs
-dat$num_patients <- 3
-dat$eff <- c(0, 1, 1)
-dat$tox <- c(0, 0, 1)
-dat$doses <- c(1, 2, 3)
-fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-decision <- efftox_process(dat, fit)
-efftox_contour_plot(dat, prob_eff = decision$prob_eff,
-                    prob_tox = decision$prob_tox)
+fit <- stan_efftox_demo(outcome_str = '1N 2E 3B')
+efftox_contour_plot(fit)
 title('EffTox utility contours')
 # The same with ggplot2
-efftox_contour_plot(dat, prob_eff = decision$prob_eff,
-                    prob_tox = decision$prob_tox,
-                    use_ggplot = TRUE) +
+efftox_contour_plot(fit, use_ggplot = TRUE) +
                     ggplot2::ggtitle('EffTox utility contours')
 
 }
 \seealso{
-\code{\link{efftox_params}}
-
-\code{\link{efftox_parameters_demo}}
+\code{\link{stan_efftox}}
 }

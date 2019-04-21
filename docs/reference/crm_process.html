@@ -32,8 +32,8 @@
 
 <meta property="og:title" content="Process RStan samples from a CRM model — crm_process" />
 
-<meta property="og:description" content="Process RStan samples from a CRM model to make inferences
-about dose-toxicity and which dose should be recommended next.
+<meta property="og:description" content="Internal function to process rstan samples from a CRM model to
+make inferences about dose-toxicity and which dose should be recommended next.
 Typically, this function is not required to be called explicitly by the user
 because stan_crm will call it implicitly." />
 <meta name="twitter:card" content="summary" />
@@ -64,7 +64,7 @@ because stan_crm will call it implicitly." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -96,13 +96,13 @@ because stan_crm will call it implicitly." />
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -137,8 +137,8 @@ because stan_crm will call it implicitly." />
 
     <div class="ref-description">
     
-    <p>Process RStan samples from a CRM model to make inferences
-about dose-toxicity and which dose should be recommended next.
+    <p>Internal function to process rstan samples from a CRM model to
+make inferences about dose-toxicity and which dose should be recommended next.
 Typically, this function is not required to be called explicitly by the user
 because <code><a href='stan_crm.html'>stan_crm</a></code> will call it implicitly.</p>
     
@@ -165,28 +165,7 @@ the trialr CRM models.</p></td>
 
     <p>An instance of <code><a href='crm_fit-class.html'>crm_fit</a></code>.</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='stan_crm.html'>stan_crm</a></code>
-<code><a href='crm_params-class.html'>crm_params</a></code></p></div>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(
-  <span class='kw'>num_doses</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.12</span>, <span class='fl'>0.25</span>, <span class='fl'>0.40</span>, <span class='fl'>0.55</span>),
-  <span class='kw'>target</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
-  <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='fl'>1.34</span>),
-  <span class='kw'>num_patients</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>doses</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>),
-  <span class='kw'>tox</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>)
-)
-<span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>CrmEmpiricNormalPrior</span>,
-                        <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
-<span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_process</span>(<span class='no'>dat</span>, <span class='no'>samp</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -194,11 +173,7 @@ the trialr CRM models.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

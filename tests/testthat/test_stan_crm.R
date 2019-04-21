@@ -14,6 +14,7 @@ test_that('stan_crm passes ellipsis variables to rstan::sampling', {
 })
 
 # Accuracy checks ----
+
 # Published example of logistic model:
 # p.21 of Cheung's "Dose Finding by the Continual Reassessment Method",
 # ISBN 9781420091519
@@ -61,6 +62,23 @@ test_that('stan_crm output for logistic model matches DFCRM by Cheung', {
   # dose-tox function. This differs from that calculated by trialr because
   # trialr draws samples from the posterior distribution of prob_tox and
   # calculates the mean from there.
+})
+
+# Published example of TITE-CRM empiric model:
+# p.124 of Cheung's "Dose Finding by the Continual Reassessment Method",
+# ISBN 9781420091519
+test_that('stan_crm output for TITE-CRM empiric model matches DFCRM by Cheung', {
+
+  epsilon <- 0.03
+
+  x <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
+               doses_given = c(3, 3, 3, 3),
+               tox = c(0, 0, 0, 0),
+               weights = c(73, 66, 35, 28) / 126,
+               model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
+  expect_equal(x$recommended_dose, 4)
+  beta_samp <- as.data.frame(x, pars = 'beta')
+  expect_lt(abs(mean(beta_samp$beta) - 0.49), epsilon)
 })
 
 

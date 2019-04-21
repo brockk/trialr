@@ -64,7 +64,7 @@ View the original source at:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -96,13 +96,13 @@ View the original source at:
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -178,8 +178,8 @@ and 2 columns. The first column is the incidence of event 1.</p>
     <pre class="examples"><div class='input'><span class='no'>probs</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0.8</span>, <span class='fl'>0.3</span>)
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>ranBin2</span>(<span class='fl'>1000</span>, <span class='no'>probs</span>, <span class='kw'>psi</span><span class='kw'>=</span><span class='fl'>0.2</span>)  <span class='co'># 1000 pairs of outcomes</span>
 <span class='fu'>cor</span>(<span class='no'>s</span>)  <span class='co'># Negatively correlated because psi &lt; 1</span></div><div class='output co'>#&gt;            [,1]       [,2]
-#&gt; [1,]  1.0000000 -0.3180045
-#&gt; [2,] -0.3180045  1.0000000</div><div class='input'><span class='fu'>colMeans</span>(<span class='no'>s</span>)  <span class='co'># Event rates as expected</span></div><div class='output co'>#&gt; [1] 0.817 0.270</div></pre>
+#&gt; [1,]  1.0000000 -0.3394953
+#&gt; [2,] -0.3394953  1.0000000</div><div class='input'><span class='fu'>colMeans</span>(<span class='no'>s</span>)  <span class='co'># Event rates as expected</span></div><div class='output co'>#&gt; [1] 0.827 0.267</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

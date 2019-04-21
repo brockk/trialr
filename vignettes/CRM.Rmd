@@ -18,13 +18,26 @@ knitr::opts_chunk$set(
 ```
 
 The Continual Reassessment Method (CRM) is the elder statesman of adaptive clinical trials.
-Originally published by @OQuigley1990, it assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose.
+Originally published by @OQuigley1990, it assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose (MTD).
 It is a truly seminal design, with many variants appearing over the years to handle different clinical scenarios, such as seperate groups, late-onset toxicity, efficacy and toxicity outcomes, and more.
 
-In this vignette, we focus on the original Bayesian design that seeks the _maximum tolerated dose_ (MTD) in an homogeneous patient group.
+In this vignette, we focus on the original Bayesian design that seeks the MTD in an homogeneous patient group.
 Let $x_i$ be a standardised dose-level. 
 The probability of _dose-limiting toxicity_ (DLT) at dose $x_i$ is estimated to be $F(x_i, \theta)$, where $F$ is a smooth mathematical function, and $\theta$ is a general vector of parameters.
 Even within this simple scenario, there are variants that use different forms for $F$, and different distributions on $\theta$.
+
+Let $Y_i$ be a random variable taking values $\{0, 1\}$ reflecting the absence and presence of DLT respectively in patient $i$.
+A patient administered dose $x_i$ has estimated probability of toxicity $F(x_i, \theta)$ so that the likelihood component arising from patient $i$ is
+
+$$ F(x_i, \theta)^{Y_i} (1 - F(x_i, \theta))^{1-Y_i} $$
+
+
+After the evaluation of $J$ patients, the aggregate likelihood is:
+
+$$ L_J(\theta) = \prod_{i=1}^J \left\{ F(x_i, \theta) \right\}^{Y_i} \left\{ 1 - F(x_i, \theta) \right\}^{1-Y_i} $$
+
+This quantity can either be maximised with respect to $\theta$ to obtain maximum likelihood estimate, or augmented with priors and analysed in a Bayesian way.
+CRM was originally published as a Bayesian design and that is the approach we take here in `trialr` using Stan.
 
 The CRM variants currently implemented in `trialr` for MTD-finding in a single homogeneous group are:
 
@@ -89,12 +102,12 @@ We then briefly compare the inferences at the end.
 The empiric model requires only that a prior normal standard deviation be specified for the slope parameter.
 We use a prior variance of $\beta$ equal to 1.34, as used by Cheung in his examples.
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-mod1 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+fit1 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
                  model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
 ```
 
 ```{r}
-mod1
+fit1
 ```
 In this demonstration, we set the seed for reproducibility when sampling however, in the wild, you might not do this.
 
@@ -104,7 +117,7 @@ For example, we can recreate the posterior expected probability of DLT at each d
 It is simply the mean of each sample:
 
 ```{r}
-prob_tox_samp1 <- as.data.frame(mod1, 'prob_tox')
+prob_tox_samp1 <- as.data.frame(fit1, 'prob_tox')
 prob_tox1 <- colMeans(prob_tox_samp1)
 prob_tox1
 ```
@@ -125,13 +138,13 @@ This type of calculation is trivial because we have access to the posterior samp
 ## One parameter logisitic model with normal prior
 This model requires that a fixed intercept value and parameters for the normal prior on the slope term are specified:
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-mod2 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+fit2 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
                  model = 'logistic', a0 = 3, beta_mean = 0, beta_sd = sqrt(1.34), 
                  seed = 123)
 ```
 
 ```{r}
-mod2
+fit2
 ```
 
 Once again, we see that dose-level 2 would be recommended for the next cohort because it is forecast to have Pr(DLT) closest to the target, 25%.
@@ -139,14 +152,14 @@ Once again, we see that dose-level 2 would be recommended for the next cohort be
 ## One parameter logisitic model with gamma prior
 This model requires that a fixed intercept value and parameters for the gamma prior on the slope term are specified:
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-mod3 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+fit3 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
                  model = 'logistic_gamma', 
                  a0 = 3, beta_shape = 1, beta_inverse_scale = 1, 
                  seed = 123)
 ```
 
 ```{r}
-mod3
+fit3
 ```
 
 This use of a Gamma(1, 1) prior is the same as an Exponential(1) prior.
@@ -154,14 +167,14 @@ This use of a Gamma(1, 1) prior is the same as an Exponential(1) prior.
 ## Two parameter logisitic model with normal priors
 This model requires that parameters for normal priors on the intercept and slope term are specified:
 ```{r, results = "hide", warning=FALSE, message=FALSE}
-mod4 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+fit4 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
                  model = 'logistic2', 
                  alpha_mean = 0, alpha_sd = 1, beta_mean =  0, beta_sd = 1, 
                  seed = 123)
 ```
 
 ```{r}
-mod4
+fit4
 ```
 
 These estimates look different to the other methods, not least because we have estimated an extra parameter.
@@ -173,10 +186,10 @@ Let's compare the posterior estimates of the dose-toxicity curve:
 ```{r}
 post_curves <- data.frame(
   DoseLevel = 1:length(skeleton),
-  Empiric = mod1$prob_tox,
-  Logit1N = mod2$prob_tox,
-  Logit1G = mod3$prob_tox,
-  Logit2N = mod4$prob_tox
+  Empiric = fit1$prob_tox,
+  Logit1N = fit2$prob_tox,
+  Logit1G = fit3$prob_tox,
+  Logit2N = fit4$prob_tox
 )
 knitr::kable(post_curves, digits = 2)
 ```
@@ -188,7 +201,7 @@ Let's have a look at that graphically:
 ```{r, fig.width=7, fig.height=7}
 post_curves_tall <- data.frame(
   DoseLevel = rep(1:length(skeleton), times = 4),
-  ProbTox = c(mod1$prob_tox, mod2$prob_tox, mod3$prob_tox, mod4$prob_tox),
+  ProbTox = c(fit1$prob_tox, fit2$prob_tox, fit3$prob_tox, fit4$prob_tox),
   Model = rep(c('Empiric', 'Logit1N', 'Logit1G', 'Logit2N'), each = 5)
 )
 
@@ -201,7 +214,7 @@ ggplot(post_curves_tall, aes(x = DoseLevel, y = ProbTox, group = Model, col = Mo
 If we suspect that the difference in inference might be driven by our prior for $\alpha$ in the two-parameter model, we can look at a summary of the posterior samples for that parameter:
 
 ```{r}
-knitr::kable(rstan::summary(mod4$fit, 'alpha')$summary, digits = 2)
+knitr::kable(rstan::summary(fit4$fit, 'alpha')$summary, digits = 2)
 ```
 
 The posterior mean is not near the tail of the $N(0, 1)$ prior distribution and the posterior 95% credible interval has relocated from prior guess of (-2, 2).
@@ -224,26 +237,30 @@ This is probably what we really want when we conduct an MTD-seeking clinical tri
 knitr::kable(
   data.frame(
     DoseLevel = 1:length(skeleton),
-    ProbMTD_Empiric = as.numeric(mod1$prob_mtd),
-    ProbMTD_Logit2N = as.numeric(mod4$prob_mtd)
+    ProbMTD_Empiric = as.numeric(fit1$prob_mtd),
+    ProbMTD_Logit2N = as.numeric(fit4$prob_mtd)
   ), digits = 2
 )
 ```
 
-The empiric model (model 1) is actually relatively ambivalent between the first four dose-levels, assigning each roughly the same probability of being the MTD.
+The empiric model (`fit1`) is actually relatively ambivalent between the first four dose-levels, assigning each roughly the same probability of being the MTD.
 The other one-parameter models are similar (not shown).
-In contrast, the two-parameter model is actually more confident in its choice of dose-level 3.
+In contrast, the two-parameter model (`fit4`) is actually more confident in its choice of dose-level 3.
 However, none of the models is particularly confident and this should not surprise us as we have only observed 6 patients.
 
 ## Other CRM vignettes
 There are many vignettes illuminating the CRM in `trialr`:
 
-- [An introduction to CRM in 'trialr'](https://brockk.github.io/trialr/articles/CRM.html)
-- [Visualisation in CRM](https://brockk.github.io/trialr/articles/CRM-visualisation.html)
+- [An introduction to CRM in 'trialr'](CRM.html)
+- [Visualisation in CRM](CRM-visualisation.html)
+- [TITE-CRM](TITE-CRM.html)
 - Stopping in CRM
 - Case study using Levy, et al. (2006)
 - Simulation
 
+
+# trialr
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
 
 
 # References

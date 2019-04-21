@@ -65,7 +65,7 @@ red numerals, enumerated in the order provided." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -97,13 +97,13 @@ red numerals, enumerated in the order provided." />
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -146,16 +146,16 @@ red numerals, enumerated in the order provided.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>efftox_contour_plot</span>(<span class='no'>dat</span>, <span class='kw'>use_ggplot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>prob_eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>num_points</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>util_vals</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>3</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>0.2</span>))</pre>
+    <pre class="usage"><span class='fu'>efftox_contour_plot</span>(<span class='no'>fit</span>, <span class='kw'>use_ggplot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>prob_eff</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>prob_eff</span>,
+  <span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>prob_tox</span>, <span class='kw'>num_points</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>util_vals</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>3</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span>
+  <span class='fl'>0.2</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dat</th>
-      <td><p>An instance of <code><a href='efftox_params-class.html'>efftox_params</a></code>, a list of EffTox
-parameters. An example is yielded by <code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code>.</p></td>
+      <th>fit</th>
+      <td><p>An instance of <code><a href='efftox_fit-class.html'>efftox_fit</a></code>.</p></td>
     </tr>
     <tr>
       <th>use_ggplot</th>
@@ -164,17 +164,19 @@ standard R graphics.</p></td>
     </tr>
     <tr>
       <th>prob_eff</th>
-      <td><p>an optional vector of numbers between 0 and 1, containing the
+      <td><p>vector of numbers between 0 and 1, containing the
 efficacy probabilities of extra points to add to the plot as points,
 e.g. the posterior mean efficacy probabilities of the doses under
-investigation. Paired with prob_tox, thus they should be the same length.</p></td>
+investigation. Paired with prob_tox, thus they should be the same length.
+Defaults to the values fitted by the model. Use NULL to supress.</p></td>
     </tr>
     <tr>
       <th>prob_tox</th>
-      <td><p>an optional vector of numbers between 0 and 1, containing the
+      <td><p>vector of numbers between 0 and 1, containing the
 toxicity probabilities of extra points to add to the plot as points,
 e.g. the posterior mean toxicity probabilities of the doses under
-investigation. Paired with prob_eff, thus they should be the same length.</p></td>
+investigation. Paired with prob_eff, thus they should be the same length.
+Defaults to the values fitted by the model. Use NULL to supress.</p></td>
     </tr>
     <tr>
       <th>num_points</th>
@@ -196,22 +198,15 @@ object is returned. Omit assignment in either case to just view the plot.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='efftox_params-class.html'>efftox_params</a></code></p>
-<p><code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code></p></div>
+    <div class='dont-index'><p><code><a href='stan_efftox.html'>stan_efftox</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()
-<span class='fu'>efftox_contour_plot</span>(<span class='no'>dat</span>)</div><div class='input'><span class='co'># Add posterior beliefs</span>
-<span class='no'>dat</span>$<span class='no'>num_patients</span> <span class='kw'>&lt;-</span> <span class='fl'>3</span>
-<span class='no'>dat</span>$<span class='no'>eff</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>tox</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>)
-<span class='no'>dat</span>$<span class='no'>doses</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstan</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></span>(<span class='no'>stanmodels</span>$<span class='no'>EffTox</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>)</div><div class='output co'>#&gt; 
+    <pre class="examples"><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stan_efftox_demo.html'>stan_efftox_demo</a></span>(<span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='st'>'1N 2E 3B'</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 1.5e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.15 seconds.
+#&gt; Chain 1: Gradient evaluation took 1.7e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -228,15 +223,15 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.083853 seconds (Warm-up)
-#&gt; Chain 1:                0.062074 seconds (Sampling)
-#&gt; Chain 1:                0.145927 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.077446 seconds (Warm-up)
+#&gt; Chain 1:                0.05612 seconds (Sampling)
+#&gt; Chain 1:                0.133566 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.2e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.1e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -253,9 +248,9 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.081819 seconds (Warm-up)
-#&gt; Chain 2:                0.057603 seconds (Sampling)
-#&gt; Chain 2:                0.139422 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.084741 seconds (Warm-up)
+#&gt; Chain 2:                0.05702 seconds (Sampling)
+#&gt; Chain 2:                0.141761 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
@@ -278,15 +273,15 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.08352 seconds (Warm-up)
-#&gt; Chain 3:                0.060222 seconds (Sampling)
-#&gt; Chain 3:                0.143742 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.081613 seconds (Warm-up)
+#&gt; Chain 3:                0.059141 seconds (Sampling)
+#&gt; Chain 3:                0.140754 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 1.2e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#&gt; Chain 4: Gradient evaluation took 1.3e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -303,15 +298,11 @@ object is returned. Omit assignment in either case to just view the plot.</p>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.080571 seconds (Warm-up)
-#&gt; Chain 4:                0.061408 seconds (Sampling)
-#&gt; Chain 4:                0.141979 seconds (Total)
-#&gt; Chain 4: </div><div class='input'><span class='no'>decision</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_process.html'>efftox_process</a></span>(<span class='no'>dat</span>, <span class='no'>fit</span>)
-<span class='fu'>efftox_contour_plot</span>(<span class='no'>dat</span>, <span class='kw'>prob_eff</span> <span class='kw'>=</span> <span class='no'>decision</span>$<span class='no'>prob_eff</span>,
-                    <span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='no'>decision</span>$<span class='no'>prob_tox</span>)</div><div class='input'><span class='fu'>title</span>(<span class='st'>'EffTox utility contours'</span>)</div><div class='img'><img src='efftox_contour_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># The same with ggplot2</span>
-<span class='fu'>efftox_contour_plot</span>(<span class='no'>dat</span>, <span class='kw'>prob_eff</span> <span class='kw'>=</span> <span class='no'>decision</span>$<span class='no'>prob_eff</span>,
-                    <span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='no'>decision</span>$<span class='no'>prob_tox</span>,
-                    <span class='kw'>use_ggplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+#&gt; Chain 4:  Elapsed Time: 0.077091 seconds (Warm-up)
+#&gt; Chain 4:                0.062535 seconds (Sampling)
+#&gt; Chain 4:                0.139626 seconds (Total)
+#&gt; Chain 4: </div><div class='input'><span class='fu'>efftox_contour_plot</span>(<span class='no'>fit</span>)</div><div class='input'><span class='fu'>title</span>(<span class='st'>'EffTox utility contours'</span>)</div><div class='img'><img src='efftox_contour_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># The same with ggplot2</span>
+<span class='fu'>efftox_contour_plot</span>(<span class='no'>fit</span>, <span class='kw'>use_ggplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
                     <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'EffTox utility contours'</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 23133 rows containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 500 rows containing missing values (geom_path).</span></div><div class='img'><img src='efftox_contour_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

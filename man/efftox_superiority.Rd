@@ -7,8 +7,7 @@
 efftox_superiority(fit)
 }
 \arguments{
-\item{fit}{An instance of \code{rstan::stanmodel}, derived by sampling an
-EffTox model. Use \code{stan::sampling(stanmodels$EffTox, data = dat)}.}
+\item{fit}{An instance of \code{efftox_fit}.}
 }
 \value{
 n by n matrix, where n is number of doses under investigation.
@@ -22,11 +21,6 @@ is inferred by posterior utility. The item in row i, col j is the posterior
 probability that the utility of dose j exceeds that of dose i.
 }
 \examples{
-dat <- efftox_parameters_demo()
-dat$num_patients <- 3
-dat$eff <- c(0, 1, 1)
-dat$tox <- c(0, 0, 1)
-dat$doses <- c(1, 2, 3)
-fit <- rstan::sampling(stanmodels$EffTox, data = dat)
+fit <- stan_efftox_demo('1N 2E 3B')
 sup_mat <- efftox_superiority(fit)
 }

@@ -71,7 +71,7 @@ parameter.}
 association parameter.}
 }
 \value{
-a \code{list} of parameters, described in \code{peps2_params}
+a \code{list} of parameters
 }
 \description{
 Get data to run the BEBOP model in the PePS2 trial. The trial
@@ -100,9 +100,10 @@ dat <- peps2_get_data(num_patients = 60,
                       prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
                       prob_tox = rep(0.1, 6),
                       eff_tox_or = rep(1, 6))
-samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
+fit <- stan_peps2(
+  eff = dat$eff,
+  tox = dat$tox,
+  cohorts = dat$cohorts
+)
 
-}
-\seealso{
-\code{\link{peps2_params}}
 }

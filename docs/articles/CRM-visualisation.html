@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -61,13 +61,13 @@
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -97,7 +97,7 @@
       <h1>Visualisation with CRM</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-04-14</h4>
+            <h4 class="date">2019-04-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/CRM-visualisation.Rmd"><code>vignettes/CRM-visualisation.Rmd</code></a></small>
       <div class="hidden name"><code>CRM-visualisation.Rmd</code></div>
@@ -106,7 +106,7 @@
 
     
     
-<p>In the general <a href="https://brockk.github.io/trialr/articles/CRM.html">introductory CRM vignette</a>, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in <code>trialr</code>. In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.</p>
+<p>In the general <a href="CRM.html">introductory CRM vignette</a>, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in <code>trialr</code>. In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.</p>
 <p>The following visualisation methods are applicable in all <code>trialr</code> variants of the CRM because they rely only on the family of <code>prob_tox</code> parameters that are estimated by all CRM models.</p>
 <p>For illustration, let us assume that we have treated 6 patients at 3 dose-levels:</p>
 <table class="table">
@@ -162,16 +162,16 @@
 <p>To access the Stan implementations of the CRM, we must load <code>trialr</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(trialr)</a></code></pre></div>
 <p>and to fit the data to the model, we run:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_crm.html">stan_crm</a></span>(outcomes, <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, </a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">                <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), <span class="dt">seed =</span> <span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">mod</a></code></pre></div>
+<a class="sourceLine" id="cb4-3" data-line-number="3">fit</a></code></pre></div>
 <p>Recall that we set the random number generator seed in demonstrations for reproducibility. You may or may not choose to do this in a real analysis.</p>
-<p>We saw <a href="https://brockk.github.io/trialr/articles/CRM.html">before</a> that dose-level 2 is closest to our target toxicity rate of 25%. However, we will probably like to convey this information to the research world in a visually-appealing manner. This is simple with access to the posterior samples.</p>
+<p>We saw <a href="CRM.html">before</a> that dose-level 2 is closest to our target toxicity rate of 25%. However, we will probably like to convey this information to the research world in a visually-appealing manner. This is simple with access to the posterior samples.</p>
 <p>For ease of plotting with <code>ggplot2</code>, we recompose the posterior samples to a tall “tidy” format using <code>tidyr</code> and <code>dplyr</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">prob_tox_samp &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(mod, <span class="st">'prob_tox'</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">prob_tox_samp &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(fit, <span class="st">'prob_tox'</span>)</a>
 <a class="sourceLine" id="cb5-5" data-line-number="5">prob_tox_samp_tall &lt;-<span class="st"> </span>prob_tox_samp <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(Label, ProbTox) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
@@ -215,40 +215,65 @@
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ProbTox, <span class="dt">y =</span> DoseLevel, <span class="dt">fill =</span> DoseLevel)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb10-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggridges/topics/geom_density_ridges">geom_density_ridges</a></span>() <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb10-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">'none'</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'joyplot of Pr(DLT) under CRM'</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'joyplot of Pr(DLT) under CRM'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">'bottom'</span>)</a></code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <p>Hopefully none of us would try to claim these posterior probabilities of toxicity are normally distributed under this model. Assuming normality has been one method for performing posterior inference with CRM models in the non-MCMC setting. With the posterior samples provided by <code>rstan</code>, we do not need to assume.</p>
-<p>We will naturally want to visualise quantities beyond just the probability of toxicity. We learned in the <a href="https://brockk.github.io/trialr/articles/CRM.html">introductory CRM vignette</a> that with the full Bayesian CRM provided by <code>trialr</code> and <code>rstan</code>, we can calculate the probability that each dose is the maximum tolerable dose (MTD). The natural next step is to visualise that trade-off:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">library</span>(magrittr)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">apply</span>(prob_tox_samp, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span>target))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">Dose =</span> .) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">stat_count</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Dose, <span class="dt">y =</span> ..prop.., <span class="dt">group =</span> <span class="dv">1</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior probability that each dose is the MTD'</span>,</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">       <span class="dt">y =</span> <span class="st">'Prob(MTD)'</span>)</a></code></pre></div>
+<p>We will naturally want to visualise quantities beyond just the probability of toxicity. We learned in the <a href="CRM.html">introductory CRM vignette</a> that with the full Bayesian CRM provided by <code>trialr</code> and <code>rstan</code>, we can calculate the probability that each dose is the maximum tolerable dose (MTD).</p>
+<p>We can visualise the MCMC candidates for the dose-toxicity curve on one plot. Colouring them by the MTD candidate they propose (i.e. using a single colour for all the curves that suggest dose-level 1 is the maximum tolerable dose, etc), we get an idea of uncertainty still in this trial:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">prob_tox_samp_tall <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(Draw <span class="op">&lt;=</span><span class="st"> </span><span class="dv">200</span>) -&gt;<span class="st"> </span>prob_tox_subset</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">prob_tox_subset <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">    prob_tox_subset <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="st">      </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(Draw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="st">      </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">MTD =</span> <span class="kw">which.min</span>(<span class="kw">abs</span>(ProbTox <span class="op">-</span><span class="st"> </span>target)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>()),</a>
+<a class="sourceLine" id="cb11-9" data-line-number="9">    <span class="dt">by =</span> <span class="st">'Draw'</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbTox, <span class="dt">group =</span> Draw)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">col =</span> MTD), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_abline">geom_hline</a></span>(<span class="dt">yintercept =</span> target, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Identify of MTD is shrouded in mystery'</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">'bottom'</span>)</a></code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-<p>In this interim stage, each of the first four doses could plausibly be the MTD, but the top dose looks unlikely. This information was not readily available from the above plots of the probabilities of toxicity.</p>
-<p>We might also like to visualise the probability that the toxicity rate at each dose exceeds our target toxicity rate.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">colMeans</span>(prob_tox_samp <span class="op">&gt;</span><span class="st"> </span>target) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">ProbToxic =</span> ., <span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbToxic)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">geom_col</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior probability that each dose is too toxic'</span>,</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">       <span class="dt">y =</span> <span class="st">'Prob(Tox &gt; target)'</span>)</a></code></pre></div>
+<p>We used just 200 curves above to avoid saturating the plot. We can visualise that data rather more bluntly:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">apply</span>(prob_tox_samp, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span>target))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">MTD =</span> <span class="kw">factor</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tally.html">count</a></span>(MTD) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">ProbMTD =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> MTD, <span class="dt">y =</span> ProbMTD, <span class="dt">fill =</span> MTD)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">geom_col</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">'bottom'</span>)</a></code></pre></div>
 <p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
-<p>Based on our prior and the data assembled thus far, dose-levels 4 and 5 are likely to be overdoses.</p>
+<p>In this interim stage, each of the first four doses could plausibly be the MTD, but the top dose looks unlikely. This information was not readily available from some of the above plots of the probabilities of toxicity.</p>
+<p>We might also like to visualise the probability that the toxicity rate at each dose exceeds our target toxicity rate.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">colMeans</span>(prob_tox_samp <span class="op">&gt;</span><span class="st"> </span>target) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">ProbToxic =</span> ., <span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbToxic, <span class="dt">fill =</span> ProbToxic)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_bar">geom_col</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_gradient">scale_fill_gradient</a></span>(<span class="dt">low=</span><span class="st">"green"</span>, <span class="dt">high=</span><span class="st">"red"</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior probability that each dose is too toxic'</span>,</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">       <span class="dt">y =</span> <span class="st">'Prob(Tox &gt; target)'</span>, <span class="dt">fill =</span> <span class="st">'Prob too toxic'</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">'bottom'</span>)</a></code></pre></div>
+<p><img src="CRM-visualisation_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p>Based on our prior and the data assembled thus far, dose-levels 4 and 5 look quite likely to be overdoses.</p>
 <div id="other-crm-vignettes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-crm-vignettes" class="anchor"></a>Other CRM vignettes</h2>
 <p>There are many vignettes illuminating the CRM in <code>trialr</code>:</p>
 <ul>
-<li><a href="https://brockk.github.io/trialr/articles/CRM.html">An introduction to CRM in ‘trialr’</a></li>
-<li><a href="https://brockk.github.io/trialr/articles/CRM-visualisation.html">Visualisation in CRM</a></li>
+<li><a href="CRM.html">An introduction to CRM in ‘trialr’</a></li>
+<li><a href="CRM-visualisation.html">Visualisation in CRM</a></li>
+<li><a href="TITE-CRM.html">TITE-CRM</a></li>
 <li>Stopping in CRM</li>
 <li>Case study using Levy, et al. (2006)</li>
 <li>Simulation</li>
 </ul>
+</div>
+<div id="trialr" class="section level1">
+<h1 class="hasAnchor">
+<a href="#trialr" class="anchor"></a>trialr</h1>
+<p><code>trialr</code> is available at <a href="https://github.com/brockk/trialr" class="uri">https://github.com/brockk/trialr</a> and <a href="https://CRAN.R-project.org/package=trialr" class="uri">https://CRAN.R-project.org/package=trialr</a></p>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
@@ -262,6 +287,7 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#other-crm-vignettes">Other CRM vignettes</a></li>
+      <li><a href="#trialr">trialr</a></li>
       <li><a href="#references">References</a></li>
       </ul>
 </div>

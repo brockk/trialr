@@ -60,5 +60,4 @@ methods.
 \seealso{
 \code{\link{stan_efftox}}
 \code{\link{stan_efftox_demo}}
-\code{\link{efftox_process}}
 }

@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -61,13 +61,13 @@
       <a href="../articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox in trialr</a>
+      <a href="../articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="../articles/trialr-overview.html">Overview of trialr</a>
+      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -97,7 +97,7 @@
       <h1>BEBOP in PePS2</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-04-14</h4>
+            <h4 class="date">2019-04-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/BEBOP.Rmd"><code>vignettes/BEBOP.Rmd</code></a></small>
       <div class="hidden name"><code>BEBOP.Rmd</code></div>
@@ -110,13 +110,12 @@
 <h1 class="hasAnchor">
 <a href="#introducing-the-bebop-design" class="anchor"></a>Introducing the BEBOP design</h1>
 <p>The BEBOP phase II trial methodology incorporates predictive baseline information to study co-primary efficacy and toxicity outcomes. BEBOP stands for Bayesian Evaluation of Bivariate Binary Outcomes and Predictive Information. It was developed for the PePS2 trial, investigating pembrolizumab in non-small-cell lung cancer (NSCLC) patients with performance status 2 (PS2). A major factor in the PePS2 trial is the data on PS0 / 1 NSCLC patients published by <span class="citation">Garon et al. (2015)</span>, showing that patients with greater PD-L1 tumour proportion scores are more likely to achieve an objective response. They introduce this predictive biomarker and validate a three-level categorisation Low, Medium and High PD-L1 score. There was also a suggestion (albeit not shown to be <em>statistically significant</em>) that previously untreated patients are more likely to have a response. These same variables will likely be predictive of response in the PS2 population. Brock et al. (publication in submission) developed BEBOP to make efficient use of this information.</p>
-<p>BEBOP re-uses the probability model at the core of the EffTox design <span class="citation">(Thall and Cook 2004, <span class="citation">@Thall2014</span>)</span>. Let <span class="math inline">\(x\)</span> represent a vector of predictive baseline variables and <span class="math inline">\(\boldsymbol{\theta}\)</span> a vector of parameters. The marginal probabilities of efficacy and toxicity are estimated using general functions <span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta})\)</span> and <span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta})\)</span> to be specified by the user.</p>
+<p>BEBOP re-uses the probability model at the core of the EffTox design <span class="citation">(Thall and Cook 2004; Thall et al. 2014)</span>. Let <span class="math inline">\(x\)</span> represent a vector of predictive baseline variables and <span class="math inline">\(\boldsymbol{\theta}\)</span> a vector of parameters. The marginal probabilities of efficacy and toxicity are estimated using general functions <span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta})\)</span> and <span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta})\)</span> to be specified by the user.</p>
 <p>In PePS2, we have <span class="math inline">\(x_{i1} = 1\)</span> if a patient has been previously treated. To convey PD-L1 expression, the authors use <span class="math inline">\(x_{i2} = 1\)</span> and <span class="math inline">\(x_{i3} = 0\)</span> if a patient has a Low PD-L1 score; <span class="math inline">\(x_{i2} = 0\)</span> and <span class="math inline">\(x_{i3} = 1\)</span> if a patient has a Medium PD-L1 score; and <span class="math inline">\(x_{i2} = 0\)</span> and <span class="math inline">\(x_{i3} = 0\)</span> if a patient has a High PD-L1 score. Thus, we have <span class="math inline">\(x_i = (x_{i1}, x_{i2}, x_{i3})\)</span>. The marginal efficacy and toxicity functions in PePS2 take the form</p>
 <p><span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta}) = \alpha + \beta x_{i1} + \gamma x_{i2} + \zeta x_{i3}\)</span></p>
 <p><span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta}) = \lambda\)</span></p>
-<p>Efficacy and toxicity events are then modelled using the joint probability function</p>
-<p><span class="math inline">\(\pi_{a,b} = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}\)</span>.</p>
-<p>where <span class="math inline">\(a,b\)</span> are dummy variables taking the value 1 if a patient experienced efficacy and toxicity respectively, else 0.</p>
+<p>As with <a href="EffTox.html">EffTox</a>, let <span class="math inline">\((Y_j, Z_j)\)</span> be random variables each taking values <span class="math inline">\(\{0, 1\}\)</span> respresenting the presence of efficacy and toxicity in patient <span class="math inline">\(j\)</span>. The efficacy and toxicity events are associated by the joint probability function</p>
+<p><span class="math inline">\(Pr(Y = a, Z = b) = \pi_{a,b}(\pi_E, \pi_T) = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}\)</span>.</p>
 <p>The complete vector of parameters is <span class="math inline">\(\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \lambda, \psi)\)</span>. Normal priors are specified for the elements of <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
 <p>The treatment is acceptable for patients with predictive vector <span class="math inline">\(x\)</span> if</p>
 <p><span class="math inline">\(\text{Pr}\left\{ \pi_E(x, \boldsymbol{\theta}) &gt; \underline{\pi}_E | \mathcal{D} \right\} &gt; p_E\)</span></p>
@@ -292,6 +291,11 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_peps2.html">stan_peps2</a></span>(dat<span class="op">$</span>eff, dat<span class="op">$</span>tox, dat<span class="op">$</span>cohorts)</a></code></pre></div>
 <p>It is informative to view plots of posterior beliefs. Posterior samples of parameter values are available but they are less meaningful to us than the modelled efficacy rates, for example. View posterior distributions using code like</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">rstan<span class="op">::</span><span class="kw">plot</span>(fit, <span class="dt">pars =</span> <span class="st">'prob_eff'</span>)</a></code></pre></div>
+<div class="figure">
+<img src="BEBOP_files/figure-html/unnamed-chunk-6-1.png" alt="Posterior Prob(Efficacy) in the six PePS2 cohorts" width="672"><p class="caption">
+Posterior Prob(Efficacy) in the six PePS2 cohorts
+</p>
+</div>
 <p>We see that the modelled rates of efficacy are highest in cohorts 3 and 6, but likely to be greater than the critical threshold of 10% in cohort 2 and perhaps cohort 5 as well. In contrast, there is not much evidence of clinical benefit in cohorts 1 and 4. This is confirmed by invoking the formally described analysis and associated decision rules.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">decision &lt;-<span class="st"> </span><span class="kw"><a href="../reference/peps2_process.html">peps2_process</a></span>(fit)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(</a>
@@ -376,7 +380,7 @@
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">
 <a href="#trialr" class="anchor"></a>trialr</h1>
-<p><code>trialr</code> is available at <a href="https://github.com/brockk/trialr" class="uri">https://github.com/brockk/trialr</a></p>
+<p><code>trialr</code> is available at <a href="https://github.com/brockk/trialr" class="uri">https://github.com/brockk/trialr</a> and <a href="https://CRAN.R-project.org/package=trialr" class="uri">https://CRAN.R-project.org/package=trialr</a></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

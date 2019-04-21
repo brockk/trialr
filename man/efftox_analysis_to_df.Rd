@@ -7,24 +7,21 @@
 efftox_analysis_to_df(x)
 }
 \arguments{
-\item{x}{An \code{\link{efftox_analysis}}}
+\item{x}{An instance of \code{\link{efftox_fit}}}
 }
 \value{
 a \code{data.frame}
 }
 \description{
-Convenient function to turn an \code{\link{efftox_analysis}}
+Convenient function to turn an \code{\link{efftox_fit}}
 into a \code{data.frame}.
 }
 \examples{
-dat <- efftox_parameters_demo()
-dat$num_patients <- 3
-dat$eff <- c(0, 1, 1)
-dat$tox <- c(0, 0, 1)
-dat$doses <- c(1, 2, 3)
-fit <- rstan::sampling(stanmodels$EffTox, data = dat)
-decision <- efftox_process(dat, fit)
-df <- efftox_analysis_to_df(decision)
-round(df$Utility, 2) == c(-0.64, 0.04, 0.24, -0.05, -0.19)
+fit <- stan_efftox_demo(outcome_str = '1N 2E 3B')
+df <- efftox_analysis_to_df(fit)
+df
 
+}
+\seealso{
+\code{\link{stan_efftox}}
 }

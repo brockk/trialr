@@ -76,5 +76,4 @@ are specified.
 
 \seealso{
 \code{\link{stan_crm}}
-\code{\link{crm_process}}
 }

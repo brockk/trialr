@@ -10,8 +10,11 @@ stan_peps2(eff, tox, cohorts, alpha_mean = -2.2, alpha_sd = 2,
   psi_mean = 0, psi_sd = 1, ...)
 }
 \arguments{
-\item{tox}{A vector of efficacy outcomes for the patients, where 1=efficacy
+\item{eff}{A vector of efficacy outcomes for the patients, where 1=efficacy
 and 0=no efficacy.}
+
+\item{tox}{A vector of toxicity outcomes for the patients, where 1=toxicity
+and 0=no toxicity.}
 
 \item{cohorts}{A vector of integers from 1 to 6, denoting the cohorts to
 which the patients belong.}
@@ -55,9 +58,6 @@ association parameter.}
 \item{...}{Extra parameters are passed to \code{rstan::sampling}. Commonly
 used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores}, and
 \code{control}.}
-
-\item{tox}{A vector of toxicity outcomes for the patients, where 1=toxicity
-and 0=no toxicity.}
 }
 \value{
 Object of class \code{\link[rstan:stanfit]{rstan::stanfit}} returned

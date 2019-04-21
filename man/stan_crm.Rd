@@ -139,7 +139,6 @@ O'Quigley, J., Pepe, M., & Fisher, L. (1990).
 }
 \seealso{
 \code{\link{crm_fit}}
-  \code{\link{crm_process}}
   \code{\link[rstan:sampling]{sampling}}.
 }
 \author{

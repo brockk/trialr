@@ -10,7 +10,7 @@ peps2_process(fit, min_eff = 0.1, max_tox = 0.3, eff_cert = 0.7,
 \arguments{
 \item{fit}{An instance of \code{rstan::stanmodel}, derived by fitting data to
 the BEBOP in PePS2 model.
-Use \code{stan::sampling(stanmodels$BebopInPeps2, data = dat)}.}
+Use \code{stan_peps2}.}
 
 \item{min_eff}{The lower efficacy probability threshold; a number between 0
 and 1.}
@@ -57,19 +57,17 @@ See the accompanying vignette for a full description.
 }
 \examples{
 set.seed(123)
-dat <- peps2_get_data(num_patients = 60,
-                      prob_eff = c(0.167, 0.192, 0.5,
-                                   0.091, 0.156, 0.439),
-                      prob_tox = rep(0.1, 6),
-                      eff_tox_or = rep(1, 6))
-samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
-decision <- peps2_process(samp)
-decision$Accept   # Accept in cohort 2, 3, 5, 6 but not 1, 4
-decision$ProbEff  # The probability of efficacy is driving that decision
+fit <- stan_peps2(
+  eff = c(0, 1, 0, 1, 0, 0),
+  tox = c(0, 0, 1, 1, 0, 0),
+  cohorts = c(3, 1, 1, 4, 5, 6)
+)
+decision <- peps2_process(fit)
+decision$Accept
+decision$ProbEff
+decision$ProbAccEff
 
 }
 \seealso{
-\code{\link{peps2_params}}
-
 \code{\link{peps2_get_data}}
 }

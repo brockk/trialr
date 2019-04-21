@@ -2,13 +2,13 @@
 library(trialr)
 
 outcomes <- '1NNE 2EEB'
-mod <- stan_efftox_demo(outcomes, seed = 123)
+fit <- stan_efftox_demo(outcomes, seed = 123)
 
 ## ---- caption = 'ProbEff and ProbTox are the probabilities of efficacy and toxicity at each dose. ProbAccEff is the probability that the efficacy rate exceeds the desired threshold and ProbAccTox the probability that the toxicity rate is less than the threshold. All probabilities are posterior means.'----
-mod
+fit
 
 ## ---- results = "hide"---------------------------------------------------
-mod <- stan_efftox(outcomes,
+fit <- stan_efftox(outcomes,
                    real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
                    efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
                    p_e = 0.1, p_t = 0.1,
@@ -23,18 +23,18 @@ mod <- stan_efftox(outcomes,
                    seed = 123)
 
 ## ------------------------------------------------------------------------
-mod$recommended_dose
+fit$recommended_dose
 
 ## ---- fig.width = 6, fig.height = 6, fig.cap = "Utility contours after observing outcomes 1NEN 2NBE."----
-efftox_contour_plot(mod$dat, prob_eff = mod$prob_eff, prob_tox = mod$prob_tox)
+efftox_contour_plot(fit)
 title('EffTox utility contours')
 
 ## ---- fig.width = 6, fig.height = 6, fig.cap = "Utility densities after observing outcomes 1NEN 2NBE."----
-efftox_utility_density_plot(mod$fit, doses = 1:3) +
+efftox_utility_density_plot(fit, doses = 1:3) +
   ggplot2::ggtitle("EffTox dose utility densities")
 
 ## ------------------------------------------------------------------------
-knitr::kable(efftox_superiority(mod$fit), digits = 2, row.names = TRUE)
+knitr::kable(efftox_superiority(fit), digits = 2, row.names = TRUE)
 
 ## ------------------------------------------------------------------------
 p <- efftox_solve_p(eff0 = 0.5, tox1 = 0.65, eff_star = 0.7, tox_star = 0.25)

@@ -1,4 +1,10 @@
 
+# trialr 0.1.0
+
+Added TITE-CRM implmentation plus tests and vignette.
+Rebased package to the format now advocated by rstantools.
+
+
 # trialr 0.0.7
 
 Making package work with staged installation, with help from Tomas Kalibera.

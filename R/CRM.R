@@ -52,7 +52,6 @@
 #'
 #' @seealso
 #' \code{\link{stan_crm}}
-#' \code{\link{crm_process}}
 crm_params <- function(skeleton, target, a0 = NULL,
                        alpha_mean = NULL, alpha_sd = NULL,
                        beta_mean = NULL, beta_sd = NULL,
@@ -165,7 +164,6 @@ crm_params <- function(skeleton, target, a0 = NULL,
 #'
 #' @seealso
 #'   \code{\link{crm_fit}}
-#'   \code{\link{crm_process}}
 #'   \code{\link[rstan:sampling]{sampling}}.
 #'
 #' @export
@@ -331,7 +329,6 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
 #'
 #' @seealso
 #' \code{\link{stan_crm}}
-#' \code{\link{crm_process}}
 crm_fit <- function(dose_indices, recommended_dose, prob_tox, median_prob_tox,
                     modal_mtd_candidate, prob_mtd, dat, fit) {
   # crm_fit class
@@ -347,8 +344,8 @@ crm_fit <- function(dose_indices, recommended_dose, prob_tox, median_prob_tox,
 
 #' @title Process RStan samples from a CRM model
 #'
-#' @description Process RStan samples from a CRM model to make inferences
-#' about dose-toxicity and which dose should be recommended next.
+#' @description Internal function to process rstan samples from a CRM model to
+#' make inferences about dose-toxicity and which dose should be recommended next.
 #' Typically, this function is not required to be called explicitly by the user
 #' because \code{\link{stan_crm}} will call it implicitly.
 #'
@@ -357,28 +354,6 @@ crm_fit <- function(dose_indices, recommended_dose, prob_tox, median_prob_tox,
 #' @param fit An instance of \code{rstan::stanmodel}, derived by fitting one of
 #' the trialr CRM models.
 #' @return An instance of \code{\link{crm_fit}}.
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' dat <- list(
-#'   num_doses = 5,
-#'   skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55),
-#'   target = 0.25,
-#'   beta_sd = sqrt(1.34),
-#'   num_patients = 3,
-#'   doses = c(1, 2, 3),
-#'   tox = c(0, 0, 1)
-#' )
-#' samp <- rstan::sampling(stanmodels$CrmEmpiricNormalPrior,
-#'                         data = dat, seed = 123)
-#' decision <- crm_process(dat, samp)
-#' }
-#'
-#' @seealso
-#' \code{\link{stan_crm}}
-#' \code{\link{crm_params}}
 crm_process <- function(dat, fit) {
   dose_indices <- seq(from = 1, to = dat$num_doses, by = 1)
   # Posterior estimates
@@ -481,27 +456,3 @@ summary.crm_fit <- function(object, ...) {
   rstan::summary(object$fit, ...)
 }
 
-
-# Not generic yet.... ----
-# tidybayes is not yet on CRAN but once it is, add it as an import and
-# implement as_sample_tibble.crm_fit(x).
-# However, for now:
-
-#' Extract tall data.frame of posterior prob_tox samples.
-#'
-#' @param x \code{\link{crm_fit}} object.
-#'
-#' @return data.frame
-#'
-#' @export
-gather_samples.crm_fit <- function(x) {
-  df <- as.data.frame(x, 'prob_tox')
-  Label <- ProbTox <- NULL
-  df_tall <- df %>%
-    tidyr::gather(Label, ProbTox) %>%
-    dplyr::mutate(
-      DoseLevel = rep(1:ncol(df), each = nrow(df)),
-      Draw = rep(1:nrow(df), times = ncol(df))
-    )
-  df_tall
-}

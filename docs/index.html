@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.8</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
 
@@ -72,13 +72,13 @@
       <a href="articles/CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="articles/EffTox.html">EffTox in trialr</a>
+      <a href="articles/EffTox.html">EffTox</a>
     </li>
     <li>
       <a href="articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
     </li>
     <li>
-      <a href="articles/trialr-overview.html">Overview of trialr</a>
+      <a href="articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
   </ul>
 </li>
@@ -114,12 +114,12 @@
 <a href="#trialr" class="anchor"></a>trialr</h1></div>
 
 <p><code>trialr</code> is a collection of Bayesian clinical trial designs implemented in Stan and R. The documentation is available at <a href="https://brockk.github.io/trialr/" class="uri">https://brockk.github.io/trialr/</a></p>
-<p>Many notable Bayesian designs for clinical trials have been published. However, one of the factors that has constrained their adoption is availability of software. We present here some of the most popular, implemented and demonstrated in a consistent style, leveraging the powerful Stan environment.</p>
-<p>It should be stressed that Bayesian trialists are not generally without code. Often authors make available code with their design publication. There are also some fantastic packages that aid the use of certain designs. However, challenges to use still persist. The disparate methods are naturally presented in a style that appeals to the particular author. Features implemented in one package for one design may be missing in another. Sometimes the technology chosen may only be available on one particular operating system, or the chosen technology may have fallen into disuse.</p>
-<p><code>trialr</code> seeks to address these problems. Models are specified in <a href="http://mc-stan.org/">Stan</a>, a state-of-the-art environment for Bayesian analysis. It uses Hamiltonian Monte Carlo to take samples from the posterior distributions. This method is more efficient than Gibbs sampling, for instance, and reliable inference can be performed on a few thousand posterior samples. R, Stan and <code>trialr</code> are each available on Mac, Linux, and Windows, so all of the examples presented here should work on each operating system. Furthermore, Stan offers a very simple method to split the sampling across <em>n</em> cores, taking full advantage of the modern multicore processor in your computer (probably).</p>
+<p>There are many notable Bayesian designs and methods for clinical trials. However, one of the factors that has constrained their use is the availability of software. We present here some of the most popular, implemented and demonstrated in a consistent style, leveraging the powerful Stan environment.</p>
+<p>Implementations exist elsewhere. There are also some fantastic packages that aid the use of particular designs. Sometimes authors make available code with their publications. However, challenges to use still persist. Different methods are presented in disparate styles. Features implemented in one package for one design may be missing in another. Sometimes the technology chosen may only be available on a particular operating system, or the chosen technology may have fallen into disuse.</p>
+<p><code>trialr</code> seeks to address these problems. Models are specified in <a href="http://mc-stan.org/">Stan</a>, a state-of-the-art environment for Bayesian analysis. It uses Hamiltonian Monte Carlo to take samples from the posterior distribution. This method is more efficient than Gibbs sampling and reliable inference can usually be performed on a few thousand posterior samples. R, Stan and <code>trialr</code> are each available on Mac, Linux, and Windows, so all of the examples presented here should work on each operating system. Furthermore, Stan offers a very simple method to split the sampling across <em>n</em> cores, taking full advantage of the modern multicore processor in your computer (probably).</p>
 <p>The designs implemented in <code>trialr</code> are introduced briefly below, and developed more fully in vignettes. We focus on real-life usage, including:</p>
 <ul>
-<li>fitting models to observed data using your prior;</li>
+<li>fitting models to observed data;</li>
 <li>processing posterior samples to produce useful inferences;</li>
 <li>and visualising inferences using modern <code>ggplot</code> graphics.</li>
 </ul>
@@ -132,16 +132,17 @@
 <div id="crm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#crm" class="anchor"></a>CRM</h2>
-<p>The Continual Reassessment Method (CRM) was first published by <span class="citation">@OQuigley1990</span>. It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. There are many variations to suit different clinical scenarios and the design has enjoyed <em>relatively</em> common use (although nowhere near as common as the ubiquitous and inferior 3+3 design).</p>
+<p>The Continual Reassessment Method (CRM) was first published by <span class="citation">O’Quigley, Pepe, and Fisher (1990)</span>. It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose. There are many variations to suit different clinical scenarios and the design has enjoyed <em>relatively</em> common use, although nowhere near as common as the ubiquitous and inferior 3+3 design.</p>
 <p>We will demonstrate the method using a notional trial example. In a scenario of five potential doses, let us assume that we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">target &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">skeleton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</a></code></pre></div>
 <p>Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, having only seen toxicity at dose-level 4. What dose should we give to the next patient or cohort? We can fit the data to the popular empiric model</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_crm.html">stan_crm</a></span>(<span class="dt">outcome_str =</span> <span class="st">'2NN 3NN 4TT'</span>, <span class="dt">skeleton =</span> skeleton, </a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fit1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_crm.html">stan_crm</a></span>(<span class="dt">outcome_str =</span> <span class="st">'2NN 3NN 4TT'</span>, <span class="dt">skeleton =</span> skeleton, </a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">                 <span class="dt">target =</span> target, <span class="dt">model =</span> <span class="st">'empiric'</span>, <span class="dt">beta_sd =</span> <span class="kw">sqrt</span>(<span class="fl">1.34</span>), </a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">                 <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
+<p>The parameter <code>outcome_str = '2NN 3NN 4TT'</code> reflects that two patients each have been treated at doses 2, 3, and 4, and that the two patients at dose 4 had toxicity but the other patients did not.</p>
 <p>The fitted model contains lots of useful of information:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod1</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fit1</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Weight</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; 1       1    2        0      1</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; 2       2    2        0      1</span></a>
@@ -162,19 +163,19 @@
 <a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">plot_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton),</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                     <span class="dt">ProbTox =</span> mod1<span class="op">$</span>prob_tox)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                     <span class="dt">ProbTox =</span> fit1<span class="op">$</span>prob_tox)</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(plot_df, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> DoseLevel, <span class="dt">y =</span> ProbTox)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/lims">ylim</a></span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_abline">geom_hline</a></span>(<span class="dt">yintercept =</span> target, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Posterior dose-toxicity curve under empiric CRM model'</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="672"></p>
-<p>Several variants of the CRM <a href="https://brockk.github.io/trialr/articles/CRM.html">are implemented in ‘trialr’</a>. Further visualisation techniques are demonstrated in the <a href="https://brockk.github.io/trialr/articles/CRM-visualisation.html">Visualisation in CRM</a> vignette.</p>
+<p>Several variants of the CRM <a href="articles/CRM.html">are implemented in ‘trialr’</a>. Further visualisation techniques are demonstrated in the <a href="articles/CRM-visualisation.html">Visualisation in CRM</a> vignette. The time-to-event CRM is introduced in the <a href="articles/TITE-CRM.html">TITE-CRM vignette</a>.</p>
 </div>
 <div id="efftox" class="section level2">
 <h2 class="hasAnchor">
 <a href="#efftox" class="anchor"></a>EffTox</h2>
-<p>EffTox by <span class="citation">@Thall2004</span> is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. We present it briefly here but there is a much more thorough examination in the <a href="https://brockk.github.io/trialr/articles/EffTox.html">EffTox vignette</a>.</p>
-<p>For demonstration, We fit the model parameterisation introduced by <span class="citation">@Thall2014</span> to the following notional outcomes:</p>
+<p>EffTox by <span class="citation">Thall and Cook (2004)</span> is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. We present it briefly here but there is a much more thorough examination in the <a href="articles/EffTox.html">EffTox vignette</a>.</p>
+<p>For demonstration, we fit the model parameterisation introduced by <span class="citation">Thall et al. (2014)</span> to the following notional outcomes:</p>
 <table class="table table">
 <thead><tr class="header">
 <th align="center">Patient</th>
@@ -222,8 +223,9 @@
 </tbody>
 </table>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">outcomes &lt;-<span class="st"> '1NNE 2EEB'</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">mod</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">fit2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_efftox_demo.html">stan_efftox_demo</a></span>(outcomes, <span class="dt">seed =</span> <span class="dv">123</span>)</a></code></pre></div>
+<p>In an efficacy and toxicity dose-finding scenario, the number of patient outcomes has increased. It is possible that patients experience efficacy only (E), toxicity only (T), both (B) or neither (N).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">fit2</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;   Patient Dose Toxicity Efficacy</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; 1       1    1        0        0</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 2       2    1        0        0</span></a>
@@ -246,134 +248,149 @@
 <a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; 5      FALSE</span></a>
 <a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; The model recommends selecting dose-level 3.</span></a></code></pre></div>
-<p>In this instance, after evaluation of our six patients, the dose advocated for the next group is dose-level 3. This is contained in the fitted object:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">mod<span class="op">$</span>recommended_dose</a>
+<p>In this example, after evaluation of our six patients, the dose advocated for the next group is dose-level 3. This is contained in the fitted object:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">fit2<span class="op">$</span>recommended_dose</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [1] 3</span></a></code></pre></div>
 <p>This is not surprising because dose 3 has the highest utility score:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">mod<span class="op">$</span>utility</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">fit2<span class="op">$</span>utility</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; [1] -0.3397885  0.4237935  0.5249445  0.4380717  0.3685257</span></a></code></pre></div>
-<p>Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. See the papers for details.</p>
-<p>Functions are provided to create useful plots. For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours. The five doses are shown in red. Doses closer to the lower-right corner have higher utility.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(mod<span class="op">$</span>dat, <span class="dt">prob_eff =</span> mod<span class="op">$</span>prob_eff, <span class="dt">prob_tox =</span> mod<span class="op">$</span>prob_tox)</a>
+<p>Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. See the <a href="articles/EffTox.html">vignette</a> and the original papers for more details.</p>
+<p>Functions are provided to create useful plots. For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours used to measure dose attractiveness. The five doses are shown in red. Doses closer to the lower-right corner have higher utility.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="reference/efftox_contour_plot.html">efftox_contour_plot</a></span>(fit2)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">title</span>(<span class="st">'EffTox utility contours'</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="672"></p>
-<p>This example continues in the <a href="https://brockk.github.io/trialr/articles/EffTox.html">EffTox vignette</a>.</p>
-<p>There are many publications related to EffTox but the two most important are <span class="citation">@Thall2004</span> and <span class="citation">@Thall2014</span>.</p>
+<p>This example continues in the <a href="articles/EffTox.html">EffTox vignette</a>.</p>
+<p>There are many publications related to EffTox, including <span class="citation">Thall and Cook (2004)</span> and <span class="citation">Thall et al. (2014)</span>.</p>
 </div>
 <div id="hierachical-analysis-of-response-in-related-cohorts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hierachical-analysis-of-response-in-related-cohorts" class="anchor"></a>Hierachical analysis of response in related cohorts</h2>
-<p>Sticking with Peter Thall’s huge contribution to Bayesian clinical trials, <span class="citation">@Thall2003</span> described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.</p>
-<p>We demonstrate the method for partially-pooling response rates to a single drug in various subtypes of sarcoma. The following convenience function returns the necessary data:</p>
-<p>Fitting the data to the model:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">mod0 &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_hierarchical_response_thall.html">stan_hierarchical_response_thall</a></span>(</a>
+<p>Sticking with Peter Thall’s huge contribution to Bayesian clinical trials, <span class="citation">Thall et al. (2003)</span> described a method for analysing treatment effects of a single intervention in several sub-types of a single disease.</p>
+<p>We demonstrate the method for partially-pooling response rates to a single drug in various subtypes of sarcoma. This example is used in <span class="citation">Thall et al. (2003)</span>. Fitting the data to the model:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">fit3 &lt;-<span class="st"> </span><span class="kw"><a href="reference/stan_hierarchical_response_thall.html">stan_hierarchical_response_thall</a></span>(</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="dt">group_responses =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), </a>
 <a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="dt">group_sizes =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span> ,<span class="dv">1</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), </a>
 <a class="sourceLine" id="cb11-4" data-line-number="4">  <span class="dt">mu_mean =</span> <span class="fl">-1.3863</span>,</a>
 <a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="dt">mu_sd =</span> <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.1</span>),</a>
 <a class="sourceLine" id="cb11-6" data-line-number="6">  <span class="dt">tau_alpha =</span> <span class="dv">2</span>,</a>
 <a class="sourceLine" id="cb11-7" data-line-number="7">  <span class="dt">tau_beta =</span> <span class="dv">20</span>)</a></code></pre></div>
+<p><code>mu</code> and <code>tau</code> are mean and precision parameters for the partially-pooled effects in the model. <code>mu_mean</code> and <code>mu_sd</code> are hyperparameters for a normal prior, and <code>tau_alpha</code> and <code>tau_beta</code> are hyperparameters for an inverse gamma prior. This specification is described in the original model.</p>
 <p>The returned object is the same type as the fits returned by rstan:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">mod0</a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">fit3</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; Inference for Stan model: ThallHierarchicalBinary.</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; 4 chains, each with iter=2000; warmup=1000; thin=1; </span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; post-warmup draws per chain=1000, total post-warmup draws=4000.</span></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; mu                 -0.09    0.03  1.35  -2.79  -0.93  -0.03   0.78   2.58</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; sigma2             11.85    0.31 10.06   3.26   6.04   8.96  14.24  37.45</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; rho[1]             -0.09    0.06  3.55  -7.49  -2.21  -0.03   2.01   6.75</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; rho[2]             -2.91    0.06  2.47  -8.81  -4.12  -2.46  -1.24   0.72</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; rho[3]              2.19    0.06  2.59  -1.95   0.45   1.88   3.48   8.41</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; rho[4]             -0.31    0.01  0.79  -1.91  -0.82  -0.30   0.20   1.23</span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; rho[5]              3.55    0.05  2.13   0.51   2.07   3.17   4.60   8.64</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; rho[6]             -0.13    0.06  3.72  -7.65  -2.30  -0.08   2.06   7.24</span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; rho[7]              0.02    0.03  1.58  -3.12  -0.96   0.03   1.00   3.21</span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; rho[8]              0.78    0.02  1.30  -1.61  -0.08   0.72   1.54   3.68</span></a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; rho[9]             -2.38    0.06  2.74  -8.87  -3.75  -2.01  -0.56   1.89</span></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; rho[10]            -0.08    0.06  3.52  -7.33  -2.19  -0.08   2.07   6.98</span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; sigma               3.25    0.04  1.14   1.80   2.46   2.99   3.77   6.12</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; prob_response[1]    0.49    0.01  0.37   0.00   0.10   0.49   0.88   1.00</span></a>
-<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; prob_response[2]    0.15    0.00  0.18   0.00   0.02   0.08   0.22   0.67</span></a>
-<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; prob_response[3]    0.76    0.00  0.26   0.12   0.61   0.87   0.97   1.00</span></a>
-<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; prob_response[4]    0.43    0.00  0.17   0.13   0.30   0.43   0.55   0.77</span></a>
-<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; prob_response[5]    0.92    0.00  0.10   0.63   0.89   0.96   0.99   1.00</span></a>
-<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; prob_response[6]    0.49    0.01  0.38   0.00   0.09   0.48   0.89   1.00</span></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; prob_response[7]    0.50    0.00  0.27   0.04   0.28   0.51   0.73   0.96</span></a>
-<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; prob_response[8]    0.64    0.00  0.22   0.17   0.48   0.67   0.82   0.98</span></a>
-<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.12   0.36   0.87</span></a>
-<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; prob_response[10]   0.49    0.01  0.37   0.00   0.10   0.48   0.89   1.00</span></a>
-<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; lp__              -34.04    0.12  3.53 -42.13 -36.11 -33.51 -31.43 -28.56</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; mu                 -0.06    0.03  1.41  -3.03  -0.94  -0.03   0.85   2.76</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; sigma2             12.94    0.39 11.93   3.29   6.34   9.41  15.11  43.31</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; rho[1]             -0.10    0.07  3.99  -8.35  -2.37   0.02   2.33   7.59</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; rho[2]             -3.13    0.08  2.84  -9.69  -4.33  -2.56  -1.26   0.80</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; rho[3]              2.46    0.06  2.80  -1.83   0.67   2.01   3.84   9.17</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; rho[4]             -0.30    0.01  0.79  -1.89  -0.80  -0.28   0.21   1.27</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; rho[5]              3.69    0.06  2.28   0.60   2.11   3.28   4.72   9.34</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; rho[6]              0.02    0.07  3.93  -8.01  -2.29   0.02   2.31   8.05</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; rho[7]             -0.01    0.02  1.51  -2.98  -0.96  -0.01   0.96   2.92</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; rho[8]              0.78    0.02  1.26  -1.58  -0.04   0.72   1.53   3.52</span></a>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; rho[9]             -2.47    0.06  2.92  -9.55  -3.98  -1.99  -0.53   2.07</span></a>
+<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; rho[10]             0.00    0.07  3.81  -8.16  -2.15   0.04   2.31   7.36</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; sigma               3.37    0.04  1.26   1.81   2.52   3.07   3.89   6.58</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; prob_response[1]    0.50    0.01  0.38   0.00   0.09   0.51   0.91   1.00</span></a>
+<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.22   0.69</span></a>
+<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; prob_response[3]    0.78    0.00  0.25   0.14   0.66   0.88   0.98   1.00</span></a>
+<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; prob_response[4]    0.43    0.00  0.17   0.13   0.31   0.43   0.55   0.78</span></a>
+<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; prob_response[5]    0.92    0.00  0.10   0.64   0.89   0.96   0.99   1.00</span></a>
+<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; prob_response[6]    0.50    0.01  0.38   0.00   0.09   0.51   0.91   1.00</span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; prob_response[7]    0.50    0.00  0.27   0.05   0.28   0.50   0.72   0.95</span></a>
+<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; prob_response[8]    0.64    0.00  0.22   0.17   0.49   0.67   0.82   0.97</span></a>
+<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.12   0.37   0.89</span></a>
+<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; prob_response[10]   0.51    0.01  0.38   0.00   0.10   0.51   0.91   1.00</span></a>
+<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; lp__              -34.42    0.14  3.79 -43.38 -36.63 -33.84 -31.73 -28.71</span></a>
 <a class="sourceLine" id="cb12-31" data-line-number="31"><span class="co">#&gt;                   n_eff Rhat</span></a>
-<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; mu                 2359    1</span></a>
-<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; sigma2             1026    1</span></a>
-<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; rho[1]             3362    1</span></a>
-<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; rho[2]             1747    1</span></a>
-<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; rho[3]             2179    1</span></a>
-<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; rho[4]             3981    1</span></a>
-<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; rho[5]             1804    1</span></a>
-<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; rho[6]             3459    1</span></a>
-<a class="sourceLine" id="cb12-40" data-line-number="40"><span class="co">#&gt; rho[7]             3728    1</span></a>
-<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="co">#&gt; rho[8]             3499    1</span></a>
-<a class="sourceLine" id="cb12-42" data-line-number="42"><span class="co">#&gt; rho[9]             2237    1</span></a>
-<a class="sourceLine" id="cb12-43" data-line-number="43"><span class="co">#&gt; rho[10]            3523    1</span></a>
-<a class="sourceLine" id="cb12-44" data-line-number="44"><span class="co">#&gt; sigma              1020    1</span></a>
-<a class="sourceLine" id="cb12-45" data-line-number="45"><span class="co">#&gt; prob_response[1]   3941    1</span></a>
-<a class="sourceLine" id="cb12-46" data-line-number="46"><span class="co">#&gt; prob_response[2]   4094    1</span></a>
-<a class="sourceLine" id="cb12-47" data-line-number="47"><span class="co">#&gt; prob_response[3]   3520    1</span></a>
-<a class="sourceLine" id="cb12-48" data-line-number="48"><span class="co">#&gt; prob_response[4]   4049    1</span></a>
-<a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; prob_response[5]   4615    1</span></a>
-<a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; prob_response[6]   3830    1</span></a>
-<a class="sourceLine" id="cb12-51" data-line-number="51"><span class="co">#&gt; prob_response[7]   4014    1</span></a>
-<a class="sourceLine" id="cb12-52" data-line-number="52"><span class="co">#&gt; prob_response[8]   4128    1</span></a>
-<a class="sourceLine" id="cb12-53" data-line-number="53"><span class="co">#&gt; prob_response[9]   4108    1</span></a>
-<a class="sourceLine" id="cb12-54" data-line-number="54"><span class="co">#&gt; prob_response[10]  3806    1</span></a>
-<a class="sourceLine" id="cb12-55" data-line-number="55"><span class="co">#&gt; lp__                818    1</span></a>
+<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; mu                 2315    1</span></a>
+<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; sigma2              950    1</span></a>
+<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; rho[1]             2893    1</span></a>
+<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; rho[2]             1262    1</span></a>
+<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; rho[3]             2141    1</span></a>
+<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; rho[4]             4184    1</span></a>
+<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; rho[5]             1345    1</span></a>
+<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; rho[6]             2953    1</span></a>
+<a class="sourceLine" id="cb12-40" data-line-number="40"><span class="co">#&gt; rho[7]             4600    1</span></a>
+<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="co">#&gt; rho[8]             4562    1</span></a>
+<a class="sourceLine" id="cb12-42" data-line-number="42"><span class="co">#&gt; rho[9]             2075    1</span></a>
+<a class="sourceLine" id="cb12-43" data-line-number="43"><span class="co">#&gt; rho[10]            3055    1</span></a>
+<a class="sourceLine" id="cb12-44" data-line-number="44"><span class="co">#&gt; sigma               912    1</span></a>
+<a class="sourceLine" id="cb12-45" data-line-number="45"><span class="co">#&gt; prob_response[1]   3457    1</span></a>
+<a class="sourceLine" id="cb12-46" data-line-number="46"><span class="co">#&gt; prob_response[2]   3942    1</span></a>
+<a class="sourceLine" id="cb12-47" data-line-number="47"><span class="co">#&gt; prob_response[3]   4495    1</span></a>
+<a class="sourceLine" id="cb12-48" data-line-number="48"><span class="co">#&gt; prob_response[4]   4382    1</span></a>
+<a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; prob_response[5]   4046    1</span></a>
+<a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; prob_response[6]   3230    1</span></a>
+<a class="sourceLine" id="cb12-51" data-line-number="51"><span class="co">#&gt; prob_response[7]   4729    1</span></a>
+<a class="sourceLine" id="cb12-52" data-line-number="52"><span class="co">#&gt; prob_response[8]   5313    1</span></a>
+<a class="sourceLine" id="cb12-53" data-line-number="53"><span class="co">#&gt; prob_response[9]   4076    1</span></a>
+<a class="sourceLine" id="cb12-54" data-line-number="54"><span class="co">#&gt; prob_response[10]  3471    1</span></a>
+<a class="sourceLine" id="cb12-55" data-line-number="55"><span class="co">#&gt; lp__                747    1</span></a>
 <a class="sourceLine" id="cb12-56" data-line-number="56"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-57" data-line-number="57"><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Sun Apr 14 09:42:53 2019.</span></a>
+<a class="sourceLine" id="cb12-57" data-line-number="57"><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Sun Apr 21 14:27:00 2019.</span></a>
 <a class="sourceLine" id="cb12-58" data-line-number="58"><span class="co">#&gt; For each parameter, n_eff is a crude measure of effective sample size,</span></a>
 <a class="sourceLine" id="cb12-59" data-line-number="59"><span class="co">#&gt; and Rhat is the potential scale reduction factor on split chains (at </span></a>
 <a class="sourceLine" id="cb12-60" data-line-number="60"><span class="co">#&gt; convergence, Rhat=1).</span></a></code></pre></div>
+<p>So, we can use the underlying plot method in <code>rstan</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">library</span>(rstan)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw">plot</span>(mod0, <span class="dt">pars =</span> <span class="st">'prob_response'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw">plot</span>(fit3, <span class="dt">pars =</span> <span class="st">'prob_response'</span>) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb13-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_abline">geom_vline</a></span>(<span class="dt">xintercept =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled analysis of response rate in 10 sarcoma subtypes'</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled response rates in 10 sarcoma subtypes'</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="672"></p>
-<p>The hierarchical model for binary responses is developed in <a href="https://brockk.github.io/trialr/articles/HierarchicalBayesianResponse.html">its own vignette</a>.</p>
+<p>The hierarchical model for binary responses is developed in <a href="articles/HierarchicalBayesianResponse.html">its own vignette</a>.</p>
 </div>
 <div id="bebop-in-peps2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bebop-in-peps2" class="anchor"></a>BEBOP in PePS2</h2>
-<p><span class="citation">@Thall2008</span> introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information. Brock, et al. simplified the method by removing the dose-finding components to leave a design that studies associated co-primary and toxicity outcomes in an arbitrary number of cohorts determined by the basline covariates. They refered to the simplifed design as BEBOP, for <em>Bayesian Evaluation of Bivariate binary Outcomes with Predictive variables</em>.</p>
-<p>The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer. A distinct feature of the trial is the availability of predictive baseline covariates, the most notwworthy of which is the PD-L1 tumour proportion score, shown by <span class="citation">@Garon2015</span> to be a predictive biomarker.</p>
-<p>This example is demonstrated in the <a href="https://brockk.github.io/trialr/articles/BEBOP.html">BEBOP vignette</a>.</p>
+<p><span class="citation">Thall, Nguyen, and Estey (2008)</span> introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information. Brock, et al. (manuscript accepted but not yet in press) simplified the method by removing the dose-finding components to leave a design that studies associated co-primary and toxicity outcomes in an arbitrary number of cohorts determined by the basline covariates. They refered to the simplifed design as BEBOP, for <em>Bayesian Evaluation of Bivariate binary Outcomes with Predictive variables</em>.</p>
+<p>The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer. A distinct feature of the trial is the availability of predictive baseline covariates, the most noteworthy of which is the PD-L1 tumour proportion score, shown by <span class="citation">Garon et al. (2015)</span> to be a predictive biomarker for drug efficacy.</p>
+<p>This example is demonstrated in the <a href="articles/BEBOP.html">BEBOP vignette</a>.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install trialr from github with:</p>
+<p>You can install the latest trialr commit from github with:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"brockk/trialr"</span>)</a></code></pre></div>
-<p>If the latest CRAN build is what you seek then instead run:</p>
+<p>You can install the latest CRAN release by running:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"trialr"</span>)</a></code></pre></div>
 <p>It should go without saying that the CRAN release will be older than the github version.</p>
 </div>
 <div id="extending-trialr-and-getting-in-touch" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extending-trialr-and-getting-in-touch" class="anchor"></a>Extending trialr and getting in touch</h2>
-<p>If there is a published Bayesian design you want implemented in Stan, get in touch. Contact <span class="citation">@brockk</span> on github.</p>
+<p>If there is a published Bayesian design you want implemented in Stan, get in touch. Contact brockk on github.</p>
 </div>
-<div id="references" class="section level2">
+<div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
-<p>Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the treatment of non-small-cell lung cancer.” The New England Journal of Medicine 372 (21): 2018–28. <a href="doi:10.1056/NEJMoa1501824" class="uri">doi:10.1056/NEJMoa1501824</a>.</p>
-<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” Biometrics 46 (1): 33–48. <a href="doi:10.2307/2531628" class="uri">doi:10.2307/2531628</a>.</p>
-<p>Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-specific dose finding based on bivariate outcomes and covariates.” Biometrics 64 (4): 1126–36. <a href="doi:10.1111/j.1541-0420.2008.01009.x" class="uri">doi:10.1111/j.1541-0420.2008.01009.x</a>.</p>
-<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” Statistics in Medicine 22 (5): 763–80. <a href="doi:10.1002/sim.1399" class="uri">doi:10.1002/sim.1399</a>.</p>
-<p>Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” Biometrics 60 (3): 684–93.</p>
-<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” Clinical Trials 11 (6): 657–66. <a href="doi:10.1177/1740774514547397" class="uri">doi:10.1177/1740774514547397</a>.</p>
+<div id="refs" class="references">
+<div id="ref-Garon2015">
+<p>Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the treatment of non-small-cell lung cancer.” <em>The New England Journal of Medicine</em> 372 (21): 2018–28. <a href="https://doi.org/10.1056/NEJMoa1501824">https://doi.org/10.1056/NEJMoa1501824</a>.</p>
+</div>
+<div id="ref-OQuigley1990">
+<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
+</div>
+<div id="ref-Thall2008">
+<p>Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-specific dose finding based on bivariate outcomes and covariates.” <em>Biometrics</em> 64 (4): 1126–36. <a href="https://doi.org/10.1111/j.1541-0420.2008.01009.x">https://doi.org/10.1111/j.1541-0420.2008.01009.x</a>.</p>
+</div>
+<div id="ref-Thall2003">
+<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. <a href="https://doi.org/10.1002/sim.1399">https://doi.org/10.1002/sim.1399</a>.</p>
+</div>
+<div id="ref-Thall2004">
+<p>Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” <em>Biometrics</em> 60 (3): 684–93.</p>
+</div>
+<div id="ref-Thall2014">
+<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” <em>Clinical Trials</em> 11 (6): 657–66. <a href="https://doi.org/10.1177/1740774514547397">https://doi.org/10.1177/1740774514547397</a>.</p>
+</div>
+</div>
 </div>
 </div>
   </div>

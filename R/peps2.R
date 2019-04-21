@@ -65,7 +65,7 @@
 #' @param psi_sd The prior standard deviation of psi. Psi is the joint model
 #' association parameter.
 #'
-#' @return a \code{list} of parameters, described in \code{peps2_params}
+#' @return a \code{list} of parameters
 #'
 #' @export
 #'
@@ -75,9 +75,12 @@
 #'                       prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
 #'                       prob_tox = rep(0.1, 6),
 #'                       eff_tox_or = rep(1, 6))
-#' samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
+#' fit <- stan_peps2(
+#'   eff = dat$eff,
+#'   tox = dat$tox,
+#'   cohorts = dat$cohorts
+#' )
 #'
-#' @seealso \code{\link{peps2_params}}
 peps2_get_data <- function(num_patients, cohort_probs = NULL,
                            prob_eff, prob_tox, eff_tox_or,
                            cohort_rho = c(15.7, 21.8, 12.4, 20.7, 18.0, 11.4),
@@ -164,7 +167,7 @@ peps2_get_data <- function(num_patients, cohort_probs = NULL,
 #' to RStan, as is the convention.
 #' See the accompanying vignette for a full description.
 #'
-#' @param tox A vector of efficacy outcomes for the patients, where 1=efficacy
+#' @param eff A vector of efficacy outcomes for the patients, where 1=efficacy
 #' and 0=no efficacy.
 #' @param tox A vector of toxicity outcomes for the patients, where 1=toxicity
 #' and 0=no toxicity.
@@ -277,7 +280,7 @@ stan_peps2 <- function(eff, tox, cohorts,
 #'
 #' @param fit An instance of \code{rstan::stanmodel}, derived by fitting data to
 #' the BEBOP in PePS2 model.
-#' Use \code{stan::sampling(stanmodels$BebopInPeps2, data = dat)}.
+#' Use \code{stan_peps2}.
 #' @param min_eff The lower efficacy probability threshold; a number between 0
 #' and 1.
 #' @param max_tox The upper toxicity probability threshold; a number between 0
@@ -312,19 +315,17 @@ stan_peps2 <- function(eff, tox, cohorts,
 #'
 #' @examples
 #' set.seed(123)
-#' dat <- peps2_get_data(num_patients = 60,
-#'                       prob_eff = c(0.167, 0.192, 0.5,
-#'                                    0.091, 0.156, 0.439),
-#'                       prob_tox = rep(0.1, 6),
-#'                       eff_tox_or = rep(1, 6))
-#' samp = rstan::sampling(stanmodels$BebopInPeps2, data = dat)
-#' decision <- peps2_process(samp)
-#' decision$Accept   # Accept in cohort 2, 3, 5, 6 but not 1, 4
-#' decision$ProbEff  # The probability of efficacy is driving that decision
+#' fit <- stan_peps2(
+#'   eff = c(0, 1, 0, 1, 0, 0),
+#'   tox = c(0, 0, 1, 1, 0, 0),
+#'   cohorts = c(3, 1, 1, 4, 5, 6)
+#' )
+#' decision <- peps2_process(fit)
+#' decision$Accept
+#' decision$ProbEff
+#' decision$ProbAccEff
 #'
 #' @seealso
-#' \code{\link{peps2_params}}
-#'
 #' \code{\link{peps2_get_data}}
 peps2_process <- function(fit, min_eff = 0.1, max_tox = 0.3,
                           eff_cert = 0.7, tox_cert = 0.9) {
