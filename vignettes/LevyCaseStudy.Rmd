@@ -1,0 +1,293 @@
+---
+title: "CRM Case Study 1 - Levy et al (2006)"
+author: "Kristian Brock"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{CRM Case Study 1 - Levy et al (2006)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The Continual Reassessment Method (CRM) for dose-finding is introduced in [its own article](CRM.html).
+This vignette reproduces the analysis in a real dose-finding trial that used the CRM by @Levy2006.
+The chosen example is particularly attractive because the authors present sequential analyses of their dose decisions in their Table 1, allowing us the opportunity to reproduce their analysis.
+
+The authors investigate five doses of semisynthetic homoharringtonine (ssHHT), seeking a dose associated with a dose-limiting toxicity (DLT) probability of approximately 33%.
+The specific doses and the investigators' initial beliefs on the probabilities of DLT are:
+
+```{r, message=FALSE}
+library(dplyr)
+
+tibble(
+  `Dose-level` = 1:5,
+  `Dose (mg/m2 per day)` = c(0.5, 1, 3, 5, 6),
+  `Prior Pr(DLT)` = c(0.05, 0.1, 0.15, 0.33, 0.5)
+) %>% knitr::kable()
+```
+
+We are not told the exact details of the model form or the parameter prior(s) used.
+However, we are told that the BPCT software was used to calculate the recommended doses.
+@zoharSoftwareComputeConduct2003 describe the software as using a one-parameter logistic model with fixed-value intercept taking possible values 1, 2, 3 or 4, and exponential or uniform priors on the gradient term with expected value 0.5, 1 or 2.
+For the purposes of this article, we assume that the investigators used a one-parameter logistic CRM with the intercept term fixed at $a_0 = 1$ and an Exponential(1) = Gamma(1, 1) prior on $\beta$.
+In the appendix, we describe an attempt to identify the exact parameterisation used by comparing a broad array of model fits.
+
+
+## Prior beliefs
+
+```{r}
+library(trialr)
+
+target <- 0.33
+skeleton <- c(0.05, 0.1, 0.15, 0.33, 0.5)
+fit0 <- crm_prior_beliefs(skeleton, target, model = 'logistic_gamma',
+                          a0 = 1, beta_shape = 1, beta_inverse_scale = 1)
+fit0
+```
+
+Notice that both the prior mean (`ProbTox`) and median (`MedianProbTox`) probabilities of toxicity are quite far from the skeleton.
+
+In an ordinary regression model, fixing the intercept will affect the gradient.
+The same is true here: 
+
+```{r, fig.width=7, fig.height=5}
+library(tidyr)
+library(purrr)
+library(ggplot2)
+
+get_prior_fit <- function(a0) {
+  crm_prior_beliefs(skeleton, target, 
+                    model = 'logistic_gamma', a0 = a0, 
+                    beta_shape = 1, beta_inverse_scale = 1)
+}
+
+tibble(a0 = c(-1, 0, 1, 2, 3, 4)) %>% 
+  mutate(Mod = map(a0, get_prior_fit)) %>% 
+  mutate(
+    Dose = Mod %>% map("dose_indices"),
+    ProbTox = Mod %>% map("prob_tox"),
+    ) %>% 
+  select(-Mod) %>% 
+  unnest() %>% 
+  mutate(a0 = factor(a0)) %>% 
+  ggplot(aes(x = Dose, y = ProbTox, group = a0, col = a0)) + 
+  geom_line() + 
+  ylim(0, 1) + 
+  labs(title = 'Prior Prob(DLT) location is affected by the fixed intercept, a0')
+```
+
+
+## Cohort 1
+The trial starts at the lowest dose, 0.5 mg/m2 per day.
+Three patients are treated and none experiences DLT.
+
+```{r, results='hide', warning=FALSE}
+fit1 <- stan_crm(outcome_str = '1NNN', 
+                 skeleton = skeleton, target = target, model = 'logistic_gamma', 
+                 a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                 seed = 123, control = list(adapt_delta = 0.99))
+```
+
+```{r}
+fit1
+```
+We see that the cohort has a great bearing on the predicted rates of toxicity.
+The trialists report estimated DLT probabilities of 0.001, 0.003, 0.006, 0.035, 0.11.
+TODO: why?
+The values calculated by `trialr` diverge somewhat from those values,
+Dose-level 5 is recommended for the next cohort.
+The trialists understandably resist the desire to skip three doses in going from the lowest to highest dose, electing instead to skip the second dose and treat the next cohort at dose-level 3.
+
+## Cohort 2
+This cohort of three was treated at 3 mg/m2 per day.
+One DLT was seen.
+
+```{r, results='hide', warning=FALSE}
+fit2 <- stan_crm(outcome_str = '1NNN 3NNT', 
+                 skeleton = skeleton, target = target, model = 'logistic_gamma', 
+                 a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                 seed = 123, control = list(adapt_delta = 0.99))
+```
+
+```{r}
+fit2
+```
+
+The trialists report Prob(DLT) = (0.07, 0.14, 0.19, 0.39, 0.55).
+The median estimates from `trialr` are now quite close to these values.
+Despite the observation of a DLT and the observed DLT-rate at dos-level 3 matching the target of 33%, the model advocates escalation to dose-level 4.
+That is what the investigators did.
+
+## Cohort 3
+This cohort of three was treated at dose-level 4, which corresponds to 5 mg/m2 per day.
+Once again, one DLT was seen.
+
+```{r, results='hide', warning=FALSE}
+fit3 <- stan_crm(outcome_str = '1NNN 3NNT 4NNT', 
+                 skeleton = skeleton, target = target, model = 'logistic_gamma', 
+                 a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                 seed = 123, control = list(adapt_delta = 0.99))
+```
+
+```{r}
+fit3
+```
+The trialists report Prob(DLT) = (0.07, 0.13, 0.19, 0.38, 0.54) after this cohort, barely shifting from the previous estimates.
+This time the model advocates to remain at dose-level 4 and that is exactly what the trialists did.
+
+
+## Cohort 4
+This cohort of three was also treated at dose-level 4.
+No DLTs were seen in this cohort.
+
+```{r, results='hide', warning=FALSE}
+fit4 <- stan_crm(outcome_str = '1NNN 3NNT 4NNT 4NNN', 
+                 skeleton = skeleton, target = target, model = 'logistic_gamma', 
+                 a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                 seed = 123, control = list(adapt_delta = 0.99))
+```
+
+```{r}
+fit4
+```
+The trialists report Prob(DLT) = (0.03, 0.07, 0.11, 0.27, 0.45) after this cohort.
+`ProbMTD` shows the implied probability that each dose is the _maximum tolerable dose_, that is, the dose with Prob(DLT) closest to the toxicity target, 33%.
+The observation of no DLTs in this cohort means it is now very unlikely that dose-levels 1 and 2 are the true MTD.
+The amount of entropy in the experiment has fallen to reflect this.
+Once again, the model advocates to remaining at dose-level 4.
+
+## Cohort 5
+This cohort was also treated at dose-level 4.
+One-out-of-three DLTs were seen.
+
+```{r, results='hide', warning=FALSE}
+fit5 <- stan_crm(outcome_str = '1NNN 3NNT 4NNT 4NNN 4NTN', 
+                 skeleton = skeleton, target = target, model = 'logistic_gamma', 
+                 a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                 seed = 123, control = list(adapt_delta = 0.99))
+```
+
+```{r}
+fit5
+```
+The trialists report Prob(DLT) = (0.04, 0.08, 0.12, 0.29, 0.46).
+
+
+## Cohort 6
+This cohort was also treated at dose-level 4.
+Two-out-of-three DLTs were seen.
+
+```{r, results='hide', warning=FALSE}
+fit6 <- stan_crm(outcome_str = '1NNN 3NNT 4NNT 4NNN 4NTN 4TNT', 
+                 skeleton = skeleton, target = target, model = 'logistic_gamma', 
+                 a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                 seed = 123, control = list(adapt_delta = 0.99))
+```
+
+```{r}
+fit6
+```
+The trialists report Prob(DLT) = (0.06, 0.12, 0.17, 0.36, 0.53).
+Prob(MTD) actually decreased and the scenario entropy increased after the evaluation of these three patients, because the observation of two-in-three DLTs was slightly surprising to the model.
+Nevertheless, the trialists stopped here and concluded that 5 mg/m2 per day was probably the MTD.
+They reported a 95% credibility interval for the DLT rate at this dose to be (15.8, 58.6%).
+We can verify this:
+
+```{r}
+apply(as.data.frame(fit6, pars = 'prob_tox'), 2, quantile, 
+      probs = c(0.025, 0.975))
+```
+The 95% CI at dose-level 4 is very close to that reported.
+
+They say "The estimated DLT probability associated with the dose level of 5mg/m2 would have been expected to change by less than 5% even if three further patients were included."
+TODO - show this with DTPs.
+
+# Trying to identify the exact model Levy et al. used
+At the end of the trial, the investigators reported the estimated probabilities of DLT (0.06, 0.12, 0.17, 0.36, 0.53).
+We will fit models using an exponential prior and each combination of `a_0 = 1, 2, 3, 4` and `beta_inverse_scale = 0.5, 1, 2` to the complete set of all outcomes observed.
+We seek the fit that yields inference closest to that of the investigators.
+
+The investigators concluded:
+```{r}
+levy_reported <- tibble(
+  Dose = 1:5,
+  ProbTox = c(0.06, 0.12, 0.17, 0.36, 0.53),
+)
+```
+
+We also define a helper function to fit the models:
+```{r}
+fit_levy_crm <- function(outcomes, a0, beta_inverse_scale) {
+  stan_crm(outcome_str = outcomes, 
+           skeleton = skeleton, target = target, 
+           model = 'logistic_gamma', 
+           a0 = a0, beta_shape = 1, 
+           beta_inverse_scale = beta_inverse_scale,
+           control = list(adapt_delta = 0.99), 
+           seed = 123, refresh = 0)
+}
+```
+
+This code block calculates the parameter combinations, fits the model to each, and extracts the posterior mean probability of DLT:
+```{r, results='hide', warning=FALSE}
+expand.grid(a0 = 1:4, beta_inverse_scale = c(0.5, 1, 2)) %>% 
+  mutate(Series = rownames(.)) %>% 
+  mutate(Mod = map2(a0, beta_inverse_scale, fit_levy_crm, 
+                    outcomes = '1NNN 3NNT 4NNT 4NNN 4NTN 4TNT')) %>% 
+  mutate(
+    Dose = Mod %>% map("dose_indices"),
+    ProbTox = Mod %>% map("prob_tox"),
+  ) %>% 
+  select(-Mod) %>% 
+  unnest() %>% 
+  mutate(a0 = factor(a0), 
+         beta_inverse_scale = factor(beta_inverse_scale)) -> all_fits
+```
+
+We then plot our inferences with the investigators' inferences superimposed in bright green.
+Plots are grouped by the value for `beta_inverse_scale` in columns, and values for `a0` are reflected by colour:
+
+```{r, fig.width=7, fig.height=5}
+all_fits %>% 
+  ggplot(aes(x = Dose, y = ProbTox)) + 
+  geom_line(aes(group = Series, col = a0)) + 
+  geom_line(data = levy_reported, col = 'green', size = 1.2) + 
+  facet_wrap(~ beta_inverse_scale) + 
+  ylim(0, 0.7) + 
+  labs(title = "None of the exponential models quite matches the investigators' inferences")
+```
+
+We see that there is broad agreement at the higher doses but none of the series quite matches the investigators' inferences.
+There are many possible explanations for the difference.
+The investigators might not have used an exponential prior.
+They might have use parameters we have not tested.
+They might have reported some statistic other than the posterior mean.
+`trialr` or their code or indeed both might be wrong.
+Either way, there is enough agreement to agree on the probable identity of the MTD.
+
+
+## Other CRM vignettes
+There are many vignettes illuminating the CRM in `trialr`:
+
+- [An introduction to CRM in 'trialr'](CRM.html)
+- [Visualisation in CRM](CRM-visualisation.html)
+- [TITE-CRM](TITE-CRM.html)
+- Stopping in CRM
+- [Case study using Levy, et al. (2006)](LevyCaseStudy.html)
+- Simulation
+
+
+# trialr
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
+
+
+
+# References

@@ -255,7 +255,7 @@ There are many vignettes illuminating the CRM in `trialr`:
 - [Visualisation in CRM](CRM-visualisation.html)
 - [TITE-CRM](TITE-CRM.html)
 - Stopping in CRM
-- Case study using Levy, et al. (2006)
+- [Case study using Levy, et al. (2006)](LevyCaseStudy.html)
 - Simulation
 
 
