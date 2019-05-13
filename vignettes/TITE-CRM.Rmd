@@ -91,7 +91,7 @@ There are many vignettes illuminating the CRM in `trialr`:
 - [An introduction to CRM in 'trialr'](CRM.html)
 - [Visualisation in CRM](CRM-visualisation.html)
 - [TITE-CRM](TITE-CRM.html)
-- Stopping in CRM
+- [Pathways and stopping in CRM](CRM-pathways.html)
 - [Case study using Levy, et al. (2006)](LevyCaseStudy.html)
 - Simulation
 

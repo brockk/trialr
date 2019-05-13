@@ -1,0 +1,340 @@
+---
+title: "Dose pathways with CRM"
+author: "Kristian Brock"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Dose pathways with CRM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In the general [introductory CRM vignette](CRM.html), we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in `trialr`.
+In this vignette, we demonstrate some of `trialr`'s capabilities for analysing dose transition pathways [@Yap2017] with the general CRM model.
+
+## Introduction
+A pathway in a dose-finding trial represents a sequence of doses that were delivered to patients and the outcomes that they experienced.
+`trialr` provides functions for calculating pathways, analysing model behaviour, and visualising results.
+
+A syntax for succinctly representing pathways will be useful.
+@Brock2017a introduced a method for describing dose pathways in efficacy and toxicity dose-finding trials using the characters E, T, N & B to represent patients that experienced efficacy only, toxicity only, neither or both.
+This syntax is used in the [EffTox vignette](EffTox.html).
+In the CRM setting, where patients experience only _toxicity_ or _no toxicity_, we can restrict the character set to simply T and N.
+
+Thus, a dose-finding trial that treated a cohort of three patients at dose-level 1, with none experiencing the dose-limiting toxicity (DLT) event, may be represented as `1NNN`.
+If the next cohort of three was treated at dose-level 2 and the first of these three experienced DLT, we could describe the entire pathway as `1NNN 2TNN`.
+Cohorts are assumed to be separated by spaces.
+This syntax can be used to describe the outcomes observed hitherto in a trial, the notional future outcomes, or some combination of the two.
+
+We might analyse the model fits on a pathway to learn how model estimation has evolved in a trial.
+That is the topic of the next section.
+We might also like to investigate what a CRM model would recommend in each feasible future pathway, as described by @Yap2017.
+Used in this way, the analysis of dose transition pathways is a valuable step for honing a trial design, or anticipating future trial directions.
+This is the topic of the latter section.
+
+## Dose pathways with CRM in `trialr`
+Suppose we are mid-way through a dose-finding trial using a CRM design.
+We have treated and evaluated nine patients at two dose-levels, with one toxicity seen at the second dose:
+
+```{r}
+outcome_str <- '1NNN 2NTN 2NNN'
+```
+
+Seeking a dose associated with a risk of toxicity close to 25%, we commenced the trial with the following dose-toxicity skeleton:
+```{r}
+skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
+target <- 0.25
+```
+
+The `crm_path_analysis` function provides a convenient way of fitting the CRM model to each cohort in a pathway.
+This allows us to see how our model has evolved in its inferences.
+
+```{r, message=FALSE}
+library(trialr)
+
+path <- crm_path_analysis(
+  outcomes_str = outcome_str,
+  skeleton = skeleton, target = target, model = 'empiric',
+  beta_sd = 1, seed = 123, refresh = 0)
+```
+
+The code above fits four CRM models:
+
+* using the prior beliefs only, before any patients have been treated (i.e. the pathway is the empty string "")
+* after outcomes `1NNN`
+* after outcomes `1NNN 2NTN`
+* after outcomes `1NNN 2NTN 2NNN`
+
+The returned object has type `dose_finding_paths`, a simple `list`-like object containing the nodes on the dose pathway.
+These nodes contain the `crm_fit` objects that would have been returned by calling `stan_crm` on the prevailing outcomes.
+Nodes also contain references to their parent so that the sequence of a pathway is known.
+This is pertinent below in the analysis of future pathways where many different future outcomes are possible, creating rich tree-like structures.
+
+For all `dose_finding_paths` objects, the nodes are keyed by the pathway:
+```{r}
+names(path)
+```
+
+We can convert the path object to a `tibble` for flexible analysis:
+```{r}
+library(tibble)
+
+df <- as_tibble(path)
+df
+```
+
+`tibble` was chosen over the base R `data.frame` class because of its flexibility.
+For instance, the `fit` column contains the `crm_fit` object associated with the outcomes.
+The `dose_index` column contains a vector of integers reflecting the dose-level under study.
+This is useful if we `unnest` the data to analyse quantities at the dose-level.
+For instance, we might be interested in how our beliefs on the rate of toxicity at dose-level 2 have evolved.
+Using functions from `tidyverse` packages, we can proceed:
+
+```{r, message=FALSE}
+library(tidyr)
+library(purrr)
+library(dplyr)
+
+df %>% 
+  mutate(prob_tox = fit %>% map('prob_tox')) %>% 
+  select(outcomes, dose_index, prob_tox) %>% 
+  unnest %>% 
+  filter(dose_index == 2)
+```
+At each update, the toxicity estimate moves in the direction we would expect in response to the outcomes observed.
+
+Having the `crm_fit` object available allows us to analyse alternative algorithms for choosing dose.
+For instance, the `careful_escalation` function will avoid skipping doses in escalation and halt a trial when there is sufficient evidence that a particular dose is too toxic.
+
+```{r}
+df %>% 
+  mutate(
+    recommended_dose = fit %>% map_int('recommended_dose'),
+    careful_dose = fit %>% map_dbl(careful_escalation, 
+                                   tox_threshold = target + 0.1, 
+                                   certainty_threshold = 0.7)
+  ) %>% 
+  select(outcomes, recommended_dose, careful_dose)
+```
+
+We will use dose selection functions like `careful_escalation` again below when calculating future dose transition pathways.
+To complete this example, let us observe how `careful_escalation` will eventually recommended the dose-level `NA` to signify that the trial should be stopped.
+
+```{r}
+paths <- crm_path_analysis(
+  outcomes_str = '1NNN 2NTN 2NNN 3TTT 1TTT 1TNT',
+  skeleton = skeleton, target = target, model = 'logistic',
+  a0 = 3, beta_mean = 0,beta_sd = 1,
+  seed = 123, refresh = 0)
+
+df <- as_tibble(paths)
+
+df %>% 
+  mutate(
+    recommended_dose = fit %>% map_int('recommended_dose'),
+    careful_dose = fit %>% map_dbl(careful_escalation, 
+                                   tox_threshold = target + 0.1, 
+                                   certainty_threshold = 0.7)
+  ) %>% 
+  select(outcomes, recommended_dose, careful_dose)
+```
+After these inopportune outcomes, we see that the `careful_escalation` function now advocates stopping.
+It does this because there is a greater than 70% posterior probability that the risk of toxicity at the lowest dose-level exceeds the target toxicity rate plus 10%.
+It stops with reference to toxicity risk at the lowest dose by default.
+To scrutinise another dose-level, we could have used the `reference_dose` parameter.
+
+
+## Dose transition pathways for future cohorts
+Statisticians have demonstrated again and again the poor performance of the perennial 3+3 dose-finding design [@OQuigley1990; @Iasonos2008; @LeTourneau2009].
+Despite this, the approach has remained stubbornly popular for decades [@Rogatko2007; @Chiuzan2017].
+Why is this?
+
+It is surely due in part to 3+3's simplicity.
+Dose selection decisions are governed by simple rules based on the outcomes of cohorts of three patients.
+Once familiar with these rules, perfect foresight on the dose selection pathways is possible.
+For instance `1NNN`, will be followed by a cohort at dose 2.
+`1NNT` will be followed by another cohort at dose 1.
+`1NNT 1NNN` will be followed by a cohort at dose 2.
+`1NNT 1NNN 2NTT` will result in the trial being stopped and dose 1 being declared the maximum tolerable dose (MTD).
+These simple rules can be generalised ad-nauseam to foresee every conceivable trial pathway.
+
+Dose transition pathways (DTPs) are a general tool for furnishing relatively complex statistical dose-finding designs with the same level of foresight and transparency.
+@Yap2017 introduced DTPs with the CRM as a tool to aid trial design and planning.
+
+The `trialr` function `crm_dtps` calculates DTPs for an arbitrary sequence of future cohorts of your choosing.
+The function is essentially a sequence of calls to `stan_crm`, with some logic to record the path structure and avoid redundant invocations.
+Thus, each of the CRM model types supported by `stan_crm` is supported here.
+
+To calculate paths for two future cohorts of two patients, we use the parameter `cohort_sizes = c(2, 2)`:
+
+```{r}
+paths <- crm_dtps(skeleton = skeleton,
+                  target = target, 
+                  model = 'empiric', 
+                  cohort_sizes = c(2, 2), 
+                  next_dose = 2, 
+                  beta_sd = 1,
+                  refresh = 0)
+```
+
+The parameters `skeleton`, `target` and `model` are mandatory because they are passed to `stan_crm`.
+Depending on the `model` type chosen, further parameters will be required.
+For instance, under the `empiric` model we must provide a value for the prior standard deviation of $\beta$ via the `beta_sd` parameter.
+Refer to the [introductory CRM vignette](CRM.html) for more details.
+
+In the example above, the parameter `next_dose` determines the dose-level that will be given to the first cohort.
+If omitted, the first cohort is treated at the dose suggested by the model fit only to the prior information.
+The option of overriding this is provided because in such experimental medical settings, trialists may choose to start at a dose they firmly believe will be safe, even if their prior belief is that some higher doses will also be tolerable.
+
+Further parameters can be passed ultimately to `rstan::sampling` via the ellipsis operator to tailor the MCMC sampling.
+Here, we provide `refresh = 0` to suppress sampling messages.
+We might also have adjusted the number of `cores` to use for sampling, or the number of `warmup` samples, for instance.
+See the `rstan` documentation for full details.
+
+As with the examples in the previous section, a `dose_finding_paths` object is returned that may be converted to a `tibble` for further analysis.
+```{r}
+df <- as_tibble(paths)
+df
+```
+
+We see that our analysis of `cohort_sizes = c(2, 2)` has yielded 13 model fits.
+There is one node of depth 0. 
+This is the trial starting point, where `next_dose` was provided manually.
+There are three nodes of depth 1, corresponding to paths `2NN`, `2NT` and `2TT`.
+Finally there are nine nodes of depth 2.
+
+We may find it helpful to see the data in a wide format:
+```{r}
+spread_paths(df %>% select(-fit, -parent_fit, -dose_index))
+```
+
+This arranges the paths in rows.
+Similar columns are output for each node in the path.
+The column names are suffixed so they can be distinguised from one another.
+The table above confirms that there are nine ways to traverse these first two cohort of two patients.
+
+The pathways we have calculated thus far were calculated from a blank slate - no patients had yet been treated.
+Pathways may also be calculated for trials in progress.
+All that is required is that we specify the trial path already observed using the `previous_outcomes` parameter.
+In the following example, we calculate pathways for the next two cohorts of three patients, having observed outcomes `2NN 3TN`.
+```{r}
+paths2 <- crm_dtps(skeleton = skeleton,
+                   target = target,
+                   model = 'empiric',
+                   cohort_sizes = c(3, 3),
+                   previous_outcomes = '2NN 3TN',
+                   next_dose = 2, 
+                   beta_sd = 1,
+                   refresh = 0)
+```
+
+```{r}
+spread_paths(as_tibble(paths2) %>% select(-fit, -parent_fit, -dose_index))
+```
+
+When calculaing pathways, the dose given for the next cohort is that with posterior mean probability of toxicity closest to the target.
+This is the default behaviour for the CRM model.
+However, we might wish to tailor the algorithm used to select doses.
+For instance, we might wish to avoid the skipping of doses in escalation and incorporate a mechanism that advises stopping the trial if excess toxicity is seen.
+As described above, these behaviours are provided by the `careful_escalation` function.
+We provide a custom dose selection function via the `user_dose_func` parameter:
+ 
+```{r}
+paths3 <- crm_dtps(
+  skeleton = skeleton,
+  target = target,
+  model = 'empiric',
+  cohort_sizes = c(3, 3),
+  previous_outcomes = '2NN 3TN',
+  next_dose = 2, 
+  beta_sd = 1,
+  user_dose_func = function(x) {
+    careful_escalation(x, tox_threshold = target + 0.1, 
+                       certainty_threshold = 0.7)
+  }, 
+  seed = 123, refresh = 0)
+
+df3 <- as_tibble(paths3)
+spread_paths(df3 %>% select(-fit, -parent_fit, -dose_index))
+```
+
+We see that the custom dose function yields a single difference compared to `paths2`.
+After observing `2TTT 1TTT`, the custom function stops because $Prob(DLT_1 > 0.35 | X) > 0.7$, i.e. it is likely that even dose-level 1 exceeds our target level of toxicity.
+
+We use `careful_escalation` here for illustration.
+`user_dose_func` can be any function that takes a `crm_fit` as its single parameter and returns either an integer dose-level, or `NA` to signify that the trial should stop.
+
+The analysis of DTPs becomes bewildering as the volume of information grows.
+A clear method of visualisation is extremely valuable.
+The `DiagrammeR` package creates graphs of nodes and edges.
+This is perfect for visualising tree-like structures like those created by `crm_dtps`.
+
+To create a graph, `DiagrammeR` requires a `data.frame` of nodes and another of edges.
+The nodes are the shapes in a graph.
+The edges are the lines that join them.
+`trialr` has already given us all of the information we require to define these elements.
+All that remains is to choose a pleasing colour scheme.
+
+```{r, fig.width=6, fig.height=6}
+library(DiagrammeR)
+
+df3 %>%
+  transmute(id = .node,
+            type = NA,
+            label = case_when(
+              is.na(next_dose) ~ 'Stop',
+              TRUE ~ next_dose %>% as.character()),
+            shape = 'circle',
+            fillcolor = case_when(
+              next_dose == 1 ~ 'slategrey',
+              next_dose == 2 ~ 'skyblue1',
+              next_dose == 3 ~ 'royalblue1',
+              next_dose == 4 ~ 'orchid4',
+              next_dose == 5 ~ 'royalblue4',
+              is.na(next_dose) ~ 'red'
+            )
+  ) -> ndf
+
+df3 %>% 
+  filter(!is.na(.parent)) %>% 
+  select(from = .parent, to = .node, label = outcomes) %>% 
+  mutate(rel = "leading_to") -> edf
+
+graph <- create_graph(nodes_df = ndf, edges_df = edf)
+render_graph(graph)
+```
+
+Compared to the tabular form above, the graph representation of DTPs is far superior.
+The central node shows that dose 2 will be given to the next cohort.
+Displaying the nodes that require stopping in a bold and symbolic colour like red immediately conveys useful information. 
+The only path that will see the model advocate stopping in the next two cohorts is if every patient experiences toxicity.
+
+Using graphs and `DiagrammeR` to visualise paths is potentially very flexible and powerful.
+Obviously different colours and shapes may be chosen.
+The opacity (or _alpha_) of the nodes and paths may be adjusted by their probability of occurrence so that paths that are less likely appear more feint.
+Opportunities abound.
+
+# Summary
+That concludes this vignette on the analysis of dose transitions with CRM in `trialr`.
+The functions described will help investigators design and conduct high-quality dose-finding clinical trials.
+Behind the scenes, this package leverages the computational power of `rstan` to fit its models.
+The objects returned work nicely with modern `tidyverse` packages and programming-styles to offer a flexible suite of tools for clinical trialists.
+
+
+## Other CRM vignettes
+There are many vignettes illuminating the CRM in `trialr`:
+
+- [An introduction to CRM in 'trialr'](CRM.html)
+- [Visualisation in CRM](CRM-visualisation.html)
+- [TITE-CRM](TITE-CRM.html)
+- [Pathways and stopping in CRM](CRM-pathways.html)
+- [Case study using Levy, et al. (2006)](LevyCaseStudy.html)
+- Simulation
+
+
+# trialr
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
+
+
+# References

@@ -82,13 +82,17 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
 #' @export
 print.efftox_fit <- function(x, ...) {
   # Patient-level data
-  treated <- data.frame(
-    Patient = 1:length(x$dat$doses),
-    Dose = x$dat$doses,
-    Toxicity = x$dat$tox,
-    Efficacy = x$dat$eff
-  )
-  print(treated)
+  if(x$dat$num_patients > 0) {
+    treated <- data.frame(
+      Patient = 1:length(x$dat$doses),
+      Dose = x$dat$doses,
+      Toxicity = x$dat$tox,
+      Efficacy = x$dat$eff
+    )
+    print(treated)
+  } else {
+    cat('No patients have been treated.\n')
+  }
   cat('\n')
 
   # Dose-level data
@@ -98,8 +102,7 @@ print.efftox_fit <- function(x, ...) {
 
   # Extras
   if(sum(x$acceptable) == 0) {
-    cat('The model advocates stopping.')
-
+    if(x$dat$num_patients > 0) cat('The model advocates stopping.')
   } else {
     cat(paste0('The model recommends selecting dose-level ',
                x$recommended_dose, '.'))

@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -87,6 +87,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -97,6 +100,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -128,7 +134,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate dose-transition pathways for an EffTox study</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/efftox_dtps.R'><code>R/efftox_dtps.R</code></a></small>
     <div class="hidden name"><code>efftox_dtps.Rd</code></div>
     </div>
 
@@ -151,8 +157,8 @@ parameters. An example is yielded by <code><a href='efftox_parameters_demo.html'
     <tr>
       <th>cohort_sizes</th>
       <td><p>vector of future cohort sizes, i.e. positive integers.
-E.g. Tot calculate paths for the the next cohort of two followed by the next
-cohort of three, use <code>c(2, 3)</code>.</p></td>
+E.g. To calculate paths for the the next cohort of two followed by another
+cohort of three, use <code>cohort_sizes = c(2, 3)</code>.</p></td>
     </tr>
     <tr>
       <th>next_dose</th>
@@ -171,7 +177,11 @@ cohort of three, use <code>c(2, 3)</code>.</p></td>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Brock et al. (submitted 2017), Implementing the EffTox
-Dose-Finding Design in the Matchpoint Trial.</p>
+Dose-Finding Design in the Matchpoint Trial.
+Brock K, Billingham L, Copland M, Siddique S, Sirovica M, Yap C.
+Implementing the EffTox dose-finding design in the Matchpoint trial.
+BMC Medical Research Methodology. 2017;17(1):112.
+doi:10.1186/s12874-017-0381-x</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Fit a CRM model — stan_crm" />
 
-<meta property="og:description" content="Fit a CRM model using Stan for full Bayesian inference." />
+<meta property="og:description" content="Fit a continual reassessment method (CRM) model for dose-finding using Stan
+for full Bayesian inference." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -61,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -87,6 +88,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -97,6 +101,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -128,21 +135,22 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fit a CRM model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/CRM.R'><code>R/CRM.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/stan_crm.R'><code>R/stan_crm.R</code></a></small>
     <div class="hidden name"><code>stan_crm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Fit a CRM model using Stan for full Bayesian inference.</p>
+    <p>Fit a continual reassessment method (CRM) model for dose-finding using Stan
+for full Bayesian inference.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>stan_crm</span>(<span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"empiric"</span>,
-  <span class='st'>"logistic"</span>, <span class='st'>"logistic_gamma"</span>, <span class='st'>"logistic2"</span>), <span class='kw'>a0</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>alpha_mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>beta_inverse_scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>doses_given</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+  <span class='st'>"logistic"</span>, <span class='st'>"logistic_gamma"</span>, <span class='st'>"logistic2"</span>), <span class='kw'>a0</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>alpha_mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>beta_inverse_scale</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>doses_given</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -243,36 +251,44 @@ used options are <code>iter</code>, <code>chains</code>, <code>warmup</code>, <c
     <p>The quickest and easiest way to fit a CRM model to some observed outcomes
 is to describe the outcomes using <span class="pkg">trialr</span>'s syntax for dose-finding
 outcomes. See <code><a href='df_parse_outcomes.html'>df_parse_outcomes</a></code> for full details and examples.</p>
-<p>Different model parameterisations require that difference parameter values
-are specified.</p>
+<p>Different model choices require that different parameters are
+provided. See below.</p>
     
     <h2 class="hasAnchor" id="requirements-of-empiric-model"><a class="anchor" href="#requirements-of-empiric-model"></a>Requirements of <code>empiric</code> model</h2>
 
     
-    <p>* beta_sd</p>
+    <ul>
+<li><p><code>beta_sd</code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="requirements-of-logistic-model"><a class="anchor" href="#requirements-of-logistic-model"></a>Requirements of <code>logistic</code> model</h2>
 
     
-    <p>* a0
-* beta_mean
-* beta_sd</p>
+    <ul>
+<li><p><code>a0</code></p></li>
+<li><p><code>beta_mean</code></p></li>
+<li><p><code>beta_sd</code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="requirements-of-logistic-gamma-model"><a class="anchor" href="#requirements-of-logistic-gamma-model"></a>Requirements of <code>logistic_gamma</code> model</h2>
 
     
-    <p>* a0
-* beta_shape
-* beta_inverse_scale</p>
+    <ul>
+<li><p><code>a0</code></p></li>
+<li><p><code>beta_shape</code></p></li>
+<li><p><code>beta_inverse_scale</code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="requirements-of-logistic-model"><a class="anchor" href="#requirements-of-logistic-model"></a>Requirements of <code>logistic2</code> model</h2>
 
     
-    <p>* a0
-* alpha_mean
-* alpha_sd
-* beta_mean
-* beta_sd</p>
+    <ul>
+<li><p><code>a0</code></p></li>
+<li><p><code>alpha_mean</code></p></li>
+<li><p><code>alpha_sd</code></p></li>
+<li><p><code>beta_mean</code></p></li>
+<li><p><code>beta_sd</code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -280,21 +296,24 @@ are specified.</p>
   Continual reassessment method: a practical design for phase 1 clinical
   trials in cancer.
   Biometrics, 46(1), 33-48. https://doi.org/10.2307/2531628</p>
+<p>Cheung, Y.K. (2011).
+  Dose Finding by the Continual Reassessment Method.
+  CRC Press. ISBN 9781420091519</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='crm_fit-class.html'>crm_fit</a></code>
-  <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></div>
+  <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># CRM example</span>
-<span class='no'>mod1</span> <span class='kw'>&lt;-</span> <span class='fu'>stan_crm</span>(<span class='st'>'1N 2N 3T'</span>, <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.35</span>, <span class='fl'>0.6</span>),
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'>stan_crm</span>(<span class='st'>'1N 2N 3T'</span>, <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.35</span>, <span class='fl'>0.6</span>),
                  <span class='kw'>target</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='fl'>1.34</span>),
                  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
 
-<span class='no'>mod2</span> <span class='kw'>&lt;-</span> <span class='fu'>stan_crm</span>(<span class='st'>'1NNN 2NNN 3TTT'</span>, <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.35</span>, <span class='fl'>0.6</span>),
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'>stan_crm</span>(<span class='st'>'1NNN 2NNN 3TTT'</span>, <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.35</span>, <span class='fl'>0.6</span>),
                  <span class='kw'>target</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'logistic'</span>, <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>,
                  <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='fl'>1.34</span>), <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
 
@@ -302,12 +321,12 @@ are specified.</p>
 <span class='co'># cores, iter, chains etc are passed on too via the ellipsis operator.</span>
 
 <span class='co'># TITE-CRM example, p.124 of Dose Finding by the CRM, Cheung (2010)</span>
-<span class='no'>mod3</span> <span class='kw'>&lt;-</span><span class='fu'>stan_crm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.12</span>, <span class='fl'>0.25</span>, <span class='fl'>0.40</span>, <span class='fl'>0.55</span>), <span class='kw'>target</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+<span class='no'>fit3</span> <span class='kw'>&lt;-</span><span class='fu'>stan_crm</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.12</span>, <span class='fl'>0.25</span>, <span class='fl'>0.40</span>, <span class='fl'>0.55</span>), <span class='kw'>target</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
                 <span class='kw'>doses_given</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>3</span>),
                 <span class='kw'>tox</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
                 <span class='kw'>weights</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>73</span>, <span class='fl'>66</span>, <span class='fl'>35</span>, <span class='fl'>28</span>) / <span class='fl'>126</span>,
                 <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='fl'>1.34</span>), <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
-<span class='no'>mod3</span>$<span class='no'>recommended_dose</span>
+<span class='no'>fit3</span>$<span class='no'>recommended_dose</span>
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -336,7 +355,7 @@ are specified.</p>
 
     <h2>Author</h2>
     
-Kristian Brock <a href='mailto:kristian.brock@gmail.com'>kristian.brock@gmail.com</a>
+Kristian Brock
 
   </div>
 </div>

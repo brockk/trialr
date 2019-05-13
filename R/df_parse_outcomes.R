@@ -16,7 +16,7 @@
 #'
 #' @param outcome_string character string, conveying doses given and outcomes
 #' observed.
-#' @param as.list TRUE (be default) to return a \code{list};
+#' @param as.list TRUE (the default) to return a \code{list};
 #' FALSE to return a \code{data.frame}
 #'
 #' @return If \code{as.list == TRUE}, a list with elements \code{tox},
@@ -29,9 +29,10 @@
 #'
 #' @examples
 #' x = df_parse_outcomes('1NNN 2NTN 3TTT')
-#' x$num_patients
-#' x$tox
-#' sum(x$tox)
+#' x$num_patients  # 9
+#' x$doses         # c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+#' x$tox           # c(0, 0, 0, 0, 1, 0, 1, 1, 1)
+#' sum(x$tox)      # 4
 #'
 #' @references
 #' Brock, K., Billingham, L., Copland, M., Siddique, S., Sirovica, M., & Yap, C.

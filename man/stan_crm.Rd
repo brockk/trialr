@@ -70,7 +70,8 @@ used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores}, and
 An object of class \code{\link{crm_fit}}
 }
 \description{
-Fit a CRM model using Stan for full Bayesian inference.
+Fit a continual reassessment method (CRM) model for dose-finding using Stan
+for full Bayesian inference.
 }
 \details{
 The quickest and easiest way to fit a CRM model to some observed outcomes
@@ -119,11 +120,11 @@ provided. See below.
 \examples{
 \dontrun{
 # CRM example
-mod1 <- stan_crm('1N 2N 3T', skeleton = c(0.1, 0.2, 0.35, 0.6),
+fit1 <- stan_crm('1N 2N 3T', skeleton = c(0.1, 0.2, 0.35, 0.6),
                  target = 0.2, model = 'empiric', beta_sd = sqrt(1.34),
                  seed = 123)
 
-mod2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
+fit2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
                  target = 0.2, model = 'logistic', a0 = 3, beta_mean = 0,
                  beta_sd = sqrt(1.34), seed = 123)
 
@@ -131,12 +132,12 @@ mod2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
 # cores, iter, chains etc are passed on too via the ellipsis operator.
 
 # TITE-CRM example, p.124 of Dose Finding by the CRM, Cheung (2010)
-mod3 <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
+fit3 <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
                 doses_given = c(3, 3, 3, 3),
                 tox = c(0, 0, 0, 0),
                 weights = c(73, 66, 35, 28) / 126,
                 model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
-mod3$recommended_dose
+fit3$recommended_dose
 }
 }
 \references{
@@ -151,7 +152,7 @@ O'Quigley, J., Pepe, M., & Fisher, L. (1990).
 }
 \seealso{
 \code{\link{crm_fit}}
-  \code{\link[rstan:sampling]{sampling}}.
+  \code{\link[rstan:sampling]{sampling}}
 }
 \author{
 Kristian Brock

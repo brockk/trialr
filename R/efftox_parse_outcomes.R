@@ -44,6 +44,20 @@
 #'
 efftox_parse_outcomes <- function(outcome_string, as.list = TRUE) {
 
+  if(outcome_string == '') {
+    if(as.list) {
+      return(list(
+        doses = array(integer(length = 0)), eff = array(integer(length = 0)),
+        tox = array(integer(length = 0)), num_patients = 0
+      ))
+    } else {
+      return(data.frame(doses = array(integer(length = 0)),
+                        eff = array(integer(length = 0)),
+                        tox = array(integer(length = 0)))
+      )
+    }
+  }
+
   # Matching is done by regex.
 
   # This pattern ensures that outcome_string is valid. It is the gate-keeper.

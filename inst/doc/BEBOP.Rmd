@@ -22,7 +22,7 @@ There was also a suggestion (albeit not shown to be _statistically significant_)
 These same variables will likely be predictive of response in the PS2 population.
 Brock et al. (publication in submission) developed BEBOP to make efficient use of this information.
 
-BEBOP re-uses the probability model at the core of the EffTox design [@Thall2004, @Thall2014].
+BEBOP re-uses the probability model at the core of the EffTox design [@Thall2004; @Thall2014].
 Let $x$ represent a vector of predictive baseline variables and $\boldsymbol{\theta}$ a vector of parameters.
 The marginal probabilities of efficacy and toxicity are estimated using general functions $\text{logit } \pi_E(x, \boldsymbol{\theta})$ and $\text{logit } \pi_T(x, \boldsymbol{\theta})$ to be specified by the user.
 
@@ -37,11 +37,10 @@ $\text{logit } \pi_E(x, \boldsymbol{\theta}) = \alpha + \beta x_{i1} + \gamma x_
 
 $\text{logit } \pi_T(x, \boldsymbol{\theta}) = \lambda$
 
-Efficacy and toxicity events are then modelled using the joint probability function
+As with [EffTox](EffTox.html), let $(Y_j, Z_j)$ be random variables each taking values $\{0, 1\}$ respresenting the presence of efficacy and toxicity in patient $j$. 
+The efficacy and toxicity events are associated by the joint probability function
 
-$\pi_{a,b} = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}$.
-
-where $a,b$ are dummy variables taking the value 1 if a patient experienced efficacy and toxicity respectively, else 0.
+$Pr(Y = a, Z = b) = \pi_{a,b}(\pi_E, \pi_T) = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}$.
 
 The complete vector of parameters is $\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \lambda, \psi)$.
 Normal priors are specified for the elements of $\boldsymbol{\theta}$.
@@ -116,14 +115,14 @@ fit <- stan_peps2(dat$eff, dat$tox, dat$cohorts)
 It is informative to view plots of posterior beliefs. 
 Posterior samples of parameter values are available but they are less meaningful to us than the modelled efficacy rates, for example.
 View posterior distributions using code like
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=FALSE}
+```{r, message = FALSE, fig.width = 7, fig.height = 7, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts"}
 rstan::plot(fit, pars = 'prob_eff')
 ```
 
 We see that the modelled rates of efficacy are highest in cohorts 3 and 6, but likely to be greater than the critical threshold of 10% in cohort 2 and perhaps cohort 5 as well.
 In contrast, there is not much evidence of clinical benefit in cohorts 1 and 4.
 This is confirmed by invoking the formally described analysis and associated decision rules.
-```{r, eval=T}
+```{r, eval=TRUE}
 decision <- peps2_process(fit)
 knitr::kable(
   with(decision, data.frame(ProbEff, ProbAccEff, ProbTox, ProbAccTox, Accept)), 
@@ -167,8 +166,7 @@ apply(sapply(sims, function(x) x$Accept), 1, mean)
 ```
 
 # trialr
-`trialr` is available at https://github.com/brockk/trialr
-
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
 
 
 # References

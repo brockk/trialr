@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -55,6 +55,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -65,6 +68,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -97,7 +103,7 @@
       <h1>Hierarchical Bayesian Model for Binary Responses</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-04-21</h4>
+            <h4 class="date">2019-05-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/HierarchicalBayesianResponse.Rmd"><code>vignettes/HierarchicalBayesianResponse.Rmd</code></a></small>
       <div class="hidden name"><code>HierarchicalBayesianResponse.Rmd</code></div>
@@ -142,57 +148,57 @@
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%
-## mu                 -0.04    0.03  1.35  -2.77  -0.87  -0.04   0.82   2.57
-## sigma2             12.76    0.63 19.55   3.22   6.24   9.23  14.35  42.45
-## rho[1]              0.00    0.08  3.86  -7.65  -2.18   0.04   2.21   7.58
-## rho[2]             -2.95    0.07  2.59  -9.15  -4.19  -2.50  -1.21   0.75
-## rho[3]              2.35    0.06  2.77  -1.83   0.55   1.95   3.68   8.71
-## rho[4]             -0.29    0.01  0.79  -1.90  -0.80  -0.27   0.23   1.24
-## rho[5]              3.68    0.06  2.37   0.64   2.12   3.18   4.69   9.65
-## rho[6]              0.00    0.08  3.99  -7.77  -2.33   0.05   2.30   7.82
-## rho[7]              0.00    0.03  1.55  -3.22  -0.94   0.00   0.99   3.02
-## rho[8]              0.79    0.02  1.32  -1.67  -0.05   0.73   1.58   3.58
-## rho[9]             -2.40    0.08  3.02  -9.46  -3.71  -1.94  -0.52   1.84
-## rho[10]            -0.08    0.07  3.84  -7.58  -2.35  -0.10   2.16   7.72
-## sigma               3.32    0.05  1.32   1.79   2.50   3.04   3.79   6.52
-## prob_response[1]    0.50    0.01  0.38   0.00   0.10   0.51   0.90   1.00
-## prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.08   0.23   0.68
-## prob_response[3]    0.77    0.00  0.25   0.14   0.63   0.88   0.98   1.00
-## prob_response[4]    0.44    0.00  0.17   0.13   0.31   0.43   0.56   0.78
-## prob_response[5]    0.92    0.00  0.10   0.65   0.89   0.96   0.99   1.00
-## prob_response[6]    0.50    0.01  0.38   0.00   0.09   0.51   0.91   1.00
-## prob_response[7]    0.50    0.00  0.27   0.04   0.28   0.50   0.73   0.95
-## prob_response[8]    0.64    0.00  0.23   0.16   0.49   0.68   0.83   0.97
-## prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.13   0.37   0.86
-## prob_response[10]   0.49    0.01  0.38   0.00   0.09   0.48   0.90   1.00
-## lp__              -34.32    0.15  3.88 -43.37 -36.39 -33.67 -31.56 -28.54
+## mu                 -0.04    0.03  1.42  -3.03  -0.90   0.02   0.88   2.61
+## sigma2             12.88    0.48 15.22   3.27   6.27   9.37  14.65  41.53
+## rho[1]              0.01    0.07  3.94  -8.09  -2.25   0.04   2.34   7.45
+## rho[2]             -2.97    0.06  2.70  -9.55  -4.13  -2.49  -1.20   0.69
+## rho[3]              2.43    0.06  2.70  -1.84   0.64   2.04   3.78   8.53
+## rho[4]             -0.30    0.01  0.81  -1.97  -0.83  -0.27   0.23   1.24
+## rho[5]              3.64    0.05  2.21   0.60   2.16   3.19   4.64   9.20
+## rho[6]             -0.13    0.07  3.87  -8.28  -2.19  -0.07   2.13   7.12
+## rho[7]              0.03    0.02  1.50  -2.90  -0.92   0.03   0.97   3.12
+## rho[8]              0.75    0.02  1.27  -1.62  -0.12   0.70   1.54   3.47
+## rho[9]             -2.38    0.06  2.80  -9.27  -3.68  -1.94  -0.56   1.81
+## rho[10]            -0.01    0.07  3.95  -8.22  -2.21   0.05   2.37   7.68
+## sigma               3.34    0.04  1.32   1.81   2.50   3.06   3.83   6.44
+## prob_response[1]    0.51    0.01  0.38   0.00   0.10   0.51   0.91   1.00
+## prob_response[2]    0.16    0.00  0.19   0.00   0.02   0.08   0.23   0.67
+## prob_response[3]    0.78    0.00  0.25   0.14   0.66   0.89   0.98   1.00
+## prob_response[4]    0.43    0.00  0.17   0.12   0.30   0.43   0.56   0.78
+## prob_response[5]    0.92    0.00  0.10   0.65   0.90   0.96   0.99   1.00
+## prob_response[6]    0.50    0.01  0.38   0.00   0.10   0.48   0.89   1.00
+## prob_response[7]    0.50    0.00  0.26   0.05   0.28   0.51   0.73   0.96
+## prob_response[8]    0.64    0.00  0.23   0.17   0.47   0.67   0.82   0.97
+## prob_response[9]    0.23    0.00  0.25   0.00   0.02   0.13   0.36   0.86
+## prob_response[10]   0.51    0.01  0.38   0.00   0.10   0.51   0.91   1.00
+## lp__              -34.24    0.13  3.76 -43.07 -36.26 -33.67 -31.57 -28.65
 ##                   n_eff Rhat
-## mu                 2378 1.00
-## sigma2              956 1.00
-## rho[1]             2566 1.00
-## rho[2]             1351 1.00
-## rho[3]             1887 1.00
-## rho[4]             4305 1.00
-## rho[5]             1347 1.00
-## rho[6]             2802 1.00
-## rho[7]             3711 1.00
-## rho[8]             3642 1.00
-## rho[9]             1515 1.00
-## rho[10]            3397 1.00
-## sigma               734 1.01
-## prob_response[1]   3140 1.00
-## prob_response[2]   3806 1.00
-## prob_response[3]   3955 1.00
-## prob_response[4]   4366 1.00
-## prob_response[5]   3957 1.00
-## prob_response[6]   3428 1.00
-## prob_response[7]   3924 1.00
-## prob_response[8]   4139 1.00
-## prob_response[9]   3402 1.00
-## prob_response[10]  4031 1.00
-## lp__                637 1.01
+## mu                 2347    1
+## sigma2             1011    1
+## rho[1]             3319    1
+## rho[2]             1848    1
+## rho[3]             2218    1
+## rho[4]             4787    1
+## rho[5]             1955    1
+## rho[6]             2934    1
+## rho[7]             4183    1
+## rho[8]             3391    1
+## rho[9]             2000    1
+## rho[10]            3140    1
+## sigma               925    1
+## prob_response[1]   3577    1
+## prob_response[2]   4279    1
+## prob_response[3]   4532    1
+## prob_response[4]   4877    1
+## prob_response[5]   4496    1
+## prob_response[6]   3807    1
+## prob_response[7]   4367    1
+## prob_response[8]   3885    1
+## prob_response[9]   3923    1
+## prob_response[10]  3853    1
+## lp__                815    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Apr 21 14:27:55 2019.
+## Samples were drawn using NUTS(diag_e) at Mon May 13 19:00:45 2019.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -215,144 +221,144 @@
 <tbody>
 <tr class="odd">
 <td>prob_response[1]</td>
-<td align="right">0.503</td>
-<td align="right">0.007</td>
-<td align="right">0.378</td>
+<td align="right">0.506</td>
+<td align="right">0.006</td>
+<td align="right">0.382</td>
 <td align="right">0.000</td>
-<td align="right">0.102</td>
+<td align="right">0.096</td>
 <td align="right">0.510</td>
-<td align="right">0.901</td>
+<td align="right">0.912</td>
 <td align="right">0.999</td>
-<td align="right">3140.345</td>
+<td align="right">3577.268</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
 <td>prob_response[2]</td>
 <td align="right">0.155</td>
 <td align="right">0.003</td>
-<td align="right">0.189</td>
+<td align="right">0.186</td>
 <td align="right">0.000</td>
-<td align="right">0.015</td>
+<td align="right">0.016</td>
 <td align="right">0.076</td>
-<td align="right">0.231</td>
-<td align="right">0.679</td>
-<td align="right">3806.248</td>
+<td align="right">0.232</td>
+<td align="right">0.666</td>
+<td align="right">4279.260</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="odd">
 <td>prob_response[3]</td>
-<td align="right">0.770</td>
+<td align="right">0.781</td>
 <td align="right">0.004</td>
-<td align="right">0.254</td>
-<td align="right">0.139</td>
-<td align="right">0.633</td>
-<td align="right">0.875</td>
-<td align="right">0.975</td>
+<td align="right">0.248</td>
+<td align="right">0.137</td>
+<td align="right">0.656</td>
+<td align="right">0.885</td>
+<td align="right">0.978</td>
 <td align="right">1.000</td>
-<td align="right">3954.839</td>
-<td align="right">1.000</td>
+<td align="right">4531.922</td>
+<td align="right">1.001</td>
 </tr>
 <tr class="even">
 <td>prob_response[4]</td>
-<td align="right">0.436</td>
-<td align="right">0.003</td>
-<td align="right">0.170</td>
-<td align="right">0.130</td>
-<td align="right">0.310</td>
-<td align="right">0.432</td>
+<td align="right">0.435</td>
+<td align="right">0.002</td>
+<td align="right">0.173</td>
+<td align="right">0.123</td>
+<td align="right">0.303</td>
+<td align="right">0.433</td>
 <td align="right">0.558</td>
 <td align="right">0.776</td>
-<td align="right">4366.330</td>
+<td align="right">4877.368</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="odd">
 <td>prob_response[5]</td>
 <td align="right">0.924</td>
-<td align="right">0.002</td>
-<td align="right">0.096</td>
-<td align="right">0.654</td>
-<td align="right">0.892</td>
-<td align="right">0.960</td>
-<td align="right">0.991</td>
+<td align="right">0.001</td>
+<td align="right">0.097</td>
+<td align="right">0.645</td>
+<td align="right">0.897</td>
+<td align="right">0.961</td>
+<td align="right">0.990</td>
 <td align="right">1.000</td>
-<td align="right">3956.808</td>
+<td align="right">4496.305</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="even">
 <td>prob_response[6]</td>
-<td align="right">0.503</td>
-<td align="right">0.007</td>
-<td align="right">0.384</td>
+<td align="right">0.496</td>
+<td align="right">0.006</td>
+<td align="right">0.378</td>
 <td align="right">0.000</td>
-<td align="right">0.089</td>
-<td align="right">0.513</td>
-<td align="right">0.909</td>
-<td align="right">1.000</td>
-<td align="right">3428.340</td>
-<td align="right">1.000</td>
+<td align="right">0.101</td>
+<td align="right">0.483</td>
+<td align="right">0.893</td>
+<td align="right">0.999</td>
+<td align="right">3806.774</td>
+<td align="right">0.999</td>
 </tr>
 <tr class="odd">
 <td>prob_response[7]</td>
-<td align="right">0.502</td>
+<td align="right">0.504</td>
 <td align="right">0.004</td>
-<td align="right">0.267</td>
-<td align="right">0.038</td>
-<td align="right">0.282</td>
-<td align="right">0.501</td>
-<td align="right">0.728</td>
-<td align="right">0.954</td>
-<td align="right">3923.538</td>
-<td align="right">1.001</td>
+<td align="right">0.264</td>
+<td align="right">0.052</td>
+<td align="right">0.284</td>
+<td align="right">0.506</td>
+<td align="right">0.725</td>
+<td align="right">0.958</td>
+<td align="right">4366.602</td>
+<td align="right">1.000</td>
 </tr>
 <tr class="even">
 <td>prob_response[8]</td>
-<td align="right">0.643</td>
+<td align="right">0.636</td>
 <td align="right">0.004</td>
-<td align="right">0.227</td>
-<td align="right">0.159</td>
-<td align="right">0.487</td>
-<td align="right">0.676</td>
-<td align="right">0.829</td>
-<td align="right">0.973</td>
-<td align="right">4138.623</td>
+<td align="right">0.225</td>
+<td align="right">0.165</td>
+<td align="right">0.470</td>
+<td align="right">0.667</td>
+<td align="right">0.823</td>
+<td align="right">0.970</td>
+<td align="right">3884.970</td>
 <td align="right">1.000</td>
 </tr>
 <tr class="odd">
 <td>prob_response[9]</td>
-<td align="right">0.231</td>
+<td align="right">0.229</td>
 <td align="right">0.004</td>
-<td align="right">0.256</td>
+<td align="right">0.253</td>
 <td align="right">0.000</td>
-<td align="right">0.024</td>
-<td align="right">0.125</td>
-<td align="right">0.373</td>
-<td align="right">0.863</td>
-<td align="right">3402.397</td>
-<td align="right">1.000</td>
+<td align="right">0.025</td>
+<td align="right">0.126</td>
+<td align="right">0.364</td>
+<td align="right">0.859</td>
+<td align="right">3923.206</td>
+<td align="right">1.001</td>
 </tr>
 <tr class="even">
 <td>prob_response[10]</td>
-<td align="right">0.491</td>
+<td align="right">0.506</td>
 <td align="right">0.006</td>
-<td align="right">0.380</td>
-<td align="right">0.001</td>
-<td align="right">0.087</td>
-<td align="right">0.475</td>
-<td align="right">0.896</td>
+<td align="right">0.382</td>
+<td align="right">0.000</td>
+<td align="right">0.099</td>
+<td align="right">0.511</td>
+<td align="right">0.915</td>
 <td align="right">1.000</td>
-<td align="right">4030.504</td>
-<td align="right">1.000</td>
+<td align="right">3853.473</td>
+<td align="right">0.999</td>
 </tr>
 </tbody>
 </table>
 <p>Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least <span class="math inline">\(q = 70\)</span>% certainty that the probability of efficacy exceeds the target response rate of 30%.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">colMeans</span>(<span class="kw">as.data.frame</span>(fit, <span class="dt">pars =</span> <span class="st">'prob_response'</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.3</span>)</a></code></pre></div>
 <pre><code>##  prob_response[1]  prob_response[2]  prob_response[3]  prob_response[4] 
-##           0.60675           0.18450           0.92150           0.76825 
+##           0.61000           0.18975           0.93075           0.75550 
 ##  prob_response[5]  prob_response[6]  prob_response[7]  prob_response[8] 
-##           1.00000           0.60125           0.73000           0.90675 
+##           0.99950           0.59675           0.72900           0.90700 
 ##  prob_response[9] prob_response[10] 
-##           0.30600           0.59200</code></pre>
+##           0.30050           0.61125</code></pre>
 <p>On that basis, at this interim stage, we would be eager to approve the treatment in subgroups 3, 5 and 8. Subgroups 4 and 7 are close to the boundary.</p>
 <p>Some distribution plots of the probabilities of efficacy in some subgroups may be informative.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
@@ -379,7 +385,7 @@ Prob(Response | D) in subgroup 3
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Thall2003">
-<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. <a href="https://doi.org/10.1002/sim.1399">https://doi.org/10.1002/sim.1399</a>.</p>
+<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian Approaches to Phase II Trials in Diseases with Multiple Subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. <a href="https://doi.org/10.1002/sim.1399">https://doi.org/10.1002/sim.1399</a>.</p>
 </div>
 </div>
 </div>

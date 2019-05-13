@@ -25,11 +25,11 @@ fit <- stan_efftox(outcomes,
 ## ------------------------------------------------------------------------
 fit$recommended_dose
 
-## ---- fig.width = 6, fig.height = 6, fig.cap = "Utility contours after observing outcomes 1NEN 2NBE."----
+## ---- fig.width = 7, fig.height = 7, fig.cap = "Utility contours after observing outcomes 1NEN 2NBE."----
 efftox_contour_plot(fit)
 title('EffTox utility contours')
 
-## ---- fig.width = 6, fig.height = 6, fig.cap = "Utility densities after observing outcomes 1NEN 2NBE."----
+## ---- fig.width = 7, fig.height = 7, fig.cap = "Utility densities after observing outcomes 1NEN 2NBE."----
 efftox_utility_density_plot(fit, doses = 1:3) +
   ggplot2::ggtitle("EffTox dose utility densities")
 
@@ -63,13 +63,6 @@ dat <- list(
   eff   = c(),
   num_patients = 0
 )
-
-## ----run_sims, eval = FALSE, cache = TRUE, results = "hide"--------------
-#  set.seed(123)
-#  sims = efftox_simulate(dat, num_sims = 100, first_dose = 1,
-#                         true_eff = c(0.20, 0.40, 0.60, 0.80, 0.90),
-#                         true_tox = c(0.05, 0.10, 0.15, 0.20, 0.40),
-#                         cohort_sizes = rep(3, 13))
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  table(sims$recommended_dose) / length(sims$recommended_dose)

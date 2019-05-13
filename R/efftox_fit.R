@@ -11,17 +11,21 @@
 #'
 #' @param dose_indices A vector of integers representing the dose-levels under
 #' consideration.
+#' @param num_patients Integer, the number of patients analysed.
+#' @param doses vector of integers representing the dose given to the patients.
+#' @param tox vector of integers representing the toxicity status of the
+#' patients.
 #' @param recommended_dose An integer representing the dose-level recommended
 #' for the next patient or cohort; or \code{NA} if stopping is recommended.
-#' @param prob_eff The posterior mean probabilities of efficacy at doses 1:n;
-#' a vector of numbers between 0 and 1.
 #' @param prob_tox The posterior mean probabilities of toxicity at doses 1:n;
 #' a vector of numbers between 0 and 1.
-#' @param prob_acc_eff The posterior mean probabilities that efficacy at the
-#' doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
-#' threshold; a vector of numbers between 0 and 1.
+#' @param prob_eff The posterior mean probabilities of efficacy at doses 1:n;
+#' a vector of numbers between 0 and 1.
 #' @param prob_acc_tox The posterior mean probabilities that toxicity at the
 #' doses is acceptable, i.e. that it is less than the maximum toxicity
+#' threshold; a vector of numbers between 0 and 1.
+#' @param prob_acc_eff The posterior mean probabilities that efficacy at the
+#' doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
 #' threshold; a vector of numbers between 0 and 1.
 #' @param utility The utilities of doses 1:n, calculated by plugging the
 #' posterior mean probabilities of efficacy and toxicity into the utility
@@ -44,20 +48,43 @@
 #' @seealso
 #' \code{\link{stan_efftox}}
 #' \code{\link{stan_efftox_demo}}
-efftox_fit <- function(dose_indices, recommended_dose, prob_eff, prob_tox,
-                       prob_acc_eff, prob_acc_tox, utility, post_utility,
-                       acceptable, dat, fit) {
-  # efftox_fit class
-  version <- list(
-    trialr = utils::packageVersion("trialr"),
-    rstan = utils::packageVersion("rstan")
-  )
-  x <- list(dose_indices = dose_indices, recommended_dose = recommended_dose,
-            prob_eff = prob_eff, prob_tox = prob_tox,
-            prob_acc_eff = prob_acc_eff, prob_acc_tox = prob_acc_tox,
-            utility = utility, post_utility = post_utility,
-            acceptable = acceptable,
-            dat = dat, fit = fit, version = version)
-  class(x) <- "efftox_fit"
+efftox_fit <- function(dose_indices,
+                       num_patients,
+                       doses,
+                       tox,
+                       prob_tox,
+                       prob_eff,
+                       median_prob_tox,
+                       median_prob_eff,
+                       prob_acc_tox,
+                       prob_acc_eff,
+                       utility,
+                       post_utility,
+                       acceptable,
+                       recommended_dose,
+                       dat,
+                       fit) {
+
+  # Elements in base class
+  x <- dose_finding_fit(dose_indices = dose_indices,
+                        num_patients = num_patients,
+                        doses = doses,
+                        tox = tox,
+                        prob_tox = prob_tox,
+                        median_prob_tox = median_prob_tox,
+                        recommended_dose = recommended_dose,
+                        dat = dat,
+                        fit = fit)
+
+  # Elements in this class
+  x$prob_eff = prob_eff
+  x$median_prob_eff = median_prob_eff
+  x$prob_acc_tox = prob_acc_tox
+  x$prob_acc_eff = prob_acc_eff
+  x$utility = utility
+  x$post_utility = post_utility
+  x$acceptable = acceptable
+
+    class(x) <- c("efftox_fit", "dose_finding_fit", "list")
   x
 }

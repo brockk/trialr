@@ -6,12 +6,19 @@
 \alias{crm_fit}
 \title{Class of model fit by \pkg{trialr} using the CRM dose-finding design.}
 \usage{
-crm_fit(dose_indices, prob_tox, median_prob_tox, prob_mtd,
-  recommended_dose, dat, fit, samples = NULL)
+crm_fit(dose_indices, num_patients, doses, tox, prob_tox, median_prob_tox,
+  prob_mtd, recommended_dose, dat, fit, samples = NULL)
 }
 \arguments{
 \item{dose_indices}{A vector of integers representing the dose-levels under
 consideration.}
+
+\item{num_patients}{Integer, the number of patients analysed.}
+
+\item{doses}{vector of integers representing the dose given to the patients.}
+
+\item{tox}{vector of integers representing the toxicity status of the
+patients.}
 
 \item{prob_tox}{The posterior mean probabilities of toxicity at doses 1:n;
 a vector of numbers between 0 and 1.}

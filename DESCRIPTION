@@ -1,6 +1,6 @@
 Package: trialr
-Version: 0.1.0.9001
-Date: 2019-04-24
+Version: 0.1.0.9002
+Date: 2019-04-27
 Title: Clinical Trial Designs in 'RStan'
 Description: A showcase of Bayesian clinical trial designs, implemented in 
     'RStan' and R. Some designs are implemented in R for the first
@@ -58,4 +58,5 @@ Suggests:
     knitr,
     rmarkdown,
     ggridges,
-    covr
+    covr,
+    DiagrammeR

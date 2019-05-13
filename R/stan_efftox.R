@@ -152,16 +152,16 @@ stan_efftox <- function(outcome_str = NULL,
       stop('doses_given and eff vectors should have same length')
     if(length(tox) != length(eff))
       stop('tox and eff vectors should have same length')
-    dat$doses <- doses_given
-    dat$eff <- eff
-    dat$tox <- tox
+    dat$doses <- array(doses_given)
+    dat$eff <- array(eff)
+    dat$tox <- array(tox)
     dat$num_patients <- length(doses_given)
   } else {
     outcomes_df <- efftox_parse_outcomes(outcome_str, as.list = TRUE)
     dat$num_patients <- outcomes_df$num_patients
-    dat$doses <- outcomes_df$doses
-    dat$eff <- outcomes_df$eff
-    dat$tox <- outcomes_df$tox
+    dat$doses <- array(outcomes_df$doses)
+    dat$eff <- array(outcomes_df$eff)
+    dat$tox <- array(outcomes_df$tox)
   }
 
   # Fit data to model using Stan

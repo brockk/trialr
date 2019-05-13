@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -84,6 +84,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -94,6 +97,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -157,6 +163,50 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="as.mcmc.list.crm_fit.html">as.mcmc.list(<i>&lt;crm_fit&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Convert <code>crm_fit</code> to instance of
+<code><a href='http://www.rdocumentation.org/packages/coda/topics/mcmc.list'>mcmc.list</a></code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as.mcmc.list.efftox_fit.html">as.mcmc.list(<i>&lt;efftox_fit&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Convert <code>efftox_fit</code> to instance of
+<code><a href='http://www.rdocumentation.org/packages/coda/topics/mcmc.list'>mcmc.list</a></code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as_tibble.dose_finding_paths.html">as_tibble(<i>&lt;dose_finding_paths&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Cast <code>dose_finding_paths</code> object to <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code>.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="careful_escalation.html">careful_escalation()</a></code> </p>
+        </td>
+        <td><p>Dose selection function that practices careful escalation.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="closest_to_target.html">closest_to_target()</a></code> </p>
+        </td>
+        <td><p>Get index of element in vector with value closest to a target</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="crm_codified_dose_logistic.html">crm_codified_dose_logistic()</a></code> </p>
+        </td>
+        <td><p>Calculate codified CRM doses.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="crm_dtps.html">crm_dtps()</a></code> </p>
+        </td>
+        <td><p>Calculate dose-transition pathways for a CRM study</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="crm_fit-class.html">crm_fit()</a></code> </p>
         </td>
         <td><p>Class of model fit by <span class="pkg">trialr</span> using the CRM dose-finding design.</p></td>
@@ -169,15 +219,40 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="crm_path_analysis.html">crm_path_analysis()</a></code> </p>
+        </td>
+        <td><p>Fit a CRM model to the incrementally observed outcomes a trial pathway.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="crm_prior_beliefs.html">crm_prior_beliefs()</a></code> </p>
+        </td>
+        <td><p>Get the prior beliefs for a CRM trial scenario.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="crm_process.html">crm_process()</a></code> </p>
         </td>
-        <td><p>Process RStan samples from a CRM model</p></td>
+        <td><p>Process RStan samples from a CRM model.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="df_parse_outcomes.html">df_parse_outcomes()</a></code> </p>
         </td>
         <td><p>Parse a string of dose-finding trial outcomes to binary vector notation.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dose_finding_fit-class.html">dose_finding_fit()</a></code> </p>
+        </td>
+        <td><p>Class of dose-finding model fit by <span class="pkg">trialr</span> using Stan.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dose_finding_path_node-class.html">dose_finding_path_node()</a></code> </p>
+        </td>
+        <td><p>Class to hold the elements of a single dose-finding analysis residing in a
+pathway of analyses.</p></td>
       </tr><tr>
         
         <td>
@@ -307,9 +382,21 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="prob_tox_exceeds.html">prob_tox_exceeds()</a></code> </p>
+        </td>
+        <td><p>Calculate the probability that the rate of toxicity exceeds some threshold</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="ranBin2.html">ranBin2()</a></code> </p>
         </td>
         <td><p>Sample pairs of correlated binary events</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="spread_paths.html">spread_paths()</a></code> </p>
+        </td>
+        <td><p>Spread the information in dose_finding_paths object to a wide data.frame format.</p></td>
       </tr><tr>
         
         <td>

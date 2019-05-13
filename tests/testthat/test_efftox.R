@@ -1,5 +1,3 @@
-# Test (most of the) methods in EffTox.R
-# The testing of some methods is done elsewhere.
 
 test_that('efftox_solve_p returns expected result', {
   p <- efftox_solve_p(eff0 = 0.5, tox1 = 0.65, eff_star = 0.7, tox_star = 0.25)
@@ -50,5 +48,4 @@ test_that('efftox_solve_p throws error on unit tox_star', {
 # efftox_get_tox()
 # efftox_superiority()
 # efftox_analysis_to_df()
-# efftox_dtps()
 # efftox_utility()

@@ -1,6 +1,7 @@
 #' Fit a CRM model
 #'
-#' Fit a CRM model using Stan for full Bayesian inference.
+#' Fit a continual reassessment method (CRM) model for dose-finding using Stan
+#' for full Bayesian inference.
 #'
 #' @param outcome_str A string representing the outcomes observed hitherto.
 #' See \code{\link{df_parse_outcomes}} for a description of syntax and
@@ -95,18 +96,18 @@
 #'
 #' @seealso
 #'   \code{\link{crm_fit}}
-#'   \code{\link[rstan:sampling]{sampling}}.
+#'   \code{\link[rstan:sampling]{sampling}}
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' # CRM example
-#' mod1 <- stan_crm('1N 2N 3T', skeleton = c(0.1, 0.2, 0.35, 0.6),
+#' fit1 <- stan_crm('1N 2N 3T', skeleton = c(0.1, 0.2, 0.35, 0.6),
 #'                  target = 0.2, model = 'empiric', beta_sd = sqrt(1.34),
 #'                  seed = 123)
 #'
-#' mod2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
+#' fit2 <- stan_crm('1NNN 2NNN 3TTT', skeleton = c(0.1, 0.2, 0.35, 0.6),
 #'                  target = 0.2, model = 'logistic', a0 = 3, beta_mean = 0,
 #'                  beta_sd = sqrt(1.34), seed = 123)
 #'
@@ -114,12 +115,12 @@
 #' # cores, iter, chains etc are passed on too via the ellipsis operator.
 #'
 #' # TITE-CRM example, p.124 of Dose Finding by the CRM, Cheung (2010)
-#' mod3 <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
+#' fit3 <-stan_crm(skeleton = c(0.05, 0.12, 0.25, 0.40, 0.55), target = 0.25,
 #'                 doses_given = c(3, 3, 3, 3),
 #'                 tox = c(0, 0, 0, 0),
 #'                 weights = c(73, 66, 35, 28) / 126,
 #'                 model = 'empiric', beta_sd = sqrt(1.34), seed = 123)
-#' mod3$recommended_dose
+#' fit3$recommended_dose
 #' }
 stan_crm <- function(outcome_str = NULL, skeleton, target,
                      model = c('empiric', 'logistic', 'logistic_gamma',
@@ -160,20 +161,20 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
     if(length(doses_given) != length(tox))
       stop('doses_given and tox vectors should have same length')
 
-    dat$doses <- doses_given
-    dat$tox <- tox
+    dat$doses <- array(doses_given)
+    dat$tox <- array(tox)
     dat$num_patients <- length(doses_given)
   } else {
     outcomes_df <- df_parse_outcomes(outcome_str, as.list = TRUE)
     dat$num_patients <- outcomes_df$num_patients
-    dat$doses <- outcomes_df$doses
-    dat$tox <- outcomes_df$tox
+    dat$doses <- array(outcomes_df$doses)
+    dat$tox <- array(outcomes_df$tox)
   }
   # Add weights if specified; infer all to be 1 if not.
   if(is.null(weights))
-    dat$weights <- rep(1, dat$num_patients)
+    dat$weights <- array(rep(1, dat$num_patients))
   else
-    dat$weights <- weights
+    dat$weights <- array(weights)
 
   # Fit data to model using Stan, after performing model-specific checks.
   if(model == 'empiric') {

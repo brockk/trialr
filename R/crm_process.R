@@ -12,23 +12,26 @@
 #' @return An instance of \code{\link{crm_fit}}.
 crm_process <- function(dat, fit) {
   dose_indices <- seq(from = 1, to = dat$num_doses, by = 1)
+
   # Posterior estimates
   prob_tox_samp <- rstan::extract(fit, 'prob_tox')[[1]]
   prob_tox <- colMeans(prob_tox_samp)
   median_prob_tox <- apply(prob_tox_samp, 2, stats::median)
   recommended_dose <- which.min(abs(prob_tox - dat$target))  # Dose decision delegate
   model_dose <- which.min(abs(prob_tox - dat$target))
+
   # Implied MTD
   implied_mtd <- apply(prob_tox_samp, 1, function(x) which.min(abs(x - dat$target)))
   prob_mtd <- sapply(dose_indices, function(x) mean(implied_mtd == x))
-  # modal_mtd_candidate <- which.max(prob_mtd)
 
   x <- crm_fit(dose_indices = dose_indices,
+               num_patients = dat$num_patients,
+               doses = dat$doses,
+               tox = dat$tox,
                prob_tox = prob_tox,
                median_prob_tox = median_prob_tox,
                prob_mtd = prob_mtd,
                recommended_dose = recommended_dose,
-               # modal_mtd_candidate = modal_mtd_candidate,
                dat = dat,
                fit = fit)
   return(x)

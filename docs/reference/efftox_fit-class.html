@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -87,6 +87,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -97,6 +100,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -128,7 +134,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Class of model fit by <span class="pkg">trialr</span> using the EffTox dose-finding design.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/efftox_fit.R'><code>R/efftox_fit.R</code></a></small>
     <div class="hidden name"><code>efftox_fit-class.Rd</code></div>
     </div>
 
@@ -138,8 +144,9 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>efftox_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>recommended_dose</span>, <span class='no'>prob_eff</span>, <span class='no'>prob_tox</span>, <span class='no'>prob_acc_eff</span>,
-  <span class='no'>prob_acc_tox</span>, <span class='no'>utility</span>, <span class='no'>post_utility</span>, <span class='no'>acceptable</span>, <span class='no'>dat</span>, <span class='no'>fit</span>)</pre>
+    <pre class="usage"><span class='fu'>efftox_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>num_patients</span>, <span class='no'>doses</span>, <span class='no'>tox</span>, <span class='no'>prob_tox</span>, <span class='no'>prob_eff</span>,
+  <span class='no'>median_prob_tox</span>, <span class='no'>median_prob_eff</span>, <span class='no'>prob_acc_tox</span>, <span class='no'>prob_acc_eff</span>, <span class='no'>utility</span>,
+  <span class='no'>post_utility</span>, <span class='no'>acceptable</span>, <span class='no'>recommended_dose</span>, <span class='no'>dat</span>, <span class='no'>fit</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,14 +157,17 @@
 consideration.</p></td>
     </tr>
     <tr>
-      <th>recommended_dose</th>
-      <td><p>An integer representing the dose-level recommended
-for the next patient or cohort; or <code>NA</code> if stopping is recommended.</p></td>
+      <th>num_patients</th>
+      <td><p>Integer, the number of patients analysed.</p></td>
     </tr>
     <tr>
-      <th>prob_eff</th>
-      <td><p>The posterior mean probabilities of efficacy at doses 1:n;
-a vector of numbers between 0 and 1.</p></td>
+      <th>doses</th>
+      <td><p>vector of integers representing the dose given to the patients.</p></td>
+    </tr>
+    <tr>
+      <th>tox</th>
+      <td><p>vector of integers representing the toxicity status of the
+patients.</p></td>
     </tr>
     <tr>
       <th>prob_tox</th>
@@ -165,15 +175,20 @@ a vector of numbers between 0 and 1.</p></td>
 a vector of numbers between 0 and 1.</p></td>
     </tr>
     <tr>
-      <th>prob_acc_eff</th>
-      <td><p>The posterior mean probabilities that efficacy at the
-doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
-threshold; a vector of numbers between 0 and 1.</p></td>
+      <th>prob_eff</th>
+      <td><p>The posterior mean probabilities of efficacy at doses 1:n;
+a vector of numbers between 0 and 1.</p></td>
     </tr>
     <tr>
       <th>prob_acc_tox</th>
       <td><p>The posterior mean probabilities that toxicity at the
 doses is acceptable, i.e. that it is less than the maximum toxicity
+threshold; a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>prob_acc_eff</th>
+      <td><p>The posterior mean probabilities that efficacy at the
+doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
 threshold; a vector of numbers between 0 and 1.</p></td>
     </tr>
     <tr>
@@ -195,6 +210,11 @@ as advocated by Thall &amp; Cook; a vector of numbers.</p></td>
       <td><p>A vector of logical values to indicate whether doses 1:n
 are acceptable, according to the rules for acceptable efficacy &amp; toxicity,
 and rules on not skipping untested doses.</p></td>
+    </tr>
+    <tr>
+      <th>recommended_dose</th>
+      <td><p>An integer representing the dose-level recommended
+for the next patient or cohort; or <code>NA</code> if stopping is recommended.</p></td>
     </tr>
     <tr>
       <th>dat</th>

@@ -46,7 +46,6 @@ print.crm_fit <- function(x, ...) {
       Weight = x$dat$weights
     )
     print(treated)
-
   } else {
     cat('No patients have been treated.\n')
   }

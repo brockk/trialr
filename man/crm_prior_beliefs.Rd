@@ -7,8 +7,7 @@
 crm_prior_beliefs(skeleton, target, model = c("empiric", "logistic",
   "logistic_gamma", "logistic2"), a0 = NULL, alpha_mean = NULL,
   alpha_sd = NULL, beta_mean = NULL, beta_sd = NULL,
-  beta_shape = NULL, beta_inverse_scale = NULL,
-  select_dose_func = closest_to_target, prior_samples = 4000)
+  beta_shape = NULL, beta_inverse_scale = NULL, ...)
 }
 \arguments{
 \item{skeleton}{a vector of the prior guesses of toxicity at doses.

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -66,6 +66,9 @@
       <a href="articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -76,6 +79,9 @@
     </li>
     <li>
       <a href="articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -160,7 +166,8 @@
 <a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
 <a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 2.</span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; Model entropy: 1.49</span></a></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">plot_df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">DoseLevel =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(skeleton),</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                     <span class="dt">ProbTox =</span> fit1<span class="op">$</span>prob_tox)</a>
@@ -282,57 +289,57 @@
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; post-warmup draws per chain=1000, total post-warmup draws=4000.</span></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; mu                 -0.06    0.03  1.41  -3.03  -0.94  -0.03   0.85   2.76</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; sigma2             12.94    0.39 11.93   3.29   6.34   9.41  15.11  43.31</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; rho[1]             -0.10    0.07  3.99  -8.35  -2.37   0.02   2.33   7.59</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; rho[2]             -3.13    0.08  2.84  -9.69  -4.33  -2.56  -1.26   0.80</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; rho[3]              2.46    0.06  2.80  -1.83   0.67   2.01   3.84   9.17</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; rho[4]             -0.30    0.01  0.79  -1.89  -0.80  -0.28   0.21   1.27</span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; rho[5]              3.69    0.06  2.28   0.60   2.11   3.28   4.72   9.34</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; rho[6]              0.02    0.07  3.93  -8.01  -2.29   0.02   2.31   8.05</span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; rho[7]             -0.01    0.02  1.51  -2.98  -0.96  -0.01   0.96   2.92</span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; rho[8]              0.78    0.02  1.26  -1.58  -0.04   0.72   1.53   3.52</span></a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; rho[9]             -2.47    0.06  2.92  -9.55  -3.98  -1.99  -0.53   2.07</span></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; rho[10]             0.00    0.07  3.81  -8.16  -2.15   0.04   2.31   7.36</span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; sigma               3.37    0.04  1.26   1.81   2.52   3.07   3.89   6.58</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; prob_response[1]    0.50    0.01  0.38   0.00   0.09   0.51   0.91   1.00</span></a>
-<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.22   0.69</span></a>
-<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; prob_response[3]    0.78    0.00  0.25   0.14   0.66   0.88   0.98   1.00</span></a>
-<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; prob_response[4]    0.43    0.00  0.17   0.13   0.31   0.43   0.55   0.78</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; mu                 -0.02    0.03  1.36  -2.81  -0.86   0.00   0.85   2.59</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; sigma2             11.92    0.34 11.06   3.25   6.09   9.05  13.93  38.44</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; rho[1]              0.14    0.06  3.74  -7.38  -2.10   0.10   2.36   7.73</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; rho[2]             -2.87    0.05  2.42  -8.53  -4.06  -2.57  -1.22   0.80</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; rho[3]              2.31    0.06  2.62  -1.78   0.54   1.93   3.63   8.70</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; rho[4]             -0.32    0.01  0.81  -1.96  -0.84  -0.30   0.21   1.26</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; rho[5]              3.63    0.06  2.28   0.58   2.09   3.22   4.66   9.34</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; rho[6]             -0.13    0.07  3.69  -7.80  -2.28  -0.03   2.07   7.03</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; rho[7]              0.04    0.02  1.49  -2.94  -0.90   0.00   0.94   3.21</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; rho[8]              0.76    0.02  1.32  -1.66  -0.11   0.67   1.60   3.57</span></a>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; rho[9]             -2.33    0.06  2.69  -8.83  -3.75  -1.92  -0.54   2.01</span></a>
+<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; rho[10]             0.00    0.06  3.73  -7.39  -2.21   0.02   2.23   7.29</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; sigma               3.25    0.04  1.17   1.80   2.47   3.01   3.73   6.20</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; prob_response[1]    0.51    0.01  0.38   0.00   0.11   0.53   0.91   1.00</span></a>
+<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; prob_response[2]    0.15    0.00  0.19   0.00   0.02   0.07   0.23   0.69</span></a>
+<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; prob_response[3]    0.77    0.00  0.25   0.14   0.63   0.87   0.97   1.00</span></a>
+<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; prob_response[4]    0.43    0.00  0.17   0.12   0.30   0.43   0.55   0.78</span></a>
 <a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; prob_response[5]    0.92    0.00  0.10   0.64   0.89   0.96   0.99   1.00</span></a>
-<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; prob_response[6]    0.50    0.01  0.38   0.00   0.09   0.51   0.91   1.00</span></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; prob_response[7]    0.50    0.00  0.27   0.05   0.28   0.50   0.72   0.95</span></a>
-<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; prob_response[8]    0.64    0.00  0.22   0.17   0.49   0.67   0.82   0.97</span></a>
-<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.12   0.37   0.89</span></a>
-<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; prob_response[10]   0.51    0.01  0.38   0.00   0.10   0.51   0.91   1.00</span></a>
-<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; lp__              -34.42    0.14  3.79 -43.38 -36.63 -33.84 -31.73 -28.71</span></a>
+<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; prob_response[6]    0.49    0.01  0.38   0.00   0.09   0.49   0.89   1.00</span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; prob_response[7]    0.51    0.00  0.26   0.05   0.29   0.50   0.72   0.96</span></a>
+<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; prob_response[8]    0.64    0.00  0.23   0.16   0.47   0.66   0.83   0.97</span></a>
+<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.13   0.37   0.88</span></a>
+<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; prob_response[10]   0.50    0.01  0.38   0.00   0.10   0.51   0.90   1.00</span></a>
+<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; lp__              -34.13    0.13  3.51 -42.16 -36.18 -33.65 -31.59 -28.78</span></a>
 <a class="sourceLine" id="cb12-31" data-line-number="31"><span class="co">#&gt;                   n_eff Rhat</span></a>
-<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; mu                 2315    1</span></a>
-<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; sigma2              950    1</span></a>
-<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; rho[1]             2893    1</span></a>
-<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; rho[2]             1262    1</span></a>
-<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; rho[3]             2141    1</span></a>
-<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; rho[4]             4184    1</span></a>
-<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; rho[5]             1345    1</span></a>
-<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; rho[6]             2953    1</span></a>
-<a class="sourceLine" id="cb12-40" data-line-number="40"><span class="co">#&gt; rho[7]             4600    1</span></a>
-<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="co">#&gt; rho[8]             4562    1</span></a>
-<a class="sourceLine" id="cb12-42" data-line-number="42"><span class="co">#&gt; rho[9]             2075    1</span></a>
-<a class="sourceLine" id="cb12-43" data-line-number="43"><span class="co">#&gt; rho[10]            3055    1</span></a>
-<a class="sourceLine" id="cb12-44" data-line-number="44"><span class="co">#&gt; sigma               912    1</span></a>
-<a class="sourceLine" id="cb12-45" data-line-number="45"><span class="co">#&gt; prob_response[1]   3457    1</span></a>
-<a class="sourceLine" id="cb12-46" data-line-number="46"><span class="co">#&gt; prob_response[2]   3942    1</span></a>
-<a class="sourceLine" id="cb12-47" data-line-number="47"><span class="co">#&gt; prob_response[3]   4495    1</span></a>
-<a class="sourceLine" id="cb12-48" data-line-number="48"><span class="co">#&gt; prob_response[4]   4382    1</span></a>
-<a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; prob_response[5]   4046    1</span></a>
-<a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; prob_response[6]   3230    1</span></a>
-<a class="sourceLine" id="cb12-51" data-line-number="51"><span class="co">#&gt; prob_response[7]   4729    1</span></a>
-<a class="sourceLine" id="cb12-52" data-line-number="52"><span class="co">#&gt; prob_response[8]   5313    1</span></a>
-<a class="sourceLine" id="cb12-53" data-line-number="53"><span class="co">#&gt; prob_response[9]   4076    1</span></a>
-<a class="sourceLine" id="cb12-54" data-line-number="54"><span class="co">#&gt; prob_response[10]  3471    1</span></a>
-<a class="sourceLine" id="cb12-55" data-line-number="55"><span class="co">#&gt; lp__                747    1</span></a>
+<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; mu                 2564    1</span></a>
+<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; sigma2             1029    1</span></a>
+<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; rho[1]             3615    1</span></a>
+<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; rho[2]             2156    1</span></a>
+<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; rho[3]             1707    1</span></a>
+<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; rho[4]             3204    1</span></a>
+<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; rho[5]             1470    1</span></a>
+<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; rho[6]             2891    1</span></a>
+<a class="sourceLine" id="cb12-40" data-line-number="40"><span class="co">#&gt; rho[7]             3703    1</span></a>
+<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="co">#&gt; rho[8]             3714    1</span></a>
+<a class="sourceLine" id="cb12-42" data-line-number="42"><span class="co">#&gt; rho[9]             2199    1</span></a>
+<a class="sourceLine" id="cb12-43" data-line-number="43"><span class="co">#&gt; rho[10]            3478    1</span></a>
+<a class="sourceLine" id="cb12-44" data-line-number="44"><span class="co">#&gt; sigma              1006    1</span></a>
+<a class="sourceLine" id="cb12-45" data-line-number="45"><span class="co">#&gt; prob_response[1]   3681    1</span></a>
+<a class="sourceLine" id="cb12-46" data-line-number="46"><span class="co">#&gt; prob_response[2]   4287    1</span></a>
+<a class="sourceLine" id="cb12-47" data-line-number="47"><span class="co">#&gt; prob_response[3]   3902    1</span></a>
+<a class="sourceLine" id="cb12-48" data-line-number="48"><span class="co">#&gt; prob_response[4]   3215    1</span></a>
+<a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; prob_response[5]   4557    1</span></a>
+<a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; prob_response[6]   3218    1</span></a>
+<a class="sourceLine" id="cb12-51" data-line-number="51"><span class="co">#&gt; prob_response[7]   3838    1</span></a>
+<a class="sourceLine" id="cb12-52" data-line-number="52"><span class="co">#&gt; prob_response[8]   4074    1</span></a>
+<a class="sourceLine" id="cb12-53" data-line-number="53"><span class="co">#&gt; prob_response[9]   3487    1</span></a>
+<a class="sourceLine" id="cb12-54" data-line-number="54"><span class="co">#&gt; prob_response[10]  4071    1</span></a>
+<a class="sourceLine" id="cb12-55" data-line-number="55"><span class="co">#&gt; lp__                784    1</span></a>
 <a class="sourceLine" id="cb12-56" data-line-number="56"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-57" data-line-number="57"><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Sun Apr 21 14:27:00 2019.</span></a>
+<a class="sourceLine" id="cb12-57" data-line-number="57"><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Mon May 13 18:59:22 2019.</span></a>
 <a class="sourceLine" id="cb12-58" data-line-number="58"><span class="co">#&gt; For each parameter, n_eff is a crude measure of effective sample size,</span></a>
 <a class="sourceLine" id="cb12-59" data-line-number="59"><span class="co">#&gt; and Rhat is the potential scale reduction factor on split chains (at </span></a>
 <a class="sourceLine" id="cb12-60" data-line-number="60"><span class="co">#&gt; convergence, Rhat=1).</span></a></code></pre></div>
@@ -373,22 +380,22 @@
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
 <div id="ref-Garon2015">
-<p>Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the treatment of non-small-cell lung cancer.” <em>The New England Journal of Medicine</em> 372 (21): 2018–28. <a href="https://doi.org/10.1056/NEJMoa1501824">https://doi.org/10.1056/NEJMoa1501824</a>.</p>
+<p>Garon, Edward B, Naiyer a Rizvi, Rina Hui, Natasha Leighl, Ani S Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015. “Pembrolizumab for the Treatment of Non-Small-Cell Lung Cancer.” <em>The New England Journal of Medicine</em> 372 (21): 2018–28. <a href="https://doi.org/10.1056/NEJMoa1501824">https://doi.org/10.1056/NEJMoa1501824</a>.</p>
 </div>
 <div id="ref-OQuigley1990">
-<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
+<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual Reassessment Method: A Practical Design for Phase 1 Clinical Trials in Cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
 </div>
 <div id="ref-Thall2008">
-<p>Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-specific dose finding based on bivariate outcomes and covariates.” <em>Biometrics</em> 64 (4): 1126–36. <a href="https://doi.org/10.1111/j.1541-0420.2008.01009.x">https://doi.org/10.1111/j.1541-0420.2008.01009.x</a>.</p>
+<p>Thall, Peter F., Hoang Q. Nguyen, and Elihu H. Estey. 2008. “Patient-Specific Dose Finding Based on Bivariate Outcomes and Covariates.” <em>Biometrics</em> 64 (4): 1126–36. <a href="https://doi.org/10.1111/j.1541-0420.2008.01009.x">https://doi.org/10.1111/j.1541-0420.2008.01009.x</a>.</p>
 </div>
 <div id="ref-Thall2003">
-<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian approaches to phase II trials in diseases with multiple subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. <a href="https://doi.org/10.1002/sim.1399">https://doi.org/10.1002/sim.1399</a>.</p>
+<p>Thall, Peter F., J. Kyle Wathen, B. Nebiyou Bekele, Richard E. Champlin, Laurence H. Baker, and Robert S. Benjamin. 2003. “Hierarchical Bayesian Approaches to Phase II Trials in Diseases with Multiple Subtypes.” <em>Statistics in Medicine</em> 22 (5): 763–80. <a href="https://doi.org/10.1002/sim.1399">https://doi.org/10.1002/sim.1399</a>.</p>
 </div>
 <div id="ref-Thall2004">
 <p>Thall, PF, and JD Cook. 2004. “Dose-Finding Based on Efficacy-Toxicity Trade-Offs.” <em>Biometrics</em> 60 (3): 684–93.</p>
 </div>
 <div id="ref-Thall2014">
-<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective sample size for computing prior hyperparameters in Bayesian phase I-II dose-finding.” <em>Clinical Trials</em> 11 (6): 657–66. <a href="https://doi.org/10.1177/1740774514547397">https://doi.org/10.1177/1740774514547397</a>.</p>
+<p>Thall, PF, RC Herrick, HQ Nguyen, JJ Venier, and JC Norris. 2014. “Effective Sample Size for Computing Prior Hyperparameters in Bayesian Phase I-II Dose-Finding.” <em>Clinical Trials</em> 11 (6): 657–66. <a href="https://doi.org/10.1177/1740774514547397">https://doi.org/10.1177/1740774514547397</a>.</p>
 </div>
 </div>
 </div>

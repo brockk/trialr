@@ -29,10 +29,10 @@ knitr::kable(
 ## ---- results = "hide"---------------------------------------------------
 fit <- stan_peps2(dat$eff, dat$tox, dat$cohorts)
 
-## ---- fig.width = 6, fig.height = 6, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts", eval=FALSE----
-#  rstan::plot(fit, pars = 'prob_eff')
+## ---- message = FALSE, fig.width = 7, fig.height = 7, fig.cap = "Posterior Prob(Efficacy) in the six PePS2 cohorts"----
+rstan::plot(fit, pars = 'prob_eff')
 
-## ---- eval=T-------------------------------------------------------------
+## ---- eval=TRUE----------------------------------------------------------
 decision <- peps2_process(fit)
 knitr::kable(
   with(decision, data.frame(ProbEff, ProbAccEff, ProbTox, ProbAccTox, Accept)), 

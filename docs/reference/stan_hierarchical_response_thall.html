@@ -64,7 +64,7 @@ Thall et al. (2003)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -90,6 +90,9 @@ Thall et al. (2003)." />
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -100,6 +103,9 @@ Thall et al. (2003)." />
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -132,7 +138,7 @@ Thall et al. (2003)." />
     <div class="page-header">
     <h1>Fit the hierarchical response model described by
 Thall <em>et al.</em> (2003).</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/hierarchical.R'><code>R/hierarchical.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/stan_hierarchical_response_thall.R'><code>R/stan_hierarchical_response_thall.R</code></a></small>
     <div class="hidden name"><code>stan_hierarchical_response_thall.Rd</code></div>
     </div>
 
@@ -143,8 +149,8 @@ Thall <em>et al.</em> (2003).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>stan_hierarchical_response_thall</span>(<span class='no'>group_responses</span>, <span class='no'>group_sizes</span>, <span class='no'>mu_mean</span>, <span class='no'>mu_sd</span>,
-  <span class='no'>tau_alpha</span>, <span class='no'>tau_beta</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>stan_hierarchical_response_thall</span>(<span class='no'>group_responses</span>, <span class='no'>group_sizes</span>, <span class='no'>mu_mean</span>,
+  <span class='no'>mu_sd</span>, <span class='no'>tau_alpha</span>, <span class='no'>tau_beta</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

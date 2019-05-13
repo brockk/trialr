@@ -26,13 +26,13 @@ test_that('Thall et al. Scenario 1 decisions are replicated', {
 #     mu_sd = sqrt(1 / 0.1),
 #     tau_alpha = 2,
 #     tau_beta = 20)
-#   continue <- colMeans(mod %>% as.data.frame('prob_response') > 0.3) > 0.005
+#   continue <- colMeans(as.data.frame(mod, 'prob_response') > 0.3) > 0.005
 #   continue <- unname(continue)
 #   expect_true(continue[1])
 #   expect_true(continue[4])
 #   expect_true(continue[6])
 # })
-#
+
 # test_that('Thall et al. Scenario 3 decisions are replicated', {
 #   mod  <- stan_hierarchical_response_thall(
 #     group_responses = rep(c(1, 5, 7), times = c(2, 3, 5)),
@@ -41,7 +41,7 @@ test_that('Thall et al. Scenario 1 decisions are replicated', {
 #     mu_sd = sqrt(1 / 0.1),
 #     tau_alpha = 2,
 #     tau_beta = 20)
-#   continue <- colMeans(mod %>% as.data.frame('prob_response') > 0.3) > 0.005
+#   continue <- colMeans(as.data.frame(mod, 'prob_response') > 0.3) > 0.005
 #   continue <- unname(continue)
 #   expect_true(continue[1])
 #   expect_true(continue[3])
@@ -56,7 +56,7 @@ test_that('Thall et al. Scenario 1 decisions are replicated', {
 #     mu_sd = sqrt(1 / 0.1),
 #     tau_alpha = 2,
 #     tau_beta = 20)
-#   continue <- colMeans(mod %>% as.data.frame('prob_response') > 0.3) > 0.005
+#   continue <- colMeans(as.data.frame(mod, 'prob_response') > 0.3) > 0.005
 #   continue <- unname(continue)
 #   expect_false(continue[1])
 #   # expect_false(continue[4])
@@ -71,7 +71,7 @@ test_that('Thall et al. Scenario 1 decisions are replicated', {
 #     mu_sd = sqrt(1 / 0.1),
 #     tau_alpha = 2,
 #     tau_beta = 20)
-#   continue <- colMeans(mod %>% as.data.frame('prob_response') > 0.3) > 0.005
+#   continue <- colMeans(as.data.frame(mod, 'prob_response') > 0.3) > 0.005
 #   continue <- unname(continue)
 #   expect_true(continue[1])
 #   expect_false(continue[4])

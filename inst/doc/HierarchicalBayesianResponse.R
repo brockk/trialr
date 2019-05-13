@@ -2,7 +2,7 @@
 library(trialr)
 
 ## ---- results = "hide"---------------------------------------------------
-mod0 <- stan_hierarchical_response_thall(
+fit <- stan_hierarchical_response_thall(
   group_responses = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0), 
   group_sizes = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0), 
   mu_mean = -1.3863,
@@ -11,20 +11,20 @@ mod0 <- stan_hierarchical_response_thall(
   tau_beta = 20)
 
 ## ------------------------------------------------------------------------
-mod0
+fit
 
 ## ------------------------------------------------------------------------
-knitr::kable(rstan::summary(mod0, par = 'prob_response')$summary, digits = 3)
+knitr::kable(rstan::summary(fit, par = 'prob_response')$summary, digits = 3)
 
 ## ------------------------------------------------------------------------
-colMeans(as.data.frame(mod0, pars = 'prob_response') > 0.3)
+colMeans(as.data.frame(fit, pars = 'prob_response') > 0.3)
 
-## ---- fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 3"----
+## ---- message = FALSE, fig.width = 7, fig.height = 7, fig.cap = "Prob(Response | D) in subgroup 3"----
 library(ggplot2)
 library(rstan)
 library(dplyr)
 
-plot(mod0, pars = 'prob_response') + 
+plot(fit, pars = 'prob_response') + 
   geom_vline(xintercept = 0.3, col = 'orange', linetype = 'dashed') +
   labs(title = 'Partially-pooled analysis of response rate in 10 sarcoma subtypes')
 

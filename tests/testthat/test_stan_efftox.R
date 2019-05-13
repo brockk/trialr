@@ -25,6 +25,42 @@ test_that('stan_efftox passes ellipsis variables to rstan::sampling', {
   expect_equal(nrow(df), 500)
 })
 
+# test_that('stan_efftox_demo fits to zero patients', {
+#   x <- stan_efftox_demo(outcome_str = '')
+#   expect_equal(x$dat$num_patients, 0)
+#   expect_equal(length(x$dat$doses), 0)
+#   expect_equal(length(x$dat$tox), 0)
+#   expect_equal(length(x$dat$weights), 0)
+#   expect_equal(x$dat$num_doses, 5)
+# })
+
+test_that('stan_efftox_demo fits to one patient', {
+  x <- stan_efftox_demo(outcome_str = '1N')
+  expect_equal(x$dat$num_patients, 1)
+  expect_equal(length(x$dat$doses), 1)
+  expect_equal(length(x$dat$tox), 1)
+  expect_equal(length(x$dat$eff), 1)
+  expect_equal(x$dat$num_doses, 5)
+})
+
+test_that('stan_efftox_demo fits to two patients in one cohort', {
+  x <- stan_efftox_demo(outcome_str = '1NE')
+  expect_equal(x$dat$num_patients, 2)
+  expect_equal(length(x$dat$doses), 2)
+  expect_equal(length(x$dat$tox), 2)
+  expect_equal(length(x$dat$eff), 2)
+  expect_equal(x$dat$num_doses, 5)
+})
+
+test_that('stan_efftox_demo fits to two patients in two cohorts', {
+  x <- stan_efftox_demo(outcome_str = '1N 2E')
+  expect_equal(x$dat$num_patients, 2)
+  expect_equal(length(x$dat$doses), 2)
+  expect_equal(length(x$dat$tox), 2)
+  expect_equal(length(x$dat$eff), 2)
+  expect_equal(x$dat$num_doses, 5)
+})
+
 # Accuracy checks ----
 # Recreate some known (i.e. independently calculated) output:
 test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN"', {

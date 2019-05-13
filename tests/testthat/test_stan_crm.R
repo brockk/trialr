@@ -13,6 +13,58 @@ test_that('stan_crm passes ellipsis variables to rstan::sampling', {
   expect_equal(nrow(df), 500)
 })
 
+test_that('stan_crm fits to zero patients', {
+  x <- stan_crm(outcome_str = '',
+                skeleton = c(0.1, 0.25, 0.4, 0.6),
+                target = 0.25,
+                model = 'empiric',
+                beta_sd = 1)
+  expect_equal(x$dat$num_patients, 0)
+  expect_equal(length(x$dat$doses), 0)
+  expect_equal(length(x$dat$tox), 0)
+  expect_equal(length(x$dat$weights), 0)
+  expect_equal(x$dat$num_doses, 4)
+})
+
+test_that('stan_crm fits to one patient', {
+  x <- stan_crm(outcome_str = '1N',
+                skeleton = c(0.1, 0.25, 0.4, 0.6),
+                target = 0.25,
+                model = 'empiric',
+                beta_sd = 1)
+  expect_equal(x$dat$num_patients, 1)
+  expect_equal(length(x$dat$doses), 1)
+  expect_equal(length(x$dat$tox), 1)
+  expect_equal(length(x$dat$weights), 1)
+  expect_equal(x$dat$num_doses, 4)
+})
+
+test_that('stan_crm fits to two patients in one cohort', {
+  x <- stan_crm(outcome_str = '1NT',
+                skeleton = c(0.1, 0.25, 0.4, 0.6),
+                target = 0.25,
+                model = 'empiric',
+                beta_sd = 1)
+  expect_equal(x$dat$num_patients, 2)
+  expect_equal(length(x$dat$doses), 2)
+  expect_equal(length(x$dat$tox), 2)
+  expect_equal(length(x$dat$weights), 2)
+  expect_equal(x$dat$num_doses, 4)
+})
+
+test_that('stan_crm fits to two patients in two cohorts', {
+  x <- stan_crm(outcome_str = '1N 2N',
+                skeleton = c(0.1, 0.25, 0.4, 0.6),
+                target = 0.25,
+                model = 'empiric',
+                beta_sd = 1)
+  expect_equal(x$dat$num_patients, 2)
+  expect_equal(length(x$dat$doses), 2)
+  expect_equal(length(x$dat$tox), 2)
+  expect_equal(length(x$dat$weights), 2)
+  expect_equal(x$dat$num_doses, 4)
+})
+
 # Accuracy checks ----
 
 # Published example of logistic model:
@@ -205,5 +257,106 @@ test_that("stan_crm requires beta_sd for 'logistic2' model", {
                         alpha_sd = 1,
                         beta_mean = 0,
                         seed = 123))
+})
+
+
+
+
+
+# Test careful_escalation
+test_that('careful_escalation advocates start_dose when n = 0', {
+
+  fit <- stan_crm('', skeleton = c(0.1, 0.2, 0.33, 0.6),
+                  target = 0.33, model = 'empiric', beta_sd = 1,
+                  seed = 123)
+  dose <- careful_escalation(fit, tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             start_dose = 1)
+  expect_equal(dose, 1)
+
+  dose <- careful_escalation(fit, tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             start_dose = 2)
+  expect_equal(dose, 2)
+
+  dose <- careful_escalation(fit, tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             start_dose = 3)
+  expect_equal(dose, 3)
+
+  dose <- careful_escalation(fit, tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             start_dose = 4)
+  expect_equal(dose, 4)
+})
+
+test_that('careful_escalation does not skip doses', {
+  fit1 <- stan_crm('1NNN', skeleton = c(0.1, 0.2, 0.33, 0.6),
+                   target = 0.33, model = 'empiric', beta_sd = 1,
+                   seed = 123)
+  dose <- careful_escalation(fit1, tox_threshold = 0.33,
+                             certainty_threshold = 0.8)
+  expect_lte(dose, max(fit1$doses) + 1)
+  expect_gte(fit1$recommended_dose, dose)
+
+  fit2 <- stan_crm('1NNN 2NNN', skeleton = c(0.1, 0.2, 0.33, 0.6),
+                   target = 0.33, model = 'empiric', beta_sd = 1,
+                   seed = 123)
+  dose <- careful_escalation(fit2, tox_threshold = 0.33,
+                             certainty_threshold = 0.8)
+  expect_lte(dose, max(fit2$doses) + 1)
+  expect_gte(fit2$recommended_dose, dose)
+})
+
+
+test_that('careful_escalation stops appropriately', {
+  fit1 <- stan_crm('1NNN 2TTT', skeleton = c(0.1, 0.2, 0.33, 0.6),
+                   target = 0.33, model = 'empiric', beta_sd = 1,
+                   seed = 123)
+  dose <- careful_escalation(fit1,
+                             tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             reference_dose = 1)
+  expect_equal(dose, 1)
+
+  dose <- careful_escalation(fit1,
+                             tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             reference_dose = 2)
+  expect_equal(dose, NA)
+
+
+
+  fit2 <- stan_crm('1NNN 2TTT 1T', skeleton = c(0.1, 0.2, 0.33, 0.6),
+                   target = 0.33, model = 'empiric', beta_sd = 1,
+                   seed = 123)
+  dose <- careful_escalation(fit2,
+                             tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             reference_dose = 1)
+  expect_equal(dose, 1)
+
+  dose <- careful_escalation(fit2,
+                             tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             reference_dose = 2)
+  expect_equal(dose, NA)
+
+
+
+  fit3 <- stan_crm('1NNN 2TTT 1TT', skeleton = c(0.1, 0.2, 0.33, 0.6),
+                   target = 0.33, model = 'empiric', beta_sd = 1,
+                   seed = 123)
+  dose <- careful_escalation(fit3,
+                             tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             reference_dose = 1)
+  expect_equal(dose, NA)
+
+  dose <- careful_escalation(fit3,
+                             tox_threshold = 0.33,
+                             certainty_threshold = 0.8,
+                             reference_dose = 2)
+  expect_equal(dose, NA)
 })
 

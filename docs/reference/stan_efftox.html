@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -87,6 +87,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -97,6 +100,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -128,7 +134,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fit an EffTox model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/stan_efftox.R'><code>R/stan_efftox.R</code></a></small>
     <div class="hidden name"><code>stan_efftox.Rd</code></div>
     </div>
 
@@ -138,10 +144,11 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>stan_efftox</span>(<span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>real_doses</span>, <span class='no'>efficacy_hurdle</span>, <span class='no'>toxicity_hurdle</span>,
-  <span class='no'>p_e</span>, <span class='no'>p_t</span>, <span class='no'>eff0</span>, <span class='no'>tox1</span>, <span class='no'>eff_star</span>, <span class='no'>tox_star</span>, <span class='no'>alpha_mean</span>, <span class='no'>alpha_sd</span>, <span class='no'>beta_mean</span>,
-  <span class='no'>beta_sd</span>, <span class='no'>gamma_mean</span>, <span class='no'>gamma_sd</span>, <span class='no'>zeta_mean</span>, <span class='no'>zeta_sd</span>, <span class='no'>eta_mean</span>, <span class='no'>eta_sd</span>, <span class='no'>psi_mean</span>,
-  <span class='no'>psi_sd</span>, <span class='kw'>doses_given</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>stan_efftox</span>(<span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>real_doses</span>, <span class='no'>efficacy_hurdle</span>,
+  <span class='no'>toxicity_hurdle</span>, <span class='no'>p_e</span>, <span class='no'>p_t</span>, <span class='no'>eff0</span>, <span class='no'>tox1</span>, <span class='no'>eff_star</span>, <span class='no'>tox_star</span>, <span class='no'>alpha_mean</span>,
+  <span class='no'>alpha_sd</span>, <span class='no'>beta_mean</span>, <span class='no'>beta_sd</span>, <span class='no'>gamma_mean</span>, <span class='no'>gamma_sd</span>, <span class='no'>zeta_mean</span>, <span class='no'>zeta_sd</span>,
+  <span class='no'>eta_mean</span>, <span class='no'>eta_sd</span>, <span class='no'>psi_mean</span>, <span class='no'>psi_sd</span>, <span class='kw'>doses_given</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>eff</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>tox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -10,6 +10,10 @@
 #'
 #' @param dose_indices A vector of integers representing the dose-levels under
 #' consideration.
+#' @param num_patients Integer, the number of patients analysed.
+#' @param doses vector of integers representing the dose given to the patients.
+#' @param tox vector of integers representing the toxicity status of the
+#' patients.
 #' @param prob_tox The posterior mean probabilities of toxicity at doses 1:n;
 #' a vector of numbers between 0 and 1.
 #' @param median_prob_tox The posterior median probabilities of toxicity at doses
@@ -40,31 +44,33 @@
 #' @seealso
 #' \code{\link{stan_crm}}
 crm_fit <- function(dose_indices,
+                    num_patients,
+                    doses,
+                    tox,
                     prob_tox,
                     median_prob_tox,
                     prob_mtd,
                     recommended_dose,
-                    # modal_mtd_candidate,
                     dat,
                     fit,
                     samples = NULL) {
-  # crm_fit class
-  version <- list(
-    trialr = utils::packageVersion("trialr"),
-    rstan = utils::packageVersion("rstan")
-  )
-  x <- list(dose_indices = dose_indices,
-            prob_tox = prob_tox,
-            median_prob_tox = median_prob_tox,
-            prob_mtd = prob_mtd,
-            recommended_dose = recommended_dose,
-            # modal_mtd_candidate = modal_mtd_candidate,
-            modal_mtd_candidate = which.max(prob_mtd),
-            entropy = .entropy(prob_mtd),
-            dat = dat,
-            fit = fit,
-            samples = samples,
-            version = version)
-  class(x) <- "crm_fit"
+
+  # Elements in base class
+  x <- dose_finding_fit(dose_indices = dose_indices,
+                        num_patients = num_patients,
+                        doses = doses,
+                        tox = tox,
+                        prob_tox = prob_tox,
+                        median_prob_tox = median_prob_tox,
+                        recommended_dose = recommended_dose,
+                        dat = dat,
+                        fit = fit)
+
+  # Elements in this class
+  x$prob_mtd = prob_mtd
+  x$modal_mtd_candidate = which.max(prob_mtd)
+  x$entropy = .entropy(prob_mtd)
+
+  class(x) <- c("crm_fit", "dose_finding_fit", "list")
   x
 }

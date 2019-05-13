@@ -6,8 +6,8 @@
 #' @param dat An instance of \code{\link{efftox_params}}, a list of EffTox
 #' parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.
 #' @param cohort_sizes vector of future cohort sizes, i.e. positive integers.
-#' E.g. Tot calculate paths for the the next cohort of two followed by the next
-#' cohort of three, use \code{c(2, 3)}.
+#' E.g. To calculate paths for the the next cohort of two followed by another
+#' cohort of three, use \code{cohort_sizes = c(2, 3)}.
 #' @param next_dose the dose-level to be given to the immediately next cohort.
 #' @param ... extra params passed to \code{rstan::sampling}.
 #'
@@ -38,7 +38,19 @@
 #'
 #' @references Brock et al. (submitted 2017), Implementing the EffTox
 #' Dose-Finding Design in the Matchpoint Trial.
+#' Brock K, Billingham L, Copland M, Siddique S, Sirovica M, Yap C.
+#' Implementing the EffTox dose-finding design in the Matchpoint trial.
+#' BMC Medical Research Methodology. 2017;17(1):112.
+#' doi:10.1186/s12874-017-0381-x
+#'
+#'
 efftox_dtps <- function(dat, cohort_sizes, next_dose, ...) {
+
+  if(!all(cohort_sizes == ceiling(cohort_sizes)))
+    stop('cohort_sizes must be stricly positive integers.')
+  if(!all(cohort_sizes > 0))
+    stop('cohort_sizes must be stricly positive integers.')
+
   previous_doses = dat$doses
   previous_eff = dat$eff
   previous_tox = dat$tox

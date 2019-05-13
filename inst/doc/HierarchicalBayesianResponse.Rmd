@@ -24,8 +24,6 @@ We port their model to Stan and illustrate usage with the example given in their
 
 
 # Implementation in `trialr`
-The model is compiled in `trialr` under the `ThallHierarchicalBinary` slot of the `stanmodels` object.
-
 Statistically, the authors assume that in a trial of $k$ disease subtypes, the treatment effects are drawn from the same common normal distribution
 
 $\rho_1, ..., \rho_k \sim N(\mu, \sigma^2)$
@@ -58,7 +56,7 @@ The number of responses is stored in `group_responses` and the number of patient
 There have been 3 / 7 responses in subgroup 4, for example, but 0 / 2 responses in subgroup 2, and zero patients treated at all in subgroups 1, 6 and 10.
 
 ```{r, results = "hide"}
-mod0 <- stan_hierarchical_response_thall(
+fit <- stan_hierarchical_response_thall(
   group_responses = c(0, 0, 1, 3, 5, 0, 1, 2, 0, 0), 
   group_sizes = c(0, 2 ,1, 7, 5, 0, 2, 3, 1, 0), 
   mu_mean = -1.3863,
@@ -68,18 +66,18 @@ mod0 <- stan_hierarchical_response_thall(
 ```
 
 ```{r}
-mod0
+fit
 ```
 
 The probability of response in each subgroup is calculated under `prob_response`.
 We can use the generic summary function from rstan to get a nice summary:
 ```{r}
-knitr::kable(rstan::summary(mod0, par = 'prob_response')$summary, digits = 3)
+knitr::kable(rstan::summary(fit, par = 'prob_response')$summary, digits = 3)
 ```
 
 Let us say that we are willing to approve the treatment for further study in a subgroup if we have at least $q = 70$% certainty that the probability of efficacy exceeds the target response rate of 30%.
 ```{r}
-colMeans(as.data.frame(mod0, pars = 'prob_response') > 0.3)
+colMeans(as.data.frame(fit, pars = 'prob_response') > 0.3)
 ```
 
 On that basis, at this interim stage, we would be eager to approve the treatment in subgroups 3, 5 and 8.
@@ -87,12 +85,12 @@ Subgroups 4 and 7 are close to the boundary.
 
 Some distribution plots of the probabilities of efficacy in some subgroups may be informative.
 
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Prob(Response | D) in subgroup 3"}
+```{r, message = FALSE, fig.width = 7, fig.height = 7, fig.cap = "Prob(Response | D) in subgroup 3"}
 library(ggplot2)
 library(rstan)
 library(dplyr)
 
-plot(mod0, pars = 'prob_response') + 
+plot(fit, pars = 'prob_response') + 
   geom_vline(xintercept = 0.3, col = 'orange', linetype = 'dashed') +
   labs(title = 'Partially-pooled analysis of response rate in 10 sarcoma subtypes')
 ```
@@ -101,7 +99,7 @@ We see that the inferred efficacy in subgroup 5 is very high.
 In contrast, efficacy is subject to more uncertainty in subgroup 4, but the majority of the mass clearly lies to the right of 30%.
 
 # trialr
-`trialr` is available at https://github.com/brockk/trialr
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
 
 
 

@@ -64,7 +64,7 @@ probability that the utility of dose j exceeds that of dose i." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -90,6 +90,9 @@ probability that the utility of dose j exceeds that of dose i." />
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -100,6 +103,9 @@ probability that the utility of dose j exceeds that of dose i." />
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -131,7 +137,7 @@ probability that the utility of dose j exceeds that of dose i." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get dose-superiority matrix in EffTox</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/efftox_superiority.R'><code>R/efftox_superiority.R</code></a></small>
     <div class="hidden name"><code>efftox_superiority.Rd</code></div>
     </div>
 
@@ -166,8 +172,8 @@ dose j exceeds that of dose i.</p>
     <pre class="examples"><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stan_efftox_demo.html'>stan_efftox_demo</a></span>(<span class='st'>'1N 2E 3B'</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 1.6e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#&gt; Chain 1: Gradient evaluation took 1.8e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.18 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -184,15 +190,15 @@ dose j exceeds that of dose i.</p>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.080764 seconds (Warm-up)
-#&gt; Chain 1:                0.060715 seconds (Sampling)
-#&gt; Chain 1:                0.141479 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.088046 seconds (Warm-up)
+#&gt; Chain 1:                0.072554 seconds (Sampling)
+#&gt; Chain 1:                0.1606 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.6e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.3e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -209,9 +215,9 @@ dose j exceeds that of dose i.</p>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.084547 seconds (Warm-up)
-#&gt; Chain 2:                0.059752 seconds (Sampling)
-#&gt; Chain 2:                0.144299 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.09244 seconds (Warm-up)
+#&gt; Chain 2:                0.05957 seconds (Sampling)
+#&gt; Chain 2:                0.15201 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
@@ -234,9 +240,9 @@ dose j exceeds that of dose i.</p>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.081892 seconds (Warm-up)
-#&gt; Chain 3:                0.059722 seconds (Sampling)
-#&gt; Chain 3:                0.141614 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.083316 seconds (Warm-up)
+#&gt; Chain 3:                0.060539 seconds (Sampling)
+#&gt; Chain 3:                0.143855 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
@@ -259,9 +265,9 @@ dose j exceeds that of dose i.</p>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.081148 seconds (Warm-up)
-#&gt; Chain 4:                0.060563 seconds (Sampling)
-#&gt; Chain 4:                0.141711 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.080084 seconds (Warm-up)
+#&gt; Chain 4:                0.058871 seconds (Sampling)
+#&gt; Chain 4:                0.138955 seconds (Total)
 #&gt; Chain 4: </div><div class='input'><span class='no'>sup_mat</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_superiority</span>(<span class='no'>fit</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

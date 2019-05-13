@@ -10,7 +10,7 @@ df_parse_outcomes(outcome_string, as.list = TRUE)
 \item{outcome_string}{character string, conveying doses given and outcomes
 observed.}
 
-\item{as.list}{TRUE (be default) to return a \code{list};
+\item{as.list}{TRUE (the default) to return a \code{list};
 FALSE to return a \code{data.frame}}
 }
 \value{
@@ -36,9 +36,10 @@ dose-level 1 and neither experienced toxicity. See examples.
 }
 \examples{
 x = df_parse_outcomes('1NNN 2NTN 3TTT')
-x$num_patients
-x$tox
-sum(x$tox)
+x$num_patients  # 9
+x$doses         # c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+x$tox           # c(0, 0, 0, 0, 1, 0, 1, 1, 1)
+sum(x$tox)      # 4
 
 }
 \references{

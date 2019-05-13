@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -55,6 +55,9 @@
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -65,6 +68,9 @@
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -97,7 +103,7 @@
       <h1>Continual Reassessment Method</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-04-21</h4>
+            <h4 class="date">2019-05-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/CRM.Rmd"><code>vignettes/CRM.Rmd</code></a></small>
       <div class="hidden name"><code>CRM.Rmd</code></div>
@@ -241,7 +247,8 @@
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
 <a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 2.</span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 2.</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; Model entropy: 1.49</span></a></code></pre></div>
 <p>In this demonstration, we set the seed for reproducibility when sampling however, in the wild, you might not do this.</p>
 <p>We can extract the samples of the posterior probability of DLT at each dose, stored as the series of parameters called <code>prob_tox</code>. From there, all manner of inference is possible. For example, we can recreate the posterior expected probability of DLT at each dose shown above. It is simply the mean of each sample:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">prob_tox_samp1 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(fit1, <span class="st">'prob_tox'</span>)</a>
@@ -280,7 +287,8 @@
 <a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
 <a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 2.</span></a>
-<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 3.</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 3.</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; Model entropy: 1.50</span></a></code></pre></div>
 <p>Once again, we see that dose-level 2 would be recommended for the next cohort because it is forecast to have Pr(DLT) closest to the target, 25%.</p>
 </div>
 <div id="one-parameter-logisitic-model-with-gamma-prior" class="section level2">
@@ -309,7 +317,8 @@
 <a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
 <a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 2.</span></a>
-<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 3.</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 3.</span></a>
+<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; Model entropy: 1.51</span></a></code></pre></div>
 <p>This use of a Gamma(1, 1) prior is the same as an Exponential(1) prior.</p>
 </div>
 <div id="two-parameter-logisitic-model-with-normal-priors" class="section level2">
@@ -338,7 +347,8 @@
 <a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt; The model targets a toxicity level of 0.25.</span></a>
 <a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 3.</span></a>
-<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 3.</span></a></code></pre></div>
+<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt; The dose most likely to be the MTD is 3.</span></a>
+<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="co">#&gt; Model entropy: 1.37</span></a></code></pre></div>
 <p>These estimates look different to the other methods, not least because we have estimated an extra parameter. We compare the inferences in the next section.</p>
 </div>
 <div id="comparison" class="section level2">
@@ -499,8 +509,8 @@
 <li><a href="CRM.html">An introduction to CRM in ‘trialr’</a></li>
 <li><a href="CRM-visualisation.html">Visualisation in CRM</a></li>
 <li><a href="TITE-CRM.html">TITE-CRM</a></li>
-<li>Stopping in CRM</li>
-<li>Case study using Levy, et al. (2006)</li>
+<li><a href="CRM-pathways.html">Pathways and stopping in CRM</a></li>
+<li><a href="LevyCaseStudy.html">Case study using Levy, et al. (2006)</a></li>
 <li>Simulation</li>
 </ul>
 </div>
@@ -518,7 +528,7 @@
 <p>Cheung, Ying Kuen. 2011. <em>Dose Finding by the Continual Reassessment Method</em>. New York: Chapman &amp; Hall / CRC Press.</p>
 </div>
 <div id="ref-OQuigley1990">
-<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual reassessment method: a practical design for phase 1 clinical trials in cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
+<p>O’Quigley, J, M Pepe, and L Fisher. 1990. “Continual Reassessment Method: A Practical Design for Phase 1 Clinical Trials in Cancer.” <em>Biometrics</em> 46 (1): 33–48. <a href="https://doi.org/10.2307/2531628">https://doi.org/10.2307/2531628</a>.</p>
 </div>
 </div>
 </div>

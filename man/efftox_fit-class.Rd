@@ -6,28 +6,33 @@
 \alias{efftox_fit}
 \title{Class of model fit by \pkg{trialr} using the EffTox dose-finding design.}
 \usage{
-efftox_fit(dose_indices, recommended_dose, prob_eff, prob_tox,
-  prob_acc_eff, prob_acc_tox, utility, post_utility, acceptable, dat, fit)
+efftox_fit(dose_indices, num_patients, doses, tox, prob_tox, prob_eff,
+  median_prob_tox, median_prob_eff, prob_acc_tox, prob_acc_eff, utility,
+  post_utility, acceptable, recommended_dose, dat, fit)
 }
 \arguments{
 \item{dose_indices}{A vector of integers representing the dose-levels under
 consideration.}
 
-\item{recommended_dose}{An integer representing the dose-level recommended
-for the next patient or cohort; or \code{NA} if stopping is recommended.}
+\item{num_patients}{Integer, the number of patients analysed.}
 
-\item{prob_eff}{The posterior mean probabilities of efficacy at doses 1:n;
-a vector of numbers between 0 and 1.}
+\item{doses}{vector of integers representing the dose given to the patients.}
+
+\item{tox}{vector of integers representing the toxicity status of the
+patients.}
 
 \item{prob_tox}{The posterior mean probabilities of toxicity at doses 1:n;
 a vector of numbers between 0 and 1.}
 
-\item{prob_acc_eff}{The posterior mean probabilities that efficacy at the
-doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
-threshold; a vector of numbers between 0 and 1.}
+\item{prob_eff}{The posterior mean probabilities of efficacy at doses 1:n;
+a vector of numbers between 0 and 1.}
 
 \item{prob_acc_tox}{The posterior mean probabilities that toxicity at the
 doses is acceptable, i.e. that it is less than the maximum toxicity
+threshold; a vector of numbers between 0 and 1.}
+
+\item{prob_acc_eff}{The posterior mean probabilities that efficacy at the
+doses is acceptable, i.e. that it exceeds the minimum acceptable efficacy
 threshold; a vector of numbers between 0 and 1.}
 
 \item{utility}{The utilities of doses 1:n, calculated by plugging the
@@ -43,6 +48,9 @@ as advocated by Thall & Cook; a vector of numbers.}
 \item{acceptable}{A vector of logical values to indicate whether doses 1:n
 are acceptable, according to the rules for acceptable efficacy & toxicity,
 and rules on not skipping untested doses.}
+
+\item{recommended_dose}{An integer representing the dose-level recommended
+for the next patient or cohort; or \code{NA} if stopping is recommended.}
 
 \item{dat}{Object \code{\link{efftox_params}} containing data passed to
 \code{\link[rstan:sampling]{sampling}}.}

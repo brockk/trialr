@@ -3,6 +3,24 @@
 
 # Test some cases that should work ----
 # Regular case
+test_that('EffTox outcomes "" parse correctly', {
+  x <- efftox_parse_outcomes('', as.list = FALSE)
+  expect_true(is.data.frame(x))
+  expect_equal(nrow(x), 0)
+  expect_equal(length(x$doses), 0)
+  expect_equal(length(x$eff), 0)
+  expect_equal(length(x$tox), 0)
+})
+
+test_that('EffTox outcomes "" parse correctly to list', {
+  x <- efftox_parse_outcomes('', as.list = TRUE)
+  expect_true(is.list(x))
+  expect_equal(x$num_patients, 0)
+  expect_equal(length(x$doses), 0)
+  expect_equal(length(x$eff), 0)
+  expect_equal(length(x$tox), 0)
+})
+
 test_that('EffTox outcomes "1EEE 3TTT" parse correctly', {
   x <- efftox_parse_outcomes('1EEE 3TTT', as.list = FALSE)
   expect_true(is.data.frame(x))
@@ -177,13 +195,13 @@ test_that('EffTox outcomes " " fail to parse to list', {
 })
 
 # Nothing
-test_that('EffTox outcomes "" fail to parse', {
-  expect_error(efftox_parse_outcomes('', as.list = FALSE))
-})
-
-test_that('EffTox outcomes "" fail to parse to list', {
-  expect_error(efftox_parse_outcomes('', as.list = TRUE))
-})
+# test_that('EffTox outcomes "" fail to parse', {
+#   expect_error(efftox_parse_outcomes('', as.list = FALSE))
+# })
+#
+# test_that('EffTox outcomes "" fail to parse to list', {
+#   expect_error(efftox_parse_outcomes('', as.list = TRUE))
+# })
 
 # Looks plausible
 test_that('EffTox outcomes "1ET TNB" fail to parse', {

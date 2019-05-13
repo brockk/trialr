@@ -3,9 +3,11 @@ pkgdown: 1.1.0.9000
 pkgdown_sha: 98bfe0fdfd59b33ef1a88ef6896cd60f805f0e81
 articles:
   BEBOP: BEBOP.html
+  CRM-pathways: CRM-pathways.html
   CRM-visualisation: CRM-visualisation.html
   CRM: CRM.html
   EffTox: EffTox.html
   HierarchicalBayesianResponse: HierarchicalBayesianResponse.html
+  LevyCaseStudy: LevyCaseStudy.html
   TITE-CRM: TITE-CRM.html
 

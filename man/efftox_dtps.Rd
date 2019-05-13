@@ -11,8 +11,8 @@ efftox_dtps(dat, cohort_sizes, next_dose, ...)
 parameters. An example is yielded by \code{\link{efftox_parameters_demo}}.}
 
 \item{cohort_sizes}{vector of future cohort sizes, i.e. positive integers.
-E.g. Tot calculate paths for the the next cohort of two followed by the next
-cohort of three, use \code{c(2, 3)}.}
+E.g. To calculate paths for the the next cohort of two followed by another
+cohort of three, use \code{cohort_sizes = c(2, 3)}.}
 
 \item{next_dose}{the dose-level to be given to the immediately next cohort.}
 
@@ -44,6 +44,10 @@ dtps2 <- efftox_dtps(dat = dat, cohort_sizes = c(3), next_dose = 1)
 \references{
 Brock et al. (submitted 2017), Implementing the EffTox
 Dose-Finding Design in the Matchpoint Trial.
+Brock K, Billingham L, Copland M, Siddique S, Sirovica M, Yap C.
+Implementing the EffTox dose-finding design in the Matchpoint trial.
+BMC Medical Research Methodology. 2017;17(1):112.
+doi:10.1186/s12874-017-0381-x
 }
 \seealso{
 \code{\link{efftox_params}}

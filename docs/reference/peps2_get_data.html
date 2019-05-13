@@ -79,7 +79,7 @@ See the accompanying vignette for a full description." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
       </span>
     </div>
 
@@ -105,6 +105,9 @@ See the accompanying vignette for a full description." />
       <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
     </li>
     <li>
+      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+    </li>
+    <li>
       <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
@@ -115,6 +118,9 @@ See the accompanying vignette for a full description." />
     </li>
     <li>
       <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
       <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
@@ -146,7 +152,7 @@ See the accompanying vignette for a full description." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get data to run the PePS2 trial example</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/peps2.R'><code>R/peps2.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/peps2_get_data.R'><code>R/peps2_get_data.R</code></a></small>
     <div class="hidden name"><code>peps2_get_data.Rd</code></div>
     </div>
 
@@ -298,8 +304,8 @@ association parameter.</p></td>
 )</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 5.9e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.59 seconds.
+#&gt; Chain 1: Gradient evaluation took 0.000102 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.02 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -316,15 +322,15 @@ association parameter.</p></td>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.344759 seconds (Warm-up)
-#&gt; Chain 1:                0.358582 seconds (Sampling)
-#&gt; Chain 1:                0.703341 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.345514 seconds (Warm-up)
+#&gt; Chain 1:                0.371978 seconds (Sampling)
+#&gt; Chain 1:                0.717492 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 3e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
+#&gt; Chain 2: Gradient evaluation took 3.7e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -341,15 +347,15 @@ association parameter.</p></td>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.352051 seconds (Warm-up)
-#&gt; Chain 2:                0.341579 seconds (Sampling)
-#&gt; Chain 2:                0.69363 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.378645 seconds (Warm-up)
+#&gt; Chain 2:                0.338941 seconds (Sampling)
+#&gt; Chain 2:                0.717586 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 3.3e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
+#&gt; Chain 3: Gradient evaluation took 3.1e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -366,15 +372,15 @@ association parameter.</p></td>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.33631 seconds (Warm-up)
-#&gt; Chain 3:                0.392634 seconds (Sampling)
-#&gt; Chain 3:                0.728944 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.333397 seconds (Warm-up)
+#&gt; Chain 3:                0.382977 seconds (Sampling)
+#&gt; Chain 3:                0.716374 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'BebopInPeps2' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 3.6e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
+#&gt; Chain 4: Gradient evaluation took 3.1e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.31 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -391,9 +397,9 @@ association parameter.</p></td>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.366225 seconds (Warm-up)
-#&gt; Chain 4:                0.379741 seconds (Sampling)
-#&gt; Chain 4:                0.745966 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.344517 seconds (Warm-up)
+#&gt; Chain 4:                0.36566 seconds (Sampling)
+#&gt; Chain 4:                0.710177 seconds (Total)
 #&gt; Chain 4: </div><div class='input'>
 </div></pre>
   </div>

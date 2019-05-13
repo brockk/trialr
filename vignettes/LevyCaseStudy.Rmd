@@ -43,22 +43,27 @@ In the appendix, we describe an attempt to identify the exact parameterisation u
 
 ## Prior beliefs
 
-```{r}
+```{r, results='hide', warning=FALSE}
 library(trialr)
 
 target <- 0.33
 skeleton <- c(0.05, 0.1, 0.15, 0.33, 0.5)
+
 fit0 <- crm_prior_beliefs(skeleton, target, model = 'logistic_gamma',
                           a0 = 1, beta_shape = 1, beta_inverse_scale = 1)
+```
+
+```{r}
 fit0
 ```
+
 
 Notice that both the prior mean (`ProbTox`) and median (`MedianProbTox`) probabilities of toxicity are quite far from the skeleton.
 
 In an ordinary regression model, fixing the intercept will affect the gradient.
 The same is true here: 
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width=7, fig.height=5, results='hide', warning=FALSE}
 library(tidyr)
 library(purrr)
 library(ggplot2)
@@ -101,8 +106,9 @@ fit1
 ```
 We see that the cohort has a great bearing on the predicted rates of toxicity.
 The trialists report estimated DLT probabilities of 0.001, 0.003, 0.006, 0.035, 0.11.
-TODO: why?
-The values calculated by `trialr` diverge somewhat from those values,
+The values calculated by `trialr` diverge somewhat from those values.
+It is difficult to know why this is given such a small sample size.
+
 Dose-level 5 is recommended for the next cohort.
 The trialists understandably resist the desire to skip three doses in going from the lowest to highest dose, electing instead to skip the second dose and treat the next cohort at dose-level 3.
 
@@ -208,7 +214,65 @@ apply(as.data.frame(fit6, pars = 'prob_tox'), 2, quantile,
 The 95% CI at dose-level 4 is very close to that reported.
 
 They say "The estimated DLT probability associated with the dose level of 5mg/m2 would have been expected to change by less than 5% even if three further patients were included."
-TODO - show this with DTPs.
+It is possible to show this with [DTPs](CRM-pathways.html).
+
+The prevailing probability of toxicity given the patients evaluated thus far is:
+```{r}
+prob_tox_mtd <- fit6$prob_tox[fit6$recommended_dose]
+prob_tox_mtd
+```
+
+We calculate the future pathways for a single additional cohort of 3 patients, conditional on the outcomes observed hitherto:
+```{r, results = 'hide', warning=FALSE}
+paths <- crm_dtps(skeleton = skeleton, target = target, 
+                  model = 'logistic_gamma', cohort_sizes = c(3), 
+                  previous_outcomes = '1NNN 3NNT 4NNT 4NNN 4NTN 4TNT',
+                  a0 = 1, beta_shape = 1, beta_inverse_scale = 1,
+                  seed = 123, control = list(adapt_delta = 0.99), refresh = 0)
+
+library(tibble)
+df <- as_tibble(paths)
+```
+
+The putative future inferences on the probability of toxicity at dose-level 4 conditional on each of the four possible cohort outcomes are:
+```{r}
+library(dplyr)
+library(purrr)
+library(tidyr)
+
+df %>% 
+  mutate(prob_tox = map(fit, 'prob_tox')) %>% 
+  select(-fit, -parent_fit) %>% 
+  unnest %>% 
+  filter(dose_index == 4)
+```
+
+We can put this data into a format conducive to reproducing the trialists' claim.
+```{r}
+df %>% 
+  filter(.depth > 0) %>% 
+  mutate(prob_tox = map(fit, 'prob_tox')) %>% 
+  select(-fit, -parent_fit) %>% 
+  unnest %>% 
+  filter(dose_index == 4) %>% 
+  select(outcomes, prob_tox) %>% 
+  bind_cols(
+    lik = dbinom(x = 0:3, size = 3, prob = prob_tox_mtd)) -> future_scenario
+
+future_scenario
+```
+Above we see the likelihood of the four possible outcomes, inferred using binomial probabilities and the prevailing probability of toxicity at dose-level 4.
+The outcome `TTT` would increase the probability by over 5% but that scenario is unlikely, given what we know.
+
+The expected change is indeed less than 5%:
+```{r}
+future_scenario %>% 
+  mutate(prob_tox_change = abs(prob_tox - prob_tox_mtd)) %>% 
+  summarise(expected_change = sum(lik * prob_tox_change))
+```
+
+This concludes the main case study on @Levy2006.
+The section below details an honest but ultimately unsuccessful attempt to infer the precise parameterisation used by the trialists.
 
 # Trying to identify the exact model Levy et al. used
 At the end of the trial, the investigators reported the estimated probabilities of DLT (0.06, 0.12, 0.17, 0.36, 0.53).
@@ -280,14 +344,13 @@ There are many vignettes illuminating the CRM in `trialr`:
 - [An introduction to CRM in 'trialr'](CRM.html)
 - [Visualisation in CRM](CRM-visualisation.html)
 - [TITE-CRM](TITE-CRM.html)
-- Stopping in CRM
+- [Pathways and stopping in CRM](CRM-pathways.html)
 - [Case study using Levy, et al. (2006)](LevyCaseStudy.html)
 - Simulation
 
 
 # trialr
 `trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
-
 
 
 # References
