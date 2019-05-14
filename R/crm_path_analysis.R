@@ -1,5 +1,5 @@
 
-#' Fit a CRM model to the incrementally observed outcomes a trial pathway.
+#' Fit a CRM model to the incrementally observed outcomes on a trial pathway.
 #'
 #' Fit a continuous reassessment method (CRM) model to the outcomes cumulatively
 #' observed at the end of each cohort in a trial pathway. E.g. if the trial

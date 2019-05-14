@@ -29,7 +29,7 @@
 #' (1-based) dose-level to be given next, or NA to show that no dose should be
 #' chosen and the trial stopped. This function gives the user the opportunity to
 #' build in custom behaviour to tailor the dose selection decision in response
-#' to the insights garnered tby the fit model, or recommend that a trial path
+#' to the insights garnered by the fit model, or recommend that a trial path
 #' be halted immediately. If omitted, the dose ordinarily chosen by the model is
 #' used. An example is given below.
 #' @param verbose logical, TRUE to get log messages.
@@ -83,7 +83,8 @@
 #'
 #' @export
 #'
-#' @references Yap C, Billingham LJ, Cheung YK, Craddock C, O’Quigley J.
+#' @references
+#' Yap C, Billingham LJ, Cheung YK, Craddock C, O’Quigley J.
 #' Dose transition pathways: The missing link between complex dose-finding
 #' designs and simple decision-making. Clinical Cancer Research.
 #' 2017;23(24):7440-7447. doi:10.1158/1078-0432.CCR-17-0582
@@ -97,20 +98,34 @@
 #' paths <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
 #'                   cohort_sizes = c(2, 2), next_dose = 3, beta_sd = 1)
 #' length(paths)  # 13
+#'
 #' library(tibble)
 #' df <- as_tibble(paths)
 #' df
 #'
+#'
 #' # Run DTPs for the next cohort of three in a trial that has already treated
 #' # six patients, seeing some toxicity at dose-level 3:
-#' paths <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
-#'                   cohort_sizes = c(3), previous_outcomes = '2NNN 3TTN',
-#'                   beta_sd = 1)
-#' length(paths)  # 5
-#' as_tibble(paths)
+#' paths2 <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
+#'                    cohort_sizes = c(3), previous_outcomes = '2NNN 3TTN',
+#'                    beta_sd = 1)
+#' length(paths2)  # 5
+#' as_tibble(paths2)
 #' # We see that de-escalation to dose-level 2 should occur now, and that any
 #' # further toxicity will result in advice for further de-escalation to
-#' dose-level 1.
+#' # dose-level 1.
+#'
+#'
+#' # An example with a custom dose selection function
+#' paths3 <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
+#'                    cohort_sizes = c(3, 3), previous_outcomes = '2NN 3TN',
+#'                    next_dose = 2, beta_sd = 1,
+#'                    user_dose_func = function(x) {
+#'                      careful_escalation(x, tox_threshold = target + 0.1,
+#'                                         certainty_threshold = 0.7)
+#'                    }, seed = 123, refresh = 0)
+#' spread_paths(as_tibble(paths3) %>% select(-fit, -parent_fit, -dose_index))
+#' # Stopping is recommended when the dose selection function returns NA.
 #' }
 crm_dtps <- function(skeleton,
                      target,

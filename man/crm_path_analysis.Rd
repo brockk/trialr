@@ -2,7 +2,7 @@
 % Please edit documentation in R/crm_path_analysis.R
 \name{crm_path_analysis}
 \alias{crm_path_analysis}
-\title{Fit a CRM model to the incrementally observed outcomes a trial pathway.}
+\title{Fit a CRM model to the incrementally observed outcomes on a trial pathway.}
 \usage{
 crm_path_analysis(outcomes_str, skeleton, target, model, verbose = FALSE,
   ...)

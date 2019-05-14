@@ -91,6 +91,7 @@ test_that('Dose-finding outcomes "96NTT 40T 1NTNNTN 174N" parse correctly', {
 # Leading white-space
 test_that('Dose-finding outcomes " \t1NTT 2T 2NTNNTN 2N" parse correctly', {
   x <- parse_dose_finding_outcomes(' \t1NTT 2T 2NTNNTN 2N')
+
   expect_true(is.list(x))
   expect_equal(length(x), 4)
 

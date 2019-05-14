@@ -44,54 +44,22 @@
 #'
 efftox_parse_outcomes <- function(outcome_string, as.list = TRUE) {
 
-  if(outcome_string == '') {
-    if(as.list) {
-      return(list(
-        doses = array(integer(length = 0)), eff = array(integer(length = 0)),
-        tox = array(integer(length = 0)), num_patients = 0
-      ))
-    } else {
-      return(data.frame(doses = array(integer(length = 0)),
-                        eff = array(integer(length = 0)),
-                        tox = array(integer(length = 0)))
-      )
-    }
-  }
+  cohorts <- parse_eff_tox_dose_finding_outcomes(outcome_string)
+  doses = integer(length = 0)
+  eff = integer(length = 0)
+  tox = integer(length = 0)
+  for(cohort in cohorts) {
+    c_dl <- cohort$dose
+    c_outcomes <- cohort$outcomes
 
-  # Matching is done by regex.
+    these_outcomes <- stringr::str_split(c_outcomes, '')[[1]]
+    these_eff = as.integer((these_outcomes == 'E') | (these_outcomes == 'B'))
+    these_tox = as.integer((these_outcomes == 'T') | (these_outcomes == 'B'))
+    these_doses <- rep(c_dl, length(these_tox))
 
-  # This pattern ensures that outcome_string is valid. It is the gate-keeper.
-  # It allows leading and trailing white space and demands >0 cohort strings.
-  # e.g. "2ENT 3TT 2E "
-  valid_str_match <- '^\\s*(\\d+[ETNB]+\\s*)+$'
-  # This pattern identifies the individual cohort strings, e.g. 2ENT
-  cohort_str_match <- '\\d+[ETNB]+'
-  # This pattern extracts the dose-level from a cohort string, e.g. 2
-  dl_str_match <- '\\d+'
-  # And this pattern extracts the outcomes from a cohort string, e.g ENT
-  outcomes_match_str <- '[ETNB]+'
-
-  if(stringr::str_detect(outcome_string, valid_str_match)) {
-    doses <- eff <- tox <- c()
-    cohort_strs <- stringr::str_extract_all(
-      outcome_string, cohort_str_match)[[1]]
-    for(cohort_str in cohort_strs) {
-      c_dl <- as.integer(stringr::str_extract(cohort_str, dl_str_match))
-      if(c_dl <= 0) stop('Dose-levels must be strictly positive integers.')
-      c_outcomes <- stringr::str_extract(cohort_str, outcomes_match_str)
-
-      these_doses <- rep(c_dl, nchar(c_outcomes))
-      doses <- c(doses, these_doses)
-
-      these_outcomes = stringr::str_split(c_outcomes, '')[[1]]
-      these_eff = as.integer((these_outcomes == 'E') | (these_outcomes == 'B'))
-      eff = c(eff, these_eff)
-      these_tox = as.integer((these_outcomes == 'T') | (these_outcomes == 'B'))
-      tox = c(tox, these_tox)
-    }
-  } else {
-    stop(paste0('"', outcome_string, '" is not a valid outcome string.
-                A valid example is "1N 2EE 3TB 2BE"'))
+    doses <- c(doses, these_doses)
+    eff = c(eff, these_eff)
+    tox = c(tox, these_tox)
   }
 
   if(as.list) {
