@@ -29,7 +29,7 @@ For illustration, let us assume that we have treated 6 patients at 3 dose-levels
 outcomes <- '2NN 3NN 4TT'
 ```
 
-and that we are using the empiric CRM with the following prior to target the dose with Pr(DLT) closest to 25%:
+and that we are using the empiric CRM with the following prior to target the dose with Prob(DLT) closest to 25%:
 
 ```{r}
 skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
@@ -58,16 +58,13 @@ This is simple with access to the posterior samples.
 For ease of plotting with `ggplot2`, we recompose the posterior samples to a tall "tidy" format using `tidyr` and `dplyr`:
 
 ```{r, warning=FALSE, message=FALSE}
-library(tidyr)
 library(dplyr)
+library(tidybayes)
 
-prob_tox_samp <- as.data.frame(fit, 'prob_tox')
-prob_tox_samp_tall <- prob_tox_samp %>%
-  gather(Label, ProbTox) %>%
-  mutate(
-    DoseLevel = rep(1:ncol(prob_tox_samp), each = nrow(prob_tox_samp)),
-    Draw = rep(1:nrow(prob_tox_samp), times = ncol(prob_tox_samp))
-  )
+prob_tox_samp_tall <- fit %>% 
+  gather_draws(prob_tox[dose]) %>% 
+  rename(prob_dlt = .value) %>% 
+  ungroup
 ```
 
 The tidy data looks like this:
@@ -82,10 +79,10 @@ Boxplots would be a traditional way of visualising the distributions of the prob
 library(ggplot2)
 
 prob_tox_samp_tall %>% 
-  ggplot(aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
+  ggplot(aes(x = dose, y = prob_dlt, group = dose)) +
   geom_boxplot() + 
   ylim(0, 1) + 
-  labs(title = 'boxplot of Pr(DLT) under CRM')
+  labs(title = 'Boxplot of Prob(DLT) under CRM')
 ```
 
 However, boxplots give only limited information on the distributions.
@@ -95,10 +92,10 @@ This inference is much more clear, however, using a violin-plot:
 
 ```{r, fig.width=7, fig.height=7}
 prob_tox_samp_tall %>% 
-  ggplot(aes(x = DoseLevel, y = ProbTox, group = DoseLevel)) +
+  ggplot(aes(x = dose, y = prob_dlt, group = dose)) +
   geom_violin(fill = 'orange') + 
   ylim(0, 1) + 
-  labs(title = 'violin plot of Pr(DLT) under CRM')
+  labs(title = 'Violin plot of Prob(DLT) under CRM')
 ```
 
 If you are a fan of post-punk UK music (and you have installed the [`ggridges`](https://CRAN.R-project.org/package=ggridges) package), you may however prefer to show this information using a ridge plot, aka a [joyplot](https://en.wikipedia.org/wiki/Unknown_Pleasures)
@@ -107,11 +104,11 @@ If you are a fan of post-punk UK music (and you have installed the [`ggridges`](
 library(ggridges)
 
 prob_tox_samp_tall %>% 
-  mutate(DoseLevel = factor(DoseLevel)) %>% 
-  ggplot(aes(x = ProbTox, y = DoseLevel, fill = DoseLevel)) +
+  mutate(dose = factor(dose)) %>% 
+  ggplot(aes(x = prob_dlt, y = dose, fill = dose)) +
   geom_density_ridges() + 
   theme(legend.position = 'none') +
-  labs(title = 'joyplot of Pr(DLT) under CRM') + 
+  labs(title = 'Joyplot of Prob(DLT) under CRM') + 
   theme(legend.position = 'bottom')
 ```
 
@@ -126,19 +123,19 @@ We can visualise the MCMC candidates for the dose-toxicity curve on one plot.
 Colouring them by the MTD candidate they propose (i.e. using a single colour for all the curves that suggest dose-level 1 is the maximum tolerable dose, etc), we get an idea of uncertainty still in this trial:
 
 ```{r, fig.width=7, fig.height=7, message=FALSE}
-prob_tox_samp_tall %>% 
-  filter(Draw <= 200) -> prob_tox_subset
+prob_tox_samp_tall  %>% 
+  group_by(.draw) %>% 
+  summarise(mtd = dose[which.min(abs(prob_dlt - target))]) %>% 
+  mutate(mtd = factor(mtd)) -> mtd_candidates
 
-prob_tox_subset %>% 
-  left_join(
-    prob_tox_subset %>% 
-      group_by(Draw) %>% 
-      summarise(MTD = which.min(abs(ProbTox - target)) %>% factor()),
-    by = 'Draw') %>% 
-  ggplot(aes(x = DoseLevel, y = ProbTox, group = Draw)) +
-  geom_line(aes(col = MTD), alpha = 0.5) + 
+prob_tox_samp_tall %>% 
+  left_join(mtd_candidates, by = '.draw') %>% 
+  filter(.draw <= 200) %>% 
+  ggplot(aes(x = dose, y = prob_dlt, group = .draw)) +
+  geom_line(aes(col = mtd), alpha = 0.5) + 
   geom_hline(yintercept = target, col = 'red', linetype = 'dashed') + 
-  labs(title = 'Identify of MTD is shrouded in mystery') +
+  labs(title = 'The identify of the MTD is still shrouded in mystery', 
+       y = 'Prob(DLT)', col = 'MTD') +
   theme(legend.position = 'bottom')
 ```
 
@@ -146,12 +143,12 @@ We used just 200 curves above to avoid saturating the plot.
 We can visualise that data rather more bluntly:
 
 ```{r, fig.width=7, fig.height=7, message=FALSE, warning=FALSE}
-apply(prob_tox_samp, 1, function(x) which.min(abs(x - target))) %>% 
-  data.frame(MTD = factor(.)) %>% 
-  count(MTD) %>% 
-  mutate(ProbMTD = n / sum(n)) %>% 
-  ggplot(aes(x = MTD, y = ProbMTD, fill = MTD)) + 
+mtd_candidates %>% 
+  count(mtd) %>% 
+  mutate(prob_mtd = n / sum(n)) %>% 
+  ggplot(aes(x = mtd, y = prob_mtd, fill = mtd)) + 
   geom_col() +
+  labs(x = 'MTD') +
   theme(legend.position = 'bottom')
 ```
 
@@ -161,13 +158,15 @@ This information was not readily available from some of the above plots of the p
 We might also like to visualise the probability that the toxicity rate at each dose exceeds our target toxicity rate.
 
 ```{r, fig.width=7, fig.height=7}
-colMeans(prob_tox_samp > target) %>% 
-  data.frame(ProbToxic = ., DoseLevel = 1:length(skeleton)) %>%
-  ggplot(aes(x = DoseLevel, y = ProbToxic, fill = ProbToxic)) + 
+fit %>% 
+  gather_draws(prob_tox[dose]) %>% 
+  group_by(dose) %>% 
+  summarise(prob_too_toxic = mean(.value > target)) %>%
+  ggplot(aes(x = dose, y = prob_too_toxic, fill = dose)) + 
   geom_col() + 
   scale_fill_gradient(low="green", high="red") + 
   labs(title = 'Posterior probability that each dose is too toxic',
-       y = 'Prob(Tox > target)', fill = 'Prob too toxic') +
+       y = 'Prob(DLT risk > target)', fill = 'Probability dose is too toxic') +
   theme(legend.position = 'bottom')
 ```
 

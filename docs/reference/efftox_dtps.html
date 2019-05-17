@@ -32,7 +32,9 @@
 
 <meta property="og:title" content="Calculate dose-transition pathways for an EffTox study — efftox_dtps" />
 
-<meta property="og:description" content="Calculate dose-transition pathways for an EffTox study." />
+<meta property="og:description" content="Calculate dose-transition pathways for an EffTox study.
+The function efftox_dtps_to_dataframe performs a similar
+function, but is much less-flexible." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -140,20 +142,18 @@
 
     <div class="ref-description">
     
-    <p>Calculate dose-transition pathways for an EffTox study.</p>
+    <p>Calculate dose-transition pathways for an EffTox study.
+The function <code><a href='efftox_dtps_to_dataframe.html'>efftox_dtps_to_dataframe</a></code> performs a similar
+function, but is much less-flexible.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>efftox_dtps</span>(<span class='no'>dat</span>, <span class='no'>cohort_sizes</span>, <span class='no'>next_dose</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>efftox_dtps</span>(<span class='no'>cohort_sizes</span>, <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>user_dose_func</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>i_am_patient</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dat</th>
-      <td><p>An instance of <code><a href='efftox_params-class.html'>efftox_params</a></code>, a list of EffTox
-parameters. An example is yielded by <code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code>.</p></td>
-    </tr>
     <tr>
       <th>cohort_sizes</th>
       <td><p>vector of future cohort sizes, i.e. positive integers.
@@ -161,8 +161,24 @@ E.g. To calculate paths for the the next cohort of two followed by another
 cohort of three, use <code>cohort_sizes = c(2, 3)</code>.</p></td>
     </tr>
     <tr>
+      <th>previous_outcomes</th>
+      <td><p>Outcomes observed hitherto in the syntax required
+by <code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code>.</p></td>
+    </tr>
+    <tr>
       <th>next_dose</th>
       <td><p>the dose-level to be given to the immediately next cohort.</p></td>
+    </tr>
+    <tr>
+      <th>user_dose_func</th>
+      <td><p>optional delegate for deciding dose. A function that
+takes a <code>eff_fit</code> as the sole argument and returns the integer
+(1-based) dose-level to be given next, or NA to show that no dose should be
+chosen and the trial stopped. This function gives the user the opportunity to
+build in custom behaviour to tailor the dose selection decision in response
+to the insights garnered by the fit model, or recommend that a trial path
+be halted immediately. If omitted, the dose ordinarily chosen by the model is
+used. An example is given below.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -176,30 +192,110 @@ cohort of three, use <code>cohort_sizes = c(2, 3)</code>.</p></td>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Brock et al. (submitted 2017), Implementing the EffTox
-Dose-Finding Design in the Matchpoint Trial.
-Brock K, Billingham L, Copland M, Siddique S, Sirovica M, Yap C.
+    <p>Yap C, Billingham LJ, Cheung YK, Craddock C, O’Quigley J.
+Dose transition pathways: The missing link between complex dose-finding
+designs and simple decision-making. Clinical Cancer Research.
+2017;23(24):7440-7447. doi:10.1158/1078-0432.CCR-17-0582</p>
+<p>Brock K, Billingham L, Copland M, Siddique S, Sirovica M, Yap C.
 Implementing the EffTox dose-finding design in the Matchpoint trial.
 BMC Medical Research Methodology. 2017;17(1):112.
 doi:10.1186/s12874-017-0381-x</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='efftox_params-class.html'>efftox_params</a></code></p>
-<p><code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code></p></div>
+    <div class='dont-index'><p><code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code>,
+  <code><a href='stan_efftox.html'>stan_efftox</a></code>,
+  <code><a href='efftox_path_analysis.html'>efftox_path_analysis</a></code>,
+  <code><a href='dose_finding_path_node-class.html'>dose_finding_path_node</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Calculate the paths for the first cohort of 3 in Thall et al 2014 example</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()</div><span class='co'># NOT RUN {</span>
-<span class='no'>dtps1</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>), <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='co'># }</span><div class='input'><span class='co'># To calculate future paths in a partially-observed trial</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()
-<span class='no'>dat</span>$<span class='no'>doses</span> <span class='kw'>=</span> <span class='fu'>array</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='no'>dat</span>$<span class='no'>eff</span> <span class='kw'>=</span> <span class='fu'>array</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
-<span class='no'>dat</span>$<span class='no'>tox</span> <span class='kw'>=</span> <span class='fu'>array</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='no'>dat</span>$<span class='no'>num_patients</span> <span class='kw'>=</span> <span class='fl'>3</span></div><span class='co'># NOT RUN {</span>
-<span class='no'>dtps2</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>), <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Calculate paths for the first cohort of 3 in Thall et al 2014 example</span>
+<span class='no'>paths1</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps</span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>), <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                      <span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>),
+                      <span class='kw'>efficacy_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>toxicity_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
+                      <span class='kw'>p_e</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>p_t</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+                      <span class='kw'>eff0</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tox1</span> <span class='kw'>=</span> <span class='fl'>0.65</span>,
+                      <span class='kw'>eff_star</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>tox_star</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+                      <span class='kw'>alpha_mean</span> <span class='kw'>=</span> -<span class='fl'>7.9593</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>3.5487</span>,
+                      <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>1.5482</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>3.5018</span>,
+                      <span class='kw'>gamma_mean</span> <span class='kw'>=</span> <span class='fl'>0.7367</span>, <span class='kw'>gamma_sd</span> <span class='kw'>=</span> <span class='fl'>2.5423</span>,
+                      <span class='kw'>zeta_mean</span> <span class='kw'>=</span> <span class='fl'>3.4181</span>, <span class='kw'>zeta_sd</span> <span class='kw'>=</span> <span class='fl'>2.4406</span>,
+                      <span class='kw'>eta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>eta_sd</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+                      <span class='kw'>psi_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>psi_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
+
+
+
+<span class='co'># Calculate paths for the next two cohorts of 2, in an in-progress trial</span>
+<span class='co'># Warning: this create 100 paths. It will run for a minute or two.</span>
+<span class='no'>paths2</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps</span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>2</span>),
+                      <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='st'>'1NN 2EE'</span>,
+                      <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                      <span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>),
+                      <span class='kw'>efficacy_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>toxicity_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
+                      <span class='kw'>p_e</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>p_t</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+                      <span class='kw'>eff0</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tox1</span> <span class='kw'>=</span> <span class='fl'>0.65</span>,
+                      <span class='kw'>eff_star</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>tox_star</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+                      <span class='kw'>alpha_mean</span> <span class='kw'>=</span> -<span class='fl'>7.9593</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>3.5487</span>,
+                      <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>1.5482</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>3.5018</span>,
+                      <span class='kw'>gamma_mean</span> <span class='kw'>=</span> <span class='fl'>0.7367</span>, <span class='kw'>gamma_sd</span> <span class='kw'>=</span> <span class='fl'>2.5423</span>,
+                      <span class='kw'>zeta_mean</span> <span class='kw'>=</span> <span class='fl'>3.4181</span>, <span class='kw'>zeta_sd</span> <span class='kw'>=</span> <span class='fl'>2.4406</span>,
+                      <span class='kw'>eta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>eta_sd</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+                      <span class='kw'>psi_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>psi_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>,
+                      <span class='kw'>i_am_patient</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># Paths can be converted to a tibble</span>
+<span class='fu'>library</span>(<span class='no'>tibble</span>)
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>paths2</span>)
+<span class='no'>df</span> <span class='kw'>%&gt;%</span> <span class='fu'>print</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>)
+
+<span class='co'># And shaped in a wide format</span>
+<span class='fu'><a href='spread_paths.html'>spread_paths</a></span>(<span class='no'>df</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(-<span class='no'>fit</span>, -<span class='no'>parent_fit</span>, -<span class='no'>dose_index</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'>print</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='co'># Incredibly, there are 100 ways these two cohorts of two can end up.</span>
+
+
+
+<span class='co'># An example with a custom dose selection function.</span>
+<span class='co'># Define a function to select the maximal utility dose, no matter what.</span>
+<span class='co'># Note: this diverges from the original authors' intentions; we provide this</span>
+<span class='co'># for illustration only!</span>
+<span class='no'>max_utility_dose</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>efftox_fit</span>) {
+  <span class='fu'>return</span>(<span class='fu'>which.max</span>(<span class='no'>efftox_fit</span>$<span class='no'>utility</span>))
+}
+<span class='co'># Fit the paths, providing the user_dose_func parameter</span>
+<span class='co'># Warning: this create 100 paths. It will run for a minute or two.</span>
+<span class='no'>paths3</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps</span>(<span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>2</span>),
+                      <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='st'>'1NN 2EE'</span>,
+                      <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                      <span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>),
+                      <span class='kw'>efficacy_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>toxicity_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
+                      <span class='kw'>p_e</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>p_t</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+                      <span class='kw'>eff0</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tox1</span> <span class='kw'>=</span> <span class='fl'>0.65</span>,
+                      <span class='kw'>eff_star</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>tox_star</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+                      <span class='kw'>alpha_mean</span> <span class='kw'>=</span> -<span class='fl'>7.9593</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>3.5487</span>,
+                      <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>1.5482</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>3.5018</span>,
+                      <span class='kw'>gamma_mean</span> <span class='kw'>=</span> <span class='fl'>0.7367</span>, <span class='kw'>gamma_sd</span> <span class='kw'>=</span> <span class='fl'>2.5423</span>,
+                      <span class='kw'>zeta_mean</span> <span class='kw'>=</span> <span class='fl'>3.4181</span>, <span class='kw'>zeta_sd</span> <span class='kw'>=</span> <span class='fl'>2.4406</span>,
+                      <span class='kw'>eta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>eta_sd</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+                      <span class='kw'>psi_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>psi_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                      <span class='kw'>user_dose_func</span> <span class='kw'>=</span> <span class='no'>max_utility_dose</span>,
+                      <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>, <span class='kw'>i_am_patient</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># We can see where the dose-selections differ at the second future cohort</span>
+<span class='co'># by joining these paths to those calculated in the previous example:</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(
+  <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>paths2</span>)<span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>.node</span>, <span class='no'>.parent</span>, <span class='no'>.depth</span>, <span class='no'>outcomes</span>, <span class='kw'>model_dose</span> <span class='kw'>=</span> <span class='no'>next_dose</span>),
+  <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>paths3</span>) <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>.node</span>, <span class='kw'>user_dose</span> <span class='kw'>=</span> <span class='no'>next_dose</span>),
+  <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'.node'</span>
+) <span class='kw'>%&gt;%</span> <span class='fu'><a href='spread_paths.html'>spread_paths</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>model_dose2</span> <span class='kw'>!=</span> <span class='no'>user_dose2</span>)
+<span class='co'># They differ in many places. The user defined functions sometimes selects</span>
+<span class='co'># higher doses; sometimes lower.</span>
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

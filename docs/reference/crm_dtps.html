@@ -202,7 +202,7 @@ takes a <code><a href='crm_fit-class.html'>crm_fit</a></code> as the sole argume
 (1-based) dose-level to be given next, or NA to show that no dose should be
 chosen and the trial stopped. This function gives the user the opportunity to
 build in custom behaviour to tailor the dose selection decision in response
-to the insights garnered tby the fit model, or recommend that a trial path
+to the insights garnered by the fit model, or recommend that a trial path
 be halted immediately. If omitted, the dose ordinarily chosen by the model is
 used. An example is given below.</p></td>
     </tr>
@@ -284,30 +284,43 @@ designs and simple decision-making. Clinical Cancer Research.
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-target <- 0.25
-skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
+<span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.15</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
 
-# Run DTPs for the first two cohorts of two for new a trial:
-paths <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
-                  cohort_sizes = c(2, 2), next_dose = 3, beta_sd = 1)
-length(paths)  # 13
-library(tibble)
-df <- as_tibble(paths)
-df
+<span class='co'># Run DTPs for the first two cohorts of two for new a trial:</span>
+<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_dtps</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>,
+                  <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>2</span>), <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='fu'>length</span>(<span class='no'>paths</span>)  <span class='co'># 13</span>
 
-# Run DTPs for the next cohort of three in a trial that has already treated
-# six patients, seeing some toxicity at dose-level 3:
-paths <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
-                  cohort_sizes = c(3), previous_outcomes = '2NNN 3TTN',
-                  beta_sd = 1)
-length(paths)  # 5
-as_tibble(paths)
-# We see that de-escalation to dose-level 2 should occur now, and that any
-# further toxicity will result in advice for further de-escalation to
-dose-level 1.
-# }
-</pre>
+<span class='fu'>library</span>(<span class='no'>tibble</span>)
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>paths</span>)
+<span class='no'>df</span>
+
+
+<span class='co'># Run DTPs for the next cohort of three in a trial that has already treated</span>
+<span class='co'># six patients, seeing some toxicity at dose-level 3:</span>
+<span class='no'>paths2</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_dtps</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>,
+                   <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>), <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='st'>'2NNN 3TTN'</span>,
+                   <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='fu'>length</span>(<span class='no'>paths2</span>)  <span class='co'># 5</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>paths2</span>)
+<span class='co'># We see that de-escalation to dose-level 2 should occur now, and that any</span>
+<span class='co'># further toxicity will result in advice for further de-escalation to</span>
+<span class='co'># dose-level 1.</span>
+
+
+<span class='co'># An example with a custom dose selection function</span>
+<span class='no'>paths3</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_dtps</span>(<span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>,
+                   <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>, <span class='fl'>3</span>), <span class='kw'>previous_outcomes</span> <span class='kw'>=</span> <span class='st'>'2NN 3TN'</span>,
+                   <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                   <span class='kw'>user_dose_func</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
+                     <span class='fu'><a href='careful_escalation.html'>careful_escalation</a></span>(<span class='no'>x</span>, <span class='kw'>tox_threshold</span> <span class='kw'>=</span> <span class='no'>target</span> + <span class='fl'>0.1</span>,
+                                        <span class='kw'>certainty_threshold</span> <span class='kw'>=</span> <span class='fl'>0.7</span>)
+                   }, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='fu'><a href='spread_paths.html'>spread_paths</a></span>(<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>paths3</span>) <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(-<span class='no'>fit</span>, -<span class='no'>parent_fit</span>, -<span class='no'>dose_index</span>))
+<span class='co'># Stopping is recommended when the dose selection function returns NA.</span>
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

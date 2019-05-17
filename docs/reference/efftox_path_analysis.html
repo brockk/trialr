@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fit a CRM model to the incrementally observed outcomes on a trial pathway. — crm_path_analysis • trialr</title>
+<title>Fit an EffTox model to the incrementally observed outcomes on a trial pathway. — efftox_path_analysis • trialr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,15 +30,14 @@
 
 
 
-<meta property="og:title" content="Fit a CRM model to the incrementally observed outcomes on a trial pathway. — crm_path_analysis" />
+<meta property="og:title" content="Fit an EffTox model to the incrementally observed outcomes on a trial pathway. — efftox_path_analysis" />
 
-<meta property="og:description" content="Fit a continuous reassessment method (CRM) model to the outcomes cumulatively
-observed at the end of each cohort in a trial pathway. E.g. if the trial
-pathway is 1NN 2NN 3NT, we have three cohorts of two patients. This function
-will fit the model to the following four states: before any patients have
-been evaluated; after 1NN; after 1NN 2NN; and finally after 1NN 2NN 3NT.
-This allows us to analyse how the trial model is evolving in its estimation
-as trial data is accumulated." />
+<meta property="og:description" content="Fit a EffTox model to the outcomes cumulatively observed at the end of each
+cohort in a trial pathway. E.g. if the trial pathway is 1EN 2NN 3BT, we have
+three cohorts of two patients. This function will fit the model to the
+following four states: before any patients have been evaluated; after 1EN;
+after 1EN 2NN; and finally after 1EN 2NN 3BT. This allows us to analyse how
+the trial model is evolving in its estimation as trial data is accumulated." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -139,59 +138,39 @@ as trial data is accumulated." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fit a CRM model to the incrementally observed outcomes on a trial pathway.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/crm_path_analysis.R'><code>R/crm_path_analysis.R</code></a></small>
-    <div class="hidden name"><code>crm_path_analysis.Rd</code></div>
+    <h1>Fit an EffTox model to the incrementally observed outcomes on a trial pathway.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/efftox_path_analysis.R'><code>R/efftox_path_analysis.R</code></a></small>
+    <div class="hidden name"><code>efftox_path_analysis.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Fit a continuous reassessment method (CRM) model to the outcomes cumulatively
-observed at the end of each cohort in a trial pathway. E.g. if the trial
-pathway is 1NN 2NN 3NT, we have three cohorts of two patients. This function
-will fit the model to the following four states: before any patients have
-been evaluated; after 1NN; after 1NN 2NN; and finally after 1NN 2NN 3NT.
-This allows us to analyse how the trial model is evolving in its estimation
-as trial data is accumulated.</p>
+    <p>Fit a EffTox model to the outcomes cumulatively observed at the end of each
+cohort in a trial pathway. E.g. if the trial pathway is 1EN 2NN 3BT, we have
+three cohorts of two patients. This function will fit the model to the
+following four states: before any patients have been evaluated; after 1EN;
+after 1EN 2NN; and finally after 1EN 2NN 3BT. This allows us to analyse how
+the trial model is evolving in its estimation as trial data is accumulated.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>crm_path_analysis</span>(<span class='no'>outcomes_str</span>, <span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='no'>model</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>efftox_path_analysis</span>(<span class='no'>outcomes_str</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>skeleton</th>
-      <td><p>a vector of the prior guesses of toxicity at doses.
-This should be a monotonically-increasing vector of numbers between 0 and 1.</p></td>
-    </tr>
-    <tr>
-      <th>target</th>
-      <td><p>the target toxicity probability, a number between 0 and 1.
-This value would normally be one of the values in <code>skeleton</code>, but that
-is not a requirement.</p></td>
-    </tr>
-    <tr>
-      <th>model</th>
-      <td><p>Character string to denote desired model. One of <code>empiric</code>,
-<code>logistic</code>, <code>logistic_gamma</code>, or <code>logistic2</code>.
-The choice of model determines which extra parameters are required by
-<code>...</code>. See Details.</p></td>
-    </tr>
     <tr>
       <th>verbose</th>
       <td><p>logical, TRUE to get log messages.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Extra parameters passed to <code><a href='stan_crm.html'>stan_crm</a></code>.</p></td>
+      <td><p>All other parameters are passed to <code><a href='stan_efftox.html'>stan_efftox</a></code>.</p></td>
     </tr>
     <tr>
       <th>outcome_str</th>
       <td><p>A string representing the outcomes observed hitherto.
-See <code><a href='df_parse_outcomes.html'>df_parse_outcomes</a></code> for a description of syntax and
+See <code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code> for a description of syntax and
 examples. Alternatively, you may provide <code>doses_given</code> and <code>tox</code>
 parameters. See Details.</p></td>
     </tr>
@@ -201,79 +180,49 @@ parameters. See Details.</p></td>
 
     <p>A <code>list</code> of <code><a href='dose_finding_path_node-class.html'>dose_finding_path_node</a></code> objects.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Different model choices require that different parameters are provided.
-See below.</p>
-    
-    <h2 class="hasAnchor" id="parameter-requirements-of-empiric-model"><a class="anchor" href="#parameter-requirements-of-empiric-model"></a>Parameter requirements of <code>empiric</code> model</h2>
-
-    
-    <ul>
-<li><p><code>beta_sd</code></p></li>
-</ul>
-    
-    <h2 class="hasAnchor" id="parameter-requirements-of-logistic-model"><a class="anchor" href="#parameter-requirements-of-logistic-model"></a>Parameter requirements of <code>logistic</code> model</h2>
-
-    
-    <ul>
-<li><p><code>a0</code></p></li>
-<li><p><code>beta_mean</code></p></li>
-<li><p><code>beta_sd</code></p></li>
-</ul>
-    
-    <h2 class="hasAnchor" id="parameter-requirements-of-logistic-gamma-model"><a class="anchor" href="#parameter-requirements-of-logistic-gamma-model"></a>Parameter requirements of <code>logistic_gamma</code> model</h2>
-
-    
-    <ul>
-<li><p><code>a0</code></p></li>
-<li><p><code>beta_shape</code></p></li>
-<li><p><code>beta_inverse_scale</code></p></li>
-</ul>
-    
-    <h2 class="hasAnchor" id="parameter-requirements-of-logistic-model"><a class="anchor" href="#parameter-requirements-of-logistic-model"></a>Parameter requirements of <code>logistic2</code> model</h2>
-
-    
-    <ul>
-<li><p><code>a0</code></p></li>
-<li><p><code>alpha_mean</code></p></li>
-<li><p><code>alpha_sd</code></p></li>
-<li><p><code>beta_mean</code></p></li>
-<li><p><code>beta_sd</code></p></li>
-</ul>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='df_parse_outcomes.html'>df_parse_outcomes</a></code>,
-  <code><a href='stan_crm.html'>stan_crm</a></code>,
+    <div class='dont-index'><p><code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code>,
+  <code><a href='stan_efftox.html'>stan_efftox</a></code>,
   <code><a href='dose_finding_path_node-class.html'>dose_finding_path_node</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># CRM example</span>
-<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
-<span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.15</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
-<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_path_analysis</span>(
-  <span class='kw'>outcomes_str</span> <span class='kw'>=</span> <span class='st'>'1NNN 2NTN 2NNN'</span>,
-  <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>,
-  <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='co'># EffTox example</span>
+<span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_path_analysis</span>(
+  <span class='kw'>outcomes_str</span> <span class='kw'>=</span> <span class='st'>'1NNN 2NEN 3NEB'</span>,
+  <span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>),
+  <span class='kw'>efficacy_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>toxicity_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
+  <span class='kw'>p_e</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>p_t</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>eff0</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tox1</span> <span class='kw'>=</span> <span class='fl'>0.65</span>,
+  <span class='kw'>eff_star</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>tox_star</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
+  <span class='kw'>alpha_mean</span> <span class='kw'>=</span> -<span class='fl'>7.9593</span>, <span class='kw'>alpha_sd</span> <span class='kw'>=</span> <span class='fl'>3.5487</span>,
+  <span class='kw'>beta_mean</span> <span class='kw'>=</span> <span class='fl'>1.5482</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>3.5018</span>,
+  <span class='kw'>gamma_mean</span> <span class='kw'>=</span> <span class='fl'>0.7367</span>, <span class='kw'>gamma_sd</span> <span class='kw'>=</span> <span class='fl'>2.5423</span>,
+  <span class='kw'>zeta_mean</span> <span class='kw'>=</span> <span class='fl'>3.4181</span>, <span class='kw'>zeta_sd</span> <span class='kw'>=</span> <span class='fl'>2.4406</span>,
+  <span class='kw'>eta_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>eta_sd</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
+  <span class='kw'>psi_mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>psi_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+
 <span class='fu'>length</span>(<span class='no'>paths</span>)  <span class='co'># 4</span>
 <span class='fu'>names</span>(<span class='no'>paths</span>)[<span class='fl'>1</span>]  <span class='co'># ""</span>
 <span class='fu'>names</span>(<span class='no'>paths</span>)[<span class='fl'>2</span>]  <span class='co'># "1NNN"</span>
-<span class='fu'>names</span>(<span class='no'>paths</span>)[<span class='fl'>3</span>]  <span class='co'># "1NNN 2NTN"</span>
-<span class='fu'>names</span>(<span class='no'>paths</span>)[<span class='fl'>4</span>]  <span class='co'># "1NNN 2NTN 2NNN"</span>
+<span class='fu'>names</span>(<span class='no'>paths</span>)[<span class='fl'>3</span>]  <span class='co'># "1NNN 2NEN"</span>
+<span class='fu'>names</span>(<span class='no'>paths</span>)[<span class='fl'>4</span>]  <span class='co'># "1NNN 2NEN 3NEB"</span>
 <span class='co'># Each node is an analysis fit to the cumulative outcomes</span>
 <span class='co'># Converting to a tibble opens up some nice opportunities</span>
 <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>as_tibble</a></span>(<span class='no'>paths</span>)
 <span class='no'>df</span>
-<span class='co'># E.g. how did our view on the risk of toxicity at dose 2 evolve?</span>
+<span class='co'># E.g. how did our view on the event probabilities at dose 2 evolve?</span>
 <span class='fu'>library</span>(<span class='no'>tidyr</span>)
 <span class='fu'>library</span>(<span class='no'>purrr</span>)
 <span class='fu'>library</span>(<span class='no'>dplyr</span>)
 <span class='no'>df</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span>(<span class='st'>'prob_tox'</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>outcomes</span>, <span class='no'>dose_index</span>, <span class='no'>prob_tox</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
+    <span class='kw'>prob_tox</span> <span class='kw'>=</span> <span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span>(<span class='st'>'prob_tox'</span>),
+    <span class='kw'>prob_eff</span> <span class='kw'>=</span> <span class='no'>fit</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span>(<span class='st'>'prob_eff'</span>)
+  ) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>outcomes</span>, <span class='no'>dose_index</span>, <span class='no'>prob_tox</span>, <span class='no'>prob_eff</span>) <span class='kw'>%&gt;%</span>
   <span class='no'>unnest</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>dose_index</span> <span class='kw'>==</span> <span class='fl'>2</span>)
 <span class='co'># }</span></pre>
@@ -284,16 +233,6 @@ See below.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#parameter-requirements-of-empiric-model">Parameter requirements of <code>empiric</code> model</a></li>
-
-      <li><a href="#parameter-requirements-of-logistic-model">Parameter requirements of <code>logistic</code> model</a></li>
-
-      <li><a href="#parameter-requirements-of-logistic-gamma-model">Parameter requirements of <code>logistic_gamma</code> model</a></li>
-
-      <li><a href="#parameter-requirements-of-logistic-model">Parameter requirements of <code>logistic2</code> model</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

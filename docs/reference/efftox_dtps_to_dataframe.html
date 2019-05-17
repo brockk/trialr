@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert <code><a href='efftox_fit-class.html'>efftox_fit</a></code> to instance of
-<code><a href='http://www.rdocumentation.org/packages/coda/topics/mcmc.list'>mcmc.list</a></code> — as.mcmc.list.efftox_fit • trialr</title>
+<title>Calculate dose-transition pathways for an EffTox study — efftox_dtps_to_dataframe • trialr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -31,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Convert <code><a href='efftox_fit-class.html'>efftox_fit</a></code> to instance of
-<code><a href='http://www.rdocumentation.org/packages/coda/topics/mcmc.list'>mcmc.list</a></code> — as.mcmc.list.efftox_fit" />
+<meta property="og:title" content="Calculate dose-transition pathways for an EffTox study — efftox_dtps_to_dataframe" />
 
-<meta property="og:description" content="This function allows trialr to use tidybayes functions." />
+<meta property="og:description" content="Calculate dose-transition pathways for an EffTox study.
+Note that TODO TODO TODO" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -135,39 +134,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert <code><a href='efftox_fit-class.html'>efftox_fit</a></code> to instance of
-<code><a href='http://www.rdocumentation.org/packages/coda/topics/mcmc.list'>mcmc.list</a></code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/EffTox.R'><code>R/EffTox.R</code></a></small>
-    <div class="hidden name"><code>as.mcmc.list.efftox_fit.Rd</code></div>
+    <h1>Calculate dose-transition pathways for an EffTox study</h1>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/efftox_dtps_to_dataframe.R'><code>R/efftox_dtps_to_dataframe.R</code></a></small>
+    <div class="hidden name"><code>efftox_dtps_to_dataframe.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function allows trialr to use tidybayes functions.</p>
+    <p>Calculate dose-transition pathways for an EffTox study.
+Note that TODO TODO TODO</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for efftox_fit</span>
-<span class='fu'>as.mcmc.list</span>(<span class='no'>efftox_fit</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>efftox_dtps_to_dataframe</span>(<span class='no'>dat</span>, <span class='no'>cohort_sizes</span>, <span class='no'>next_dose</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>efftox_fit</th>
-      <td><p>Object of class <code><a href='efftox_fit-class.html'>efftox_fit</a></code></p></td>
+      <th>dat</th>
+      <td><p>An instance of <code><a href='efftox_params-class.html'>efftox_params</a></code>, a list of EffTox
+parameters. An example is yielded by <code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>cohort_sizes</th>
+      <td><p>vector of future cohort sizes, i.e. positive integers.
+E.g. To calculate paths for the the next cohort of two followed by another
+cohort of three, use <code>cohort_sizes = c(2, 3)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>next_dose</th>
+      <td><p>the dose-level to be given to the immediately next cohort.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Extra variables that are passed onwards.</p></td>
+      <td><p>extra params passed to <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>rstan::sampling</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Object of class <code><a href='http://www.rdocumentation.org/packages/coda/topics/mcmc.list'>mcmc.list</a></code></p>
+    <p>dose pathways in a <code>data.frame</code>.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Brock K, Billingham L, Copland M, Siddique S, Sirovica M, Yap C.
+Implementing the EffTox dose-finding design in the Matchpoint trial.
+BMC Medical Research Methodology. 2017;17(1):112.
+doi:10.1186/s12874-017-0381-x</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='efftox_dtps.html'>efftox_dtps</a></code>, <code><a href='efftox_params-class.html'>efftox_params</a></code>,
+<code><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Calculate the paths for the first cohort of 3 in Thall et al 2014 example</span>
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()</div><span class='co'># NOT RUN {</span>
+<span class='no'>dtps1</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps_to_dataframe</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>),
+                                  <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='co'># }</span><div class='input'><span class='co'># To calculate future paths in a partially-observed trial</span>
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='efftox_parameters_demo.html'>efftox_parameters_demo</a></span>()
+<span class='no'>dat</span>$<span class='no'>doses</span> <span class='kw'>=</span> <span class='fu'>array</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='no'>dat</span>$<span class='no'>eff</span> <span class='kw'>=</span> <span class='fu'>array</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
+<span class='no'>dat</span>$<span class='no'>tox</span> <span class='kw'>=</span> <span class='fu'>array</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='no'>dat</span>$<span class='no'>num_patients</span> <span class='kw'>=</span> <span class='fl'>3</span></div><span class='co'># NOT RUN {</span>
+<span class='no'>dtps2</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_dtps_to_dataframe</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>cohort_sizes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>),
+                                  <span class='kw'>next_dose</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -175,7 +211,13 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
