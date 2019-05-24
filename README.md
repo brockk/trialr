@@ -7,11 +7,9 @@ Kritian Brock
 # trialr
 
 [![cran
-version](http://www.r-pkg.org/badges/version/trialr)](https://cran.r-project.org/web/packages/trialr)
-
-<https://cranlogs.r-pkg.org/badges/trialr>
-
-<https://cranlogs.r-pkg.org/badges/grand-total/trialr>
+version](http://www.r-pkg.org/badges/version/trialr)](https://cran.r-project.org/package=trialr)
+![](https://cranlogs.r-pkg.org/badges/trialr)
+![](https://cranlogs.r-pkg.org/badges/grand-total/trialr)
 
 `trialr` is a collection of Bayesian clinical trial designs implemented
 in Stan and R. The documentation is available at
@@ -264,57 +262,57 @@ fit3
 #> post-warmup draws per chain=1000, total post-warmup draws=4000.
 #> 
 #>                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%
-#> mu                 -0.08    0.03  1.39  -3.10  -0.92  -0.02   0.85   2.54
-#> sigma2             12.92    0.40 12.39   3.28   6.29   9.56  14.97  44.64
-#> rho[1]             -0.02    0.07  3.87  -8.22  -2.23   0.04   2.33   7.49
-#> rho[2]             -3.16    0.07  2.83  -9.70  -4.44  -2.68  -1.28   0.75
-#> rho[3]              2.42    0.06  2.75  -1.85   0.59   2.06   3.78   8.99
-#> rho[4]             -0.32    0.01  0.78  -1.89  -0.84  -0.30   0.21   1.18
-#> rho[5]              3.74    0.06  2.38   0.50   2.11   3.27   4.82   9.56
-#> rho[6]             -0.07    0.06  3.78  -7.81  -2.26  -0.01   2.23   7.46
-#> rho[7]              0.01    0.02  1.52  -3.06  -0.94   0.02   0.98   3.05
-#> rho[8]              0.74    0.02  1.25  -1.59  -0.09   0.69   1.50   3.46
-#> rho[9]             -2.46    0.07  2.98  -9.63  -3.80  -2.02  -0.52   2.05
-#> rho[10]            -0.03    0.07  3.75  -7.72  -2.31   0.06   2.30   7.67
-#> sigma               3.36    0.04  1.27   1.81   2.51   3.09   3.87   6.68
-#> prob_response[1]    0.51    0.01  0.38   0.00   0.10   0.51   0.91   1.00
-#> prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.06   0.22   0.68
-#> prob_response[3]    0.78    0.00  0.25   0.14   0.64   0.89   0.98   1.00
-#> prob_response[4]    0.43    0.00  0.17   0.13   0.30   0.43   0.55   0.76
-#> prob_response[5]    0.92    0.00  0.10   0.62   0.89   0.96   0.99   1.00
-#> prob_response[6]    0.50    0.01  0.38   0.00   0.09   0.50   0.90   1.00
-#> prob_response[7]    0.50    0.00  0.27   0.04   0.28   0.50   0.73   0.95
-#> prob_response[8]    0.64    0.00  0.22   0.17   0.48   0.67   0.82   0.97
-#> prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.12   0.37   0.89
-#> prob_response[10]   0.50    0.01  0.38   0.00   0.09   0.51   0.91   1.00
-#> lp__              -34.40    0.13  3.67 -43.24 -36.44 -33.90 -31.77 -28.76
+#> mu                 -0.04    0.03  1.40  -2.92  -0.92   0.00   0.87   2.68
+#> sigma2             12.39    0.31 10.23   3.37   6.29   9.35  14.79  39.50
+#> rho[1]             -0.07    0.06  3.77  -7.59  -2.36  -0.04   2.27   7.45
+#> rho[2]             -3.03    0.07  2.69  -9.64  -4.34  -2.59  -1.21   0.81
+#> rho[3]              2.33    0.05  2.65  -1.96   0.61   1.98   3.70   8.70
+#> rho[4]             -0.29    0.01  0.77  -1.85  -0.81  -0.28   0.25   1.19
+#> rho[5]              3.72    0.05  2.33   0.46   2.14   3.31   4.75   9.49
+#> rho[6]             -0.11    0.06  3.78  -8.02  -2.33  -0.02   2.21   7.30
+#> rho[7]             -0.02    0.02  1.51  -2.99  -0.96  -0.01   0.92   3.04
+#> rho[8]              0.78    0.02  1.32  -1.63  -0.08   0.72   1.55   3.52
+#> rho[9]             -2.41    0.06  2.79  -9.02  -3.79  -2.02  -0.53   1.92
+#> rho[10]            -0.10    0.07  3.74  -7.95  -2.26   0.06   2.17   7.14
+#> sigma               3.32    0.04  1.17   1.84   2.51   3.06   3.85   6.28
+#> prob_response[1]    0.49    0.01  0.38   0.00   0.09   0.49   0.91   1.00
+#> prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.23   0.69
+#> prob_response[3]    0.77    0.00  0.26   0.12   0.65   0.88   0.98   1.00
+#> prob_response[4]    0.44    0.00  0.17   0.14   0.31   0.43   0.56   0.77
+#> prob_response[5]    0.92    0.00  0.10   0.61   0.89   0.96   0.99   1.00
+#> prob_response[6]    0.49    0.01  0.38   0.00   0.09   0.49   0.90   1.00
+#> prob_response[7]    0.50    0.00  0.26   0.05   0.28   0.50   0.72   0.95
+#> prob_response[8]    0.64    0.00  0.23   0.16   0.48   0.67   0.83   0.97
+#> prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.12   0.37   0.87
+#> prob_response[10]   0.50    0.01  0.38   0.00   0.09   0.52   0.90   1.00
+#> lp__              -34.32    0.13  3.64 -42.73 -36.44 -33.83 -31.67 -28.71
 #>                   n_eff Rhat
-#> mu                 2154 1.00
-#> sigma2              974 1.00
-#> rho[1]             3053 1.00
-#> rho[2]             1422 1.00
-#> rho[3]             1997 1.00
-#> rho[4]             3331 1.00
-#> rho[5]             1676 1.00
-#> rho[6]             3504 1.00
-#> rho[7]             4056 1.00
-#> rho[8]             4144 1.00
-#> rho[9]             1886 1.00
-#> rho[10]            2922 1.00
-#> sigma               986 1.00
-#> prob_response[1]   3442 1.00
-#> prob_response[2]   3624 1.00
-#> prob_response[3]   4037 1.00
-#> prob_response[4]   3425 1.00
-#> prob_response[5]   4141 1.00
-#> prob_response[6]   3729 1.00
-#> prob_response[7]   4321 1.00
-#> prob_response[8]   4402 1.00
-#> prob_response[9]   4293 1.00
-#> prob_response[10]  3732 1.00
-#> lp__                779 1.01
+#> mu                 2250    1
+#> sigma2             1080    1
+#> rho[1]             3504    1
+#> rho[2]             1507    1
+#> rho[3]             2564    1
+#> rho[4]             4012    1
+#> rho[5]             1872    1
+#> rho[6]             4193    1
+#> rho[7]             3691    1
+#> rho[8]             3395    1
+#> rho[9]             2247    1
+#> rho[10]            3196    1
+#> sigma              1075    1
+#> prob_response[1]   3785    1
+#> prob_response[2]   3704    1
+#> prob_response[3]   4376    1
+#> prob_response[4]   4020    1
+#> prob_response[5]   4411    1
+#> prob_response[6]   3671    1
+#> prob_response[7]   3838    1
+#> prob_response[8]   3769    1
+#> prob_response[9]   4000    1
+#> prob_response[10]  3680    1
+#> lp__                843    1
 #> 
-#> Samples were drawn using NUTS(diag_e) at Thu May 23 19:38:57 2019.
+#> Samples were drawn using NUTS(diag_e) at Fri May 24 16:20:48 2019.
 #> For each parameter, n_eff is a crude measure of effective sample size,
 #> and Rhat is the potential scale reduction factor on split chains (at 
 #> convergence, Rhat=1).

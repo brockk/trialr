@@ -178,8 +178,8 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
     <pre class="examples"><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stan_efftox_demo.html'>stan_efftox_demo</a></span>(<span class='st'>'1N 2E 3B'</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 1.6e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#&gt; Chain 1: Gradient evaluation took 1.7e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -196,15 +196,15 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.080867 seconds (Warm-up)
-#&gt; Chain 1:                0.05985 seconds (Sampling)
-#&gt; Chain 1:                0.140717 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.09441 seconds (Warm-up)
+#&gt; Chain 1:                0.063731 seconds (Sampling)
+#&gt; Chain 1:                0.158141 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.6e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.1e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -221,15 +221,15 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.087585 seconds (Warm-up)
-#&gt; Chain 2:                0.057196 seconds (Sampling)
-#&gt; Chain 2:                0.144781 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.087043 seconds (Warm-up)
+#&gt; Chain 2:                0.05973 seconds (Sampling)
+#&gt; Chain 2:                0.146773 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 1.2e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
+#&gt; Chain 3: Gradient evaluation took 1.1e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -246,15 +246,15 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.079628 seconds (Warm-up)
-#&gt; Chain 3:                0.05861 seconds (Sampling)
-#&gt; Chain 3:                0.138238 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.081915 seconds (Warm-up)
+#&gt; Chain 3:                0.060717 seconds (Sampling)
+#&gt; Chain 3:                0.142632 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 1.4e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#&gt; Chain 4: Gradient evaluation took 1.6e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -271,9 +271,9 @@ only dose-levels 1, 2 &amp; 3 (and suppress the plotting of any other doses), us
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.079453 seconds (Warm-up)
-#&gt; Chain 4:                0.056683 seconds (Sampling)
-#&gt; Chain 4:                0.136136 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.087346 seconds (Warm-up)
+#&gt; Chain 4:                0.071464 seconds (Sampling)
+#&gt; Chain 4:                0.15881 seconds (Total)
 #&gt; Chain 4: </div><div class='input'><span class='fu'>efftox_utility_density_plot</span>(<span class='no'>fit</span>) + <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'My doses'</span>)  <span class='co'># Too busy?</span></div><div class='img'><img src='efftox_utility_density_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Specify subset of doses to make plot less cluttered</span>
 <span class='fu'>efftox_utility_density_plot</span>(<span class='no'>fit</span>, <span class='kw'>doses</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>) + <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>'My doses'</span>)</div><div class='img'><img src='efftox_utility_density_plot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>

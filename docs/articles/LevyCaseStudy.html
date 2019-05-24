@@ -103,7 +103,7 @@
       <h1>CRM Case Study 1 - Levy et al (2006)</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-05-23</h4>
+            <h4 class="date">2019-05-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/LevyCaseStudy.Rmd"><code>vignettes/LevyCaseStudy.Rmd</code></a></small>
       <div class="hidden name"><code>LevyCaseStudy.Rmd</code></div>
@@ -171,16 +171,16 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; No patients have been treated.</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;   Dose Skeleton N Tox ProbTox MedianProbTox ProbMTD</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1    1     0.05 0   0   0.266         0.192  0.4158</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 2    2     0.10 0   0   0.306         0.273  0.0595</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 3    3     0.15 0   0   0.336         0.334  0.1057</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 4    4     0.33 0   0   0.432         0.486  0.1752</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 5    5     0.50 0   0   0.533         0.594  0.2437</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1    1     0.05 0   0   0.255         0.168   0.395</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 2    2     0.10 0   0   0.293         0.248   0.060</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 3    3     0.15 0   0   0.324         0.309   0.105</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 4    4     0.33 0   0   0.419         0.468   0.177</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 5    5     0.50 0   0   0.523         0.584   0.263</span></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; The model targets a toxicity level of 0.33.</span></a>
 <a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; The dose with estimated toxicity probability closest to target is 3.</span></a>
 <a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; The dose most likely to be the MTD is 1.</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; Model entropy: 1.42</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; Model entropy: 1.43</span></a></code></pre></div>
 <p>Notice that both the prior mean (<code>ProbTox</code>) and median (<code>MedianProbTox</code>) probabilities of toxicity are quite far from the skeleton.</p>
 <p>In an ordinary regression model, fixing the intercept will affect the gradient. The same is true here:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>

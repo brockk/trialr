@@ -170,8 +170,8 @@ into a <code>data.frame</code>.</p>
     <pre class="examples"><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stan_efftox_demo.html'>stan_efftox_demo</a></span>(<span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='st'>'1N 2E 3B'</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 3.8e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+#&gt; Chain 1: Gradient evaluation took 3.6e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -188,9 +188,9 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.081374 seconds (Warm-up)
-#&gt; Chain 1:                0.056763 seconds (Sampling)
-#&gt; Chain 1:                0.138137 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.086906 seconds (Warm-up)
+#&gt; Chain 1:                0.057792 seconds (Sampling)
+#&gt; Chain 1:                0.144698 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 2).
@@ -213,15 +213,15 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.078674 seconds (Warm-up)
-#&gt; Chain 2:                0.053699 seconds (Sampling)
-#&gt; Chain 2:                0.132373 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.081568 seconds (Warm-up)
+#&gt; Chain 2:                0.058261 seconds (Sampling)
+#&gt; Chain 2:                0.139829 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 1.3e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#&gt; Chain 3: Gradient evaluation took 1.1e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -238,9 +238,9 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.082389 seconds (Warm-up)
-#&gt; Chain 3:                0.056608 seconds (Sampling)
-#&gt; Chain 3:                0.138997 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.086408 seconds (Warm-up)
+#&gt; Chain 3:                0.059442 seconds (Sampling)
+#&gt; Chain 3:                0.14585 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'EffTox' NOW (CHAIN 4).
@@ -263,9 +263,9 @@ into a <code>data.frame</code>.</p>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.084503 seconds (Warm-up)
-#&gt; Chain 4:                0.055353 seconds (Sampling)
-#&gt; Chain 4:                0.139856 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.085778 seconds (Warm-up)
+#&gt; Chain 4:                0.064219 seconds (Sampling)
+#&gt; Chain 4:                0.149997 seconds (Total)
 #&gt; Chain 4: </div><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_analysis_to_df</span>(<span class='no'>fit</span>)
 <span class='no'>df</span></div><div class='output co'>#&gt;   Dose N   ProbEff    ProbTox ProbAccEff ProbAccTox     Utility Acceptable
 #&gt; 1    1 1 0.2193306 0.04292599    0.14650    0.95900 -0.63396140       TRUE
