@@ -1,4 +1,9 @@
 
+# trialr 0.1.1
+
+Plumbed in support for tidybayes. Added pathways analysis for CRM and rewrote
+the same for EffTox.
+
 # trialr 0.1.0
 
 Added TITE-CRM implmentation plus tests and vignette.

@@ -19,6 +19,7 @@
 #' @importFrom purrr map_chr
 #' @export
 as_tibble.dose_finding_paths <- function(x, ...) {
+  fit <- NULL
   tibble(
     .node = map_dbl(x, '.node'),
     .parent = map_dbl(x, '.parent'),

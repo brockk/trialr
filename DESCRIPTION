@@ -1,16 +1,13 @@
 Package: trialr
-Version: 0.1.0.9002
-Date: 2019-04-27
+Version: 0.1.1
+Date: 2019-05-22
 Title: Clinical Trial Designs in 'RStan'
 Description: A showcase of Bayesian clinical trial designs, implemented in 
-    'RStan' and R. Some designs are implemented in R for the first
-    time (e.g. 'EffTox' by Thall and Cook, 2004, 
-    <https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software_Id=2>). 
+    'RStan' and R, including the Continual Reassessment Method (CRM) and EffTox.
     Given the emphasis on flexibility in Bayesian analysis,
     the implementations in a common language and style may serve as a cookbook
     to encourage the use of Bayesian methods in trials. Compiled 'RStan' models
-    are provided in addition to helper classes and functions to perform 
-    simulations and inference on observed trial outcomes. 
+    are installed, alongside helper classes and functions to work with models.
     There is a preponderance of early phase trial designs because this is where 
     Bayesian methods are used most. If there is a published Bayesian design you
     want implemented in 'Stan', get in touch.
@@ -40,7 +37,8 @@ Imports:
   ggplot2,
   gtools,
   coda,
-  tidybayes
+  tidybayes,
+  tibble
 LinkingTo:
   StanHeaders (>= 2.18.1), 
   rstan (>= 2.18.2), 

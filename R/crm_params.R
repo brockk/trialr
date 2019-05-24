@@ -28,25 +28,32 @@
 #' Different model parameterisations require that difference parameter values
 #' are specified.
 #'
-#' @section Requirements of \code{empiric} model:
-#' * beta_sd
+#' @section Parameter requirements of \code{empiric} model:
+#' \itemize{
+#'   \item \code{beta_sd}
+#' }
 #'
-#' @section Requirements of \code{logistic} model:
-#' * a0
-#' * beta_mean
-#' * beta_sd
+#' @section Parameter requirements of \code{logistic} model:
+#' \itemize{
+#'   \item \code{a0}
+#'   \item \code{beta_mean}
+#'   \item \code{beta_sd}
+#' }
 #'
-#' @section Requirements of \code{logistic_gamma} model:
-#' * a0
-#' * beta_shape
-#' * beta_inverse_scale
+#' @section Parameter requirements of \code{logistic_gamma} model:
+#' \itemize{
+#'   \item \code{a0}
+#'   \item \code{beta_shape}
+#'   \item \code{beta_inverse_scale}
+#' }
 #'
-#' @section Requirements of \code{logistics} model:
-#' * a0
-#' * alpha_mean
-#' * alpha_sd
-#' * beta_mean
-#' * beta_sd
+#' @section Parameter requirements of \code{logistic2} model:
+#' \itemize{
+#'   \item \code{alpha_mean}
+#'   \item \code{alpha_sd}
+#'   \item \code{beta_mean}
+#'   \item \code{beta_sd}
+#' }
 #'
 #' @export
 #'

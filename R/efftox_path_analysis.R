@@ -32,7 +32,7 @@
 #' \dontrun{
 #' # EffTox example
 #' paths <- efftox_path_analysis(
-#'   outcomes_str = '1NNN 2NEN 3NEB',
+#'   outcome_str = '1NNN 2NEN 3NEB',
 #'   real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
 #'   efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
 #'   p_e = 0.1, p_t = 0.1,
@@ -67,14 +67,13 @@
 #'   unnest %>%
 #'   filter(dose_index == 2)
 #' }
-efftox_path_analysis <- function(outcomes_str,
+efftox_path_analysis <- function(outcome_str,
                                  verbose = FALSE,
                                  ...) {
 
   # Break outcomes pathway into cohorts.
-  cohorts = parse_eff_tox_dose_finding_outcomes(outcomes_str)
+  cohorts = parse_eff_tox_dose_finding_outcomes(outcome_str)
 
-  num_doses <- length(skeleton)
   cache <- list()
   # Root node is the current scenario. Create and cache.
   root_node_id <- 1

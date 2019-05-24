@@ -17,7 +17,7 @@ crm_process <- function(dat, fit) {
   prob_tox_samp <- rstan::extract(fit, 'prob_tox')[[1]]
   prob_tox <- colMeans(prob_tox_samp)
   median_prob_tox <- apply(prob_tox_samp, 2, stats::median)
-  recommended_dose <- which.min(abs(prob_tox - dat$target))  # Dose decision delegate
+  recommended_dose <- which.min(abs(prob_tox - dat$target))
   model_dose <- which.min(abs(prob_tox - dat$target))
 
   # Implied MTD

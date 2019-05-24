@@ -53,7 +53,7 @@ print.crm_fit <- function(x, ...) {
 
   # Dose-level data
   df <- data.frame(
-    DoseLevel = factor(x$dose_indices),
+    Dose = factor(x$dose_indices),
     Skeleton = x$dat$skeleton,
     N = sapply(1:x$dat$num_doses, function(i) sum(x$dat$doses == i)),
     Tox = sapply(1:x$dat$num_doses, function(i) sum(x$dat$tox[x$dat$doses == i])),
@@ -117,7 +117,7 @@ plot.crm_fit <- function(x, pars = 'prob_tox', ...) {
 #' @seealso
 #' \code{\link{stan_crm}}
 summary.crm_fit <- function(object, ...) {
-  if(!is.null(x$fit))
+  if(!is.null(object$fit))
     rstan::summary(object$fit, ...)
 }
 

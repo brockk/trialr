@@ -25,19 +25,11 @@
 #' @param recommended_dose An integer representing the dose-level that is
 #' recommended for the next patient or cohort. Contrast to
 #' \code{modal_mtd_candidate}.
-#' @param modal_mtd_candidate An integer representing the dose-level most likely
-#' to be the MTD, i.e. the dose-level that maximises \code{prob_mtd}.
-#' @param entropy The value of the entropy implied by prob_mtd. If the values of
-#' prob_mtd are equal, entropy is maximised, taking value log(n) where n is
-#' the number of doses, and we could not be more ignorant about the identity of
-#' the maximum tolerable dose. If prob_mtd is a vector of zeroes except for a
-#' single value of 1, then entropy is minimisied, taking value 0, and we are
-#' sure of the identity of the maximum tolerable dose.
 #' @param dat Object \code{\link{crm_params}} containing data passed to
 #' \code{\link[rstan:sampling]{sampling}}.
 #' @param fit An object of class \code{\link[rstan:stanfit]{stanfit}},
 #' containing the posterior samples.
-#' @param An optional \code{data.frame} like object of samples.
+#' @param samples An optional \code{data.frame} like object of samples.
 #'
 #' @export
 #'

@@ -13,7 +13,9 @@
 #'
 efftox_process <- function(dat, fit) {
 
-  # Posterior mean estimates
+  dose_indices <- 1:dat$num_doses
+
+  # Posterior estimates
   prob_eff <- colMeans(rstan::extract(fit, 'prob_eff')[[1]])
   median_prob_eff <- apply(rstan::extract(fit, 'prob_eff')[[1]], 2,
                            stats::median)
@@ -22,22 +24,31 @@ efftox_process <- function(dat, fit) {
   median_prob_tox <- apply(rstan::extract(fit, 'prob_tox')[[1]], 2,
                            stats::median)
   prob_acc_tox <- colMeans(rstan::extract(fit, 'prob_acc_tox')[[1]])
-  post_utility <- colMeans(rstan::extract(fit, 'utility')[[1]])
+
+  post_utility_samp <- rstan::extract(fit, 'utility')[[1]]
+  post_utility <- colMeans(post_utility_samp)
+  obd_candidate <- apply(post_utility_samp, 1, function(x) which.max(x))
+  prob_obd <- sapply(dose_indices, function(x) mean(obd_candidate == x))
 
   # Derived quantities
-  utility = efftox_utility(dat$p, dat$eff0, dat$tox1,
-                           prob_eff, prob_tox)
+  # Utility estimate from plugging in prob_eff and prob_tox, a la Thall et al
+  utility = efftox_utility(dat$p, dat$eff0, dat$tox1, prob_eff, prob_tox)
+  # post_utility in contrast is full Bayesian posterior mean
 
-  # Dose admissibility
-  dose_indices <- 1:dat$num_doses
-  lowest <- min(dat$doses)
-  highest <- max(dat$doses)
-  in_range <- sapply(dose_indices,
-                     function(x) (x >= lowest - 1) & (x <= highest + 1))
-  acceptable <- (prob_acc_eff > dat$p_e) & (prob_acc_tox > dat$p_t) & in_range
-  if(sum(acceptable) > 0) {
-    recommended_dose <- which.max(ifelse(acceptable, utility, NA))  # 2
+  # Dose admissibility and recommended dose
+  if(dat$num_patients > 0) {
+    lowest <- min(dat$doses)
+    highest <- max(dat$doses)
+    in_range <- sapply(dose_indices,
+                       function(x) (x >= lowest - 1) & (x <= highest + 1))
+    acceptable <- (prob_acc_eff > dat$p_e) & (prob_acc_tox > dat$p_t) & in_range
+    if(sum(acceptable) > 0) {
+      recommended_dose <- which.max(ifelse(acceptable, utility, NA))
+    } else {
+      recommended_dose <- NA
+    }
   } else {
+    acceptable <- rep(NA, dat$num_doses)
     recommended_dose <- NA
   }
 
@@ -45,6 +56,7 @@ efftox_process <- function(dat, fit) {
                   num_patients = dat$num_patients,
                   doses = dat$doses,
                   tox = dat$tox,
+                  eff = dat$eff,
                   prob_tox = prob_tox,
                   prob_eff = prob_eff,
                   median_prob_tox = median_prob_tox,
@@ -53,6 +65,7 @@ efftox_process <- function(dat, fit) {
                   prob_acc_eff = prob_acc_eff,
                   utility = utility,
                   post_utility = post_utility,
+                  prob_obd = prob_obd,
                   acceptable = acceptable,
                   recommended_dose = recommended_dose,
                   dat = dat,

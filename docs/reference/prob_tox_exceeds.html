@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Calculate the probability that the rate of toxicity exceeds some threshold — prob_tox_exceeds" />
 
-<meta property="og:description" content="Calculate the probability that the rate of toxicity exceeds some threshold" />
+<meta property="og:description" content="Calculate the probability that the rate of toxicity exceeds some threshold
+Calculate the probability that the rate of toxicity exceeds some threshold" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -61,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -141,19 +142,25 @@
     <div class="ref-description">
     
     <p>Calculate the probability that the rate of toxicity exceeds some threshold</p>
+<p>Calculate the probability that the rate of toxicity exceeds some threshold</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>prob_tox_exceeds</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>prob_tox_exceeds</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for dose_finding_fit</span>
+<span class='fu'>prob_tox_exceeds</span>(<span class='no'>x</span>, <span class='no'>threshold</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fit</th>
-      <td><p>Object like <code><a href='crm_fit-class.html'>crm_fit</a></code> or <code><a href='efftox_fit-class.html'>efftox_fit</a></code>
-that contains samples for <code>prob_tox</code> variable indexed by an integer
-dose-level.</p></td>
+      <th>x</th>
+      <td><p>an R object of class <code>"dose_finding_fit"</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed to other methods</p></td>
     </tr>
     <tr>
       <th>threshold</th>
@@ -164,6 +171,7 @@ dose-level.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>numerical vector of probabilities</p>
+<p>numerical vector of probabilities</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

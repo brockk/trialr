@@ -3,8 +3,8 @@
 #' @param df Optional \code{data.frame} like that returned by
 #' as_tibble(dose_finding_paths). Columns .depth, .node, .parent are required.
 #' All other columns are spread with a suffix reflecting depth.
-#' @param dose_finding_paths Optional instance of
-#' \code{\link{dose_finding_paths}}. Required if `df` is null.
+#' @param dose_finding_paths Optional instance of dose_finding_paths. Required
+#' if `df` is null.
 #' @param max_depth integer, maximum depth of paths to traverse.
 #'
 #' @return A data.frame
@@ -38,6 +38,8 @@ spread_paths <- function(df = NULL,
   if(is.null(max_depth)) max_depth <- max(df$.depth)
   if(!all(c('.depth', '.node', '.parent') %in% colnames(df)))
     stop("Columns '.depth', '.node' and '.parent' are required.")
+
+  .depth <- .parent <- .node <- Node <- NULL
 
   depth = 0
   wide_df <- df %>%

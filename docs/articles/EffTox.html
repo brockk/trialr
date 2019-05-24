@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <h1>EffTox</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-05-17</h4>
+            <h4 class="date">2019-05-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/EffTox.Rmd"><code>vignettes/EffTox.Rmd</code></a></small>
       <div class="hidden name"><code>EffTox.Rmd</code></div>
@@ -209,20 +209,16 @@
 ## 5       5    2        0        1
 ## 6       6    2        1        1
 ## 
-##   DoseLevel   ProbEff    ProbTox ProbAccEff ProbAccTox    Utility
-## 1         1 0.4045039 0.08990953    0.33175    0.92700 -0.3397885
-## 2         2 0.7917219 0.09875146    0.94575    0.92250  0.4237935
-## 3         3 0.9313427 0.21522248    0.98475    0.72900  0.5249445
-## 4         4 0.9572788 0.30606939    0.98475    0.62925  0.4380717
-## 5         5 0.9657038 0.36255571    0.98350    0.57725  0.3685257
-##   Acceptable
-## 1       TRUE
-## 2       TRUE
-## 3       TRUE
-## 4      FALSE
-## 5      FALSE
+##   Dose N ProbEff ProbTox ProbAccEff ProbAccTox Utility Acceptable ProbOBD
+## 1    1 3   0.405  0.0899      0.332      0.927  -0.340       TRUE  0.0400
+## 2    2 3   0.792  0.0988      0.946      0.922   0.424       TRUE  0.2512
+## 3    3 0   0.931  0.2152      0.985      0.729   0.525       TRUE  0.2065
+## 4    4 0   0.957  0.3061      0.985      0.629   0.438      FALSE  0.0622
+## 5    5 0   0.966  0.3626      0.984      0.577   0.369      FALSE  0.4400
 ## 
-## The model recommends selecting dose-level 3.</code></pre>
+## The model recommends selecting dose-level 3.
+## The dose most likely to be the OBD is 5.
+## Model entropy: 1.34</code></pre>
 <p>As with the CRM models, the default <code>print</code> method for EffTox models tabulates patient data and then dose-level data. We see that dose-level 3 is recommended for the next cohort, offering the projected best trade-off between efficacy and toxicity probabilities. We see that dose-levels 4 and 5 are unacceptable. This is because dose-level 3 has not yet been given. No doses are inferred to be too toxic or inefficacious yet.</p>
 <p>More generally, the function <code>stan_efftox</code> can be used to fit EffTox models. The above call is simply short-hand for:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stan_efftox.html">stan_efftox</a></span>(outcomes,</a>

@@ -18,13 +18,18 @@ by \code{\link{efftox_parse_outcomes}}.}
 \item{next_dose}{the dose-level to be given to the immediately next cohort.}
 
 \item{user_dose_func}{optional delegate for deciding dose. A function that
-takes a \code{\link{eff_fit}} as the sole argument and returns the integer
+takes a \code{\link{efftox_fit}} as the sole argument and returns the integer
 (1-based) dose-level to be given next, or NA to show that no dose should be
 chosen and the trial stopped. This function gives the user the opportunity to
 build in custom behaviour to tailor the dose selection decision in response
 to the insights garnered by the fit model, or recommend that a trial path
 be halted immediately. If omitted, the dose ordinarily chosen by the model is
 used. An example is given below.}
+
+\item{verbose}{logical, TRUE to get progress messages.}
+
+\item{i_am_patient}{logical, TRUE to show your tolerance for waiting for over 100
+models to fit. Set to FALSE by default.}
 
 \item{...}{extra params passed to \code{rstan::sampling}.}
 }

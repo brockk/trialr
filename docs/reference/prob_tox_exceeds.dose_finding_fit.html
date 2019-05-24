@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Class of model fit by <span class="pkg">trialr</span> using the CRM dose-finding design. — crm_fit-class • trialr</title>
+<title>Calculate the probability that the rate of toxicity exceeds some threshold — prob_tox_exceeds.dose_finding_fit • trialr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Class of model fit by <span class="pkg">trialr</span> using the CRM dose-finding design. — crm_fit-class" />
+<meta property="og:title" content="Calculate the probability that the rate of toxicity exceeds some threshold — prob_tox_exceeds.dose_finding_fit" />
 
-<meta property="og:description" content="Class of model fit by trialr using the CRM dose-finding design." />
+<meta property="og:description" content="Calculate the probability that the rate of toxicity exceeds some threshold" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -133,100 +133,58 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Class of model fit by <span class="pkg">trialr</span> using the CRM dose-finding design.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/crm_fit.R'><code>R/crm_fit.R</code></a></small>
-    <div class="hidden name"><code>crm_fit-class.Rd</code></div>
+    <h1>Calculate the probability that the rate of toxicity exceeds some threshold</h1>
+    <small class="dont-index">Source: <a href='https://github.com/brockk/trialr/blob/master/R/prob_tox_exceeds.R'><code>R/prob_tox_exceeds.R</code></a></small>
+    <div class="hidden name"><code>prob_tox_exceeds.dose_finding_fit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Class of model fit by <span class="pkg">trialr</span> using the CRM dose-finding design.</p>
+    <p>Calculate the probability that the rate of toxicity exceeds some threshold</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>crm_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>num_patients</span>, <span class='no'>doses</span>, <span class='no'>tox</span>, <span class='no'>prob_tox</span>, <span class='no'>median_prob_tox</span>,
-  <span class='no'>prob_mtd</span>, <span class='no'>recommended_dose</span>, <span class='no'>dat</span>, <span class='no'>fit</span>, <span class='kw'>samples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for dose_finding_fit</span>
+<span class='fu'><a href='prob_tox_exceeds.html'>prob_tox_exceeds</a></span>(<span class='no'>fit</span>, <span class='no'>threshold</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dose_indices</th>
-      <td><p>A vector of integers representing the dose-levels under
-consideration.</p></td>
-    </tr>
-    <tr>
-      <th>num_patients</th>
-      <td><p>Integer, the number of patients analysed.</p></td>
-    </tr>
-    <tr>
-      <th>doses</th>
-      <td><p>vector of integers representing the dose given to the patients.</p></td>
-    </tr>
-    <tr>
-      <th>tox</th>
-      <td><p>vector of integers representing the toxicity status of the
-patients.</p></td>
-    </tr>
-    <tr>
-      <th>prob_tox</th>
-      <td><p>The posterior mean probabilities of toxicity at doses 1:n;
-a vector of numbers between 0 and 1.</p></td>
-    </tr>
-    <tr>
-      <th>median_prob_tox</th>
-      <td><p>The posterior median probabilities of toxicity at doses
-1:n; a vector of numbers between 0 and 1.</p></td>
-    </tr>
-    <tr>
-      <th>prob_mtd</th>
-      <td><p>The posterior probability that each dose is the MTD, by the
-chosen model; a vector of numbers between 0 and 1. This probability reflects
-the uncertainty remaining in the parameter distributions, whereas
-<code>prob_tox</code> and <code>median_prob_tox</code> do not.</p></td>
-    </tr>
-    <tr>
-      <th>recommended_dose</th>
-      <td><p>An integer representing the dose-level that is
-recommended for the next patient or cohort. Contrast to
-<code>modal_mtd_candidate</code>.</p></td>
-    </tr>
-    <tr>
-      <th>dat</th>
-      <td><p>Object <code><a href='crm_params-class.html'>crm_params</a></code> containing data passed to
-<code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling'>sampling</a></code>.</p></td>
-    </tr>
-    <tr>
       <th>fit</th>
-      <td><p>An object of class <code><a href='http://www.rdocumentation.org/packages/rstan/topics/stanfit-class'>stanfit</a></code>,
-containing the posterior samples.</p></td>
+      <td><p>Object of class <code><a href='dose_finding_fit-class.html'>dose_finding_fit</a></code> that contains
+samples for <code>prob_tox</code> variable indexed by an integer dose-level.</p></td>
     </tr>
     <tr>
-      <th>samples</th>
-      <td><p>An optional <code>data.frame</code> like object of samples.</p></td>
+      <th>threshold</th>
+      <td><p>numeric, threshold value.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>See <code>methods(class = "crm_fit")</code> for an overview of available
-methods.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='stan_crm.html'>stan_crm</a></code></p></div>
+    <p>numerical vector of probabilities</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># CRM example</span>
+<span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.2</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stan_crm.html'>stan_crm</a></span>(<span class='st'>'1N 2N 3T'</span>, <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.35</span>, <span class='fl'>0.6</span>),
+                 <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>, <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='fl'>1.34</span>),
+                 <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>)
+<span class='fu'><a href='prob_tox_exceeds.html'>prob_tox_exceeds</a></span>(<span class='no'>fit</span>, <span class='no'>target</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

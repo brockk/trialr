@@ -52,28 +52,27 @@
 #' Different model choices require that different parameters are
 #' provided. See below.
 #'
-#' @section Requirements of \code{empiric} model:
+#' @section Parameter requirements of \code{empiric} model:
 #' \itemize{
 #'   \item \code{beta_sd}
 #' }
 #'
-#' @section Requirements of \code{logistic} model:
+#' @section Parameter requirements of \code{logistic} model:
 #' \itemize{
 #'   \item \code{a0}
 #'   \item \code{beta_mean}
 #'   \item \code{beta_sd}
 #' }
 #'
-#' @section Requirements of \code{logistic_gamma} model:
+#' @section Parameter requirements of \code{logistic_gamma} model:
 #' \itemize{
 #'   \item \code{a0}
 #'   \item \code{beta_shape}
 #'   \item \code{beta_inverse_scale}
 #' }
 #'
-#' @section Requirements of \code{logistic2} model:
+#' @section Parameter requirements of \code{logistic2} model:
 #' \itemize{
-#'   \item \code{a0}
 #'   \item \code{alpha_mean}
 #'   \item \code{alpha_sd}
 #'   \item \code{beta_mean}

@@ -11,8 +11,8 @@ spread_paths(df = NULL, dose_finding_paths = NULL, max_depth = NULL)
 as_tibble(dose_finding_paths). Columns .depth, .node, .parent are required.
 All other columns are spread with a suffix reflecting depth.}
 
-\item{dose_finding_paths}{Optional instance of
-\code{\link{dose_finding_paths}}. Required if `df` is null.}
+\item{dose_finding_paths}{Optional instance of dose_finding_paths. Required
+if `df` is null.}
 
 \item{max_depth}{integer, maximum depth of paths to traverse.}
 }

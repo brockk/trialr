@@ -32,7 +32,10 @@
 
 <meta property="og:title" content="Class of model fit by <span class="pkg">trialr</span> using the EffTox dose-finding design. — efftox_fit-class" />
 
-<meta property="og:description" content="Class of model fit by trialr using the EffTox dose-finding design." />
+<meta property="og:description" content="Phase I/II dose-finding trials, i.e. those that search for a dose my efficacy
+and toxicity outcomes search for the optimal biological dose (OBD), rather
+than the maximum tolerated dose (MTD) that is typically sought be traditional
+toxicity-only dose-finding." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -61,7 +64,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -140,13 +143,16 @@
 
     <div class="ref-description">
     
-    <p>Class of model fit by <span class="pkg">trialr</span> using the EffTox dose-finding design.</p>
+    <p>Phase I/II dose-finding trials, i.e. those that search for a dose my efficacy
+and toxicity outcomes search for the optimal biological dose (OBD), rather
+than the maximum tolerated dose (MTD) that is typically sought be traditional
+toxicity-only dose-finding.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>efftox_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>num_patients</span>, <span class='no'>doses</span>, <span class='no'>tox</span>, <span class='no'>prob_tox</span>, <span class='no'>prob_eff</span>,
+    <pre class="usage"><span class='fu'>efftox_fit</span>(<span class='no'>dose_indices</span>, <span class='no'>num_patients</span>, <span class='no'>doses</span>, <span class='no'>tox</span>, <span class='no'>eff</span>, <span class='no'>prob_tox</span>, <span class='no'>prob_eff</span>,
   <span class='no'>median_prob_tox</span>, <span class='no'>median_prob_eff</span>, <span class='no'>prob_acc_tox</span>, <span class='no'>prob_acc_eff</span>, <span class='no'>utility</span>,
-  <span class='no'>post_utility</span>, <span class='no'>acceptable</span>, <span class='no'>recommended_dose</span>, <span class='no'>dat</span>, <span class='no'>fit</span>)</pre>
+  <span class='no'>post_utility</span>, <span class='no'>prob_obd</span>, <span class='no'>acceptable</span>, <span class='no'>recommended_dose</span>, <span class='no'>dat</span>, <span class='no'>fit</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,6 +176,11 @@ consideration.</p></td>
 patients.</p></td>
     </tr>
     <tr>
+      <th>eff</th>
+      <td><p>vector of integers representing the efficacy status of the
+patients.</p></td>
+    </tr>
+    <tr>
       <th>prob_tox</th>
       <td><p>The posterior mean probabilities of toxicity at doses 1:n;
 a vector of numbers between 0 and 1.</p></td>
@@ -178,6 +189,16 @@ a vector of numbers between 0 and 1.</p></td>
       <th>prob_eff</th>
       <td><p>The posterior mean probabilities of efficacy at doses 1:n;
 a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>median_prob_tox</th>
+      <td><p>The posterior median probabilities of toxicity at
+doses 1:n; a vector of numbers between 0 and 1.</p></td>
+    </tr>
+    <tr>
+      <th>median_prob_eff</th>
+      <td><p>The posterior mean probabilities of efficacy at doses
+1:n; a vector of numbers between 0 and 1.</p></td>
     </tr>
     <tr>
       <th>prob_acc_tox</th>
@@ -204,6 +225,13 @@ a vector of numbers.</p></td>
 from the posterior distributions of the utilities. This is in contrast to
 <code>utility</code>, which uses plug-in posterior means of efficacy and toxicity,
 as advocated by Thall &amp; Cook; a vector of numbers.</p></td>
+    </tr>
+    <tr>
+      <th>prob_obd</th>
+      <td><p>The posterior probability that each dose is the optimal
+biological dose (OBD); a vector of numbers between 0 and 1. This probability
+reflects the uncertainty remaining in the parameter distributions, whereas
+<code>prob_tox</code> and <code>prob_eff</code> (etc) do not.</p></td>
     </tr>
     <tr>
       <th>acceptable</th>

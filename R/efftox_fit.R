@@ -1,6 +1,11 @@
 
 #' Class of model fit by \pkg{trialr} using the EffTox dose-finding design.
 #'
+#' Phase I/II dose-finding trials, i.e. those that search for a dose my efficacy
+#' and toxicity outcomes search for the optimal biological dose (OBD), rather
+#' than the maximum tolerated dose (MTD) that is typically sought be traditional
+#' toxicity-only dose-finding.
+#'
 #' @name efftox_fit-class
 #' @aliases efftox_fit
 #' @docType class
@@ -15,12 +20,18 @@
 #' @param doses vector of integers representing the dose given to the patients.
 #' @param tox vector of integers representing the toxicity status of the
 #' patients.
+#' @param eff vector of integers representing the efficacy status of the
+#' patients.
 #' @param recommended_dose An integer representing the dose-level recommended
 #' for the next patient or cohort; or \code{NA} if stopping is recommended.
 #' @param prob_tox The posterior mean probabilities of toxicity at doses 1:n;
 #' a vector of numbers between 0 and 1.
 #' @param prob_eff The posterior mean probabilities of efficacy at doses 1:n;
 #' a vector of numbers between 0 and 1.
+#' @param median_prob_tox The posterior median probabilities of toxicity at
+#' doses 1:n; a vector of numbers between 0 and 1.
+#' @param median_prob_eff The posterior mean probabilities of efficacy at doses
+#' 1:n; a vector of numbers between 0 and 1.
 #' @param prob_acc_tox The posterior mean probabilities that toxicity at the
 #' doses is acceptable, i.e. that it is less than the maximum toxicity
 #' threshold; a vector of numbers between 0 and 1.
@@ -31,6 +42,10 @@
 #' posterior mean probabilities of efficacy and toxicity into the utility
 #' formula, as advocated by Thall & Cook. Contrast to \code{post_utility};
 #' a vector of numbers.
+#' @param prob_obd The posterior probability that each dose is the optimal
+#' biological dose (OBD); a vector of numbers between 0 and 1. This probability
+#' reflects the uncertainty remaining in the parameter distributions, whereas
+#' \code{prob_tox} and \code{prob_eff} (etc) do not.
 #' @param post_utility The posterior mean utilities of doses 1:n, calculated
 #' from the posterior distributions of the utilities. This is in contrast to
 #' \code{utility}, which uses plug-in posterior means of efficacy and toxicity,
@@ -52,6 +67,7 @@ efftox_fit <- function(dose_indices,
                        num_patients,
                        doses,
                        tox,
+                       eff,
                        prob_tox,
                        prob_eff,
                        median_prob_tox,
@@ -60,6 +76,7 @@ efftox_fit <- function(dose_indices,
                        prob_acc_eff,
                        utility,
                        post_utility,
+                       prob_obd,
                        acceptable,
                        recommended_dose,
                        dat,
@@ -83,8 +100,11 @@ efftox_fit <- function(dose_indices,
   x$prob_acc_eff = prob_acc_eff
   x$utility = utility
   x$post_utility = post_utility
+  x$prob_obd = prob_obd
+  x$modal_obd_candidate = which.max(prob_obd)
+  x$entropy = .entropy(prob_obd)
   x$acceptable = acceptable
 
-    class(x) <- c("efftox_fit", "dose_finding_fit", "list")
+  class(x) <- c("efftox_fit", "dose_finding_fit", "list")
   x
 }

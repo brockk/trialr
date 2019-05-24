@@ -1,17 +1,11 @@
 
 #' Calculate the probability that the rate of toxicity exceeds some threshold
 #'
-#' @param fit Object like \code{\link{crm_fit}} or \code{\link{efftox_fit}}
-#' that contains samples for \code{prob_tox} variable indexed by an integer
-#' dose-level.
-#' @param threshold numeric, threshold value.
-#'
+#' @param x an R object of class \code{"dose_finding_fit"}
+#' @param ... arguments passed to other methods
 #' @return numerical vector of probabilities
-#' @importFrom magrittr "%>%"
-#' @importFrom tidybayes gather_draws
-#' @importFrom dplyr mutate summarise ungroup select
 #' @export
-#'
+#' @rdname prob_tox_exceeds
 #' @examples
 #' \dontrun{
 #' # CRM example
@@ -21,12 +15,22 @@
 #'                  seed = 123)
 #' prob_tox_exceeds(fit, target)
 #' }
-prob_tox_exceeds <- function (x, ...) {
+prob_tox_exceeds <- function(x, ...) {
   UseMethod("prob_tox_exceeds", x)
 }
 
-prob_tox_exceeds.dose_finding_fit <- function(fit, threshold) {
-  fit %>%
+#' Calculate the probability that the rate of toxicity exceeds some threshold
+#'
+#' @param threshold numeric, threshold value.
+#' @return numerical vector of probabilities
+#' @rdname prob_tox_exceeds
+#' @importFrom magrittr "%>%"
+#' @importFrom tidybayes gather_draws
+#' @importFrom dplyr mutate summarise ungroup select
+#' @export
+prob_tox_exceeds.dose_finding_fit <- function(x, threshold, ...) {
+  prob_tox <- dose <- .value <- TooToxic <- ProbToxExceeds <- . <- NULL
+  x %>%
     gather_draws(prob_tox[dose]) %>%
     mutate(TooToxic = .value > threshold) %>%
     summarise(ProbToxExceeds = mean(TooToxic)) %>%

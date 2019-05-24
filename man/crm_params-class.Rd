@@ -46,32 +46,39 @@ Container class for parameters to fit the CRM models in trialr.
 Different model parameterisations require that difference parameter values
 are specified.
 }
-\section{Requirements of \code{empiric} model}{
+\section{Parameter requirements of \code{empiric} model}{
 
-* beta_sd
+\itemize{
+  \item \code{beta_sd}
+}
 }
 
-\section{Requirements of \code{logistic} model}{
+\section{Parameter requirements of \code{logistic} model}{
 
-* a0
-* beta_mean
-* beta_sd
+\itemize{
+  \item \code{a0}
+  \item \code{beta_mean}
+  \item \code{beta_sd}
+}
 }
 
-\section{Requirements of \code{logistic_gamma} model}{
+\section{Parameter requirements of \code{logistic_gamma} model}{
 
-* a0
-* beta_shape
-* beta_inverse_scale
+\itemize{
+  \item \code{a0}
+  \item \code{beta_shape}
+  \item \code{beta_inverse_scale}
+}
 }
 
-\section{Requirements of \code{logistics} model}{
+\section{Parameter requirements of \code{logistic2} model}{
 
-* a0
-* alpha_mean
-* alpha_sd
-* beta_mean
-* beta_sd
+\itemize{
+  \item \code{alpha_mean}
+  \item \code{alpha_sd}
+  \item \code{beta_mean}
+  \item \code{beta_sd}
+}
 }
 
 \seealso{

@@ -2,21 +2,28 @@
 % Please edit documentation in R/prob_tox_exceeds.R
 \name{prob_tox_exceeds}
 \alias{prob_tox_exceeds}
+\alias{prob_tox_exceeds.dose_finding_fit}
 \title{Calculate the probability that the rate of toxicity exceeds some threshold}
 \usage{
 prob_tox_exceeds(x, ...)
+
+\method{prob_tox_exceeds}{dose_finding_fit}(x, threshold, ...)
 }
 \arguments{
-\item{fit}{Object like \code{\link{crm_fit}} or \code{\link{efftox_fit}}
-that contains samples for \code{prob_tox} variable indexed by an integer
-dose-level.}
+\item{x}{an R object of class \code{"dose_finding_fit"}}
+
+\item{...}{arguments passed to other methods}
 
 \item{threshold}{numeric, threshold value.}
 }
 \value{
 numerical vector of probabilities
+
+numerical vector of probabilities
 }
 \description{
+Calculate the probability that the rate of toxicity exceeds some threshold
+
 Calculate the probability that the rate of toxicity exceeds some threshold
 }
 \examples{

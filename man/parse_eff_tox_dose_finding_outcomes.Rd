@@ -38,7 +38,7 @@ were treated at dose-level 1 and neither of these patients experienced
 either event. See examples.
 }
 \examples{
-x = parse_dose_finding_outcomes('1NEN 2ENT 3TB')
+x = parse_eff_tox_dose_finding_outcomes('1NEN 2ENT 3TB')
 length(x)
 x[[1]]$dose
 x[[1]]$outcomes

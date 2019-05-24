@@ -4,17 +4,17 @@
 \alias{efftox_path_analysis}
 \title{Fit an EffTox model to the incrementally observed outcomes on a trial pathway.}
 \usage{
-efftox_path_analysis(outcomes_str, verbose = FALSE, ...)
+efftox_path_analysis(outcome_str, verbose = FALSE, ...)
 }
 \arguments{
-\item{verbose}{logical, TRUE to get log messages.}
-
-\item{...}{All other parameters are passed to \code{\link{stan_efftox}}.}
-
 \item{outcome_str}{A string representing the outcomes observed hitherto.
 See \code{\link{efftox_parse_outcomes}} for a description of syntax and
 examples. Alternatively, you may provide \code{doses_given} and \code{tox}
 parameters. See Details.}
+
+\item{verbose}{logical, TRUE to get log messages.}
+
+\item{...}{All other parameters are passed to \code{\link{stan_efftox}}.}
 }
 \value{
 A \code{\link{list}} of \code{\link{dose_finding_path_node}} objects.
@@ -31,7 +31,7 @@ the trial model is evolving in its estimation as trial data is accumulated.
 \dontrun{
 # EffTox example
 paths <- efftox_path_analysis(
-  outcomes_str = '1NNN 2NEN 3NEB',
+  outcome_str = '1NNN 2NEN 3NEB',
   real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
   efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
   p_e = 0.1, p_t = 0.1,

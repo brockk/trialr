@@ -63,7 +63,7 @@ function, but is much less-flexible." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -172,13 +172,22 @@ by <code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code>.<
     <tr>
       <th>user_dose_func</th>
       <td><p>optional delegate for deciding dose. A function that
-takes a <code>eff_fit</code> as the sole argument and returns the integer
+takes a <code><a href='efftox_fit-class.html'>efftox_fit</a></code> as the sole argument and returns the integer
 (1-based) dose-level to be given next, or NA to show that no dose should be
 chosen and the trial stopped. This function gives the user the opportunity to
 build in custom behaviour to tailor the dose selection decision in response
 to the insights garnered by the fit model, or recommend that a trial path
 be halted immediately. If omitted, the dose ordinarily chosen by the model is
 used. An example is given below.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical, TRUE to get progress messages.</p></td>
+    </tr>
+    <tr>
+      <th>i_am_patient</th>
+      <td><p>logical, TRUE to show your tolerance for waiting for over 100
+models to fit. Set to FALSE by default.</p></td>
     </tr>
     <tr>
       <th>...</th>

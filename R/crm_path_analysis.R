@@ -50,7 +50,6 @@
 #'
 #' @section Parameter requirements of \code{logistic2} model:
 #' \itemize{
-#'   \item \code{a0}
 #'   \item \code{alpha_mean}
 #'   \item \code{alpha_sd}
 #'   \item \code{beta_mean}
@@ -75,7 +74,7 @@
 #' target <- 0.25
 #' skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
 #' paths <- crm_path_analysis(
-#'   outcomes_str = '1NNN 2NTN 2NNN',
+#'   outcome_str = '1NNN 2NTN 2NNN',
 #'   skeleton = skeleton, target = target, model = 'empiric',
 #'   beta_sd = 1, seed = 123, refresh = 0)
 #' length(paths)  # 4
@@ -97,7 +96,7 @@
 #'   unnest %>%
 #'   filter(dose_index == 2)
 #' }
-crm_path_analysis <- function(outcomes_str,
+crm_path_analysis <- function(outcome_str,
                               skeleton,
                               target,
                               model,
@@ -105,7 +104,7 @@ crm_path_analysis <- function(outcomes_str,
                               ...) {
 
   # Break outcomes pathway into cohorts.
-  cohorts = parse_dose_finding_outcomes(outcomes_str)
+  cohorts = parse_dose_finding_outcomes(outcome_str)
 
   num_doses <- length(skeleton)
   cache <- list()

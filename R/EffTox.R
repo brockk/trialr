@@ -19,10 +19,17 @@
 #' @seealso
 #' \code{\link{stan_efftox}}
 efftox_analysis_to_df <- function(x) {
-  df <- data.frame(DoseLevel = factor(x$dose_indices),
-                   ProbEff = x$prob_eff, ProbTox = x$prob_tox,
-                   ProbAccEff = x$prob_acc_eff, ProbAccTox = x$prob_acc_tox,
-                   Utility = x$utility, Acceptable = x$acceptable)
+  df <- data.frame(
+    Dose = factor(x$dose_indices),
+    N = sapply(1:x$dat$num_doses, function(i) sum(x$dat$doses == i)),
+    ProbEff = x$prob_eff,
+    ProbTox = x$prob_tox,
+    ProbAccEff = x$prob_acc_eff,
+    ProbAccTox = x$prob_acc_tox,
+    Utility = x$utility, Acceptable = x$acceptable,
+    ProbOBD = x$prob_obd
+  )
+
   return(df)
 }
 
@@ -97,15 +104,23 @@ print.efftox_fit <- function(x, ...) {
 
   # Dose-level data
   df <- efftox_analysis_to_df(x)
-  print(df)
+  print(df, digits = 3)
   cat('\n')
 
   # Extras
-  if(sum(x$acceptable) == 0) {
-    if(x$dat$num_patients > 0) cat('The model advocates stopping.')
+  if(x$num_patients > 0 & sum(x$acceptable) == 0) {
+    cat('The model advocates stopping.')
   } else {
-    cat(paste0('The model recommends selecting dose-level ',
-               x$recommended_dose, '.'))
+    if(!is.na(x$recommended_dose)) {
+      cat(paste0('The model recommends selecting dose-level ',
+                 x$recommended_dose, '.'))
+      cat('\n')
+    }
+
+    cat(paste0('The dose most likely to be the OBD is ',
+               x$modal_obd_candidate, '.'))
+    cat('\n')
+    cat(paste0('Model entropy: ', format(round(x$entropy, 2), nsmall = 2)))
   }
 }
 

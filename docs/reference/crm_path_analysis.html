@@ -67,7 +67,7 @@ as trial data is accumulated." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -156,12 +156,19 @@ as trial data is accumulated.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>crm_path_analysis</span>(<span class='no'>outcomes_str</span>, <span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='no'>model</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>crm_path_analysis</span>(<span class='no'>outcome_str</span>, <span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='no'>model</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>outcome_str</th>
+      <td><p>A string representing the outcomes observed hitherto.
+See <code><a href='df_parse_outcomes.html'>df_parse_outcomes</a></code> for a description of syntax and
+examples. Alternatively, you may provide <code>doses_given</code> and <code>tox</code>
+parameters. See Details.</p></td>
+    </tr>
     <tr>
       <th>skeleton</th>
       <td><p>a vector of the prior guesses of toxicity at doses.
@@ -187,13 +194,6 @@ The choice of model determines which extra parameters are required by
     <tr>
       <th>...</th>
       <td><p>Extra parameters passed to <code><a href='stan_crm.html'>stan_crm</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>outcome_str</th>
-      <td><p>A string representing the outcomes observed hitherto.
-See <code><a href='df_parse_outcomes.html'>df_parse_outcomes</a></code> for a description of syntax and
-examples. Alternatively, you may provide <code>doses_given</code> and <code>tox</code>
-parameters. See Details.</p></td>
     </tr>
     </table>
     
@@ -235,7 +235,6 @@ See below.</p>
 
     
     <ul>
-<li><p><code>a0</code></p></li>
 <li><p><code>alpha_mean</code></p></li>
 <li><p><code>alpha_sd</code></p></li>
 <li><p><code>beta_mean</code></p></li>
@@ -255,7 +254,7 @@ See below.</p>
 <span class='no'>target</span> <span class='kw'>&lt;-</span> <span class='fl'>0.25</span>
 <span class='no'>skeleton</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0.05</span>, <span class='fl'>0.15</span>, <span class='fl'>0.25</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>)
 <span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_path_analysis</span>(
-  <span class='kw'>outcomes_str</span> <span class='kw'>=</span> <span class='st'>'1NNN 2NTN 2NNN'</span>,
+  <span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='st'>'1NNN 2NTN 2NNN'</span>,
   <span class='kw'>skeleton</span> <span class='kw'>=</span> <span class='no'>skeleton</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'empiric'</span>,
   <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 <span class='fu'>length</span>(<span class='no'>paths</span>)  <span class='co'># 4</span>

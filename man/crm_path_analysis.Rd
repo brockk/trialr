@@ -4,10 +4,15 @@
 \alias{crm_path_analysis}
 \title{Fit a CRM model to the incrementally observed outcomes on a trial pathway.}
 \usage{
-crm_path_analysis(outcomes_str, skeleton, target, model, verbose = FALSE,
+crm_path_analysis(outcome_str, skeleton, target, model, verbose = FALSE,
   ...)
 }
 \arguments{
+\item{outcome_str}{A string representing the outcomes observed hitherto.
+See \code{\link{df_parse_outcomes}} for a description of syntax and
+examples. Alternatively, you may provide \code{doses_given} and \code{tox}
+parameters. See Details.}
+
 \item{skeleton}{a vector of the prior guesses of toxicity at doses.
 This should be a monotonically-increasing vector of numbers between 0 and 1.}
 
@@ -23,11 +28,6 @@ The choice of model determines which extra parameters are required by
 \item{verbose}{logical, TRUE to get log messages.}
 
 \item{...}{Extra parameters passed to \code{\link{stan_crm}}.}
-
-\item{outcome_str}{A string representing the outcomes observed hitherto.
-See \code{\link{df_parse_outcomes}} for a description of syntax and
-examples. Alternatively, you may provide \code{doses_given} and \code{tox}
-parameters. See Details.}
 }
 \value{
 A \code{\link{list}} of \code{\link{dose_finding_path_node}} objects.
@@ -73,7 +73,6 @@ See below.
 \section{Parameter requirements of \code{logistic2} model}{
 
 \itemize{
-  \item \code{a0}
   \item \code{alpha_mean}
   \item \code{alpha_sd}
   \item \code{beta_mean}
@@ -87,7 +86,7 @@ See below.
 target <- 0.25
 skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
 paths <- crm_path_analysis(
-  outcomes_str = '1NNN 2NTN 2NNN',
+  outcome_str = '1NNN 2NTN 2NNN',
   skeleton = skeleton, target = target, model = 'empiric',
   beta_sd = 1, seed = 123, refresh = 0)
 length(paths)  # 4

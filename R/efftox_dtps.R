@@ -12,13 +12,16 @@
 #' by \code{\link{efftox_parse_outcomes}}.
 #' @param next_dose the dose-level to be given to the immediately next cohort.
 #' @param user_dose_func optional delegate for deciding dose. A function that
-#' takes a \code{\link{eff_fit}} as the sole argument and returns the integer
+#' takes a \code{\link{efftox_fit}} as the sole argument and returns the integer
 #' (1-based) dose-level to be given next, or NA to show that no dose should be
 #' chosen and the trial stopped. This function gives the user the opportunity to
 #' build in custom behaviour to tailor the dose selection decision in response
 #' to the insights garnered by the fit model, or recommend that a trial path
 #' be halted immediately. If omitted, the dose ordinarily chosen by the model is
 #' used. An example is given below.
+#' @param verbose logical, TRUE to get progress messages.
+#' @param i_am_patient logical, TRUE to show your tolerance for waiting for over 100
+#' models to fit. Set to FALSE by default.
 #' @param ... extra params passed to \code{rstan::sampling}.
 #'
 #' @return dose pathways in a \code{data.frame}.
@@ -148,7 +151,6 @@ efftox_dtps <- function(cohort_sizes,
     dat <- efftox_parse_outcomes(previous_outcomes)
   else
     dat <- list(doses = c(), eff = c(), tox = c(), num_patients = 0)
-  num_doses <- length(skeleton)
   previous_doses <- dat$doses
   previous_eff <- dat$eff
   previous_tox <- dat$tox

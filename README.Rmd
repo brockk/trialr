@@ -28,10 +28,9 @@ The documentation is available at https://brockk.github.io/trialr/
 
 There are many notable Bayesian designs and methods for clinical trials.
 However, one of the factors that has constrained their use is the availability of software.
-We present here some of the most popular, implemented and demonstrated in a consistent style, leveraging the powerful Stan environment.
+We present here some of the most popular, implemented and demonstrated in a consistent style, leveraging the powerful Stan environment for Bayesian computing.
 
-Implementations exist elsewhere.
-There are also some fantastic packages that aid the use of particular designs.
+Implementations exist in other R packages.
 Sometimes authors make available code with their publications.
 However, challenges to use still persist.
 Different methods are presented in disparate styles.
@@ -42,14 +41,14 @@ Sometimes the technology chosen may only be available on a particular operating 
 Models are specified in [Stan](http://mc-stan.org/), a state-of-the-art environment for Bayesian analysis.
 It uses Hamiltonian Monte Carlo to take samples from the posterior distribution.
 This method is more efficient than Gibbs sampling and reliable inference can usually be performed on a few thousand posterior samples.
-R, Stan and `trialr` are each available on Mac, Linux, and Windows, so all of the examples presented here should work on each operating system.
-Furthermore, Stan offers a very simple method to split the sampling across _n_ cores, taking full advantage of the modern multicore processor in your computer (probably).
+R, Stan and `trialr` are each available on Mac, Linux, and Windows, so all of the examples presented here work on each operating system.
+Furthermore, Stan offers a very simple method to split the sampling across _n_ cores, taking full advantage of the modern multicore processors.
 
 The designs implemented in `trialr` are introduced briefly below, and developed more fully in vignettes.
 We focus on real-life usage, including:
 
 - fitting models to observed data;
-- processing posterior samples to produce useful inferences;
+- processing posterior samples using tidy principles to produce useful inferences;
 - and visualising inferences using modern `ggplot` graphics.
 
 # Examples
@@ -62,19 +61,19 @@ library(trialr)
 ## CRM
 The Continual Reassessment Method (CRM) was first published by @OQuigley1990.
 It assumes a smooth mathematical form for the dose-toxicity curve to conduct a dose-finding trial seeking a maximum tolerable dose.
-There are many variations to suit different clinical scenarios and the design has enjoyed _relatively_ common use, although nowhere near as common as the ubiquitous and inferior 3+3 design.
+There are many variations to suit different clinical scenarios and the design has enjoyed relatively common use, although nowhere near as common as the ubiquitous and inferior 3+3 design.
 
 We will demonstrate the method using a notional trial example.
-In a scenario of five potential doses, let us assume that we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:
+In a scenario of five doses, we seek the dose with probability of toxicity closest to 25% where our prior guesses of the rates of toxicity can be represented:
 
 ```{r}
 target <- 0.25
 skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
 ```
 
-Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, having only seen toxicity at dose-level 4.
+Let us assume that we have already treated 2 patients each at doses 2, 3 and 4, having seen two toxicities at dose-level 4 and none elsewhere.
 What dose should we give to the next patient or cohort?
-We can fit the data to the popular empiric model
+We fit the data to the popular empiric variant of the CRM model:
 
 ```{r, results = "hide", warning=FALSE, message=FALSE}
 fit1 <- stan_crm(outcome_str = '2NN 3NN 4TT', skeleton = skeleton, 
@@ -89,14 +88,17 @@ The fitted model contains lots of useful of information:
 fit1
 ```
 
-```{r, fig.width=7, fig.height=7}
+```{r, fig.width=9, fig.height=7, message=FALSE}
 library(ggplot2)
-plot_df = data.frame(DoseLevel = 1:length(skeleton),
-                     ProbTox = fit1$prob_tox)
-ggplot(plot_df, aes(x = DoseLevel, y = ProbTox)) +
-  geom_point() + geom_line() + ylim(0, 1) + 
-  geom_hline(yintercept = target, col = 'orange', linetype = 'dashed') +
-  labs(title = 'Posterior dose-toxicity curve under empiric CRM model')
+library(tidybayes)
+library(dplyr)
+
+fit1 %>% 
+  spread_draws(prob_tox[Dose]) %>% 
+  ggplot(aes(x = Dose, y = prob_tox)) +
+  stat_interval(.width = c(.5, .8, .95)) +
+  scale_color_brewer() + 
+  labs(y = 'Prob(DLT)', title = 'Posterior dose-toxicity beliefs using empiric CRM')
 ```
 
 Several variants of the CRM [are implemented in 'trialr'](articles/CRM.html).
@@ -151,7 +153,7 @@ Functions are provided to create useful plots.
 For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours used to measure dose attractiveness.
 The five doses are shown in red. Doses closer to the lower-right corner have higher utility. 
 
-```{r, fig.width=7, fig.height=7}
+```{r, fig.width=9, fig.height=7}
 efftox_contour_plot(fit2)
 title('EffTox utility contours')
 ```
@@ -189,7 +191,7 @@ fit3
 ```
 
 So, we can use the underlying plot method in `rstan`.
-```{r, fig.width=7, fig.height=7, warning=FALSE, message=FALSE}
+```{r, fig.width=9, fig.height=7, warning=FALSE, message=FALSE}
 library(rstan)
 library(ggplot2)
 

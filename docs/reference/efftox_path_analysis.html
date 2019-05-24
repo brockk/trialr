@@ -66,7 +66,7 @@ the trial model is evolving in its estimation as trial data is accumulated." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9002</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
       </span>
     </div>
 
@@ -154,11 +154,18 @@ the trial model is evolving in its estimation as trial data is accumulated.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>efftox_path_analysis</span>(<span class='no'>outcomes_str</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>efftox_path_analysis</span>(<span class='no'>outcome_str</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>outcome_str</th>
+      <td><p>A string representing the outcomes observed hitherto.
+See <code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code> for a description of syntax and
+examples. Alternatively, you may provide <code>doses_given</code> and <code>tox</code>
+parameters. See Details.</p></td>
+    </tr>
     <tr>
       <th>verbose</th>
       <td><p>logical, TRUE to get log messages.</p></td>
@@ -166,13 +173,6 @@ the trial model is evolving in its estimation as trial data is accumulated.</p>
     <tr>
       <th>...</th>
       <td><p>All other parameters are passed to <code><a href='stan_efftox.html'>stan_efftox</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>outcome_str</th>
-      <td><p>A string representing the outcomes observed hitherto.
-See <code><a href='efftox_parse_outcomes.html'>efftox_parse_outcomes</a></code> for a description of syntax and
-examples. Alternatively, you may provide <code>doses_given</code> and <code>tox</code>
-parameters. See Details.</p></td>
     </tr>
     </table>
     
@@ -191,7 +191,7 @@ parameters. See Details.</p></td>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># EffTox example</span>
 <span class='no'>paths</span> <span class='kw'>&lt;-</span> <span class='fu'>efftox_path_analysis</span>(
-  <span class='kw'>outcomes_str</span> <span class='kw'>=</span> <span class='st'>'1NNN 2NEN 3NEB'</span>,
+  <span class='kw'>outcome_str</span> <span class='kw'>=</span> <span class='st'>'1NNN 2NEN 3NEB'</span>,
   <span class='kw'>real_doses</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>),
   <span class='kw'>efficacy_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>toxicity_hurdle</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
   <span class='kw'>p_e</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>p_t</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,

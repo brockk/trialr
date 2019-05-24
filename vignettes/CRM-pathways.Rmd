@@ -54,7 +54,7 @@ This allows us to see how our model has evolved in its inferences.
 library(trialr)
 
 path <- crm_path_analysis(
-  outcomes_str = outcome_str,
+  outcome_str = outcome_str,
   skeleton = skeleton, target = target, model = 'empiric',
   beta_sd = 1, seed = 123, refresh = 0)
 ```
@@ -123,7 +123,7 @@ To complete this example, let us observe how `careful_escalation` will eventuall
 
 ```{r}
 paths <- crm_path_analysis(
-  outcomes_str = '1NNN 2NTN 2NNN 3TTT 1TTT 1TNT',
+  outcome_str = '1NNN 2NTN 2NNN 3TTT 1TTT 1TNT',
   skeleton = skeleton, target = target, model = 'logistic',
   a0 = 3, beta_mean = 0,beta_sd = 1,
   seed = 123, refresh = 0)

@@ -31,7 +31,7 @@
 #' @export
 #'
 #' @examples
-#' x = parse_dose_finding_outcomes('1NEN 2ENT 3TB')
+#' x = parse_eff_tox_dose_finding_outcomes('1NEN 2ENT 3TB')
 #' length(x)
 #' x[[1]]$dose
 #' x[[1]]$outcomes

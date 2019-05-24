@@ -92,7 +92,6 @@ See below.
 \section{Parameter requirements of \code{logistic2} model}{
 
 \itemize{
-  \item \code{a0}
   \item \code{alpha_mean}
   \item \code{alpha_sd}
   \item \code{beta_mean}
