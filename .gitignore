@@ -7,3 +7,4 @@ src/*.so
 src/*.dll
 vignettes/*_cache/
 inst/doc
+.httr-oauth
