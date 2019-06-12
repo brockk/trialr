@@ -28,7 +28,7 @@ efftox_utility_density_plot <- function(fit, doses = NULL) {
 
   u <- rstan::extract(fit$fit, par = 'utility')[[1]]
   df <- data.frame(Utility = as.numeric(u),
-                   D = rep(1:5, each = nrow(u))
+                   D = rep(fit$dose_indices, each = nrow(u))
   )
   df$Dose = factor(df$D)
   if(!is.null(doses))
