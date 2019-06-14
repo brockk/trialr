@@ -1,5 +1,5 @@
 Package: trialr
-Version: 0.1.1.9000
+Version: 0.1.1.9001
 Date: 2019-06-12
 Title: Clinical Trial Designs in 'RStan'
 Description: A showcase of Bayesian clinical trial designs, implemented in 
@@ -38,7 +38,8 @@ Imports:
   gtools,
   coda,
   tidybayes,
-  tibble
+  tibble,
+  binom
 LinkingTo:
   StanHeaders (>= 2.18.1), 
   rstan (>= 2.18.2), 
