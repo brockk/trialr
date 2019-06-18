@@ -5,10 +5,10 @@
 #' @param num_patients Integer, the number of patients analysed.
 #' @param tumour_size matrix-like object containing tumour size measures, with
 #' rows representing patients and columns representing chronological
-#' standardised assessment points. Column one is baseline.
+#' assessment points. Column one is baseline.
 #' @param non_shrinkage_failure matrix-like object containing logical indicators
 #' of non-shrinkage failure, with rows representing patients and columns
-#' representing chronological standardised assessment points.
+#' representing chronological assessment points.
 #' @param fit An object of class \code{\link[rstan:stanfit]{stanfit}},
 #' containing the posterior samples.
 #'
@@ -50,9 +50,47 @@ augbin_2t_1a_fit <- function(num_patients,
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #' @export
-as_tibble.augbin_2t_1a_fit <- function(fit, ...) {
-  data.frame(fit$tumour_size, fit$non_shrinkage_failure) %>%
+as_tibble.augbin_2t_1a_fit <- function(x, ...) {
+  data.frame(x$tumour_size, x$non_shrinkage_failure) %>%
     as_tibble %>%
     mutate(y1 = log(.data$z1 / .data$z0),
            y2 = log(.data$z2 / .data$z0))
+}
+
+#' Predict probability of success for given tumour size measurements.
+#'
+#' This method simply forwards to \code{\link{prob_success}}.
+#'
+#' @param x Object of class \code{augbin_2t_1a_fit}.
+#' @param y1_lower numeric, minimum threshold to constitute success,
+#' scrutinising the log of the tumour size ratio comparing time 1 to baseline.
+#' Defaults to negative infinity.
+#' @param y1_upper numeric, maximum threshold to constitute success,
+#' scrutinising the log of the tumour size ratio comparing time 1 to baseline.
+#' Defaults to positive infinity.
+#' @param y2_lower numeric, minimum threshold to constitute success,
+#' scrutinising the log of the tumour size ratio comparing time 2 to baseline.
+#' @param y2_upper numeric, maximum threshold to constitute success,
+#' scrutinising the log of the tumour size ratio comparing time 2 to baseline.
+#' Defaults to log(0.7).
+#' @param probs pair of probabilities to use to calculate the credible interval
+#' for the probability of success.
+#' @param newdata data for which to infer the probability of success.
+#' A dataframe-like object with baseline tumour sizes in first column, and first
+#' and second post-baseline tumour sizes in columns 2 and 3. Omitted by default.
+#' When omitted, newdata is set to be the \code{fit$tumour_size}.
+#' @param ... Extra args passed onwards.
+#'
+#' @return Object of class \code{\link[tibble]{tibble}}
+#'
+#' @export
+predict.augbin_2t_1a_fit <- function(x,
+                                     y1_lower = -Inf, y1_upper = Inf,
+                                     y2_lower = -Inf, y2_upper = log(0.7),
+                                     probs = c(0.025, 0.975),
+                                     newdata = NULL,
+                                     ...) {
+  prob_success(fit = x, y1_lower = y1_lower, y1_upper = y1_upper,
+               y2_lower = y2_lower, y2_upper = y2_upper,
+               probs = probs, newdata = newdata, ...)
 }

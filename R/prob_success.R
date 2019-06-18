@@ -1,20 +1,15 @@
 
 #' Calculate the probability of success.
 #'
-#' @param x an R object of class \code{"augbin_fit"}
+#' @param fit an R object of class \code{"augbin_fit"}
 #' @param ... arguments passed to other methods
 #' @export
 #' @rdname prob_success
-#' @examples
-#' \dontrun{
-#' # TODO
-#' }
-prob_success <- function(x, ...) {
-  UseMethod("prob_success", x)
+prob_success <- function(fit, ...) {
+  UseMethod("prob_success", fit)
 }
 
-
-#' Calculate the probability of success.
+#' Calculate the probability of success for an augbin_2t_1a_fit object.
 #'
 #' @param y1_lower numeric, minimum threshold to constitute success,
 #' scrutinising the log of the tumour size ratio comparing time 1 to baseline.
@@ -26,29 +21,43 @@ prob_success <- function(x, ...) {
 #' scrutinising the log of the tumour size ratio comparing time 2 to baseline.
 #' @param y2_upper numeric, maximum threshold to constitute success,
 #' scrutinising the log of the tumour size ratio comparing time 2 to baseline.
-#' Defaults to log(0.7), i.e. tumour shrinkage of at least 30% is success.
+#' Defaults to log(0.7).
 #' @param probs pair of probabilities to use to calculate the credible interval
 #' for the probability of success.
+#' @param newdata data for which to infer the probability of success.
+#' A dataframe-like object with baseline tumour sizes in first column, and first
+#' and second post-baseline tumour sizes in columns 2 and 3. Omitted by default.
+#' When omitted, newdata is set to be the \code{fit$tumour_size}.
+#' @param ... Extra args passed onwards.
 #'
-#' @return numerical vector of probabilities.
-#'
-#' @rdname prob_success
+#' @return Object of class \code{\link[tibble]{tibble}}
 #'
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble tibble
 #' @importFrom dplyr mutate
 #' @importFrom gtools inv.logit
+#' @importFrom purrr map2
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' fit <- stan_augbin_demo()
+#' prob_success(fit, y2_upper = log(0.7))
+#' }
 prob_success.augbin_2t_1a_fit <- function(fit,
                                           y1_lower = -Inf, y1_upper = Inf,
                                           y2_lower = -Inf, y2_upper = log(0.7),
                                           probs = c(0.025, 0.975),
+                                          newdata = NULL,
                                           ...) {
 
   if(length(probs) != 2)
     stop('probs should be a pair of probabilities between 0 and 1.')
   if(any(probs > 1) | any(probs < 0))
     stop('probs should be a pair of probabilities between 0 and 1.')
+  if(is.null(newdata))
+    newdata <- fit$tumour_size
+  num_patients <- nrow(newdata)
 
   alpha <- rstan::extract(fit$fit)$alpha
   beta <- rstan::extract(fit$fit)$beta
@@ -63,7 +72,7 @@ prob_success.augbin_2t_1a_fit <- function(fit,
   .get_prob_success <- function(z0, z1) {
     mu1 <- alpha + gamma * z0
     mu2 <- beta + gamma * z0
-    prob_success_samp_tno <- (
+    prob_success_samp_id <- (
       (1 - inv.logit(alphaD1 + z0 * gammaD1)) *
         (1 - inv.logit(alphaD2 + z1 * gammaD2)) *
         ( pnorm(q = y1_upper, mean = mu1, sd = sigma1) -
@@ -71,12 +80,12 @@ prob_success.augbin_2t_1a_fit <- function(fit,
         ( pnorm(q = y2_upper, mean = mu2, sd = sigma2) -
             pnorm(q = y2_lower, mean = mu2, sd = sigma2) )
     )
-    prob_success_samp_tno
+    prob_success_samp_id
   }
 
-  tibble(tno = 1:fit$num_patients,
-         z0 = fit$tumour_size[, 1],
-         z1 = fit$tumour_size[, 2]) %>%
+  tibble(id = num_patients,
+         z0 = newdata[, 1],
+         z1 = newdata[, 2]) %>%
     mutate(
       prob_success_samp = map2(.data$z0, .data$z1, .get_prob_success),
       prob_success = map_dbl(.data$prob_success_samp, mean),

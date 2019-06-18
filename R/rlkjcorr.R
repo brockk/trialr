@@ -4,6 +4,11 @@
 
 #' Sample LKJ correlation matrices.
 #'
+#' This function was copied from Richard McElreath's rethinking package hosted
+#' at https://github.com/rmcelreath/rethinking. In turn, he appears to have
+#' copied it from Ben Bolker's rLKJ function from the emdbook package, although
+#' I cannot find it there (else I would have imported it).
+#'
 #' @param n Number of matrices to sample.
 #' @param K dimenstion of matrix to sample.
 #' @param eta Distribution parameter

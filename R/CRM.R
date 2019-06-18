@@ -32,7 +32,7 @@ crm_codified_dose_logistic <- function(prob_tox, alpha_mean, beta_mean) {
 # Generics ----
 #' Print crm_fit object.
 #'
-#' @param x \code{\link{crm_fit}} object to convert.
+#' @param x \code{\link{crm_fit}} object to print.
 #' @param ... Extra parameters, passed onwards.
 #' @method print crm_fit
 #' @export

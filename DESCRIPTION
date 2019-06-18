@@ -39,7 +39,8 @@ Imports:
   coda,
   tidybayes,
   tibble,
-  binom
+  binom,
+  MASS
 LinkingTo:
   StanHeaders (>= 2.18.1), 
   rstan (>= 2.18.2), 

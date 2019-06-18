@@ -7,7 +7,7 @@
 \method{print}{crm_fit}(x, ...)
 }
 \arguments{
-\item{x}{\code{\link{crm_fit}} object to convert.}
+\item{x}{\code{\link{crm_fit}} object to print.}
 
 \item{...}{Extra parameters, passed onwards.}
 }

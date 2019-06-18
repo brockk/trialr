@@ -45,10 +45,15 @@ augbin_fit <- function(num_patients,
 
 #' Print augbin_fit object.
 #'
-#' @param x \code{\link{augbin_fit}} object to convert.
+#' @param x \code{\link{augbin_fit}} object to print.
+#' @param pars parameters in model to summarise.
 #' @param ... Extra parameters, passed onwards.
 #' @method print augbin_fit
 #' @export
-print.augbin_fit <- function(x, ...) {
-  print('Hi')
+print.augbin_fit <- function(x,
+                             pars = c('alpha', 'beta', 'gamma', 'Omega',
+                                      'sigma', 'alphaD1', 'gammaD1', 'alphaD2',
+                                      'gammaD2'),
+                             ...) {
+  print(x$fit, pars = pars, ...)
 }

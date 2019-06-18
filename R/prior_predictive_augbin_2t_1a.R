@@ -1,8 +1,8 @@
 
-#' Sample data from two-period, single arm Augmented Binary model prior
-#' predictive distribution
+#' Sample data from the Augmented Binary model prior predictive distribution.
 #'
-#' TODO - equations.
+#' Sample data from the prior predictive distributions of the two-period, single
+#' arm Augmented Binary model, subject to chosen prior parameters.
 #'
 #' @param num_samps Number of samples.
 #' @param alpha_mean Prior mean of alpha parameter.
@@ -28,11 +28,23 @@
 #'
 #' @export
 #'
+#' @seealso
+#'   \code{\link{stan_augbin}}
+#'
 #' @importFrom tibble tibble
 #' @importFrom gtools inv.logit
 #'
 #' @examples
-#' TODO
+#' prior_predictive_augbin_2t_1a(num_samps = 1000,
+#'                               alpha_mean = 0, alpha_sd = 1,
+#'                               beta_mean = 0, beta_sd = 1,
+#'                               gamma_mean = 0, gamma_sd = 1,
+#'                               sigma_mean = 0, sigma_sd = 1,
+#'                               omega_lkj_eta = 1,
+#'                               alpha_d1_mean = 0, alpha_d1_sd = 1,
+#'                               gamma_d1_mean = 0, gamma_d1_sd = 1,
+#'                               alpha_d2_mean = 0, alpha_d2_sd = 1,
+#'                               gamma_d2_mean = 0, gamma_d2_sd = 1)
 prior_predictive_augbin_2t_1a <- function(
   num_samps,
   alpha_mean, alpha_sd, beta_mean, beta_sd,
