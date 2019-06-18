@@ -71,7 +71,8 @@ An object of class \code{\link{crm_fit}}
 }
 \description{
 Fit a continual reassessment method (CRM) model for dose-finding using Stan
-for full Bayesian inference.
+for full Bayesian inference. There are several likelihood and prior
+combinations supported. See model-specific sections below.
 }
 \details{
 The quickest and easiest way to fit a CRM model to some observed outcomes
@@ -79,16 +80,28 @@ is to describe the outcomes using \pkg{trialr}'s syntax for dose-finding
 outcomes. See \code{\link{df_parse_outcomes}} for full details and examples.
 
 Different model choices require that different parameters are
-provided. See below.
+provided. See sections below.
 }
-\section{Parameter requirements of \code{empiric} model}{
+\section{The \code{empiric} model}{
+
+The model form is:
+
+\eqn{F(x_{i}, \beta) = x_{i}^{\exp{\beta}}}
+
+and the required parameters are:
 
 \itemize{
   \item \code{beta_sd}
 }
 }
 
-\section{Parameter requirements of \code{logistic} model}{
+\section{The \code{logistic} model}{
+
+The model form is:
+
+\eqn{F(x_{i}, \beta) = 1 / (1 + \exp{(-a_{0} - \exp{(\beta)} x_{i}})) }
+
+and the required parameters are:
 
 \itemize{
   \item \code{a0}
@@ -97,7 +110,13 @@ provided. See below.
 }
 }
 
-\section{Parameter requirements of \code{logistic_gamma} model}{
+\section{The \code{logistic_gamma} model}{
+
+The model form is:
+
+\eqn{F(x_{i}, \beta) = 1 / (1 + \exp{(-a_{0} - \exp{(\beta)} x_{i}})) }
+
+and the required parameters are:
 
 \itemize{
   \item \code{a0}
@@ -106,7 +125,13 @@ provided. See below.
 }
 }
 
-\section{Parameter requirements of \code{logistic2} model}{
+\section{The \code{logistic2} model}{
+
+The model form is:
+
+\eqn{F(x_{i}, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)}) }
+
+and the required parameters are:
 
 \itemize{
   \item \code{alpha_mean}

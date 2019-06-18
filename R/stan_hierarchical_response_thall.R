@@ -34,9 +34,9 @@
 #' Let the probability of response in group \eqn{i} be \eqn{\pi[i]} for
 #' \eqn{i = 1,...,N}.
 #' They assume a logistic model so that
-#' \eqn{\theta[i] = log{\pi[i] / (1 - \pi[i])}}
+#' \eqn{\theta_{i} = \log{\pi_{i} / (1 - \pi_{i})}}
 #' is the log-odds of response in group \eqn{i}.
-#' They assume that \eqn{\theta[i] ~ N(\mu, \sigma^2)}.
+#' They assume that \eqn{\theta_{i} \sim N(\mu, \sigma^2)}.
 #'
 #' The authors implemented their model in BUGS.
 #' As is the convention in BUGS, the authors define normal distributions by a
