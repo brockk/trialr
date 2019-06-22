@@ -2,15 +2,54 @@
 % Please edit documentation in R/prob_success.R
 \name{prob_success}
 \alias{prob_success}
+\alias{prob_success.augbin_2t_1a_fit}
 \title{Calculate the probability of success.}
 \usage{
-prob_success(fit, ...)
+prob_success(x, ...)
+
+\method{prob_success}{augbin_2t_1a_fit}(x, y1_lower = -Inf,
+  y1_upper = Inf, y2_lower = -Inf, y2_upper = log(0.7),
+  probs = c(0.025, 0.975), newdata = NULL, ...)
 }
 \arguments{
-\item{fit}{an R object of class \code{"augbin_fit"}}
+\item{x}{an R object of class \code{"augbin_fit"}}
 
 \item{...}{arguments passed to other methods}
+
+\item{y1_lower}{numeric, minimum threshold to constitute success,
+scrutinising the log of the tumour size ratio comparing time 1 to baseline.
+Defaults to negative infinity.}
+
+\item{y1_upper}{numeric, maximum threshold to constitute success,
+scrutinising the log of the tumour size ratio comparing time 1 to baseline.
+Defaults to positive infinity.}
+
+\item{y2_lower}{numeric, minimum threshold to constitute success,
+scrutinising the log of the tumour size ratio comparing time 2 to baseline.}
+
+\item{y2_upper}{numeric, maximum threshold to constitute success,
+scrutinising the log of the tumour size ratio comparing time 2 to baseline.
+Defaults to log(0.7).}
+
+\item{probs}{pair of probabilities to use to calculate the credible interval
+for the probability of success.}
+
+\item{newdata}{data for which to infer the probability of success.
+A dataframe-like object with baseline tumour sizes in first column, and first
+and second post-baseline tumour sizes in columns 2 and 3. Omitted by default.
+When omitted, newdata is set to be the \code{fit$tumour_size}.}
+}
+\value{
+Object of class \code{\link[tibble]{tibble}}
 }
 \description{
 Calculate the probability of success.
+
+Calculate the probability of success for an augbin_2t_1a_fit object.
+}
+\examples{
+\dontrun{
+fit <- stan_augbin_demo()
+prob_success(fit, y2_upper = log(0.7))
+}
 }

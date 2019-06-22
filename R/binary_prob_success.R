@@ -4,6 +4,7 @@
 #'
 #' @param x an R object of class \code{"augbin_fit"}
 #' @param ... arguments passed to other methods
+#' @return a \code{data.frame}-like object
 #' @export
 #' @rdname binary_prob_success
 binary_prob_success <- function(x, ...) {
@@ -26,21 +27,21 @@ binary_prob_success <- function(x, ...) {
 #' Defaults to log(0.7).
 #' @param conf.level confidence level for interval.
 #'
-#' @return data.frame
-#'
 #' @importFrom tibble tibble
 #' @importFrom tibble as_tibble
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr mutate summarise
 #' @importFrom binom binom.confint
+#' @importFrom rlang .data
 #' @export
+#' @rdname binary_prob_success
 #'
 #' @examples
 #' \dontrun{
 #' fit <- stan_augbin_demo()
 #' binary_prob_success(fit, y2_upper = log(0.7))
 #' }
-binary_prob_success.augbin_2t_1a_fit <- function(fit,
+binary_prob_success.augbin_2t_1a_fit <- function(x,
                                                  y1_lower = -Inf,
                                                  y1_upper = Inf,
                                                  y2_lower = -Inf,
@@ -48,12 +49,13 @@ binary_prob_success.augbin_2t_1a_fit <- function(fit,
                                                  conf.level = 0.95,
                                                  ...) {
 
-  as_tibble(fit) %>%
+  . <- NULL # To avoid "no visible binding for global variable ‘.’"
+  as_tibble(x) %>%
     mutate(success = (.data$d1 == 0) & (.data$d2 == 0) &
              (.data$y1 < y1_upper) & (.data$y1 > y1_lower) &
              (.data$y2 < y2_upper) & (.data$y2 > y2_lower)) %>%
     summarise(num_success = sum(.data$success)) %>% .[[1]] -> num_success
-  binom.confint(x = num_success, n = fit$num_patients,
+  binom.confint(x = num_success, n = x$num_patients,
                 conf.level = conf.level, ...) %>%
     mutate(ci_width = .data$upper - .data$lower)
 }

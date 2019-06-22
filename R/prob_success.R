@@ -1,12 +1,12 @@
 
 #' Calculate the probability of success.
 #'
-#' @param fit an R object of class \code{"augbin_fit"}
+#' @param x an R object of class \code{"augbin_fit"}
 #' @param ... arguments passed to other methods
 #' @export
 #' @rdname prob_success
-prob_success <- function(fit, ...) {
-  UseMethod("prob_success", fit)
+prob_success <- function(x, ...) {
+  UseMethod("prob_success", x)
 }
 
 #' Calculate the probability of success for an augbin_2t_1a_fit object.
@@ -28,7 +28,6 @@ prob_success <- function(fit, ...) {
 #' A dataframe-like object with baseline tumour sizes in first column, and first
 #' and second post-baseline tumour sizes in columns 2 and 3. Omitted by default.
 #' When omitted, newdata is set to be the \code{fit$tumour_size}.
-#' @param ... Extra args passed onwards.
 #'
 #' @return Object of class \code{\link[tibble]{tibble}}
 #'
@@ -37,14 +36,16 @@ prob_success <- function(fit, ...) {
 #' @importFrom dplyr mutate
 #' @importFrom gtools inv.logit
 #' @importFrom purrr map2
+#' @importFrom stats quantile pnorm
 #' @export
+#' @rdname prob_success
 #'
 #' @examples
 #' \dontrun{
 #' fit <- stan_augbin_demo()
 #' prob_success(fit, y2_upper = log(0.7))
 #' }
-prob_success.augbin_2t_1a_fit <- function(fit,
+prob_success.augbin_2t_1a_fit <- function(x,
                                           y1_lower = -Inf, y1_upper = Inf,
                                           y2_lower = -Inf, y2_upper = log(0.7),
                                           probs = c(0.025, 0.975),
@@ -56,18 +57,18 @@ prob_success.augbin_2t_1a_fit <- function(fit,
   if(any(probs > 1) | any(probs < 0))
     stop('probs should be a pair of probabilities between 0 and 1.')
   if(is.null(newdata))
-    newdata <- fit$tumour_size
+    newdata <- x$tumour_size
   num_patients <- nrow(newdata)
 
-  alpha <- rstan::extract(fit$fit)$alpha
-  beta <- rstan::extract(fit$fit)$beta
-  gamma <- rstan::extract(fit$fit)$gamma
-  sigma1 <- rstan::extract(fit$fit)$sigma[,1]
-  sigma2 <- rstan::extract(fit$fit)$sigma[,2]
-  alphaD1 <- rstan::extract(fit$fit)$alphaD1
-  gammaD1 <- rstan::extract(fit$fit)$gammaD1
-  alphaD2 <- rstan::extract(fit$fit)$alphaD2
-  gammaD2 <- rstan::extract(fit$fit)$gammaD2
+  alpha <- rstan::extract(x$fit)$alpha
+  beta <- rstan::extract(x$fit)$beta
+  gamma <- rstan::extract(x$fit)$gamma
+  sigma1 <- rstan::extract(x$fit)$sigma[,1]
+  sigma2 <- rstan::extract(x$fit)$sigma[,2]
+  alphaD1 <- rstan::extract(x$fit)$alphaD1
+  gammaD1 <- rstan::extract(x$fit)$gammaD1
+  alphaD2 <- rstan::extract(x$fit)$alphaD2
+  gammaD2 <- rstan::extract(x$fit)$gammaD2
 
   .get_prob_success <- function(z0, z1) {
     mu1 <- alpha + gamma * z0
@@ -83,7 +84,7 @@ prob_success.augbin_2t_1a_fit <- function(fit,
     prob_success_samp_id
   }
 
-  tibble(id = num_patients,
+  tibble(id = 1:num_patients,
          z0 = newdata[, 1],
          z1 = newdata[, 2]) %>%
     mutate(
@@ -93,5 +94,6 @@ prob_success.augbin_2t_1a_fit <- function(fit,
       upper = map_dbl(.data$prob_success_samp, quantile, probs = max(probs)),
       ci_width = .data$upper - .data$lower
     ) -> inferences
+
   inferences
 }

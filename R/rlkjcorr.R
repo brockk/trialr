@@ -12,8 +12,9 @@
 #' @param n Number of matrices to sample.
 #' @param K dimenstion of matrix to sample.
 #' @param eta Distribution parameter
-#'
 #' @return matrix
+#'
+#' @importFrom stats rbeta rnorm
 #' @export
 rlkjcorr <- function (n, K, eta = 1) {
 

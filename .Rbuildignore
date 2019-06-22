@@ -17,3 +17,5 @@ cran-comments\.md
 ^pkgdown$
 ^codecov\.yml$
 ^\.httr-oauth$
+^doc$
+^Meta$

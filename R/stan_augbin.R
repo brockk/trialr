@@ -137,6 +137,20 @@ stan_augbin <- function(tumour_size, non_shrinkage_failure,
     if(nrow(tumour_size) != length(arm))
       stop('The number of items in arm should match nrow(tumour_size).')
   }
+  # Check priors
+  if(model == '2t-1a') {
+    reqd_params <- c("alpha_mean", "alpha_sd", "beta_mean", "beta_sd",
+                     "gamma_mean", "gamma_sd", "sigma_mean", "sigma_sd",
+                     "omega_lkj_eta", "alpha_d1_mean", "alpha_d1_sd",
+                     "gamma_d1_mean", "gamma_d1_sd", "alpha_d2_mean",
+                     "alpha_d2_sd", "gamma_d2_mean", "gamma_d2_sd")
+    if(!all(reqd_params %in% names(prior_params))) {
+      missing_params <- reqd_params[!(reqd_params %in% names(prior_params))]
+      stop(paste0('\nParameter ', missing_params, ' is required in prior_params',
+                  ' for model of type ', model))
+    }
+  }
+
   data <- list(N = nrow(tumour_size),
                z0 = tumour_size[, 1],
                z1 = tumour_size[, 2],

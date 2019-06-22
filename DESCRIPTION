@@ -1,6 +1,6 @@
 Package: trialr
-Version: 0.1.1.9001
-Date: 2019-06-12
+Version: 0.1.1.9002
+Date: 2019-06-22
 Title: Clinical Trial Designs in 'RStan'
 Description: A showcase of Bayesian clinical trial designs, implemented in 
     'RStan' and R, including the Continual Reassessment Method (CRM) and EffTox.
@@ -29,6 +29,7 @@ Depends:
 Imports:
   rstan (>= 2.18.2), 
   rstantools (>= 1.5.1),
+  rlang,
   dplyr,
   tidyr,
   purrr,

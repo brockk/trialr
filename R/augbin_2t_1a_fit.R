@@ -49,6 +49,7 @@ augbin_2t_1a_fit <- function(num_patients,
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 #' @export
 as_tibble.augbin_2t_1a_fit <- function(x, ...) {
   data.frame(x$tumour_size, x$non_shrinkage_failure) %>%
@@ -61,7 +62,7 @@ as_tibble.augbin_2t_1a_fit <- function(x, ...) {
 #'
 #' This method simply forwards to \code{\link{prob_success}}.
 #'
-#' @param x Object of class \code{augbin_2t_1a_fit}.
+#' @param object Object of class \code{augbin_2t_1a_fit}.
 #' @param y1_lower numeric, minimum threshold to constitute success,
 #' scrutinising the log of the tumour size ratio comparing time 1 to baseline.
 #' Defaults to negative infinity.
@@ -78,19 +79,19 @@ as_tibble.augbin_2t_1a_fit <- function(x, ...) {
 #' @param newdata data for which to infer the probability of success.
 #' A dataframe-like object with baseline tumour sizes in first column, and first
 #' and second post-baseline tumour sizes in columns 2 and 3. Omitted by default.
-#' When omitted, newdata is set to be the \code{fit$tumour_size}.
+#' When omitted, newdata is set to be the \code{object$tumour_size}.
 #' @param ... Extra args passed onwards.
 #'
 #' @return Object of class \code{\link[tibble]{tibble}}
 #'
 #' @export
-predict.augbin_2t_1a_fit <- function(x,
+predict.augbin_2t_1a_fit <- function(object,
                                      y1_lower = -Inf, y1_upper = Inf,
                                      y2_lower = -Inf, y2_upper = log(0.7),
                                      probs = c(0.025, 0.975),
                                      newdata = NULL,
                                      ...) {
-  prob_success(fit = x, y1_lower = y1_lower, y1_upper = y1_upper,
+  prob_success(object, y1_lower = y1_lower, y1_upper = y1_upper,
                y2_lower = y2_lower, y2_upper = y2_upper,
                probs = probs, newdata = newdata, ...)
 }

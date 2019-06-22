@@ -33,6 +33,7 @@
 #'
 #' @importFrom tibble tibble
 #' @importFrom gtools inv.logit
+#' @importFrom stats runif rnorm
 #'
 #' @examples
 #' prior_predictive_augbin_2t_1a(num_samps = 1000,

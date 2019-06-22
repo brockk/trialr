@@ -4,10 +4,13 @@
 \alias{print.augbin_fit}
 \title{Print augbin_fit object.}
 \usage{
-\method{print}{augbin_fit}(x, ...)
+\method{print}{augbin_fit}(x, pars = c("alpha", "beta", "gamma", "Omega",
+  "sigma", "alphaD1", "gammaD1", "alphaD2", "gammaD2"), ...)
 }
 \arguments{
 \item{x}{\code{\link{augbin_fit}} object to print.}
+
+\item{pars}{parameters in model to summarise.}
 
 \item{...}{Extra parameters, passed onwards.}
 }

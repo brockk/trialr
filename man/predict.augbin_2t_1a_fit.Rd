@@ -4,12 +4,12 @@
 \alias{predict.augbin_2t_1a_fit}
 \title{Predict probability of success for given tumour size measurements.}
 \usage{
-\method{predict}{augbin_2t_1a_fit}(x, y1_lower = -Inf, y1_upper = Inf,
-  y2_lower = -Inf, y2_upper = log(0.7), probs = c(0.025, 0.975),
-  newdata = NULL, ...)
+\method{predict}{augbin_2t_1a_fit}(object, y1_lower = -Inf,
+  y1_upper = Inf, y2_lower = -Inf, y2_upper = log(0.7),
+  probs = c(0.025, 0.975), newdata = NULL, ...)
 }
 \arguments{
-\item{x}{Object of class \code{augbin_2t_1a_fit}.}
+\item{object}{Object of class \code{augbin_2t_1a_fit}.}
 
 \item{y1_lower}{numeric, minimum threshold to constitute success,
 scrutinising the log of the tumour size ratio comparing time 1 to baseline.
@@ -32,7 +32,7 @@ for the probability of success.}
 \item{newdata}{data for which to infer the probability of success.
 A dataframe-like object with baseline tumour sizes in first column, and first
 and second post-baseline tumour sizes in columns 2 and 3. Omitted by default.
-When omitted, newdata is set to be the \code{fit$tumour_size}.}
+When omitted, newdata is set to be the \code{object$tumour_size}.}
 
 \item{...}{Extra args passed onwards.}
 }

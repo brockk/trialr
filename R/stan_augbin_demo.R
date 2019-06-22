@@ -12,7 +12,8 @@
 #'   \code{\link{augbin_fit}}
 #'   \code{\link{prior_predictive_augbin_2t_1a}}
 #'   \code{\link[rstan:sampling]{sampling}}
-
+#'
+#' @importFrom stats runif rbinom
 #' @export
 #'
 #' @examples

@@ -8,3 +8,5 @@ src/*.dll
 vignettes/*_cache/
 inst/doc
 .httr-oauth
+doc
+Meta
