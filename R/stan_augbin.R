@@ -37,8 +37,8 @@
 #' \deqn{(y_{1i}, y_{2i})^T \sim N( (\mu_{1i}, \mu_{2i})^T, \Sigma) }
 #' \deqn{ \mu_{1i} = \alpha + \gamma z_{0i} }
 #' \deqn{ \mu_{2i} = \beta + \gamma z_{0i} }
-#' \deqn{ \text{logit} \; \text{Pr}(D_{1i} = 1 | Z_{0i}) = \alpha_{D1} + \gamma_{D1} z_{0i} }
-#' \deqn{ \text{logit} \; \text{Pr}(D_{2i} = 1 | D_{1i} = 0, Z_{0i}, Z_{1i}) = \alpha_{D2} + \gamma_{D2} z_{1i} }
+#' \deqn{ logit(Pr(D_{1i} = 1 | Z_{0i})) = \alpha_{D1} + \gamma_{D1} z_{0i} }
+#' \deqn{ logit(Pr(D_{2i} = 1 | D_{1i} = 0, Z_{0i}, Z_{1i})) = \alpha_{D2} + \gamma_{D2} z_{1i} }
 #' where \eqn{z_{0i}, z_{1i}, z_{2i}} are tumour sizes at baseline, period 1,
 #' and period 2, for patient i; \eqn{y_{1i}, y_{2i}} are the log-tumour-size
 #' ratios with respect to baseline; \eqn{D_{1i}, D_{2i}} are indicators of
