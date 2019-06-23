@@ -1,4 +1,31 @@
 
+# Version 0.1.2
+
+## Test environments
+* local Mac install, R 3.5.2
+* WinBuilder R-release, 3.6.0
+
+0 errors | 0 warnings | 1 notes
+
+## NOTEs
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Kristian Brock <kristian.brock@gmail.com>'
+
+Version contains large components (0.1.1.9002)
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/CRM-pathways.html
+          inst/doc/CRM.html
+          inst/doc/EffTox.html
+    Status: 403
+    Message: Forbidden
+
+This URL is OK.
+
+
+
 # Version 0.1.1
 
 ## Test environments
