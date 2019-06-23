@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
       </span>
     </div>
 
@@ -171,10 +171,10 @@
 <a class="sourceLine" id="cb5-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5">fit1 <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://mjskay.github.io/tidybayes/reference/spread_draws.html">spread_draws</a></span>(prob_tox[Dose]) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> Dose, <span class="dt">y =</span> prob_tox)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> Dose, <span class="dt">y =</span> prob_tox)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="http://mjskay.github.io/tidybayes/reference/stat_interval.html">stat_interval</a></span>(<span class="dt">.width =</span> <span class="kw">c</span>(.<span class="dv">5</span>, <span class="fl">.8</span>, <span class="fl">.95</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_brewer">scale_color_brewer</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">y =</span> <span class="st">'Prob(DLT)'</span>, <span class="dt">title =</span> <span class="st">'Posterior dose-toxicity beliefs using empiric CRM'</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">y =</span> <span class="st">'Prob(DLT)'</span>, <span class="dt">title =</span> <span class="st">'Posterior dose-toxicity beliefs using empiric CRM'</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="864"></p>
 <p>Several variants of the CRM <a href="articles/CRM.html">are implemented in ‘trialr’</a>. Further visualisation techniques are demonstrated in the <a href="articles/CRM-visualisation.html">Visualisation in CRM</a> vignette. The time-to-event CRM is introduced in the <a href="articles/TITE-CRM.html">TITE-CRM vignette</a>.</p>
 </div>
@@ -285,57 +285,57 @@
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; post-warmup draws per chain=1000, total post-warmup draws=4000.</span></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; mu                 -0.03    0.03  1.42  -2.98  -0.95   0.02   0.92   2.69</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; sigma2             12.69    0.35 11.21   3.43   6.37   9.38  15.13  41.16</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; rho[1]             -0.02    0.06  3.83  -7.97  -2.42   0.13   2.27   7.58</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; rho[2]             -3.05    0.06  2.68  -9.76  -4.27  -2.56  -1.28   0.83</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; rho[3]              2.47    0.07  2.83  -1.78   0.60   2.06   3.84   9.67</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; rho[4]             -0.32    0.01  0.82  -2.03  -0.84  -0.31   0.22   1.25</span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; rho[5]              3.73    0.06  2.33   0.48   2.19   3.28   4.85   9.31</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; rho[6]             -0.09    0.07  3.86  -8.17  -2.42   0.00   2.27   7.56</span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; rho[7]              0.05    0.02  1.57  -3.11  -0.93   0.07   1.04   3.10</span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; rho[8]              0.80    0.02  1.34  -1.64  -0.09   0.74   1.62   3.62</span></a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; rho[9]             -2.53    0.07  3.03  -9.57  -4.03  -2.08  -0.51   1.94</span></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; rho[10]            -0.01    0.07  3.85  -7.67  -2.30   0.00   2.29   7.76</span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; sigma               3.35    0.04  1.21   1.85   2.52   3.06   3.89   6.42</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; prob_response[1]    0.51    0.01  0.38   0.00   0.08   0.53   0.91   1.00</span></a>
-<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.22   0.70</span></a>
-<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; prob_response[3]    0.78    0.00  0.25   0.14   0.65   0.89   0.98   1.00</span></a>
-<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; prob_response[4]    0.43    0.00  0.17   0.12   0.30   0.42   0.56   0.78</span></a>
-<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; prob_response[5]    0.92    0.00  0.10   0.62   0.90   0.96   0.99   1.00</span></a>
-<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; prob_response[6]    0.50    0.01  0.38   0.00   0.08   0.50   0.91   1.00</span></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; prob_response[7]    0.51    0.00  0.27   0.04   0.28   0.52   0.74   0.96</span></a>
-<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; prob_response[8]    0.64    0.00  0.23   0.16   0.48   0.68   0.83   0.97</span></a>
-<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.11   0.38   0.87</span></a>
-<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; prob_response[10]   0.50    0.01  0.38   0.00   0.09   0.50   0.91   1.00</span></a>
-<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; lp__              -34.57    0.13  3.70 -42.99 -36.72 -34.07 -31.84 -28.85</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; mu                 -0.04    0.03  1.38  -2.81  -0.89  -0.05   0.82   2.67</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; sigma2             12.34    0.34 10.90   3.32   6.21   9.32  14.50  39.39</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; rho[1]             -0.05    0.06  3.76  -7.59  -2.26  -0.01   2.23   7.39</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; rho[2]             -2.97    0.06  2.64  -9.79  -4.20  -2.54  -1.22   0.78</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; rho[3]              2.36    0.06  2.68  -1.95   0.62   1.98   3.74   8.83</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; rho[4]             -0.28    0.01  0.77  -1.86  -0.75  -0.27   0.24   1.21</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt; rho[5]              3.73    0.06  2.36   0.53   2.08   3.30   4.81   9.69</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; rho[6]             -0.12    0.07  3.83  -7.93  -2.21  -0.01   2.15   7.29</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; rho[7]              0.01    0.03  1.54  -3.23  -0.94   0.00   0.95   3.09</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; rho[8]              0.76    0.02  1.31  -1.68  -0.10   0.72   1.58   3.58</span></a>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; rho[9]             -2.36    0.06  2.76  -9.01  -3.73  -1.99  -0.54   1.95</span></a>
+<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; rho[10]            -0.11    0.07  3.85  -7.71  -2.35  -0.12   2.20   7.72</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; sigma               3.31    0.04  1.19   1.82   2.49   3.05   3.81   6.28</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; prob_response[1]    0.50    0.01  0.38   0.00   0.09   0.50   0.90   1.00</span></a>
+<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.23   0.69</span></a>
+<a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; prob_response[3]    0.78    0.00  0.25   0.12   0.65   0.88   0.98   1.00</span></a>
+<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; prob_response[4]    0.44    0.00  0.17   0.13   0.32   0.43   0.56   0.77</span></a>
+<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; prob_response[5]    0.92    0.00  0.10   0.63   0.89   0.96   0.99   1.00</span></a>
+<a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; prob_response[6]    0.50    0.01  0.38   0.00   0.10   0.50   0.90   1.00</span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; prob_response[7]    0.50    0.00  0.27   0.04   0.28   0.50   0.72   0.96</span></a>
+<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; prob_response[8]    0.64    0.00  0.23   0.16   0.47   0.67   0.83   0.97</span></a>
+<a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; prob_response[9]    0.23    0.00  0.25   0.00   0.02   0.12   0.37   0.88</span></a>
+<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; prob_response[10]   0.49    0.01  0.38   0.00   0.09   0.47   0.90   1.00</span></a>
+<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; lp__              -34.27    0.13  3.66 -42.46 -36.54 -33.77 -31.54 -28.55</span></a>
 <a class="sourceLine" id="cb12-31" data-line-number="31"><span class="co">#&gt;                   n_eff Rhat</span></a>
-<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; mu                 1971 1.00</span></a>
-<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; sigma2             1007 1.00</span></a>
-<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; rho[1]             3508 1.00</span></a>
-<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; rho[2]             1722 1.00</span></a>
-<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; rho[3]             1749 1.00</span></a>
-<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; rho[4]             3719 1.00</span></a>
-<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; rho[5]             1736 1.00</span></a>
-<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; rho[6]             2958 1.00</span></a>
-<a class="sourceLine" id="cb12-40" data-line-number="40"><span class="co">#&gt; rho[7]             3988 1.00</span></a>
-<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="co">#&gt; rho[8]             3399 1.00</span></a>
-<a class="sourceLine" id="cb12-42" data-line-number="42"><span class="co">#&gt; rho[9]             1824 1.00</span></a>
-<a class="sourceLine" id="cb12-43" data-line-number="43"><span class="co">#&gt; rho[10]            2873 1.00</span></a>
-<a class="sourceLine" id="cb12-44" data-line-number="44"><span class="co">#&gt; sigma              1015 1.00</span></a>
-<a class="sourceLine" id="cb12-45" data-line-number="45"><span class="co">#&gt; prob_response[1]   3452 1.00</span></a>
-<a class="sourceLine" id="cb12-46" data-line-number="46"><span class="co">#&gt; prob_response[2]   3540 1.00</span></a>
-<a class="sourceLine" id="cb12-47" data-line-number="47"><span class="co">#&gt; prob_response[3]   3955 1.00</span></a>
-<a class="sourceLine" id="cb12-48" data-line-number="48"><span class="co">#&gt; prob_response[4]   3651 1.00</span></a>
-<a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; prob_response[5]   3385 1.00</span></a>
-<a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; prob_response[6]   3511 1.00</span></a>
-<a class="sourceLine" id="cb12-51" data-line-number="51"><span class="co">#&gt; prob_response[7]   4249 1.00</span></a>
-<a class="sourceLine" id="cb12-52" data-line-number="52"><span class="co">#&gt; prob_response[8]   3932 1.00</span></a>
-<a class="sourceLine" id="cb12-53" data-line-number="53"><span class="co">#&gt; prob_response[9]   3624 1.00</span></a>
-<a class="sourceLine" id="cb12-54" data-line-number="54"><span class="co">#&gt; prob_response[10]  2939 1.00</span></a>
-<a class="sourceLine" id="cb12-55" data-line-number="55"><span class="co">#&gt; lp__                760 1.01</span></a>
+<a class="sourceLine" id="cb12-32" data-line-number="32"><span class="co">#&gt; mu                 2013    1</span></a>
+<a class="sourceLine" id="cb12-33" data-line-number="33"><span class="co">#&gt; sigma2             1016    1</span></a>
+<a class="sourceLine" id="cb12-34" data-line-number="34"><span class="co">#&gt; rho[1]             3529    1</span></a>
+<a class="sourceLine" id="cb12-35" data-line-number="35"><span class="co">#&gt; rho[2]             1741    1</span></a>
+<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="co">#&gt; rho[3]             2301    1</span></a>
+<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="co">#&gt; rho[4]             3925    1</span></a>
+<a class="sourceLine" id="cb12-38" data-line-number="38"><span class="co">#&gt; rho[5]             1674    1</span></a>
+<a class="sourceLine" id="cb12-39" data-line-number="39"><span class="co">#&gt; rho[6]             2652    1</span></a>
+<a class="sourceLine" id="cb12-40" data-line-number="40"><span class="co">#&gt; rho[7]             3328    1</span></a>
+<a class="sourceLine" id="cb12-41" data-line-number="41"><span class="co">#&gt; rho[8]             3717    1</span></a>
+<a class="sourceLine" id="cb12-42" data-line-number="42"><span class="co">#&gt; rho[9]             2060    1</span></a>
+<a class="sourceLine" id="cb12-43" data-line-number="43"><span class="co">#&gt; rho[10]            3296    1</span></a>
+<a class="sourceLine" id="cb12-44" data-line-number="44"><span class="co">#&gt; sigma              1008    1</span></a>
+<a class="sourceLine" id="cb12-45" data-line-number="45"><span class="co">#&gt; prob_response[1]   3830    1</span></a>
+<a class="sourceLine" id="cb12-46" data-line-number="46"><span class="co">#&gt; prob_response[2]   3550    1</span></a>
+<a class="sourceLine" id="cb12-47" data-line-number="47"><span class="co">#&gt; prob_response[3]   4187    1</span></a>
+<a class="sourceLine" id="cb12-48" data-line-number="48"><span class="co">#&gt; prob_response[4]   3829    1</span></a>
+<a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; prob_response[5]   4570    1</span></a>
+<a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; prob_response[6]   3309    1</span></a>
+<a class="sourceLine" id="cb12-51" data-line-number="51"><span class="co">#&gt; prob_response[7]   3645    1</span></a>
+<a class="sourceLine" id="cb12-52" data-line-number="52"><span class="co">#&gt; prob_response[8]   4249    1</span></a>
+<a class="sourceLine" id="cb12-53" data-line-number="53"><span class="co">#&gt; prob_response[9]   3909    1</span></a>
+<a class="sourceLine" id="cb12-54" data-line-number="54"><span class="co">#&gt; prob_response[10]  3598    1</span></a>
+<a class="sourceLine" id="cb12-55" data-line-number="55"><span class="co">#&gt; lp__                813    1</span></a>
 <a class="sourceLine" id="cb12-56" data-line-number="56"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb12-57" data-line-number="57"><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Fri May 24 16:23:29 2019.</span></a>
+<a class="sourceLine" id="cb12-57" data-line-number="57"><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Sun Jun 23 19:31:51 2019.</span></a>
 <a class="sourceLine" id="cb12-58" data-line-number="58"><span class="co">#&gt; For each parameter, n_eff is a crude measure of effective sample size,</span></a>
 <a class="sourceLine" id="cb12-59" data-line-number="59"><span class="co">#&gt; and Rhat is the potential scale reduction factor on split chains (at </span></a>
 <a class="sourceLine" id="cb12-60" data-line-number="60"><span class="co">#&gt; convergence, Rhat=1).</span></a></code></pre></div>
@@ -344,8 +344,8 @@
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw">plot</span>(fit3, <span class="dt">pars =</span> <span class="st">'prob_response'</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_abline">geom_vline</a></span>(<span class="dt">xintercept =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled response rates in 10 sarcoma subtypes'</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span>(<span class="dt">xintercept =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">'orange'</span>, <span class="dt">linetype =</span> <span class="st">'dashed'</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">'Partially-pooled response rates in 10 sarcoma subtypes'</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="864"></p>
 <p>The hierarchical model for binary responses is developed in <a href="articles/HierarchicalBayesianResponse.html">its own vignette</a>.</p>
 </div>
@@ -361,7 +361,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the latest trialr commit from github with:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"brockk/trialr"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb14-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"brockk/trialr"</span>)</a></code></pre></div>
 <p>You can install the latest CRAN release by running:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"trialr"</span>)</a></code></pre></div>
 <p>It should go without saying that the CRAN release will be older than the github version.</p>

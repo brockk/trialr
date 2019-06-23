@@ -64,7 +64,7 @@ Thall et al. (2003)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
       </span>
     </div>
 
@@ -208,9 +208,9 @@ This function fits their model for binary response outcomes.</p>
 <p>Let the probability of response in group \(i\) be \(\pi[i]\) for
 \(i = 1,...,N\).
 They assume a logistic model so that
-\(\theta[i] = log{\pi[i] / (1 - \pi[i])}\)
+\(\theta_{i} = \log{\pi_{i} / (1 - \pi_{i})}\)
 is the log-odds of response in group \(i\).
-They assume that \(\theta[i] ~ N(\mu, \sigma^2)\).</p>
+They assume that \(\theta_{i} \sim N(\mu, \sigma^2)\).</p>
 <p>The authors implemented their model in BUGS.
 As is the convention in BUGS, the authors define normal distributions by a
 precision parameter \(\tau\) as opposed to the standard deviation parameter

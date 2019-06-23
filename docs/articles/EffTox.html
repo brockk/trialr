@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <h1>EffTox</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-05-24</h4>
+            <h4 class="date">2019-06-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/EffTox.Rmd"><code>vignettes/EffTox.Rmd</code></a></small>
       <div class="hidden name"><code>EffTox.Rmd</code></div>
@@ -250,7 +250,7 @@ Utility contours after observing outcomes 1NEN 2NBE.
 <p>The blue points show the location of the hinge points on the neutral-uility (u=0) contour. The red numbers show the posterior means of the five dose-levels. Doses that are closer to the lower-right corner have higher utility. We see that dose-level 3 has the highest utility.</p>
 <p>We can also produce posterior density plots of the dose utilities. For illustration, we will just plot the densities of the three acceptable doses. The package <code>ggplot2</code> is required.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/efftox_utility_density_plot.html">efftox_utility_density_plot</a></span>(fit, <span class="dt">doses =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"EffTox dose utility densities"</span>)</a></code></pre></div>
 <div class="figure">
 <img src="EffTox_files/figure-html/unnamed-chunk-6-1.png" alt="Utility densities after observing outcomes 1NEN 2NBE." width="672"><p class="caption">
 Utility densities after observing outcomes 1NEN 2NBE.

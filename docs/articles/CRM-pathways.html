@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@
       <h1>Dose pathways with CRM</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-05-24</h4>
+            <h4 class="date">2019-06-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/CRM-pathways.Rmd"><code>vignettes/CRM-pathways.Rmd</code></a></small>
       <div class="hidden name"><code>CRM-pathways.Rmd</code></div>
@@ -158,12 +158,12 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span>(path)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">df</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 8
-##   .node .parent .depth outcomes    next_dose fit     parent_fit  dose_index
-##   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt; &lt;list&gt;  &lt;list&gt;      &lt;list&gt;    
-## 1     1      NA      0 ""                  2 &lt;S3: c… &lt;NULL&gt;      &lt;dbl [5]&gt; 
-## 2     2       1      1 1NNN                4 &lt;S3: c… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-## 3     3       2      2 1NNN 2NTN           2 &lt;S3: c… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-## 4     4       3      3 1NNN 2NTN …         3 &lt;S3: c… &lt;S3: crm_f… &lt;dbl [5]&gt;</code></pre>
+##   .node .parent .depth outcomes     next_dose fit     parent_fit dose_index
+##   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;list&gt;  &lt;list&gt;     &lt;list&gt;    
+## 1     1      NA      0 ""                   2 &lt;crm_f… &lt;NULL&gt;     &lt;dbl [5]&gt; 
+## 2     2       1      1 1NNN                 4 &lt;crm_f… &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 3     3       2      2 1NNN 2NTN            2 &lt;crm_f… &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 4     4       3      3 1NNN 2NTN 2…         3 &lt;crm_f… &lt;crm_fit&gt;  &lt;dbl [5]&gt;</code></pre>
 <p><code>tibble</code> was chosen over the base R <code>data.frame</code> class because of its flexibility. For instance, the <code>fit</code> column contains the <code>crm_fit</code> object associated with the outcomes. The <code>dose_index</code> column contains a vector of integers reflecting the dose-level under study. This is useful if we <code>unnest</code> the data to analyse quantities at the dose-level. For instance, we might be interested in how our beliefs on the rate of toxicity at dose-level 2 have evolved. Using functions from <code>tidyverse</code> packages, we can proceed:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">library</span>(purrr)</a>
@@ -249,21 +249,21 @@
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">df</a></code></pre></div>
 <pre><code>## # A tibble: 13 x 8
-##    .node .parent .depth outcomes next_dose fit       parent_fit  dose_index
-##    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;list&gt;    &lt;list&gt;      &lt;list&gt;    
-##  1     1      NA      0 ""               2 &lt;S3: crm… &lt;NULL&gt;      &lt;dbl [5]&gt; 
-##  2     2       1      1 NN               4 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  3     3       2      2 NN               5 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  4     4       1      1 NT               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  5     5       4      2 NN               2 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  6     6       1      1 TT               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  7     7       6      2 NN               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  8     8       2      2 NT               3 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-##  9     9       4      2 NT               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-## 10    10       6      2 NT               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-## 11    11       2      2 TT               2 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-## 12    12       4      2 TT               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt; 
-## 13    13       6      2 TT               1 &lt;S3: crm… &lt;S3: crm_f… &lt;dbl [5]&gt;</code></pre>
+##    .node .parent .depth outcomes next_dose fit       parent_fit dose_index
+##    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;list&gt;    &lt;list&gt;     &lt;list&gt;    
+##  1     1      NA      0 ""               2 &lt;crm_fit&gt; &lt;NULL&gt;     &lt;dbl [5]&gt; 
+##  2     2       1      1 NN               4 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  3     3       2      2 NN               5 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  4     4       1      1 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  5     5       4      2 NN               2 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  6     6       1      1 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  7     7       6      2 NN               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  8     8       2      2 NT               3 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+##  9     9       4      2 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 10    10       6      2 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 11    11       2      2 TT               2 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 12    12       4      2 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 13    13       6      2 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt;</code></pre>
 <p>We see that our analysis of <code>cohort_sizes = c(2, 2)</code> has yielded 13 model fits. There is one node of depth 0. This is the trial starting point, where <code>next_dose</code> was provided manually. There are three nodes of depth 1, corresponding to paths <code>2NN</code>, <code>2NT</code> and <code>2TT</code>. Finally there are nine nodes of depth 2.</p>
 <p>We may find it helpful to see the data in a wide format:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
@@ -349,34 +349,38 @@
 <p>We use <code>careful_escalation</code> here for illustration. <code>user_dose_func</code> can be any function that takes a <code>crm_fit</code> as its single parameter and returns either an integer dose-level, or <code>NA</code> to signify that the trial should stop.</p>
 <p>The analysis of DTPs becomes bewildering as the volume of information grows. A clear method of visualisation is extremely valuable. The <code>DiagrammeR</code> package creates graphs of nodes and edges. This is perfect for visualising tree-like structures like those created by <code>crm_dtps</code>.</p>
 <p>To create a graph, <code>DiagrammeR</code> requires a <code>data.frame</code> of nodes and another of edges. The nodes are the shapes in a graph. The edges are the lines that join them. <code>trialr</code> has already given us all of the information we require to define these elements. All that remains is to choose a pleasing colour scheme.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">library</span>(DiagrammeR)</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">df3 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">transmute</a></span>(<span class="dt">id =</span> .node,</a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">            <span class="dt">type =</span> <span class="ot">NA</span>,</a>
-<a class="sourceLine" id="cb24-6" data-line-number="6">            <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
-<a class="sourceLine" id="cb24-7" data-line-number="7">              <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'Stop'</span>,</a>
-<a class="sourceLine" id="cb24-8" data-line-number="8">              <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>next_dose <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.character</span>()),</a>
-<a class="sourceLine" id="cb24-9" data-line-number="9">            <span class="dt">shape =</span> <span class="st">'circle'</span>,</a>
-<a class="sourceLine" id="cb24-10" data-line-number="10">            <span class="dt">fillcolor =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
-<a class="sourceLine" id="cb24-11" data-line-number="11">              next_dose <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> 'slategrey'</span>,</a>
-<a class="sourceLine" id="cb24-12" data-line-number="12">              next_dose <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> 'skyblue1'</span>,</a>
-<a class="sourceLine" id="cb24-13" data-line-number="13">              next_dose <span class="op">==</span><span class="st"> </span><span class="dv">3</span> <span class="op">~</span><span class="st"> 'royalblue1'</span>,</a>
-<a class="sourceLine" id="cb24-14" data-line-number="14">              next_dose <span class="op">==</span><span class="st"> </span><span class="dv">4</span> <span class="op">~</span><span class="st"> 'orchid4'</span>,</a>
-<a class="sourceLine" id="cb24-15" data-line-number="15">              next_dose <span class="op">==</span><span class="st"> </span><span class="dv">5</span> <span class="op">~</span><span class="st"> 'royalblue4'</span>,</a>
-<a class="sourceLine" id="cb24-16" data-line-number="16">              <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'red'</span></a>
-<a class="sourceLine" id="cb24-17" data-line-number="17">            )</a>
-<a class="sourceLine" id="cb24-18" data-line-number="18">  ) -&gt;<span class="st"> </span>ndf</a>
-<a class="sourceLine" id="cb24-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb24-20" data-line-number="20">df3 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-21" data-line-number="21"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(.parent)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-22" data-line-number="22"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="dt">from =</span> .parent, <span class="dt">to =</span> .node, <span class="dt">label =</span> outcomes) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-23" data-line-number="23"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">rel =</span> <span class="st">"leading_to"</span>) -&gt;<span class="st"> </span>edf</a>
-<a class="sourceLine" id="cb24-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb24-25" data-line-number="25">graph &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/create_graph">create_graph</a></span>(<span class="dt">nodes_df =</span> ndf, <span class="dt">edges_df =</span> edf)</a>
-<a class="sourceLine" id="cb24-26" data-line-number="26"><span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/render_graph">render_graph</a></span>(graph)</a></code></pre></div>
-<div id="htmlwidget-c2aff0cec50eff047088" style="width:576px;height:576px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c2aff0cec50eff047088">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"2\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"3\" [label = \"4\", shape = \"circle\", fillcolor = \"#8B4789\", fontcolor = \"#FFFFFF\"] \n  \"4\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"5\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"6\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"7\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"8\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"9\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"10\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"11\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"12\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"13\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"14\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"15\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"16\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"17\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"18\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"19\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"20\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"21\" [label = \"Stop\", shape = \"circle\", fillcolor = \"#FF0000\", fontcolor = \"#FFFFFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Compared to the tabular form above, the graph representation of DTPs is far superior. The central node shows that dose 2 will be given to the next cohort. Displaying the nodes that require stopping in a bold and symbolic colour like red immediately conveys useful information. The only path that will see the model advocate stopping in the next two cohorts is if every patient experiences toxicity.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># This section of code outputs to the Viewer pane in RStudio</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">Sys.getenv</span>(<span class="st">"RSTUDIO"</span>) <span class="op">==</span><span class="st"> "1"</span>) {</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">  <span class="kw">library</span>(DiagrammeR)</a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">  </a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">  df3 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">transmute</a></span>(<span class="dt">id =</span> .node,</a>
+<a class="sourceLine" id="cb24-8" data-line-number="8">              <span class="dt">type =</span> <span class="ot">NA</span>,</a>
+<a class="sourceLine" id="cb24-9" data-line-number="9">              <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
+<a class="sourceLine" id="cb24-10" data-line-number="10">                <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'Stop'</span>,</a>
+<a class="sourceLine" id="cb24-11" data-line-number="11">                <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>next_dose <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.character</span>()),</a>
+<a class="sourceLine" id="cb24-12" data-line-number="12">              <span class="dt">shape =</span> <span class="st">'circle'</span>,</a>
+<a class="sourceLine" id="cb24-13" data-line-number="13">              <span class="dt">fillcolor =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
+<a class="sourceLine" id="cb24-14" data-line-number="14">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> 'slategrey'</span>,</a>
+<a class="sourceLine" id="cb24-15" data-line-number="15">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> 'skyblue1'</span>,</a>
+<a class="sourceLine" id="cb24-16" data-line-number="16">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">3</span> <span class="op">~</span><span class="st"> 'royalblue1'</span>,</a>
+<a class="sourceLine" id="cb24-17" data-line-number="17">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">4</span> <span class="op">~</span><span class="st"> 'orchid4'</span>,</a>
+<a class="sourceLine" id="cb24-18" data-line-number="18">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">5</span> <span class="op">~</span><span class="st"> 'royalblue4'</span>,</a>
+<a class="sourceLine" id="cb24-19" data-line-number="19">                <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'red'</span></a>
+<a class="sourceLine" id="cb24-20" data-line-number="20">              )</a>
+<a class="sourceLine" id="cb24-21" data-line-number="21">    ) -&gt;<span class="st"> </span>ndf</a>
+<a class="sourceLine" id="cb24-22" data-line-number="22">  </a>
+<a class="sourceLine" id="cb24-23" data-line-number="23">  df3 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-24" data-line-number="24"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(.parent)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-25" data-line-number="25"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="dt">from =</span> .parent, <span class="dt">to =</span> .node, <span class="dt">label =</span> outcomes) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-26" data-line-number="26"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">rel =</span> <span class="st">"leading_to"</span>) -&gt;<span class="st"> </span>edf</a>
+<a class="sourceLine" id="cb24-27" data-line-number="27">  </a>
+<a class="sourceLine" id="cb24-28" data-line-number="28">  graph &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/create_graph">create_graph</a></span>(<span class="dt">nodes_df =</span> ndf, <span class="dt">edges_df =</span> edf)</a>
+<a class="sourceLine" id="cb24-29" data-line-number="29">  <span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/render_graph">render_graph</a></span>(graph)</a>
+<a class="sourceLine" id="cb24-30" data-line-number="30">}</a></code></pre></div>
+<div id="htmlwidget-4704a6d8b203c255edb3" style="width:576px;height:576px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4704a6d8b203c255edb3">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"2\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"3\" [label = \"4\", shape = \"circle\", fillcolor = \"#8B4789\", fontcolor = \"#FFFFFF\"] \n  \"4\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"5\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"6\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"7\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"8\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"9\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"10\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"11\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"12\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"13\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"14\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"15\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"16\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"17\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"18\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"19\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"20\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"21\" [label = \"Stop\", shape = \"circle\", fillcolor = \"#FF0000\", fontcolor = \"#FFFFFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Compared to the tabular form above, the graph representation of DTPs is far superior. The central node shows that dose 2 will be given to the next cohort. Displaying the nodes that require stopping in a bold and symbolic colour like red immediately conveys useful information. The only path that will see the model advocate stopping in the next two cohorts is if every patient experiences toxicity.</p>
 <p>Using graphs and <code>DiagrammeR</code> to visualise paths is potentially very flexible and powerful. Obviously different colours and shapes may be chosen. The opacity (or <em>alpha</em>) of the nodes and paths may be adjusted by their probability of occurrence so that paths that are less likely appear more feint. Opportunities abound.</p>
 </div>
 <div id="summary" class="section level1">

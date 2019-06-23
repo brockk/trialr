@@ -64,7 +64,7 @@ View the original source at:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
       </span>
     </div>
 
@@ -184,8 +184,8 @@ and 2 columns. The first column is the incidence of event 1.</p>
     <pre class="examples"><div class='input'><span class='no'>probs</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0.8</span>, <span class='fl'>0.3</span>)
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>ranBin2</span>(<span class='fl'>1000</span>, <span class='no'>probs</span>, <span class='kw'>psi</span><span class='kw'>=</span><span class='fl'>0.2</span>)  <span class='co'># 1000 pairs of outcomes</span>
 <span class='fu'>cor</span>(<span class='no'>s</span>)  <span class='co'># Negatively correlated because psi &lt; 1</span></div><div class='output co'>#&gt;            [,1]       [,2]
-#&gt; [1,]  1.0000000 -0.3394953
-#&gt; [2,] -0.3394953  1.0000000</div><div class='input'><span class='fu'>colMeans</span>(<span class='no'>s</span>)  <span class='co'># Event rates as expected</span></div><div class='output co'>#&gt; [1] 0.827 0.267</div></pre>
+#&gt; [1,]  1.0000000 -0.3392352
+#&gt; [2,] -0.3392352  1.0000000</div><div class='input'><span class='fu'>colMeans</span>(<span class='no'>s</span>)  <span class='co'># Event rates as expected</span></div><div class='output co'>#&gt; [1] 0.807 0.299</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
