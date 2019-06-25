@@ -107,7 +107,7 @@ prior_fit2 <- crm_prior_beliefs(skeleton, target, model = 'logistic_gamma',
 O'Quigley, J., Pepe, M., & Fisher, L. (1990).
   Continual reassessment method: a practical design for phase 1 clinical
   trials in cancer.
-  Biometrics, 46(1), 33-48. https://doi.org/10.2307/2531628
+  Biometrics, 46(1), 33-48. https://www.jstor.org/stable/2531628
 
   Cheung, Y.K. (2011).
   Dose Finding by the Continual Reassessment Method.

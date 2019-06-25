@@ -131,18 +131,17 @@ fit1 %>%
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
-Several variants of the CRM [are implemented in
-‘trialr’](articles/CRM.html). Further visualisation techniques are
-demonstrated in the [Visualisation in
-CRM](articles/CRM-visualisation.html) vignette. The time-to-event CRM is
-introduced in the [TITE-CRM vignette](articles/TITE-CRM.html).
+Several variants of the CRM are implemented in ‘trialr’. These are
+demonstrated in the CRM vignette. Several visualisation techniques are
+illustrated in the *Visualisation in CRM* vignette. The time-to-event
+CRM is introduced in the TITE-CRM vignette.
 
 ## EffTox
 
 EffTox by Thall and Cook (2004) is a dose-finding design that uses
 binary efficacy and toxicity outcomes to select a dose with a high
 utility score. We present it briefly here but there is a much more
-thorough examination in the [EffTox vignette](articles/EffTox.html).
+thorough examination in the EffTox vignette.
 
 For demonstration, we fit the model parameterisation introduced by Thall
 et al. (2014) to the following notional outcomes:
@@ -204,9 +203,8 @@ fit2$utility
 ```
 
 Sometimes, doses other than the maximal-utility dose will be recommended
-because of the dose-admissibility rules. See the
-[vignette](articles/EffTox.html) and the original papers for more
-details.
+because of the dose-admissibility rules. See the EffTox vignette and the
+original papers for more details.
 
 Functions are provided to create useful plots. For instance, it is
 illuminating to plot the posterior means of the probabilities of
@@ -221,10 +219,9 @@ title('EffTox utility contours')
 
 ![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
 
-This example continues in the [EffTox vignette](articles/EffTox.html).
-
-There are many publications related to EffTox, including Thall and Cook
-(2004) and Thall et al. (2014).
+This example continues in the EffTox vignette. There are many
+publications related to EffTox, including Thall and Cook (2004) and
+Thall et al. (2014).
 
 ## Hierachical analysis of response in related cohorts
 
@@ -261,58 +258,58 @@ fit3
 #> 4 chains, each with iter=2000; warmup=1000; thin=1; 
 #> post-warmup draws per chain=1000, total post-warmup draws=4000.
 #> 
-#>                     mean se_mean    sd   2.5%    25%    50%    75%  97.5%
-#> mu                 -0.04    0.03  1.40  -2.92  -0.92   0.00   0.87   2.68
-#> sigma2             12.39    0.31 10.23   3.37   6.29   9.35  14.79  39.50
-#> rho[1]             -0.07    0.06  3.77  -7.59  -2.36  -0.04   2.27   7.45
-#> rho[2]             -3.03    0.07  2.69  -9.64  -4.34  -2.59  -1.21   0.81
-#> rho[3]              2.33    0.05  2.65  -1.96   0.61   1.98   3.70   8.70
-#> rho[4]             -0.29    0.01  0.77  -1.85  -0.81  -0.28   0.25   1.19
-#> rho[5]              3.72    0.05  2.33   0.46   2.14   3.31   4.75   9.49
-#> rho[6]             -0.11    0.06  3.78  -8.02  -2.33  -0.02   2.21   7.30
-#> rho[7]             -0.02    0.02  1.51  -2.99  -0.96  -0.01   0.92   3.04
-#> rho[8]              0.78    0.02  1.32  -1.63  -0.08   0.72   1.55   3.52
-#> rho[9]             -2.41    0.06  2.79  -9.02  -3.79  -2.02  -0.53   1.92
-#> rho[10]            -0.10    0.07  3.74  -7.95  -2.26   0.06   2.17   7.14
-#> sigma               3.32    0.04  1.17   1.84   2.51   3.06   3.85   6.28
-#> prob_response[1]    0.49    0.01  0.38   0.00   0.09   0.49   0.91   1.00
-#> prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.23   0.69
-#> prob_response[3]    0.77    0.00  0.26   0.12   0.65   0.88   0.98   1.00
-#> prob_response[4]    0.44    0.00  0.17   0.14   0.31   0.43   0.56   0.77
-#> prob_response[5]    0.92    0.00  0.10   0.61   0.89   0.96   0.99   1.00
-#> prob_response[6]    0.49    0.01  0.38   0.00   0.09   0.49   0.90   1.00
-#> prob_response[7]    0.50    0.00  0.26   0.05   0.28   0.50   0.72   0.95
-#> prob_response[8]    0.64    0.00  0.23   0.16   0.48   0.67   0.83   0.97
-#> prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.12   0.37   0.87
-#> prob_response[10]   0.50    0.01  0.38   0.00   0.09   0.52   0.90   1.00
-#> lp__              -34.32    0.13  3.64 -42.73 -36.44 -33.83 -31.67 -28.71
+#>                     mean se_mean   sd   2.5%    25%    50%    75%  97.5%
+#> mu                 -0.05    0.03 1.37  -2.80  -0.91  -0.04   0.89   2.51
+#> sigma2             11.49    0.29 9.39   3.27   6.15   8.81  13.53  35.38
+#> rho[1]             -0.03    0.06 3.60  -7.43  -2.19  -0.04   2.23   7.01
+#> rho[2]             -2.91    0.06 2.50  -9.20  -4.05  -2.48  -1.26   0.73
+#> rho[3]              2.21    0.06 2.60  -1.93   0.47   1.87   3.66   8.27
+#> rho[4]             -0.30    0.01 0.80  -1.89  -0.83  -0.29   0.24   1.24
+#> rho[5]              3.63    0.05 2.32   0.54   2.06   3.16   4.66   9.75
+#> rho[6]             -0.01    0.07 3.65  -7.14  -2.23  -0.01   2.20   7.26
+#> rho[7]             -0.01    0.02 1.54  -3.07  -0.98   0.00   0.96   3.12
+#> rho[8]              0.74    0.02 1.31  -1.75  -0.11   0.66   1.53   3.47
+#> rho[9]             -2.21    0.05 2.60  -8.41  -3.54  -1.85  -0.50   1.99
+#> rho[10]            -0.06    0.07 3.58  -7.23  -2.20  -0.08   2.15   6.99
+#> sigma               3.21    0.03 1.09   1.81   2.48   2.97   3.68   5.95
+#> prob_response[1]    0.50    0.01 0.38   0.00   0.10   0.49   0.90   1.00
+#> prob_response[2]    0.15    0.00 0.18   0.00   0.02   0.08   0.22   0.68
+#> prob_response[3]    0.76    0.00 0.26   0.13   0.62   0.87   0.97   1.00
+#> prob_response[4]    0.44    0.00 0.17   0.13   0.30   0.43   0.56   0.78
+#> prob_response[5]    0.92    0.00 0.10   0.63   0.89   0.96   0.99   1.00
+#> prob_response[6]    0.50    0.01 0.38   0.00   0.10   0.50   0.90   1.00
+#> prob_response[7]    0.50    0.00 0.27   0.04   0.27   0.50   0.72   0.96
+#> prob_response[8]    0.63    0.00 0.23   0.15   0.47   0.66   0.82   0.97
+#> prob_response[9]    0.24    0.00 0.26   0.00   0.03   0.14   0.38   0.88
+#> prob_response[10]   0.49    0.01 0.38   0.00   0.10   0.48   0.90   1.00
+#> lp__              -34.00    0.11 3.45 -42.04 -36.02 -33.51 -31.51 -28.70
 #>                   n_eff Rhat
-#> mu                 2250    1
-#> sigma2             1080    1
-#> rho[1]             3504    1
-#> rho[2]             1507    1
-#> rho[3]             2564    1
-#> rho[4]             4012    1
-#> rho[5]             1872    1
-#> rho[6]             4193    1
-#> rho[7]             3691    1
-#> rho[8]             3395    1
-#> rho[9]             2247    1
-#> rho[10]            3196    1
-#> sigma              1075    1
-#> prob_response[1]   3785    1
-#> prob_response[2]   3704    1
-#> prob_response[3]   4376    1
-#> prob_response[4]   4020    1
-#> prob_response[5]   4411    1
-#> prob_response[6]   3671    1
-#> prob_response[7]   3838    1
-#> prob_response[8]   3769    1
-#> prob_response[9]   4000    1
-#> prob_response[10]  3680    1
-#> lp__                843    1
+#> mu                 2140 1.00
+#> sigma2             1079 1.01
+#> rho[1]             3076 1.00
+#> rho[2]             1884 1.00
+#> rho[3]             2088 1.00
+#> rho[4]             4031 1.00
+#> rho[5]             1832 1.00
+#> rho[6]             3068 1.00
+#> rho[7]             4263 1.00
+#> rho[8]             3529 1.00
+#> rho[9]             2562 1.00
+#> rho[10]            2918 1.00
+#> sigma              1113 1.01
+#> prob_response[1]   3710 1.00
+#> prob_response[2]   4645 1.00
+#> prob_response[3]   3758 1.00
+#> prob_response[4]   4134 1.00
+#> prob_response[5]   4351 1.00
+#> prob_response[6]   3578 1.00
+#> prob_response[7]   4556 1.00
+#> prob_response[8]   4014 1.00
+#> prob_response[9]   4165 1.00
+#> prob_response[10]  3212 1.00
+#> lp__                967 1.01
 #> 
-#> Samples were drawn using NUTS(diag_e) at Fri May 24 16:20:48 2019.
+#> Samples were drawn using NUTS(diag_e) at Mon Jun 24 15:50:13 2019.
 #> For each parameter, n_eff is a crude measure of effective sample size,
 #> and Rhat is the potential scale reduction factor on split chains (at 
 #> convergence, Rhat=1).
@@ -331,8 +328,8 @@ plot(fit3, pars = 'prob_response') +
 
 ![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
 
-The hierarchical model for binary responses is developed in [its own
-vignette](articles/HierarchicalBayesianResponse.html).
+The hierarchical model for binary responses is developed in its own
+vignette.
 
 ## BEBOP in PePS2
 
@@ -351,8 +348,7 @@ trial is the availability of predictive baseline covariates, the most
 noteworthy of which is the PD-L1 tumour proportion score, shown by Garon
 et al. (2015) to be a predictive biomarker for drug efficacy.
 
-This example is demonstrated in the [BEBOP
-vignette](articles/BEBOP.html).
+This example is demonstrated in the BEBOP vignette.
 
 ## Installation
 

@@ -100,14 +100,15 @@ fit1 %>%
   labs(y = 'Prob(DLT)', title = 'Posterior dose-toxicity beliefs using empiric CRM')
 ```
 
-Several variants of the CRM [are implemented in 'trialr'](articles/CRM.html).
-Further visualisation techniques are demonstrated in the [Visualisation in CRM](articles/CRM-visualisation.html) vignette.
-The time-to-event CRM is introduced in the [TITE-CRM vignette](articles/TITE-CRM.html).
+Several variants of the CRM are implemented in 'trialr'.
+These are demonstrated in the CRM vignette.
+Several visualisation techniques are illustrated in the _Visualisation in CRM_ vignette.
+The time-to-event CRM is introduced in the TITE-CRM vignette.
 
 
 ## EffTox
 EffTox by @Thall2004 is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. 
-We present it briefly here but there is a much more thorough examination in the [EffTox vignette](articles/EffTox.html).
+We present it briefly here but there is a much more thorough examination in the EffTox vignette.
 
 For demonstration, we fit the model parameterisation introduced by @Thall2014 to the following notional outcomes:
 
@@ -146,7 +147,7 @@ fit2$utility
 ```
 
 Sometimes, doses other than the maximal-utility dose will be recommended because of the dose-admissibility rules. 
-See the [vignette](articles/EffTox.html) and the original papers for more details. 
+See the EffTox vignette and the original papers for more details. 
 
 Functions are provided to create useful plots. 
 For instance, it is illuminating to plot the posterior means of the probabilities of efficacy and toxicity at each of the doses on the trade-off contours used to measure dose attractiveness.
@@ -157,8 +158,7 @@ efftox_contour_plot(fit2)
 title('EffTox utility contours')
 ```
 
-This example continues in the [EffTox vignette](articles/EffTox.html).
-
+This example continues in the EffTox vignette.
 There are many publications related to EffTox, including @Thall2004 and @Thall2014.
 
 
@@ -199,7 +199,7 @@ plot(fit3, pars = 'prob_response') +
   labs(title = 'Partially-pooled response rates in 10 sarcoma subtypes')
 ```
 
-The hierarchical model for binary responses is developed in [its own vignette](articles/HierarchicalBayesianResponse.html).
+The hierarchical model for binary responses is developed in its own vignette.
 
 ## BEBOP in PePS2
 @Thall2008 introduced an extension of EffTox that allows dose-finding by efficacy and toxicity outcomes and adjusts for covariate information.
@@ -209,7 +209,7 @@ They refered to the simplifed design as BEBOP, for _Bayesian Evaluation of Bivar
 The investigators implement the design is a phase II trial of pembrolizumab in non-small-cell lung cancer.
 A distinct feature of the trial is the availability of predictive baseline covariates, the most noteworthy of which is the PD-L1 tumour proportion score, shown by @Garon2015 to be a predictive biomarker for drug efficacy.
 
-This example is demonstrated in the [BEBOP vignette](articles/BEBOP.html).
+This example is demonstrated in the BEBOP vignette.
 
 
 

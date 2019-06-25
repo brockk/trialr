@@ -47,6 +47,7 @@ test_that('crm_dtps and derived tibbles perform as expected.', {
   skeleton <- c(0.05, 0.1, 0.15, 0.33, 0.5)
   target <- 0.33
 
+  set.seed(123)
   paths <- crm_dtps(skeleton = skeleton,
                     target = target,
                     model = 'empiric',
