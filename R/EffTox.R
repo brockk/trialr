@@ -21,7 +21,7 @@
 efftox_analysis_to_df <- function(x) {
   df <- data.frame(
     Dose = factor(x$dose_indices),
-    N = sapply(1:x$dat$num_doses, function(i) sum(x$dat$doses == i)),
+    N = sapply(1:length(x$dose_indices), function(i) sum(x$doses == i)),
     ProbEff = x$prob_eff,
     ProbTox = x$prob_tox,
     ProbAccEff = x$prob_acc_eff,
@@ -89,12 +89,12 @@ efftox_get_tox <- function(eff, util, p, eff0, tox1) {
 #' @export
 print.efftox_fit <- function(x, ...) {
   # Patient-level data
-  if(x$dat$num_patients > 0) {
+  if(x$num_patients > 0) {
     treated <- data.frame(
-      Patient = 1:length(x$dat$doses),
-      Dose = x$dat$doses,
-      Toxicity = x$dat$tox,
-      Efficacy = x$dat$eff
+      Patient = 1:length(x$doses),
+      Dose = x$doses,
+      Toxicity = x$tox,
+      Efficacy = x$eff
     )
     print(treated)
   } else {

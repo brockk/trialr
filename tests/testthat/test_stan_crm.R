@@ -19,11 +19,11 @@ test_that('stan_crm fits to zero patients', {
                 target = 0.25,
                 model = 'empiric',
                 beta_sd = 1)
-  expect_equal(x$dat$num_patients, 0)
-  expect_equal(length(x$dat$doses), 0)
-  expect_equal(length(x$dat$tox), 0)
-  expect_equal(length(x$dat$weights), 0)
-  expect_equal(x$dat$num_doses, 4)
+  expect_equal(x$num_patients, 0)
+  expect_equal(length(x$doses), 0)
+  expect_equal(length(x$tox), 0)
+  expect_equal(length(x$weights), 0)
+  expect_equal(length(x$dose_indices), 4)
 })
 
 test_that('stan_crm fits to one patient', {
@@ -32,11 +32,11 @@ test_that('stan_crm fits to one patient', {
                 target = 0.25,
                 model = 'empiric',
                 beta_sd = 1)
-  expect_equal(x$dat$num_patients, 1)
-  expect_equal(length(x$dat$doses), 1)
-  expect_equal(length(x$dat$tox), 1)
-  expect_equal(length(x$dat$weights), 1)
-  expect_equal(x$dat$num_doses, 4)
+  expect_equal(x$num_patients, 1)
+  expect_equal(length(x$doses), 1)
+  expect_equal(length(x$tox), 1)
+  expect_equal(length(x$weights), 1)
+  expect_equal(length(x$dose_indices), 4)
 })
 
 test_that('stan_crm fits to two patients in one cohort', {
@@ -45,11 +45,11 @@ test_that('stan_crm fits to two patients in one cohort', {
                 target = 0.25,
                 model = 'empiric',
                 beta_sd = 1)
-  expect_equal(x$dat$num_patients, 2)
-  expect_equal(length(x$dat$doses), 2)
-  expect_equal(length(x$dat$tox), 2)
-  expect_equal(length(x$dat$weights), 2)
-  expect_equal(x$dat$num_doses, 4)
+  expect_equal(x$num_patients, 2)
+  expect_equal(length(x$doses), 2)
+  expect_equal(length(x$tox), 2)
+  expect_equal(length(x$weights), 2)
+  expect_equal(length(x$dose_indices), 4)
 })
 
 test_that('stan_crm fits to two patients in two cohorts', {
@@ -58,11 +58,11 @@ test_that('stan_crm fits to two patients in two cohorts', {
                 target = 0.25,
                 model = 'empiric',
                 beta_sd = 1)
-  expect_equal(x$dat$num_patients, 2)
-  expect_equal(length(x$dat$doses), 2)
-  expect_equal(length(x$dat$tox), 2)
-  expect_equal(length(x$dat$weights), 2)
-  expect_equal(x$dat$num_doses, 4)
+  expect_equal(x$num_patients, 2)
+  expect_equal(length(x$doses), 2)
+  expect_equal(length(x$tox), 2)
+  expect_equal(length(x$weights), 2)
+  expect_equal(length(x$dose_indices), 4)
 })
 
 # Accuracy checks ----

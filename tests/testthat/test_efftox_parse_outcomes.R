@@ -227,3 +227,4 @@ test_that('EffTox outcomes "1ET 3TNB 4" fail to parse', {
 test_that('EffTox outcomes "1ET 3TNB 4" fail to parse to list', {
   expect_error(efftox_parse_outcomes('1ET 3TNB 4', as.list = TRUE))
 })
+

@@ -1,7 +1,4 @@
 
-
-
-
 test_that('efftox_dtps fails when cohort_sizes is not vector of +ve integers', {
 
   expect_error(

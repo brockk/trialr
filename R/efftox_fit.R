@@ -94,16 +94,17 @@ efftox_fit <- function(dose_indices,
                         fit = fit)
 
   # Elements in this class
-  x$prob_eff = prob_eff
-  x$median_prob_eff = median_prob_eff
-  x$prob_acc_tox = prob_acc_tox
-  x$prob_acc_eff = prob_acc_eff
-  x$utility = utility
-  x$post_utility = post_utility
-  x$prob_obd = prob_obd
-  x$modal_obd_candidate = which.max(prob_obd)
-  x$entropy = .entropy(prob_obd)
-  x$acceptable = acceptable
+  x$eff <- eff
+  x$prob_eff <- prob_eff
+  x$median_prob_eff <- median_prob_eff
+  x$prob_acc_tox <- prob_acc_tox
+  x$prob_acc_eff <- prob_acc_eff
+  x$utility <- utility
+  x$post_utility <- post_utility
+  x$prob_obd <- prob_obd
+  x$modal_obd_candidate <- which.max(prob_obd)
+  x$entropy <- .entropy(prob_obd)
+  x$acceptable <- acceptable
 
   class(x) <- c("efftox_fit", "dose_finding_fit", "list")
   x
