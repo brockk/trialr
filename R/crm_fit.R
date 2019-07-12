@@ -14,6 +14,8 @@
 #' @param doses vector of integers representing the dose given to the patients.
 #' @param tox vector of integers representing the toxicity status of the
 #' patients.
+#' @param weights Vector of numeric weights for the observations for patients
+#' 1:num_patients, thus facilitating the TITE-CRM design.
 #' @param prob_tox The posterior mean probabilities of toxicity at doses 1:n;
 #' a vector of numbers between 0 and 1.
 #' @param median_prob_tox The posterior median probabilities of toxicity at doses
@@ -39,6 +41,7 @@ crm_fit <- function(dose_indices,
                     num_patients,
                     doses,
                     tox,
+                    weights,
                     prob_tox,
                     median_prob_tox,
                     prob_mtd,
@@ -59,9 +62,10 @@ crm_fit <- function(dose_indices,
                         fit = fit)
 
   # Elements in this class
-  x$prob_mtd = prob_mtd
-  x$modal_mtd_candidate = which.max(prob_mtd)
-  x$entropy = .entropy(prob_mtd)
+  x$weights <- weights
+  x$prob_mtd <- prob_mtd
+  x$modal_mtd_candidate <- which.max(prob_mtd)
+  x$entropy <- .entropy(prob_mtd)
 
   class(x) <- c("crm_fit", "dose_finding_fit", "list")
   x

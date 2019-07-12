@@ -28,6 +28,7 @@ crm_process <- function(dat, fit) {
                num_patients = dat$num_patients,
                doses = dat$doses,
                tox = dat$tox,
+               weights = dat$weights,
                prob_tox = prob_tox,
                median_prob_tox = median_prob_tox,
                prob_mtd = prob_mtd,
