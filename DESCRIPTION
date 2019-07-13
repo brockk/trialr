@@ -1,5 +1,5 @@
 Package: trialr
-Version: 0.1.2.9001
+Version: 0.1.2.9002
 Date: 2019-07-12
 Title: Clinical Trial Designs in 'rstan'
 Description: A collection of clinical trial designs and methods, implemented in 
