@@ -52,6 +52,7 @@
 #' names(paths)[4]  # "1NNN 2NEN 3NEB"
 #' # Each node is an analysis fit to the cumulative outcomes
 #' # Converting to a tibble opens up some nice opportunities
+#' library(tibble)
 #' df <- as_tibble(paths)
 #' df
 #' # E.g. how did our view on the event probabilities at dose 2 evolve?

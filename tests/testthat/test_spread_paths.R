@@ -1,5 +1,8 @@
 
 test_that('spread_paths returns data.frames with the expected number of rows', {
+
+  library(tibble)
+
   target <- 0.25
   skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
   paths <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
@@ -15,6 +18,4 @@ test_that('spread_paths returns data.frames with the expected number of rows', {
 
   df3 <- spread_paths(df, max_depth = 1)
   expect_equal(nrow(df3), 2)
-
-
 })

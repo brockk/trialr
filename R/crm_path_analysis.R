@@ -84,6 +84,7 @@
 #' names(paths)[4]  # "1NNN 2NTN 2NNN"
 #' # Each node is an analysis fit to the cumulative outcomes
 #' # Converting to a tibble opens up some nice opportunities
+#' library(tibble)
 #' df <- as_tibble(paths)
 #' df
 #' # E.g. how did our view on the risk of toxicity at dose 2 evolve?
