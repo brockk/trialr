@@ -1,4 +1,33 @@
 
+# Version 0.1.3
+
+## Test environment - local Mac install, R 3.5.2
+
+0 errors | 0 warnings | 2 notes
+
+### NOTEs
+
+❯ checking installed package size ... NOTE
+    installed size is 12.6Mb
+    sub-directories of 1Mb or more:
+      doc    4.1Mb
+      libs   7.7Mb
+
+❯ checking for GNU extensions in Makefiles ... NOTE
+  GNU make is a SystemRequirements.
+
+Both on these notes are OK.
+
+## Test environment - WinBuilder R-release, 3.6.2
+
+0 errors | 0 warnings | 0 notes
+
+## Test environment - WinBuilder WinBuilder R-devel
+
+0 errors | 0 warnings | 0 notes
+
+
+
 # Version 0.1.2
 
 ## Test environments

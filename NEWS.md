@@ -1,4 +1,8 @@
 
+# trialr 0.1.3
+
+Adjusted uses of tidyr::unnest to suppress warnings when using v1.0 of tidyr.
+
 # trialr 0.1.2
 
 Added the AugBin model for phase II response assessment in cancer. Just the 

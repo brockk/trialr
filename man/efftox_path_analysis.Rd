@@ -50,21 +50,10 @@ names(paths)[2]  # "1NNN"
 names(paths)[3]  # "1NNN 2NEN"
 names(paths)[4]  # "1NNN 2NEN 3NEB"
 # Each node is an analysis fit to the cumulative outcomes
-# Converting to a tibble opens up some nice opportunities
+# Converting to a tibble presents some nice tidyverse-related opportunities
+library(tibble)
 df <- as_tibble(paths)
 df
-# E.g. how did our view on the event probabilities at dose 2 evolve?
-library(tidyr)
-library(purrr)
-library(dplyr)
-df \%>\%
-  mutate(
-    prob_tox = fit \%>\% map('prob_tox'),
-    prob_eff = fit \%>\% map('prob_eff')
-  ) \%>\%
-  select(outcomes, dose_index, prob_tox, prob_eff) \%>\%
-  unnest \%>\%
-  filter(dose_index == 2)
 }
 }
 \seealso{

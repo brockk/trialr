@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.3</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@
       <h1>Dose pathways with CRM</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2019-06-25</h4>
+            <h4 class="date">2019-12-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/CRM-pathways.Rmd"><code>vignettes/CRM-pathways.Rmd</code></a></small>
       <div class="hidden name"><code>CRM-pathways.Rmd</code></div>
@@ -158,13 +158,14 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span>(path)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">df</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 8
-##   .node .parent .depth outcomes     next_dose fit     parent_fit dose_index
-##   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;list&gt;  &lt;list&gt;     &lt;list&gt;    
-## 1     1      NA      0 ""                   2 &lt;crm_f… &lt;NULL&gt;     &lt;dbl [5]&gt; 
-## 2     2       1      1 1NNN                 4 &lt;crm_f… &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-## 3     3       2      2 1NNN 2NTN            2 &lt;crm_f… &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-## 4     4       3      3 1NNN 2NTN 2…         3 &lt;crm_f… &lt;crm_fit&gt;  &lt;dbl [5]&gt;</code></pre>
-<p><code>tibble</code> was chosen over the base R <code>data.frame</code> class because of its flexibility. For instance, the <code>fit</code> column contains the <code>crm_fit</code> object associated with the outcomes. The <code>dose_index</code> column contains a vector of integers reflecting the dose-level under study. This is useful if we <code>unnest</code> the data to analyse quantities at the dose-level. For instance, we might be interested in how our beliefs on the rate of toxicity at dose-level 2 have evolved. Using functions from <code>tidyverse</code> packages, we can proceed:</p>
+##   .node .parent .depth outcomes    next_dose fit      parent_fit dose_index
+##   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt; &lt;named &gt; &lt;named li&gt; &lt;named li&gt;
+## 1     1      NA      0 ""                  2 &lt;crm_fi… &lt;NULL&gt;     &lt;dbl [5]&gt; 
+## 2     2       1      1 1NNN                4 &lt;crm_fi… &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 3     3       2      2 1NNN 2NTN           2 &lt;crm_fi… &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
+## 4     4       3      3 1NNN 2NTN …         3 &lt;crm_fi… &lt;crm_fit&gt;  &lt;dbl [5]&gt;</code></pre>
+<p><code>tibble</code> was chosen over the base R <code>data.frame</code> class because of its flexibility. For instance, the <code>fit</code> column contains the <code>crm_fit</code> object associated with the outcomes. The <code>dose_index</code> column contains a vector of integers reflecting the dose-level under study. This is useful if we <code>unnest</code> the data to analyse statistics pertaining to specific doses. For instance, we might be interested in how our beliefs on the rate of toxicity at dose-level 2 have evolved. Using functions from <code>dplyr</code>, <code>tidyr</code> and <code>purrr</code>, we can extract the <code>prob_tox</code> vector from each fit, unnest, and filter to retain only rows that pertain to dose 2.</p>
+<p>The behaviour of <code>unnest</code> changed in v1.0 of <code>tidyr</code>. As of version v1.0, the command to do this is:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">library</span>(purrr)</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
@@ -172,7 +173,7 @@
 <a class="sourceLine" id="cb8-5" data-line-number="5">df <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">prob_tox =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="st">'prob_tox'</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(outcomes, dose_index, prob_tox) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">  </span>unnest <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span>(<span class="dt">cols =</span> <span class="kw">c</span>(dose_index, prob_tox)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(dose_index <span class="op">==</span><span class="st"> </span><span class="dv">2</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   outcomes       dose_index prob_tox
@@ -181,16 +182,26 @@
 ## 2 1NNN                    2    0.128
 ## 3 1NNN 2NTN               2    0.232
 ## 4 1NNN 2NTN 2NNN          2    0.168</code></pre>
-<p>At each update, the toxicity estimate moves in the direction we would expect in response to the outcomes observed.</p>
+<p>For older versions of <code>tidyr</code>, that command is:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">prob_tox =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="st">'prob_tox'</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(outcomes, dose_index, prob_tox) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span>unnest <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(dose_index <span class="op">==</span><span class="st"> </span><span class="dv">2</span>)</a></code></pre></div>
+<p>We see that at each update, the toxicity estimate moves in the direction we would expect in response to the outcomes observed.</p>
 <p>Having the <code>crm_fit</code> object available allows us to analyse alternative algorithms for choosing dose. For instance, the <code>careful_escalation</code> function will avoid skipping doses in escalation and halt a trial when there is sufficient evidence that a particular dose is too toxic.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">    <span class="dt">recommended_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span>(<span class="st">'recommended_dose'</span>),</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">    <span class="dt">careful_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span>(careful_escalation, </a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">                                   <span class="dt">tox_threshold =</span> target <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, </a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">                                   <span class="dt">certainty_threshold =</span> <span class="fl">0.7</span>)</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(outcomes, recommended_dose, careful_dose)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">    <span class="dt">recommended_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span>(<span class="st">'recommended_dose'</span>),</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">    <span class="dt">careful_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span>(careful_escalation, </a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">                                   <span class="dt">tox_threshold =</span> target <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, </a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">                                   <span class="dt">certainty_threshold =</span> <span class="fl">0.7</span>)</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(outcomes, recommended_dose, careful_dose)</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   outcomes       recommended_dose careful_dose
 ##   &lt;chr&gt;                     &lt;int&gt;        &lt;dbl&gt;
@@ -199,22 +210,22 @@
 ## 3 1NNN 2NTN                     2            2
 ## 4 1NNN 2NTN 2NNN                3            3</code></pre>
 <p>We will use dose selection functions like <code>careful_escalation</code> again below when calculating future dose transition pathways. To complete this example, let us observe how <code>careful_escalation</code> will eventually recommended the dose-level <code>NA</code> to signify that the trial should be stopped.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">paths &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_path_analysis.html">crm_path_analysis</a></span>(</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="dt">outcome_str =</span> <span class="st">'1NNN 2NTN 2NNN 3TTT 1TTT 1TNT'</span>,</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, <span class="dt">model =</span> <span class="st">'logistic'</span>,</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="dt">a0 =</span> <span class="dv">3</span>, <span class="dt">beta_mean =</span> <span class="dv">0</span>,<span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">  <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">refresh =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">df &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths)</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb12-11" data-line-number="11">    <span class="dt">recommended_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span>(<span class="st">'recommended_dose'</span>),</a>
-<a class="sourceLine" id="cb12-12" data-line-number="12">    <span class="dt">careful_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span>(careful_escalation, </a>
-<a class="sourceLine" id="cb12-13" data-line-number="13">                                   <span class="dt">tox_threshold =</span> target <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, </a>
-<a class="sourceLine" id="cb12-14" data-line-number="14">                                   <span class="dt">certainty_threshold =</span> <span class="fl">0.7</span>)</a>
-<a class="sourceLine" id="cb12-15" data-line-number="15">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(outcomes, recommended_dose, careful_dose)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">paths &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_path_analysis.html">crm_path_analysis</a></span>(</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="dt">outcome_str =</span> <span class="st">'1NNN 2NTN 2NNN 3TTT 1TTT 1TNT'</span>,</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">  <span class="dt">skeleton =</span> skeleton, <span class="dt">target =</span> target, <span class="dt">model =</span> <span class="st">'logistic'</span>,</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">  <span class="dt">a0 =</span> <span class="dv">3</span>, <span class="dt">beta_mean =</span> <span class="dv">0</span>,<span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">  <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">refresh =</span> <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">df &lt;-<span class="st"> </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths)</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">    <span class="dt">recommended_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span>(<span class="st">'recommended_dose'</span>),</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">    <span class="dt">careful_dose =</span> fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span>(careful_escalation, </a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">                                   <span class="dt">tox_threshold =</span> target <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, </a>
+<a class="sourceLine" id="cb13-14" data-line-number="14">                                   <span class="dt">certainty_threshold =</span> <span class="fl">0.7</span>)</a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(outcomes, recommended_dose, careful_dose)</a></code></pre></div>
 <pre><code>## # A tibble: 7 x 3
 ##   outcomes                      recommended_dose careful_dose
 ##   &lt;chr&gt;                                    &lt;int&gt;        &lt;dbl&gt;
@@ -235,42 +246,42 @@
 <p>Dose transition pathways (DTPs) are a general tool for furnishing relatively complex statistical dose-finding designs with the same level of foresight and transparency. <span class="citation">Yap et al. (2017)</span> introduced DTPs with the CRM as a tool to aid trial design and planning.</p>
 <p>The <code>trialr</code> function <code>crm_dtps</code> calculates DTPs for an arbitrary sequence of future cohorts of your choosing. The function is essentially a sequence of calls to <code>stan_crm</code>, with some logic to record the path structure and avoid redundant invocations. Thus, each of the CRM model types supported by <code>stan_crm</code> is supported here.</p>
 <p>To calculate paths for two future cohorts of two patients, we use the parameter <code>cohort_sizes = c(2, 2)</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">paths &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_dtps.html">crm_dtps</a></span>(<span class="dt">skeleton =</span> skeleton,</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">                  <span class="dt">target =</span> target, </a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">                  <span class="dt">model =</span> <span class="st">'empiric'</span>, </a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">                  <span class="dt">cohort_sizes =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), </a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">                  <span class="dt">next_dose =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">                  <span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">                  <span class="dt">refresh =</span> <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">paths &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_dtps.html">crm_dtps</a></span>(<span class="dt">skeleton =</span> skeleton,</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">                  <span class="dt">target =</span> target, </a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">                  <span class="dt">model =</span> <span class="st">'empiric'</span>, </a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">                  <span class="dt">cohort_sizes =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), </a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">                  <span class="dt">next_dose =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">                  <span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">                  <span class="dt">refresh =</span> <span class="dv">0</span>)</a></code></pre></div>
 <p>The parameters <code>skeleton</code>, <code>target</code> and <code>model</code> are mandatory because they are passed to <code>stan_crm</code>. Depending on the <code>model</code> type chosen, further parameters will be required. For instance, under the <code>empiric</code> model we must provide a value for the prior standard deviation of <span class="math inline">\(\beta\)</span> via the <code>beta_sd</code> parameter. Refer to the <a href="CRM.html">introductory CRM vignette</a> for more details.</p>
 <p>In the example above, the parameter <code>next_dose</code> determines the dose-level that will be given to the first cohort. If omitted, the first cohort is treated at the dose suggested by the model fit only to the prior information. The option of overriding this is provided because in such experimental medical settings, trialists may choose to start at a dose they firmly believe will be safe, even if their prior belief is that some higher doses will also be tolerable.</p>
 <p>Further parameters can be passed ultimately to <code><a href="http://www.rdocumentation.org/packages/rstan/topics/stanmodel-method-sampling">rstan::sampling</a></code> via the ellipsis operator to tailor the MCMC sampling. Here, we provide <code>refresh = 0</code> to suppress sampling messages. We might also have adjusted the number of <code>cores</code> to use for sampling, or the number of <code>warmup</code> samples, for instance. See the <code>rstan</code> documentation for full details.</p>
 <p>As with the examples in the previous section, a <code>dose_finding_paths</code> object is returned that may be converted to a <code>tibble</code> for further analysis.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">df</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">df</a></code></pre></div>
 <pre><code>## # A tibble: 13 x 8
-##    .node .parent .depth outcomes next_dose fit       parent_fit dose_index
-##    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;list&gt;    &lt;list&gt;     &lt;list&gt;    
-##  1     1      NA      0 ""               2 &lt;crm_fit&gt; &lt;NULL&gt;     &lt;dbl [5]&gt; 
-##  2     2       1      1 NN               4 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  3     3       2      2 NN               5 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  4     4       1      1 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  5     5       4      2 NN               2 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  6     6       1      1 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  7     7       6      2 NN               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  8     8       2      2 NT               3 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-##  9     9       4      2 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-## 10    10       6      2 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-## 11    11       2      2 TT               2 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-## 12    12       4      2 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt; 
-## 13    13       6      2 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;  &lt;dbl [5]&gt;</code></pre>
+##    .node .parent .depth outcomes next_dose fit       parent_fit  dose_index
+##    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;named l&gt; &lt;named lis&gt; &lt;named li&gt;
+##  1     1      NA      0 ""               2 &lt;crm_fit&gt; &lt;NULL&gt;      &lt;dbl [5]&gt; 
+##  2     2       1      1 NN               4 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  3     3       2      2 NN               4 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  4     4       1      1 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  5     5       4      2 NN               2 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  6     6       1      1 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  7     7       6      2 NN               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  8     8       2      2 NT               3 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+##  9     9       4      2 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+## 10    10       6      2 NT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+## 11    11       2      2 TT               2 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+## 12    12       4      2 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt; 
+## 13    13       6      2 TT               1 &lt;crm_fit&gt; &lt;crm_fit&gt;   &lt;dbl [5]&gt;</code></pre>
 <p>We see that our analysis of <code>cohort_sizes = c(2, 2)</code> has yielded 13 model fits. There is one node of depth 0. This is the trial starting point, where <code>next_dose</code> was provided manually. There are three nodes of depth 1, corresponding to paths <code>2NN</code>, <code>2NT</code> and <code>2TT</code>. Finally there are nine nodes of depth 2.</p>
 <p>We may find it helpful to see the data in a wide format:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
 <pre><code>## # A tibble: 9 x 6
 ##   outcomes0 next_dose0 outcomes1 next_dose1 outcomes2 next_dose2
 ##   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
-## 1 ""                 2 NN                 4 NN                 5
+## 1 ""                 2 NN                 4 NN                 4
 ## 2 ""                 2 NN                 4 NT                 3
 ## 3 ""                 2 NN                 4 TT                 2
 ## 4 ""                 2 NT                 1 NN                 2
@@ -281,15 +292,15 @@
 ## 9 ""                 2 TT                 1 TT                 1</code></pre>
 <p>This arranges the paths in rows. Similar columns are output for each node in the path. The column names are suffixed so they can be distinguised from one another. The table above confirms that there are nine ways to traverse these first two cohort of two patients.</p>
 <p>The pathways we have calculated thus far were calculated from a blank slate - no patients had yet been treated. Pathways may also be calculated for trials in progress. All that is required is that we specify the trial path already observed using the <code>previous_outcomes</code> parameter. In the following example, we calculate pathways for the next two cohorts of three patients, having observed outcomes <code>2NN 3TN</code>.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">paths2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_dtps.html">crm_dtps</a></span>(<span class="dt">skeleton =</span> skeleton,</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">                   <span class="dt">target =</span> target,</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">                   <span class="dt">model =</span> <span class="st">'empiric'</span>,</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">                   <span class="dt">cohort_sizes =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>),</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">                   <span class="dt">previous_outcomes =</span> <span class="st">'2NN 3TN'</span>,</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">                   <span class="dt">next_dose =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb19-7" data-line-number="7">                   <span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb19-8" data-line-number="8">                   <span class="dt">refresh =</span> <span class="dv">0</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">paths2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_dtps.html">crm_dtps</a></span>(<span class="dt">skeleton =</span> skeleton,</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">                   <span class="dt">target =</span> target,</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">                   <span class="dt">model =</span> <span class="st">'empiric'</span>,</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">                   <span class="dt">cohort_sizes =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">                   <span class="dt">previous_outcomes =</span> <span class="st">'2NN 3TN'</span>,</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6">                   <span class="dt">next_dose =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">                   <span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">                   <span class="dt">refresh =</span> <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(<span class="kw"><a href="https://tidyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 6
 ##    outcomes0 next_dose0 outcomes1 next_dose1 outcomes2 next_dose2
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
@@ -310,22 +321,22 @@
 ## 15 ""                 2 TTT                1 NTT                1
 ## 16 ""                 2 TTT                1 TTT                1</code></pre>
 <p>When calculaing pathways, the dose given for the next cohort is that with posterior mean probability of toxicity closest to the target. This is the default behaviour for the CRM model. However, we might wish to tailor the algorithm used to select doses. For instance, we might wish to avoid the skipping of doses in escalation and incorporate a mechanism that advises stopping the trial if excess toxicity is seen. As described above, these behaviours are provided by the <code>careful_escalation</code> function. We provide a custom dose selection function via the <code>user_dose_func</code> parameter:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">paths3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_dtps.html">crm_dtps</a></span>(</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">  <span class="dt">skeleton =</span> skeleton,</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">  <span class="dt">target =</span> target,</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4">  <span class="dt">model =</span> <span class="st">'empiric'</span>,</a>
-<a class="sourceLine" id="cb22-5" data-line-number="5">  <span class="dt">cohort_sizes =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>),</a>
-<a class="sourceLine" id="cb22-6" data-line-number="6">  <span class="dt">previous_outcomes =</span> <span class="st">'2NN 3TN'</span>,</a>
-<a class="sourceLine" id="cb22-7" data-line-number="7">  <span class="dt">next_dose =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb22-8" data-line-number="8">  <span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb22-9" data-line-number="9">  <span class="dt">user_dose_func =</span> <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb22-10" data-line-number="10">    <span class="kw"><a href="../reference/careful_escalation.html">careful_escalation</a></span>(x, <span class="dt">tox_threshold =</span> target <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, </a>
-<a class="sourceLine" id="cb22-11" data-line-number="11">                       <span class="dt">certainty_threshold =</span> <span class="fl">0.7</span>)</a>
-<a class="sourceLine" id="cb22-12" data-line-number="12">  }, </a>
-<a class="sourceLine" id="cb22-13" data-line-number="13">  <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">refresh =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb22-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb22-15" data-line-number="15">df3 &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths3)</a>
-<a class="sourceLine" id="cb22-16" data-line-number="16"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(df3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">paths3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/crm_dtps.html">crm_dtps</a></span>(</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="dt">skeleton =</span> skeleton,</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">  <span class="dt">target =</span> target,</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">  <span class="dt">model =</span> <span class="st">'empiric'</span>,</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">  <span class="dt">cohort_sizes =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">  <span class="dt">previous_outcomes =</span> <span class="st">'2NN 3TN'</span>,</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">  <span class="dt">next_dose =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">  <span class="dt">beta_sd =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">  <span class="dt">user_dose_func =</span> <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">    <span class="kw"><a href="../reference/careful_escalation.html">careful_escalation</a></span>(x, <span class="dt">tox_threshold =</span> target <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, </a>
+<a class="sourceLine" id="cb23-11" data-line-number="11">                       <span class="dt">certainty_threshold =</span> <span class="fl">0.7</span>)</a>
+<a class="sourceLine" id="cb23-12" data-line-number="12">  }, </a>
+<a class="sourceLine" id="cb23-13" data-line-number="13">  <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">refresh =</span> <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb23-15" data-line-number="15">df3 &lt;-<span class="st"> </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/reexports.html">as_tibble</a></span>(paths3)</a>
+<a class="sourceLine" id="cb23-16" data-line-number="16"><span class="kw"><a href="../reference/spread_paths.html">spread_paths</a></span>(df3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>fit, <span class="op">-</span>parent_fit, <span class="op">-</span>dose_index))</a></code></pre></div>
 <pre><code>## # A tibble: 16 x 6
 ##    outcomes0 next_dose0 outcomes1 next_dose1 outcomes2 next_dose2
 ##    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
@@ -349,38 +360,38 @@
 <p>We use <code>careful_escalation</code> here for illustration. <code>user_dose_func</code> can be any function that takes a <code>crm_fit</code> as its single parameter and returns either an integer dose-level, or <code>NA</code> to signify that the trial should stop.</p>
 <p>The analysis of DTPs becomes bewildering as the volume of information grows. A clear method of visualisation is extremely valuable. The <code>DiagrammeR</code> package creates graphs of nodes and edges. This is perfect for visualising tree-like structures like those created by <code>crm_dtps</code>.</p>
 <p>To create a graph, <code>DiagrammeR</code> requires a <code>data.frame</code> of nodes and another of edges. The nodes are the shapes in a graph. The edges are the lines that join them. <code>trialr</code> has already given us all of the information we require to define these elements. All that remains is to choose a pleasing colour scheme.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># This section of code outputs to the Viewer pane in RStudio</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">Sys.getenv</span>(<span class="st">"RSTUDIO"</span>) <span class="op">==</span><span class="st"> "1"</span>) {</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">  </a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">  <span class="kw">library</span>(DiagrammeR)</a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">  </a>
-<a class="sourceLine" id="cb24-6" data-line-number="6">  df3 <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">transmute</a></span>(<span class="dt">id =</span> .node,</a>
-<a class="sourceLine" id="cb24-8" data-line-number="8">              <span class="dt">type =</span> <span class="ot">NA</span>,</a>
-<a class="sourceLine" id="cb24-9" data-line-number="9">              <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
-<a class="sourceLine" id="cb24-10" data-line-number="10">                <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'Stop'</span>,</a>
-<a class="sourceLine" id="cb24-11" data-line-number="11">                <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>next_dose <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.character</span>()),</a>
-<a class="sourceLine" id="cb24-12" data-line-number="12">              <span class="dt">shape =</span> <span class="st">'circle'</span>,</a>
-<a class="sourceLine" id="cb24-13" data-line-number="13">              <span class="dt">fillcolor =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
-<a class="sourceLine" id="cb24-14" data-line-number="14">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> 'slategrey'</span>,</a>
-<a class="sourceLine" id="cb24-15" data-line-number="15">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> 'skyblue1'</span>,</a>
-<a class="sourceLine" id="cb24-16" data-line-number="16">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">3</span> <span class="op">~</span><span class="st"> 'royalblue1'</span>,</a>
-<a class="sourceLine" id="cb24-17" data-line-number="17">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">4</span> <span class="op">~</span><span class="st"> 'orchid4'</span>,</a>
-<a class="sourceLine" id="cb24-18" data-line-number="18">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">5</span> <span class="op">~</span><span class="st"> 'royalblue4'</span>,</a>
-<a class="sourceLine" id="cb24-19" data-line-number="19">                <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'red'</span></a>
-<a class="sourceLine" id="cb24-20" data-line-number="20">              )</a>
-<a class="sourceLine" id="cb24-21" data-line-number="21">    ) -&gt;<span class="st"> </span>ndf</a>
-<a class="sourceLine" id="cb24-22" data-line-number="22">  </a>
-<a class="sourceLine" id="cb24-23" data-line-number="23">  df3 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-24" data-line-number="24"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(.parent)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-25" data-line-number="25"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="dt">from =</span> .parent, <span class="dt">to =</span> .node, <span class="dt">label =</span> outcomes) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-26" data-line-number="26"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">rel =</span> <span class="st">"leading_to"</span>) -&gt;<span class="st"> </span>edf</a>
-<a class="sourceLine" id="cb24-27" data-line-number="27">  </a>
-<a class="sourceLine" id="cb24-28" data-line-number="28">  graph &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/create_graph">create_graph</a></span>(<span class="dt">nodes_df =</span> ndf, <span class="dt">edges_df =</span> edf)</a>
-<a class="sourceLine" id="cb24-29" data-line-number="29">  <span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/render_graph">render_graph</a></span>(graph)</a>
-<a class="sourceLine" id="cb24-30" data-line-number="30">}</a></code></pre></div>
-<div id="htmlwidget-d5ebf5798d9c9eada771" style="width:576px;height:576px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d5ebf5798d9c9eada771">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"2\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"3\" [label = \"4\", shape = \"circle\", fillcolor = \"#8B4789\", fontcolor = \"#FFFFFF\"] \n  \"4\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"5\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"6\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"7\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"8\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"9\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"10\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"11\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"12\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"13\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"14\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"15\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"16\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"17\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"18\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"19\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"20\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"21\" [label = \"Stop\", shape = \"circle\", fillcolor = \"#FF0000\", fontcolor = \"#FFFFFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Compared to the tabular form above, the graph representation of DTPs is far superior. The central node shows that dose 2 will be given to the next cohort. Displaying the nodes that require stopping in a bold and symbolic colour like red immediately conveys useful information. The only path that will see the model advocate stopping in the next two cohorts is if every patient experiences toxicity.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># This section of code outputs to the Viewer pane in RStudio</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="cf">if</span>(<span class="kw">Sys.getenv</span>(<span class="st">"RSTUDIO"</span>) <span class="op">==</span><span class="st"> "1"</span>) {</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">  <span class="kw">library</span>(DiagrammeR)</a>
+<a class="sourceLine" id="cb25-5" data-line-number="5">  </a>
+<a class="sourceLine" id="cb25-6" data-line-number="6">  df3 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">transmute</a></span>(<span class="dt">id =</span> .node,</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">              <span class="dt">type =</span> <span class="ot">NA</span>,</a>
+<a class="sourceLine" id="cb25-9" data-line-number="9">              <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
+<a class="sourceLine" id="cb25-10" data-line-number="10">                <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'Stop'</span>,</a>
+<a class="sourceLine" id="cb25-11" data-line-number="11">                <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>next_dose <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.character</span>()),</a>
+<a class="sourceLine" id="cb25-12" data-line-number="12">              <span class="dt">shape =</span> <span class="st">'circle'</span>,</a>
+<a class="sourceLine" id="cb25-13" data-line-number="13">              <span class="dt">fillcolor =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span>(</a>
+<a class="sourceLine" id="cb25-14" data-line-number="14">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> 'slategrey'</span>,</a>
+<a class="sourceLine" id="cb25-15" data-line-number="15">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> 'skyblue1'</span>,</a>
+<a class="sourceLine" id="cb25-16" data-line-number="16">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">3</span> <span class="op">~</span><span class="st"> 'royalblue1'</span>,</a>
+<a class="sourceLine" id="cb25-17" data-line-number="17">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">4</span> <span class="op">~</span><span class="st"> 'orchid4'</span>,</a>
+<a class="sourceLine" id="cb25-18" data-line-number="18">                next_dose <span class="op">==</span><span class="st"> </span><span class="dv">5</span> <span class="op">~</span><span class="st"> 'royalblue4'</span>,</a>
+<a class="sourceLine" id="cb25-19" data-line-number="19">                <span class="kw">is.na</span>(next_dose) <span class="op">~</span><span class="st"> 'red'</span></a>
+<a class="sourceLine" id="cb25-20" data-line-number="20">              )</a>
+<a class="sourceLine" id="cb25-21" data-line-number="21">    ) -&gt;<span class="st"> </span>ndf</a>
+<a class="sourceLine" id="cb25-22" data-line-number="22">  </a>
+<a class="sourceLine" id="cb25-23" data-line-number="23">  df3 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-24" data-line-number="24"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(.parent)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-25" data-line-number="25"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="dt">from =</span> .parent, <span class="dt">to =</span> .node, <span class="dt">label =</span> outcomes) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-26" data-line-number="26"><span class="st">    </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">rel =</span> <span class="st">"leading_to"</span>) -&gt;<span class="st"> </span>edf</a>
+<a class="sourceLine" id="cb25-27" data-line-number="27">  </a>
+<a class="sourceLine" id="cb25-28" data-line-number="28">  graph &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/create_graph">create_graph</a></span>(<span class="dt">nodes_df =</span> ndf, <span class="dt">edges_df =</span> edf)</a>
+<a class="sourceLine" id="cb25-29" data-line-number="29">  <span class="kw"><a href="http://www.rdocumentation.org/packages/DiagrammeR/topics/render_graph">render_graph</a></span>(graph)</a>
+<a class="sourceLine" id="cb25-30" data-line-number="30">}</a></code></pre></div>
+<div id="htmlwidget-901181464237c8c61a9a" style="width:576px;height:576px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-901181464237c8c61a9a">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"2\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"3\" [label = \"4\", shape = \"circle\", fillcolor = \"#8B4789\", fontcolor = \"#FFFFFF\"] \n  \"4\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"5\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"6\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"7\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"8\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"9\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"10\" [label = \"3\", shape = \"circle\", fillcolor = \"#4876FF\", fontcolor = \"#FFFFFF\"] \n  \"11\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"12\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"13\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"14\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"15\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"16\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"17\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"18\" [label = \"2\", shape = \"circle\", fillcolor = \"#87CEFF\", fontcolor = \"#FFFFFF\"] \n  \"19\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"20\" [label = \"1\", shape = \"circle\", fillcolor = \"#708090\", fontcolor = \"#FFFFFF\"] \n  \"21\" [label = \"Stop\", shape = \"circle\", fillcolor = \"#FF0000\", fontcolor = \"#FFFFFF\"] \n\"1\"->\"2\" [label = \"NNN\"] \n\"2\"->\"3\" [label = \"NNN\"] \n\"1\"->\"4\" [label = \"NNT\"] \n\"4\"->\"5\" [label = \"NNN\"] \n\"1\"->\"6\" [label = \"NTT\"] \n\"6\"->\"7\" [label = \"NNN\"] \n\"1\"->\"8\" [label = \"TTT\"] \n\"8\"->\"9\" [label = \"NNN\"] \n\"2\"->\"10\" [label = \"NNT\"] \n\"4\"->\"11\" [label = \"NNT\"] \n\"6\"->\"12\" [label = \"NNT\"] \n\"8\"->\"13\" [label = \"NNT\"] \n\"2\"->\"14\" [label = \"NTT\"] \n\"4\"->\"15\" [label = \"NTT\"] \n\"6\"->\"16\" [label = \"NTT\"] \n\"8\"->\"17\" [label = \"NTT\"] \n\"2\"->\"18\" [label = \"TTT\"] \n\"4\"->\"19\" [label = \"TTT\"] \n\"6\"->\"20\" [label = \"TTT\"] \n\"8\"->\"21\" [label = \"TTT\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p>Compared to the tabular form above, the graph representation of DTPs is far superior. The central node shows that dose 2 will be given to the next cohort. Displaying the nodes that require stopping in a bold and symbolic colour like red immediately conveys useful information. The only path that will see the model advocate stopping in the next two cohorts is if every patient experiences toxicity.</p>
 <p>Using graphs and <code>DiagrammeR</code> to visualise paths is potentially very flexible and powerful. Obviously different colours and shapes may be chosen. The opacity (or <em>alpha</em>) of the nodes and paths may be adjusted by their probability of occurrence so that paths that are less likely appear more feint. Opportunities abound.</p>
 </div>
 <div id="summary" class="section level1">

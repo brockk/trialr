@@ -87,11 +87,27 @@ df
 `tibble` was chosen over the base R `data.frame` class because of its flexibility.
 For instance, the `fit` column contains the `crm_fit` object associated with the outcomes.
 The `dose_index` column contains a vector of integers reflecting the dose-level under study.
-This is useful if we `unnest` the data to analyse quantities at the dose-level.
+This is useful if we `unnest` the data to analyse statistics pertaining to specific doses.
 For instance, we might be interested in how our beliefs on the rate of toxicity at dose-level 2 have evolved.
-Using functions from `tidyverse` packages, we can proceed:
+Using functions from `dplyr`, `tidyr` and `purrr`, we can extract the `prob_tox` vector from each fit, unnest, and filter to retain only rows that pertain to dose 2.
+
+The behaviour of `unnest` changed in v1.0 of `tidyr`.
+As of version v1.0, the command to do this is:
 
 ```{r, message=FALSE}
+library(tidyr)
+library(purrr)
+library(dplyr)
+
+df %>% 
+  mutate(prob_tox = fit %>% map('prob_tox')) %>% 
+  select(outcomes, dose_index, prob_tox) %>% 
+  unnest(cols = c(dose_index, prob_tox)) %>% 
+  filter(dose_index == 2)
+```
+
+For older versions of `tidyr`, that command is:
+```{r, message=FALSE, eval=FALSE}
 library(tidyr)
 library(purrr)
 library(dplyr)
@@ -102,7 +118,8 @@ df %>%
   unnest %>% 
   filter(dose_index == 2)
 ```
-At each update, the toxicity estimate moves in the direction we would expect in response to the outcomes observed.
+
+We see that at each update, the toxicity estimate moves in the direction we would expect in response to the outcomes observed.
 
 Having the `crm_fit` object available allows us to analyse alternative algorithms for choosing dose.
 For instance, the `careful_escalation` function will avoid skipping doses in escalation and halt a trial when there is sufficient evidence that a particular dose is too toxic.

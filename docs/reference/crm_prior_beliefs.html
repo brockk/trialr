@@ -65,7 +65,7 @@ task analagous to stan_crm before any data has been collected." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.3</span>
       </span>
     </div>
 
@@ -286,8 +286,8 @@ provided. See below.</p>
                                 <span class='kw'>beta_sd</span> <span class='kw'>=</span> <span class='fu'>sqrt</span>(<span class='fl'>1.34</span>))</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmEmpiricNormalPrior' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 2.7e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#&gt; Chain 1: Gradient evaluation took 2.6e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -304,15 +304,15 @@ provided. See below.</p>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.013666 seconds (Warm-up)
-#&gt; Chain 1:                0.012638 seconds (Sampling)
-#&gt; Chain 1:                0.026304 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.013518 seconds (Warm-up)
+#&gt; Chain 1:                0.012088 seconds (Sampling)
+#&gt; Chain 1:                0.025606 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmEmpiricNormalPrior' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 6e-06 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+#&gt; Chain 2: Gradient evaluation took 7e-06 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -329,15 +329,15 @@ provided. See below.</p>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.014071 seconds (Warm-up)
-#&gt; Chain 2:                0.011663 seconds (Sampling)
-#&gt; Chain 2:                0.025734 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.01342 seconds (Warm-up)
+#&gt; Chain 2:                0.012568 seconds (Sampling)
+#&gt; Chain 2:                0.025988 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmEmpiricNormalPrior' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 5e-06 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+#&gt; Chain 3: Gradient evaluation took 8e-06 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -354,9 +354,9 @@ provided. See below.</p>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.013163 seconds (Warm-up)
-#&gt; Chain 3:                0.011526 seconds (Sampling)
-#&gt; Chain 3:                0.024689 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.013747 seconds (Warm-up)
+#&gt; Chain 3:                0.011816 seconds (Sampling)
+#&gt; Chain 3:                0.025563 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmEmpiricNormalPrior' NOW (CHAIN 4).
@@ -379,9 +379,9 @@ provided. See below.</p>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.013587 seconds (Warm-up)
-#&gt; Chain 4:                0.013804 seconds (Sampling)
-#&gt; Chain 4:                0.027391 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.012898 seconds (Warm-up)
+#&gt; Chain 4:                0.014253 seconds (Sampling)
+#&gt; Chain 4:                0.027151 seconds (Total)
 #&gt; Chain 4: </div><div class='input'><span class='no'>prior_fit2</span> <span class='kw'>&lt;-</span> <span class='fu'>crm_prior_beliefs</span>(<span class='no'>skeleton</span>, <span class='no'>target</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>'logistic_gamma'</span>,
                                 <span class='kw'>a0</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>beta_shape</span> <span class='kw'>=</span> <span class='fl'>1</span>,
                                 <span class='kw'>beta_inverse_scale</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; 
@@ -411,9 +411,9 @@ provided. See below.</p>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.027409 seconds (Warm-up)
-#&gt; Chain 1:                0.015777 seconds (Sampling)
-#&gt; Chain 1:                0.043186 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.028716 seconds (Warm-up)
+#&gt; Chain 1:                0.017753 seconds (Sampling)
+#&gt; Chain 1:                0.046469 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmOneParamLogisticGammaPrior' NOW (CHAIN 2).
@@ -421,8 +421,8 @@ provided. See below.</p>
 #&gt; Chain 2:   Log probability evaluates to log(0), i.e. negative infinity.
 #&gt; Chain 2:   Stan can't start sampling from this initial value.
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 6e-06 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+#&gt; Chain 2: Gradient evaluation took 5e-06 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -439,9 +439,9 @@ provided. See below.</p>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.022524 seconds (Warm-up)
-#&gt; Chain 2:                0.021909 seconds (Sampling)
-#&gt; Chain 2:                0.044433 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.024671 seconds (Warm-up)
+#&gt; Chain 2:                0.02296 seconds (Sampling)
+#&gt; Chain 2:                0.047631 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmOneParamLogisticGammaPrior' NOW (CHAIN 3).
@@ -467,9 +467,9 @@ provided. See below.</p>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.024258 seconds (Warm-up)
-#&gt; Chain 3:                0.022296 seconds (Sampling)
-#&gt; Chain 3:                0.046554 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.024367 seconds (Warm-up)
+#&gt; Chain 3:                0.023451 seconds (Sampling)
+#&gt; Chain 3:                0.047818 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'CrmOneParamLogisticGammaPrior' NOW (CHAIN 4).
@@ -477,8 +477,8 @@ provided. See below.</p>
 #&gt; Chain 4:   Log probability evaluates to log(0), i.e. negative infinity.
 #&gt; Chain 4:   Stan can't start sampling from this initial value.
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 6e-06 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+#&gt; Chain 4: Gradient evaluation took 4e-06 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -495,9 +495,9 @@ provided. See below.</p>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.023987 seconds (Warm-up)
-#&gt; Chain 4:                0.01434 seconds (Sampling)
-#&gt; Chain 4:                0.038327 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.025359 seconds (Warm-up)
+#&gt; Chain 4:                0.016951 seconds (Sampling)
+#&gt; Chain 4:                0.04231 seconds (Total)
 #&gt; Chain 4: </div><div class='output co'>#&gt; <span class='warning'>Warning: There were 2027 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Examine the pairs() plot to diagnose sampling problems</span></div></pre>
   </div>

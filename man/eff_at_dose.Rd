@@ -25,8 +25,9 @@ Get the number of efficacy events seen at the doses under investigation.
 \examples{
 \dontrun{
 # EffTox example
-# TODO
-tox_at_dose(fit)            # c(0, 0, 1, 0)
-tox_at_dose(fit, dose = 3)  # 1
+x <- stan_efftox_demo(outcome_str = '1N 2E')
+eff_at_dose(fit)            # c(0, 1, 0, 0)
+eff_at_dose(fit, dose = 2)  # 1
+eff_at_dose(fit, dose = 3)  # 0
 }
 }
