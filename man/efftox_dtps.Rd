@@ -4,8 +4,15 @@
 \alias{efftox_dtps}
 \title{Calculate dose-transition pathways for an EffTox study}
 \usage{
-efftox_dtps(cohort_sizes, previous_outcomes = "", next_dose = NULL,
-  user_dose_func = NULL, verbose = FALSE, i_am_patient = FALSE, ...)
+efftox_dtps(
+  cohort_sizes,
+  previous_outcomes = "",
+  next_dose = NULL,
+  user_dose_func = NULL,
+  verbose = FALSE,
+  i_am_patient = FALSE,
+  ...
+)
 }
 \arguments{
 \item{cohort_sizes}{vector of future cohort sizes, i.e. positive integers.

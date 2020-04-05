@@ -1,6 +1,6 @@
 Package: trialr
-Version: 0.1.3
-Date: 2019-12-26
+Version: 0.1.3.9000
+Date: 2020-04-04
 Title: Clinical Trial Designs in 'rstan'
 Description: A collection of clinical trial designs and methods, implemented in 
     'rstan' and R, including: the Continual Reassessment Method by O'Quigley et 
@@ -26,12 +26,12 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 Depends:
-  R (>= 3.4.0), 
+  R (>= 3.5.0), 
   methods,Rcpp (>= 1.0.1)
 Imports:
   rstan (>= 2.18.2), 
   rstantools (>= 1.5.1),
-  rlang,
+  rlang (>= 0.4.5),
   dplyr,
   tidyr,
   purrr,
@@ -40,8 +40,8 @@ Imports:
   ggplot2,
   gtools,
   coda,
-  tidybayes,
-  tibble,
+  tidybayes (>= 2.0.3),
+  tibble (>= 3.0.0),
   binom,
   MASS
 LinkingTo:
@@ -52,7 +52,7 @@ LinkingTo:
   RcppEigen (>= 0.3.3.5.0)
 SystemRequirements: GNU make
 NeedsCompilation: yes
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 URL: https://github.com/brockk/trialr
 BugReports: https://github.com/brockk/trialr/issues

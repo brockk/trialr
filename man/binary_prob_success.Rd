@@ -7,9 +7,15 @@
 \usage{
 binary_prob_success(x, ...)
 
-\method{binary_prob_success}{augbin_2t_1a_fit}(x, y1_lower = -Inf,
-  y1_upper = Inf, y2_lower = -Inf, y2_upper = log(0.7),
-  conf.level = 0.95, ...)
+\method{binary_prob_success}{augbin_2t_1a_fit}(
+  x,
+  y1_lower = -Inf,
+  y1_upper = Inf,
+  y2_lower = -Inf,
+  y2_upper = log(0.7),
+  conf.level = 0.95,
+  ...
+)
 }
 \arguments{
 \item{x}{an R object of class \code{"augbin_fit"}}

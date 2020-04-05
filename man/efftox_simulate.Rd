@@ -4,8 +4,15 @@
 \alias{efftox_simulate}
 \title{Run EffTox simulations}
 \usage{
-efftox_simulate(dat, num_sims, first_dose, true_eff, true_tox,
-  cohort_sizes, ...)
+efftox_simulate(
+  dat,
+  num_sims,
+  first_dose,
+  true_eff,
+  true_tox,
+  cohort_sizes,
+  ...
+)
 }
 \arguments{
 \item{dat}{An instance of \code{\link{efftox_params}}, a list of EffTox

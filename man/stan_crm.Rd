@@ -4,11 +4,23 @@
 \alias{stan_crm}
 \title{Fit a CRM model}
 \usage{
-stan_crm(outcome_str = NULL, skeleton, target, model = c("empiric",
-  "logistic", "logistic_gamma", "logistic2"), a0 = NULL,
-  alpha_mean = NULL, alpha_sd = NULL, beta_mean = NULL,
-  beta_sd = NULL, beta_shape = NULL, beta_inverse_scale = NULL,
-  doses_given = NULL, tox = NULL, weights = NULL, ...)
+stan_crm(
+  outcome_str = NULL,
+  skeleton,
+  target,
+  model = c("empiric", "logistic", "logistic_gamma", "logistic2"),
+  a0 = NULL,
+  alpha_mean = NULL,
+  alpha_sd = NULL,
+  beta_mean = NULL,
+  beta_sd = NULL,
+  beta_shape = NULL,
+  beta_inverse_scale = NULL,
+  doses_given = NULL,
+  tox = NULL,
+  weights = NULL,
+  ...
+)
 }
 \arguments{
 \item{outcome_str}{A string representing the outcomes observed hitherto.

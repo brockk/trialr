@@ -4,10 +4,26 @@
 \alias{prior_predictive_augbin_2t_1a}
 \title{Sample data from the Augmented Binary model prior predictive distribution.}
 \usage{
-prior_predictive_augbin_2t_1a(num_samps, alpha_mean, alpha_sd, beta_mean,
-  beta_sd, gamma_mean, gamma_sd, sigma_mean, sigma_sd, omega_lkj_eta,
-  alpha_d1_mean, alpha_d1_sd, gamma_d1_mean, gamma_d1_sd, alpha_d2_mean,
-  alpha_d2_sd, gamma_d2_mean, gamma_d2_sd)
+prior_predictive_augbin_2t_1a(
+  num_samps,
+  alpha_mean,
+  alpha_sd,
+  beta_mean,
+  beta_sd,
+  gamma_mean,
+  gamma_sd,
+  sigma_mean,
+  sigma_sd,
+  omega_lkj_eta,
+  alpha_d1_mean,
+  alpha_d1_sd,
+  gamma_d1_mean,
+  gamma_d1_sd,
+  alpha_d2_mean,
+  alpha_d2_sd,
+  gamma_d2_mean,
+  gamma_d2_sd
+)
 }
 \arguments{
 \item{num_samps}{Number of samples.}

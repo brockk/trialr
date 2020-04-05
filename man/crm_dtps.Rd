@@ -4,9 +4,18 @@
 \alias{crm_dtps}
 \title{Calculate dose-transition pathways for a CRM study}
 \usage{
-crm_dtps(skeleton, target, model, cohort_sizes, previous_outcomes = "",
-  next_dose = NULL, user_dose_func = NULL, verbose = FALSE,
-  i_am_patient = FALSE, ...)
+crm_dtps(
+  skeleton,
+  target,
+  model,
+  cohort_sizes,
+  previous_outcomes = "",
+  next_dose = NULL,
+  user_dose_func = NULL,
+  verbose = FALSE,
+  i_am_patient = FALSE,
+  ...
+)
 }
 \arguments{
 \item{skeleton}{a vector of the prior guesses of toxicity at doses.

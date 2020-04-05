@@ -4,8 +4,7 @@
 \alias{crm_path_analysis}
 \title{Fit a CRM model to the incrementally observed outcomes on a trial pathway.}
 \usage{
-crm_path_analysis(outcome_str, skeleton, target, model, verbose = FALSE,
-  ...)
+crm_path_analysis(outcome_str, skeleton, target, model, verbose = FALSE, ...)
 }
 \arguments{
 \item{outcome_str}{A string representing the outcomes observed hitherto.

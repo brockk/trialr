@@ -1,4 +1,9 @@
 
+# trialr 0.1.4
+
+Updated dependencies to account for recent breaking changes in tibble v3.0.0.
+
+
 # trialr 0.1.3
 
 Adjusted uses of tidyr::unnest to suppress warnings when using v1.0 of tidyr.

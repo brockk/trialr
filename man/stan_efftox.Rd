@@ -4,11 +4,34 @@
 \alias{stan_efftox}
 \title{Fit an EffTox model}
 \usage{
-stan_efftox(outcome_str = NULL, real_doses, efficacy_hurdle,
-  toxicity_hurdle, p_e, p_t, eff0, tox1, eff_star, tox_star, alpha_mean,
-  alpha_sd, beta_mean, beta_sd, gamma_mean, gamma_sd, zeta_mean, zeta_sd,
-  eta_mean, eta_sd, psi_mean, psi_sd, doses_given = NULL, eff = NULL,
-  tox = NULL, ...)
+stan_efftox(
+  outcome_str = NULL,
+  real_doses,
+  efficacy_hurdle,
+  toxicity_hurdle,
+  p_e,
+  p_t,
+  eff0,
+  tox1,
+  eff_star,
+  tox_star,
+  alpha_mean,
+  alpha_sd,
+  beta_mean,
+  beta_sd,
+  gamma_mean,
+  gamma_sd,
+  zeta_mean,
+  zeta_sd,
+  eta_mean,
+  eta_sd,
+  psi_mean,
+  psi_sd,
+  doses_given = NULL,
+  eff = NULL,
+  tox = NULL,
+  ...
+)
 }
 \arguments{
 \item{outcome_str}{A string representing the outcomes observed hitherto.

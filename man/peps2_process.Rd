@@ -4,8 +4,13 @@
 \alias{peps2_process}
 \title{Process RStan samples from a BEBOP model fit to PePS2 data}
 \usage{
-peps2_process(fit, min_eff = 0.1, max_tox = 0.3, eff_cert = 0.7,
-  tox_cert = 0.9)
+peps2_process(
+  fit,
+  min_eff = 0.1,
+  max_tox = 0.3,
+  eff_cert = 0.7,
+  tox_cert = 0.9
+)
 }
 \arguments{
 \item{fit}{An instance of \code{rstan::stanmodel}, derived by fitting data to

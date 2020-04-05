@@ -4,9 +4,16 @@
 \alias{predict.augbin_2t_1a_fit}
 \title{Predict probability of success for given tumour size measurements.}
 \usage{
-\method{predict}{augbin_2t_1a_fit}(object, y1_lower = -Inf,
-  y1_upper = Inf, y2_lower = -Inf, y2_upper = log(0.7),
-  probs = c(0.025, 0.975), newdata = NULL, ...)
+\method{predict}{augbin_2t_1a_fit}(
+  object,
+  y1_lower = -Inf,
+  y1_upper = Inf,
+  y2_lower = -Inf,
+  y2_upper = log(0.7),
+  probs = c(0.025, 0.975),
+  newdata = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{Object of class \code{augbin_2t_1a_fit}.}

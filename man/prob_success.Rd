@@ -7,9 +7,16 @@
 \usage{
 prob_success(x, ...)
 
-\method{prob_success}{augbin_2t_1a_fit}(x, y1_lower = -Inf,
-  y1_upper = Inf, y2_lower = -Inf, y2_upper = log(0.7),
-  probs = c(0.025, 0.975), newdata = NULL, ...)
+\method{prob_success}{augbin_2t_1a_fit}(
+  x,
+  y1_lower = -Inf,
+  y1_upper = Inf,
+  y2_lower = -Inf,
+  y2_upper = log(0.7),
+  probs = c(0.025, 0.975),
+  newdata = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{an R object of class \code{"augbin_fit"}}

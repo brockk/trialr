@@ -4,11 +4,26 @@
 \alias{peps2_get_data}
 \title{Get data to run the PePS2 trial example}
 \usage{
-peps2_get_data(num_patients, cohort_probs = NULL, prob_eff, prob_tox,
-  eff_tox_or, cohort_rho = c(15.7, 21.8, 12.4, 20.7, 18, 11.4),
-  alpha_mean = -2.2, alpha_sd = 2, beta_mean = -0.5, beta_sd = 2,
-  gamma_mean = -0.5, gamma_sd = 2, zeta_mean = -0.5, zeta_sd = 2,
-  lambda_mean = -2.2, lambda_sd = 2, psi_mean = 0, psi_sd = 1)
+peps2_get_data(
+  num_patients,
+  cohort_probs = NULL,
+  prob_eff,
+  prob_tox,
+  eff_tox_or,
+  cohort_rho = c(15.7, 21.8, 12.4, 20.7, 18, 11.4),
+  alpha_mean = -2.2,
+  alpha_sd = 2,
+  beta_mean = -0.5,
+  beta_sd = 2,
+  gamma_mean = -0.5,
+  gamma_sd = 2,
+  zeta_mean = -0.5,
+  zeta_sd = 2,
+  lambda_mean = -2.2,
+  lambda_sd = 2,
+  psi_mean = 0,
+  psi_sd = 1
+)
 }
 \arguments{
 \item{num_patients}{Total number of patients to use, positive integer.}

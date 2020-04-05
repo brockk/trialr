@@ -6,9 +6,17 @@
 \alias{crm_params}
 \title{Container class for parameters to fit the CRM models in trialr.}
 \usage{
-crm_params(skeleton, target, a0 = NULL, alpha_mean = NULL,
-  alpha_sd = NULL, beta_mean = NULL, beta_sd = NULL,
-  beta_shape = NULL, beta_inverse_scale = NULL)
+crm_params(
+  skeleton,
+  target,
+  a0 = NULL,
+  alpha_mean = NULL,
+  alpha_sd = NULL,
+  beta_mean = NULL,
+  beta_sd = NULL,
+  beta_shape = NULL,
+  beta_inverse_scale = NULL
+)
 }
 \arguments{
 \item{skeleton}{a vector of the prior guesses of toxicity at doses.

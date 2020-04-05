@@ -5,8 +5,15 @@
 \title{Fit the hierarchical response model described by
 Thall \emph{et al.} (2003).}
 \usage{
-stan_hierarchical_response_thall(group_responses, group_sizes, mu_mean,
-  mu_sd, tau_alpha, tau_beta, ...)
+stan_hierarchical_response_thall(
+  group_responses,
+  group_sizes,
+  mu_mean,
+  mu_sd,
+  tau_alpha,
+  tau_beta,
+  ...
+)
 }
 \arguments{
 \item{group_responses}{vector of integers, number of responses in each group}

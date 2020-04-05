@@ -6,8 +6,17 @@
 \alias{dose_finding_fit}
 \title{Class of dose-finding model fit by \pkg{trialr} using Stan.}
 \usage{
-dose_finding_fit(dose_indices, num_patients, doses, tox, prob_tox,
-  median_prob_tox, recommended_dose, dat, fit)
+dose_finding_fit(
+  dose_indices,
+  num_patients,
+  doses,
+  tox,
+  prob_tox,
+  median_prob_tox,
+  recommended_dose,
+  dat,
+  fit
+)
 }
 \arguments{
 \item{dose_indices}{A vector of integers representing the dose-levels under

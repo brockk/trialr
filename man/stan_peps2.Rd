@@ -4,10 +4,24 @@
 \alias{stan_peps2}
 \title{Fit the P2TNE model developed for the PePS2 trial to some outcomes.}
 \usage{
-stan_peps2(eff, tox, cohorts, alpha_mean = -2.2, alpha_sd = 2,
-  beta_mean = -0.5, beta_sd = 2, gamma_mean = -0.5, gamma_sd = 2,
-  zeta_mean = -0.5, zeta_sd = 2, lambda_mean = -2.2, lambda_sd = 2,
-  psi_mean = 0, psi_sd = 1, ...)
+stan_peps2(
+  eff,
+  tox,
+  cohorts,
+  alpha_mean = -2.2,
+  alpha_sd = 2,
+  beta_mean = -0.5,
+  beta_sd = 2,
+  gamma_mean = -0.5,
+  gamma_sd = 2,
+  zeta_mean = -0.5,
+  zeta_sd = 2,
+  lambda_mean = -2.2,
+  lambda_sd = 2,
+  psi_mean = 0,
+  psi_sd = 1,
+  ...
+)
 }
 \arguments{
 \item{eff}{A vector of efficacy outcomes for the patients, where 1=efficacy

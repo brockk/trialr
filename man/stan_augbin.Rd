@@ -4,8 +4,14 @@
 \alias{stan_augbin}
 \title{Fit Wason & Seaman's Augmented Binary model for tumour response.}
 \usage{
-stan_augbin(tumour_size, non_shrinkage_failure, arm = NULL,
-  model = c("2t-1a"), prior_params = list(), ...)
+stan_augbin(
+  tumour_size,
+  non_shrinkage_failure,
+  arm = NULL,
+  model = c("2t-1a"),
+  prior_params = list(),
+  ...
+)
 }
 \arguments{
 \item{tumour_size}{matrix-like object containing tumour size measures, with

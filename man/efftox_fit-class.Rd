@@ -6,9 +6,26 @@
 \alias{efftox_fit}
 \title{Class of model fit by \pkg{trialr} using the EffTox dose-finding design.}
 \usage{
-efftox_fit(dose_indices, num_patients, doses, tox, eff, prob_tox, prob_eff,
-  median_prob_tox, median_prob_eff, prob_acc_tox, prob_acc_eff, utility,
-  post_utility, prob_obd, acceptable, recommended_dose, dat, fit)
+efftox_fit(
+  dose_indices,
+  num_patients,
+  doses,
+  tox,
+  eff,
+  prob_tox,
+  prob_eff,
+  median_prob_tox,
+  median_prob_eff,
+  prob_acc_tox,
+  prob_acc_eff,
+  utility,
+  post_utility,
+  prob_obd,
+  acceptable,
+  recommended_dose,
+  dat,
+  fit
+)
 }
 \arguments{
 \item{dose_indices}{A vector of integers representing the dose-levels under

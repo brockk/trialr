@@ -7,10 +7,10 @@ test_that('stan_crm passes ellipsis variables to rstan::sampling', {
                 target = 0.25,
                 model = 'empiric',
                 beta_sd = sqrt(1.34),
-                iter = 500, chains = 2, seed = 123)
+                iter = 1000, chains = 2, seed = 123)
   df <- as.data.frame(x$fit)
   # Expect 2 * 500 / 2 post-warmup samples
-  expect_equal(nrow(df), 500)
+  expect_equal(nrow(df), 1000)
 })
 
 test_that('stan_crm fits to zero patients', {

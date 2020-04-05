@@ -4,9 +4,14 @@
 \alias{efftox_contour_plot}
 \title{Plot EffTox utility contours}
 \usage{
-efftox_contour_plot(fit, use_ggplot = FALSE, prob_eff = fit$prob_eff,
-  prob_tox = fit$prob_tox, num_points = 1000, util_vals = seq(-3, 3,
-  by = 0.2))
+efftox_contour_plot(
+  fit,
+  use_ggplot = FALSE,
+  prob_eff = fit$prob_eff,
+  prob_tox = fit$prob_tox,
+  num_points = 1000,
+  util_vals = seq(-3, 3, by = 0.2)
+)
 }
 \arguments{
 \item{fit}{An instance of \code{\link{efftox_fit}}.}

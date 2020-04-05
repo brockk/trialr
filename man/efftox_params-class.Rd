@@ -6,10 +6,29 @@
 \alias{efftox_params}
 \title{Container class for parameters to fit the EffTox model in trialr.}
 \usage{
-efftox_params(real_doses, efficacy_hurdle, toxicity_hurdle, p_e, p_t, eff0,
-  tox1, eff_star, tox_star, alpha_mean, alpha_sd, beta_mean, beta_sd,
-  gamma_mean, gamma_sd, zeta_mean, zeta_sd, eta_mean, eta_sd, psi_mean,
-  psi_sd)
+efftox_params(
+  real_doses,
+  efficacy_hurdle,
+  toxicity_hurdle,
+  p_e,
+  p_t,
+  eff0,
+  tox1,
+  eff_star,
+  tox_star,
+  alpha_mean,
+  alpha_sd,
+  beta_mean,
+  beta_sd,
+  gamma_mean,
+  gamma_sd,
+  zeta_mean,
+  zeta_sd,
+  eta_mean,
+  eta_sd,
+  psi_mean,
+  psi_sd
+)
 }
 \arguments{
 \item{real_doses}{a vector of numbers.The doses under investigation.

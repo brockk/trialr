@@ -4,8 +4,15 @@
 \alias{trialr_simulate}
 \title{Run a simulation study.}
 \usage{
-trialr_simulate(N, get_data_func, fit_model_func, summarise_func = NULL,
-  num_logs = 10, num_saves = NULL, save_func = NULL)
+trialr_simulate(
+  N,
+  get_data_func,
+  fit_model_func,
+  summarise_func = NULL,
+  num_logs = 10,
+  num_saves = NULL,
+  save_func = NULL
+)
 }
 \arguments{
 \item{N}{integer, number of simulated iterations to run.}

@@ -4,8 +4,13 @@
 \alias{careful_escalation}
 \title{Dose selection function that practices careful escalation.}
 \usage{
-careful_escalation(dose_finding_fit, tox_threshold, certainty_threshold,
-  reference_dose = 1, start_dose = 1)
+careful_escalation(
+  dose_finding_fit,
+  tox_threshold,
+  certainty_threshold,
+  reference_dose = 1,
+  start_dose = 1
+)
 }
 \arguments{
 \item{dose_finding_fit}{Instance of \code{\link{dose_finding_fit}}.}

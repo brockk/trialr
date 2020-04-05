@@ -7,8 +7,15 @@
 \title{Class to hold the elements of a single dose-finding analysis residing in a
 pathway of analyses.}
 \usage{
-dose_finding_path_node(node_id, parent_node_id, depth, outcomes, next_dose,
-  fit, parent_fit)
+dose_finding_path_node(
+  node_id,
+  parent_node_id,
+  depth,
+  outcomes,
+  next_dose,
+  fit,
+  parent_fit
+)
 }
 \arguments{
 \item{node_id}{An integer representing the id of this node in a pathway.}
