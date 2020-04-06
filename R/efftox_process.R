@@ -16,15 +16,14 @@ efftox_process <- function(dat, fit) {
   dose_indices <- 1:dat$num_doses
 
   # Posterior estimates
-  prob_eff <- colMeans(rstan::extract(fit, 'prob_eff')[[1]])
-  median_prob_eff <- apply(rstan::extract(fit, 'prob_eff')[[1]], 2,
-                           stats::median)
-  prob_acc_eff <- colMeans(rstan::extract(fit, 'prob_acc_eff')[[1]])
-  prob_tox <- colMeans(rstan::extract(fit, 'prob_tox')[[1]])
-  median_prob_tox <- apply(rstan::extract(fit, 'prob_tox')[[1]], 2,
-                           stats::median)
-  prob_acc_tox <- colMeans(rstan::extract(fit, 'prob_acc_tox')[[1]])
-
+  prob_eff_samp <- rstan::extract(fit, 'prob_eff')[[1]]
+  prob_eff <- colMeans(prob_eff_samp)
+  median_prob_eff <- apply(prob_eff_samp, 2, stats::median)
+  prob_acc_eff <- colMeans(prob_eff_samp > dat$efficacy_hurdle)
+  prob_tox_samp <- rstan::extract(fit, 'prob_tox')[[1]]
+  prob_tox <- colMeans(prob_tox_samp)
+  median_prob_tox <- apply(prob_tox_samp, 2, stats::median)
+  prob_acc_tox <- colMeans(prob_tox_samp < dat$toxicity_hurdle)
   post_utility_samp <- rstan::extract(fit, 'utility')[[1]]
   post_utility <- colMeans(post_utility_samp)
   obd_candidate <- apply(post_utility_samp, 1, function(x) which.max(x))

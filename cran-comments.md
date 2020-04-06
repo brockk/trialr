@@ -10,23 +10,71 @@
 ❯ checking installed package size ... NOTE
     installed size is 12.6Mb
     sub-directories of 1Mb or more:
-      doc    4.1Mb
-      libs   7.7Mb
+      doc    3.8Mb
+      libs   8.0Mb
 
 ❯ checking for GNU extensions in Makefiles ... NOTE
   GNU make is a SystemRequirements.
 
 Both on these notes are OK.
 
-## Test environment - WinBuilder R-release, 3.6.2
 
-0 errors | 0 warnings | 0 notes
-TODO
+## Test environment - WinBuilder R-release, 3.6.3
+
+0 errors | 0 warnings | 1 notes
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Kristian Brock <kristian.brock@gmail.com>'
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/CRM-pathways.html
+          inst/doc/CRM.html
+          inst/doc/EffTox.html
+    Status: 403
+    Message: Forbidden
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.2307/2531628
+    From: DESCRIPTION
+    Status: Forbidden
+    Message: 403
+
+This URL and DOI are OK.
+
 
 ## Test environment - WinBuilder WinBuilder R-devel
 
-0 errors | 0 warnings | 0 notes
-TODO
+1 errors | 0 warnings | 1 notes
+
+* checking package dependencies ... ERROR
+Package required but not available: 'rstan'
+
+Why might rstan be unavailable under R-devel?
+The latest version on production CRAN (2.19.3) exceeds the required version (2.18.2).
+Perhaps rstan is not available for R v4.0.0?
+
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Kristian Brock <kristian.brock@gmail.com>'
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/CRM-pathways.html
+          inst/doc/CRM.html
+          inst/doc/EffTox.html
+          README.md
+    Status: 403
+    Message: Forbidden
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.2307/2531628
+    From: DESCRIPTION
+    Status: Forbidden
+    Message: 403
+
+This URL and DOI are OK.
+
 
 
 # Version 0.1.3

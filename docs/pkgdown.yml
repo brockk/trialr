@@ -1,6 +1,6 @@
 pandoc: 2.3.1
-pkgdown: 1.1.0.9000
-pkgdown_sha: 98bfe0fdfd59b33ef1a88ef6896cd60f805f0e81
+pkgdown: 1.5.0
+pkgdown_sha: ~
 articles:
   BEBOP: BEBOP.html
   CRM-pathways: CRM-pathways.html
@@ -10,4 +10,5 @@ articles:
   HierarchicalBayesianResponse: HierarchicalBayesianResponse.html
   LevyCaseStudy: LevyCaseStudy.html
   TITE-CRM: TITE-CRM.html
+last_built: 2020-04-06T11:38Z
 

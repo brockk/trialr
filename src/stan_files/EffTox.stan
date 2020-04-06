@@ -88,8 +88,6 @@ parameters {
 transformed parameters {
   real<lower=0, upper=1> prob_eff[num_doses]; // Posterior probability of efficacy at doses i=1,...,num_doses
   real<lower=0, upper=1> prob_tox[num_doses]; // Posterior probability of toxicity at doses i=1,...,num_doses
-  real<lower=0, upper=1> prob_acc_eff[num_doses]; // Probability efficacy is acceptable at doses i=1,...,num_doses
-  real<lower=0, upper=1> prob_acc_tox[num_doses]; // Probability toxicity is acceptable at doses i=1,...,num_doses
   real utility[num_doses]; // Posterior utility of doses i=1,...,num_doses
   // Calculate the utility of each dose using the method described in
   // "Efficacy-Toxicity trade-offs based on L-p norms: Technical Report UTMDABTR-003-06", John Cook
@@ -98,8 +96,6 @@ transformed parameters {
     real r_to_the_p; // Convenience variable, as in (2) of Cook.
     prob_tox[i] = inv_logit(alpha + beta * coded_doses[i]);
     prob_eff[i] = inv_logit(gamma + zeta * coded_doses[i] + eta * coded_doses_squ[i]);
-    prob_acc_eff[i] = int_step(prob_eff[i] - efficacy_hurdle);
-    prob_acc_tox[i] = int_step(toxicity_hurdle - prob_tox[i]);
     r_to_the_p = ((1 - prob_eff[i]) / (1 - eff0))^p + (prob_tox[i] / tox1)^p;
     utility[i] = 1 - r_to_the_p ^ (1.0/p);
   }
