@@ -73,7 +73,8 @@ crm_params <- function(skeleton, target, a0 = NULL,
   x <- list(num_doses = length(skeleton), skeleton = skeleton, target = target,
             a0 = a0, alpha_mean = alpha_mean, alpha_sd = alpha_sd,
             beta_mean = beta_mean, beta_sd = beta_sd,
-            beta_shape = beta_shape, beta_inverse_scale = beta_inverse_scale)
+            beta_shape = beta_shape, beta_inverse_scale = beta_inverse_scale,
+            version = version)
 
   # Initialise with no patients observed
   x$num_patients = 0

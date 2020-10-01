@@ -7,9 +7,9 @@
 #' See \code{\link{efftox_parse_outcomes}} for a description of syntax and
 #' examples. Alternatively, you may provide \code{doses_given}, \code{eff} and
 #' \code{tox} parameters. See Details.
-#' @param real_doses A vector of numbers.The doses under investigation. They
+#' @param real_doses A vector of numbers, the doses under investigation. They
 #' should be ordered from lowest to highest and be in consistent units.
-#' E.g., #' to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
+#' E.g. to conduct a dose-finding trial of doses 10mg, 20mg and 50mg, use
 #' c(10, 20, 50).
 #' @param efficacy_hurdle Minimum acceptable efficacy probability.
 #' A number between 0 and 1.

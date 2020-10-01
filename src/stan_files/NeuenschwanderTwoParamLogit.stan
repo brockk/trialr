@@ -1,35 +1,36 @@
-// The two-parameter Bayesian Continual Reassessment Method (CRM) model for
-// dose-finding using the logistic link function and a normal prior on the
-// parameters.
+// The two-parameter logit model for dose-finding presented by Neuenschwander,
+// Branson and Gsponer (2009), using logistic link function and normal priors on
+// the intercept and slope terms.
 //
-// i.e. F(x, alpha, beta) = 1 / (1 + exp{-(alpha + exp(beta) x)})
-// where x is the skeleton (the prior dose-toxicity curve), the intercept
-// parameter is
+// i.e. F(x, alpha, beta) = 1 / (1 + exp{-(alpha + exp(beta) log(x / x*))})
+// where x is dose, x* is a reference dose, the intercept parameter is
 // alpha ~ N(alpha_mean, alpha_sd)
 // and the slope parameter is
 // beta ~ N(beta_mean, beta_sd).
 //
 // The slope is exponentiated because it is required to be positive for
-// monotonic dose-toxicity curves. See p.18 Cheung (2011).
-// However, the intercept can take any value so it is not exponentiated.
+// monotonic dose-toxicity curves. However, the intercept can take any value so
+// it is not exponentiated. In their paper, the authors use the log of the
+// intercept and gradient terms presented above. I have done that to promote
+// consistency with models already implemented in trialr.
+//
+// This model is similar to the 2-param logit CRM. It differs in that it uses
+// dose as an explanatory covariate, rather than a skeleton.
 //
 // References:
-// 1) O’Quigley, J., Pepe, M., & Fisher, L. (1990).
-// Continual reassessment method: a practical design for phase 1 clinical trials
-// in cancer. Biometrics, 46(1), 33–48. http://doi.org/10.2307/2531628
-// 2) Cheung, Y. K. (2011).
-// Dose Finding by the Continual Reassessment Method.
-// New York: Chapman & Hall / CRC Press.
+// 1) Neuenschwander, B., Branson, M., & Gsponer, T. (2008).
+// Critical aspects of the Bayesian approach to phase I cancer trials.
+// Statistics in Medicine, 27, 2420–2439. https://doi.org/10.1002/sim
 
 functions {
-  real log_joint_pdf(int num_patients, int[] tox, int[] doses, real[] weights,
-                     real[] codified_doses, real alpha, real beta) {
+  real log_joint_pdf(int num_patients, int[] tox, real[] codified_doses,
+                     real[] weights, real alpha, real beta) {
     real p;
     p = 0;
     for(j in 1:num_patients) {
       real prob_tox;
       real p_j;
-      prob_tox = inv_logit(alpha + exp(beta) * codified_doses[doses[j]]);
+      prob_tox = inv_logit(alpha + exp(beta) * codified_doses[j]);
       p_j = (weights[j] * prob_tox)^tox[j] *
               (1 - weights[j] * prob_tox)^(1 - tox[j]);
       p += log(p_j);
@@ -48,9 +49,10 @@ data {
   // Fixed trial parameters
   int<lower=1> num_doses;
 
-  // Prior probability of toxicity at each dose, commonly referred to as the
-  // skeleton. Should be monotonically increasing.
-  real<lower=0, upper = 1> skeleton[num_doses];
+  // Doses under investigation, e.g. 10, 20, 30 for 10mg, 20mg, 30mg:
+  real<lower=0> real_doses[num_doses];
+  // Reference dose
+  real<lower=0> d_star;
 
   // Observed trial outcomes
   int<lower=0> num_patients;
@@ -67,13 +69,10 @@ data {
 }
 
 transformed data {
-  // Codified doses, aka dose-labels, are obtained by backwards substitution
-  // of skeleton values into dose-toxicity relationship. I.e. given assumed
-  // dose-toxicity relationship and parameters, what "dose" gives me prob_tox =
-  // skeleton[1], skeleton[2], etc? See p.18 of Cheung (2011).
-  real codified_doses[num_doses];
-  for(i in 1:num_doses) {
-    codified_doses[i] = (logit(skeleton[i]) - alpha_mean) / exp(beta_mean);
+  // Codified doses in this model are simply doses given over the reference dose
+  real codified_doses[num_patients];
+  for(j in 1:num_patients) {
+    codified_doses[j] = log(real_doses[doses[j]] / d_star);
   }
 }
 
@@ -87,14 +86,14 @@ transformed parameters {
   // Posterior probability of toxicity at doses i=1,...,num_doses
   real<lower=0, upper=1> prob_tox[num_doses];
   for(i in 1:num_doses) {
-    prob_tox[i] = inv_logit(alpha + exp(beta) * codified_doses[i]);
+    prob_tox[i] = inv_logit(alpha + exp(beta) * log(real_doses[i] / d_star));
   }
 }
 
 model {
   target += normal_lpdf(alpha | alpha_mean, alpha_sd);
   target += normal_lpdf(beta | beta_mean, beta_sd);
-  target += log_joint_pdf(num_patients, tox, doses, weights, codified_doses,
+  target += log_joint_pdf(num_patients, tox, codified_doses, weights,
                           alpha, beta);
 }
 
@@ -102,7 +101,7 @@ generated quantities {
   vector[num_patients] log_lik;
   for (j in 1:num_patients) {
     real p_j;
-    p_j = inv_logit(alpha + exp(beta) * codified_doses[doses[j]]);
+    p_j = inv_logit(alpha + exp(beta) * codified_doses[j]);
     log_lik[j] = log((weights[j] * p_j)^tox[j] *
                   (1 - weights[j] * p_j)^(1 - tox[j]));
   }

@@ -39,7 +39,7 @@
 #' @param weights An optional vector of numeric weights for the observations
 #' for patients 1:num_patients, thus facilitating the TITE-CRM design.
 #' Can be used with \code{outcome_str}, or with \code{doses_given} and
-#' \code{tox}. It is generally tider to specify \code{doses_given},
+#' \code{tox}. It is generally tidier to specify \code{doses_given},
 #' \code{tox} and \code{weights} when a TITE-CRM analysis is desired.
 #' @param ... Extra parameters are passed to \code{rstan::sampling}. Commonly
 #' used options are \code{iter}, \code{chains}, \code{warmup}, \code{cores}, and
@@ -93,7 +93,7 @@
 #' @section The \code{logistic2} model:
 #' The model form is:
 #'
-#' \eqn{F(x_{i}, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)}) }
+#' \eqn{F(x_{i}, alpha, \beta) = 1 / (1 + \exp{(-\alpha - \exp{(\beta)} x_i)}) }
 #'
 #' and the required parameters are:
 #'
@@ -177,8 +177,7 @@ stan_crm <- function(outcome_str = NULL, skeleton, target,
                     beta_mean = beta_mean,
                     beta_sd = beta_sd,
                     beta_shape = beta_shape,
-                    beta_inverse_scale = beta_inverse_scale
-  )
+                    beta_inverse_scale = beta_inverse_scale)
 
   # Add outcomes
   if(is.null(outcome_str)) {
