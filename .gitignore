@@ -4,6 +4,7 @@
 .Ruserdata
 src/*.o
 src/*.so
+src/*.hpp
 src/*.dll
 vignettes/*_cache/
 inst/doc
