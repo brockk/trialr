@@ -1,6 +1,6 @@
 Package: trialr
-Version: 0.1.4.9001
-Date: 2020-09-28
+Version: 0.1.4.9002
+Date: 2020-10-06
 Title: Clinical Trial Designs in 'rstan'
 Description: A collection of clinical trial designs and methods, implemented in 
     'rstan' and R, including: the Continual Reassessment Method by O'Quigley et 
@@ -33,7 +33,6 @@ Imports:
   rstantools (>= 1.5.1),
   rlang (>= 0.4.5),
   dplyr,
-  tidyr,
   purrr,
   magrittr,
   stringr,
@@ -60,5 +59,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+    tidyr,
     ggridges,
     DiagrammeR

@@ -5,7 +5,7 @@
 # Generics ----
 #' Print nbg_fit object.
 #'
-#' @param x \code{\link{nbg_fit}} object to print.
+#' @param x \code{nbg_fit} object to print.
 #' @param ... Extra parameters, passed onwards.
 #' @method print nbg_fit
 #' @export
