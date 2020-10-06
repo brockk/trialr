@@ -2,9 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
-src/*.o
+src/stan_files/*.o
+src/stan_files/*.hpp
+src/init.o
 src/*.so
-src/*.hpp
 src/*.dll
 vignettes/*_cache/
 inst/doc

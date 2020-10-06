@@ -7,7 +7,7 @@
 \method{print}{nbg_fit}(x, ...)
 }
 \arguments{
-\item{x}{\code{\link{nbg_fit}} object to print.}
+\item{x}{\code{nbg_fit} object to print.}
 
 \item{...}{Extra parameters, passed onwards.}
 }
