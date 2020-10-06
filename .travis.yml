@@ -4,9 +4,6 @@ r: devel
 cache: packages
 latex: true
 
-r_github_packages:
-  - jimhester/covr
-
 env:
   matrix:
     - CXX_OLEVEL=2 CXX=clang++

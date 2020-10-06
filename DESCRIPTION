@@ -61,5 +61,4 @@ Suggests:
     knitr,
     rmarkdown,
     ggridges,
-    covr,
     DiagrammeR
