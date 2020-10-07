@@ -14,7 +14,7 @@
 #'
 #' @return An object of class \code{\link{efftox_fit}}
 #'
-#' @author Kristian Brock \email{kristian.brock@@gmail.com}
+#' @author Kristian Brock \email{kristian.brock@gmail.com}
 #'
 #' @references
 #'   Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
@@ -45,16 +45,18 @@
 #' # cores, iter, chains etc are passed on too via the ellipsis operator.
 #' }
 stan_efftox_demo <- function(outcome_str, ...) {
+  p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                     beta_mean = 1.5482, beta_sd = 3.5018,
+                     gamma_mean = 0.7367, gamma_sd = 2.5423,
+                     zeta_mean = 3.4181, zeta_sd = 2.4406,
+                     eta_mean = 0, eta_sd = 0.2,
+                     psi_mean = 0, psi_sd = 1)
   stan_efftox(outcome_str,
               real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
               efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
               p_e = 0.1, p_t = 0.1,
               eff0 = 0.5, tox1 = 0.65,
               eff_star = 0.7, tox_star = 0.25,
-              alpha_mean = -7.9593, alpha_sd = 3.5487,
-              beta_mean = 1.5482, beta_sd = 3.5018,
-              gamma_mean = 0.7367, gamma_sd = 2.5423,
-              zeta_mean = 3.4181, zeta_sd = 2.4406,
-              eta_mean = 0, eta_sd = 0.2,
-              psi_mean = 0, psi_sd = 1, ...)
+              priors = p,
+              ...)
 }

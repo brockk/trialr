@@ -36,16 +36,16 @@ in this logit model is \code{dose / d_star}.}
 \item{target}{the target toxicity probability, a number between 0 and 1.}
 
 \item{alpha_mean}{Prior mean of intercept variable for normal prior.
-Only required for certain models. See Details.}
+See Details.}
 
 \item{alpha_sd}{Prior standard deviation of intercept variable for normal prior.
-Only required for certain models. See Details.}
+See Details.}
 
 \item{beta_mean}{Prior mean of gradient variable for normal prior.
-Only required for certain models. See Details.}
+See Details.}
 
 \item{beta_sd}{Prior standard deviation of slope variable for normal prior.
-Only required for certain models. See Details.}
+See Details.}
 
 \item{doses_given}{A optional vector of dose-levels given to patients
 1:num_patients, where 1=lowest dose, 2=second dose, etc. Only required when
@@ -126,5 +126,5 @@ Neuenschwander, B., Branson, M., & Gsponer, T. (2008).
   \code{\link[rstan:sampling]{sampling}}
 }
 \author{
-Kristian Brock
+Kristian Brock \email{kristian.brock@gmail.com}
 }

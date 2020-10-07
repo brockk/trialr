@@ -16,18 +16,7 @@ efftox_params(
   tox1,
   eff_star,
   tox_star,
-  alpha_mean,
-  alpha_sd,
-  beta_mean,
-  beta_sd,
-  gamma_mean,
-  gamma_sd,
-  zeta_mean,
-  zeta_sd,
-  eta_mean,
-  eta_sd,
-  psi_mean,
-  psi_sd
+  priors
 )
 }
 \arguments{
@@ -60,46 +49,15 @@ Details).}
 \item{tox_star}{Toxicity probability of an equi-utility third point (see
 Details).}
 
-\item{alpha_mean}{The prior normal mean of the intercept term in the toxicity
-logit model. A number.}
-
-\item{alpha_sd}{The prior normal standard deviation of the intercept term in
-the toxicity logit model. A number.}
-
-\item{beta_mean}{The prior normal mean of the slope term in the toxicity
-logit model. A number.}
-
-\item{beta_sd}{The prior normal standard deviation of the slope term in the
-toxicity logit model. A number.}
-
-\item{gamma_mean}{The prior normal mean of the intercept term in the efficacy
-logit model. A number.}
-
-\item{gamma_sd}{The prior normal standard deviation of the intercept term in
-the efficacy logit model. A number.}
-
-\item{zeta_mean}{The prior normal mean of the slope term in the efficacy
-logit model. A number.}
-
-\item{zeta_sd}{The prior normal standard deviation of the slope term in the
-efficacy logit model. A number.}
-
-\item{eta_mean}{The prior normal mean of the squared term coefficient in the
-efficacy logit model. A number.}
-
-\item{eta_sd}{The prior normal standard deviation of the squared term
-coefficient in the efficacy logit model. A number.}
-
-\item{psi_mean}{The prior normal mean of the association term in the combined
-efficacy-toxicity model. A number.}
-
-\item{psi_sd}{The prior normal standard deviation of the association term in
-the combined efficacy-toxicity model. A number.}
+\item{priors}{instance of class \code{\link{efftox_priors}}, the
+hyperparameters for normal priors on the six model parameters.}
 }
 \description{
 Container class for parameters to fit the EffTox model in trialr.
 }
 \seealso{
+\code{\link{efftox_priors}}
+\code{\link{get_efftox_priors}}
 \code{\link{stan_efftox}}
 \code{\link{stan_efftox_demo}}
 }

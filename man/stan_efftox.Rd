@@ -15,18 +15,19 @@ stan_efftox(
   tox1,
   eff_star,
   tox_star,
-  alpha_mean,
-  alpha_sd,
-  beta_mean,
-  beta_sd,
-  gamma_mean,
-  gamma_sd,
-  zeta_mean,
-  zeta_sd,
-  eta_mean,
-  eta_sd,
-  psi_mean,
-  psi_sd,
+  priors = NULL,
+  alpha_mean = NULL,
+  alpha_sd = NULL,
+  beta_mean = NULL,
+  beta_sd = NULL,
+  gamma_mean = NULL,
+  gamma_sd = NULL,
+  zeta_mean = NULL,
+  zeta_sd = NULL,
+  eta_mean = NULL,
+  eta_sd = NULL,
+  psi_mean = NULL,
+  psi_sd = NULL,
   doses_given = NULL,
   eff = NULL,
   tox = NULL,
@@ -68,41 +69,67 @@ Details).}
 \item{tox_star}{Toxicity probability of an equi-utility third point (see
 Details).}
 
-\item{alpha_mean}{The prior normal mean of the intercept term in the toxicity
-logit model. A number.}
+\item{priors}{instance of class \code{\link{efftox_priors}}, the
+hyperparameters for normal priors on the six model parameters.}
 
-\item{alpha_sd}{The prior normal standard deviation of the intercept term in
-the toxicity logit model. A number.}
+\item{alpha_mean}{Optional, the prior normal mean of the intercept term in
+the toxicity logit model. A number. You should prioritise specifying this
+value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{beta_mean}{The prior normal mean of the slope term in the toxicity
-logit model. A number.}
+\item{alpha_sd}{Optional, the prior normal standard deviation of the
+intercept term in the toxicity logit model. A number.You should prioritise
+specifying this value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{beta_sd}{The prior normal standard deviation of the slope term in the
-toxicity logit model. A number.}
+\item{beta_mean}{Optional, the prior normal mean of the slope term in the
+toxicity logit model. A number. You should prioritise specifying this
+value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{gamma_mean}{The prior normal mean of the intercept term in the efficacy
-logit model. A number.}
+\item{beta_sd}{Optional, the prior normal standard deviation of the slope
+term in the toxicity logit model. A number. You should prioritise specifying
+this value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{gamma_sd}{The prior normal standard deviation of the intercept term in
-the efficacy logit model. A number.}
+\item{gamma_mean}{Optional, The prior normal mean of the intercept term in
+the efficacy logit model. A number. You should prioritise specifying this
+value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{zeta_mean}{The prior normal mean of the slope term in the efficacy logit
-model. A number.}
+\item{gamma_sd}{Optional, the prior normal standard deviation of the
+intercept term in the efficacy logit model. A number. You should prioritise
+specifying this value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{zeta_sd}{The prior normal standard deviation of the slope term in the
-efficacy logit model. A number.}
+\item{zeta_mean}{Optional, the prior normal mean of the slope term in the
+efficacy logit model. A number. You should prioritise specifying this value
+via  \code{priors} but this option is provided for backwards-compatibility.}
 
-\item{eta_mean}{The prior normal mean of the squared term coefficient in the
-efficacy logit model. A number.}
+\item{zeta_sd}{Optional, the prior normal standard deviation of the slope
+term in the efficacy logit model. A number. You should prioritise specifying
+this value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{eta_sd}{The prior normal standard deviation of the squared term
-coefficient in the efficacy logit model. A number.}
+\item{eta_mean}{Optional, the prior normal mean of the squared term
+coefficient in the efficacy logit model. A number. You should prioritise
+specifying this value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{psi_mean}{The prior normal mean of the association term in the combined
-efficacy-toxicity model. A number.}
+\item{eta_sd}{Optional, the prior normal standard deviation of the squared
+term coefficient in the efficacy logit model. A number. You should prioritise
+specifying this value via \code{priors} but this option is provided for
+backwards-compatibility.}
 
-\item{psi_sd}{The prior normal standard deviation of the association term in
-the combined efficacy-toxicity model. A number.}
+\item{psi_mean}{Optional, the prior normal mean of the association term in
+the combined efficacy-toxicity model. A number. You should prioritise
+specifying this value via \code{priors} but this option is provided for
+backwards-compatibility.}
+
+\item{psi_sd}{Optional, the prior normal standard deviation of the
+association term in the combined efficacy-toxicity model. A number. You
+should prioritise specifying this value via \code{priors} but this option is
+provided for backwards-compatibility.}
 
 \item{doses_given}{A optional vector of dose-levels given to patients
 1:num_patients, where 1=lowest dose, 2=second dose, etc. Only required when
@@ -146,21 +173,23 @@ will yield greater scores, and vice-versa.
 }
 \examples{
 \dontrun{
-# This model is presented in Thall et al. (2014)
+# This model is presented in Thall et al. (2014).
+p <- efftox_priors(alpha_mean = -7.9593, alpha_sd = 3.5487,
+                  beta_mean = 1.5482, beta_sd = 3.5018,
+                  gamma_mean = 0.7367, gamma_sd = 2.5423,
+                  zeta_mean = 3.4181, zeta_sd = 2.4406,
+                  eta_mean = 0, eta_sd = 0.2,
+                  psi_mean = 0, psi_sd = 1)
 mod1 <- stan_efftox('1N 2E 3B',
-                     real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
-                     efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
-                     p_e = 0.1, p_t = 0.1,
-                     eff0 = 0.5, tox1 = 0.65,
-                     eff_star = 0.7, tox_star = 0.25,
-                     alpha_mean = -7.9593, alpha_sd = 3.5487,
-                     beta_mean = 1.5482, beta_sd = 3.5018,
-                     gamma_mean = 0.7367, gamma_sd = 2.5423,
-                     zeta_mean = 3.4181, zeta_sd = 2.4406,
-                     eta_mean = 0, eta_sd = 0.2,
-                     psi_mean = 0, psi_sd = 1, seed = 123)
+                    real_doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
+                    efficacy_hurdle = 0.5, toxicity_hurdle = 0.3,
+                    p_e = 0.1, p_t = 0.1,
+                    eff0 = 0.5, tox1 = 0.65,
+                    eff_star = 0.7, tox_star = 0.25,
+                    priors = p,
+                    seed = 123)
 
-# Shorthand for the above is:
+# The above is a longhad version of:
 mod2 <- stan_efftox_demo('1N 2E 3B', seed = 123)
 
 # the seed is passed to the Stan sampler. The usual Stan sampler params like
@@ -182,8 +211,10 @@ Thall, P., & Cook, J. (2004). Dose-Finding Based on Efficacy-Toxicity
     https://doi.org/10.1186/s12874-017-0381-x
 }
 \seealso{
+\code{\link{efftox_priors}}
+\code{\link{get_efftox_priors}}
 \code{\link{efftox_fit}}
-  \code{\link{stan_efftox_demo}}
+\code{\link{stan_efftox_demo}}
 }
 \author{
 Kristian Brock \email{kristian.brock@gmail.com}

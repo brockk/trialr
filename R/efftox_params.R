@@ -24,42 +24,20 @@
 #' Details).
 #' @param tox_star Toxicity probability of an equi-utility third point (see
 #' Details).
-#' @param alpha_mean The prior normal mean of the intercept term in the toxicity
-#' logit model. A number.
-#' @param alpha_sd The prior normal standard deviation of the intercept term in
-#' the toxicity logit model. A number.
-#' @param beta_mean The prior normal mean of the slope term in the toxicity
-#' logit model. A number.
-#' @param beta_sd The prior normal standard deviation of the slope term in the
-#' toxicity logit model. A number.
-#' @param gamma_mean The prior normal mean of the intercept term in the efficacy
-#' logit model. A number.
-#' @param gamma_sd The prior normal standard deviation of the intercept term in
-#' the efficacy logit model. A number.
-#' @param zeta_mean The prior normal mean of the slope term in the efficacy
-#' logit model. A number.
-#' @param zeta_sd The prior normal standard deviation of the slope term in the
-#' efficacy logit model. A number.
-#' @param eta_mean The prior normal mean of the squared term coefficient in the
-#' efficacy logit model. A number.
-#' @param eta_sd The prior normal standard deviation of the squared term
-#' coefficient in the efficacy logit model. A number.
-#' @param psi_mean The prior normal mean of the association term in the combined
-#' efficacy-toxicity model. A number.
-#' @param psi_sd The prior normal standard deviation of the association term in
-#' the combined efficacy-toxicity model. A number.
+#' @param priors instance of class \code{\link{efftox_priors}}, the
+#' hyperparameters for normal priors on the six model parameters.
 #'
 #' @export
 #'
 #' @seealso
+#' \code{\link{efftox_priors}}
+#' \code{\link{get_efftox_priors}}
 #' \code{\link{stan_efftox}}
 #' \code{\link{stan_efftox_demo}}
 efftox_params <- function(real_doses, efficacy_hurdle, toxicity_hurdle,
                           p_e, p_t, eff0, tox1, eff_star, tox_star,
-                          alpha_mean, alpha_sd, beta_mean, beta_sd,
-                          gamma_mean, gamma_sd, zeta_mean, zeta_sd,
-                          eta_mean, eta_sd, psi_mean, psi_sd) {
-  # efftox_params class
+                          priors) {
+
   version <- list(
     trialr = utils::packageVersion("trialr"),
     rstan = utils::packageVersion("rstan")
@@ -70,12 +48,12 @@ efftox_params <- function(real_doses, efficacy_hurdle, toxicity_hurdle,
             efficacy_hurdle = efficacy_hurdle, toxicity_hurdle = toxicity_hurdle,
             p_e = p_e, p_t = p_t, p = p, eff0 = eff0, tox1 = tox1,
             eff_star = eff_star, tox_star = tox_star,
-            alpha_mean = alpha_mean, alpha_sd = alpha_sd,
-            beta_mean = beta_mean, beta_sd = beta_sd,
-            gamma_mean = gamma_mean, gamma_sd = gamma_sd,
-            zeta_mean = zeta_mean, zeta_sd = zeta_sd,
-            eta_mean = eta_mean, eta_sd = eta_sd,
-            psi_mean = psi_mean, psi_sd = psi_sd,
+            alpha_mean = priors$alpha_mean, alpha_sd = priors$alpha_sd,
+            beta_mean = priors$beta_mean, beta_sd = priors$beta_sd,
+            gamma_mean = priors$gamma_mean, gamma_sd = priors$gamma_sd,
+            zeta_mean = priors$zeta_mean, zeta_sd = priors$zeta_sd,
+            eta_mean = priors$eta_mean, eta_sd = priors$eta_sd,
+            psi_mean = priors$psi_mean, psi_sd = priors$psi_sd,
             version = version)
 
   # Initialise with no patients observed

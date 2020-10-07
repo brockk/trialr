@@ -58,7 +58,7 @@
 #' @return An object of class \code{nbg_fit}, which inherits behaviour from
 #' \code{\link{crm_fit}}.
 #'
-#' @author Kristian Brock
+#' @author Kristian Brock \email{kristian.brock@gmail.com}
 #'
 #' @references
 #'
