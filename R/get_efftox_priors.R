@@ -11,6 +11,7 @@
   inv.logit(A %*% t(B))
 }
 
+#' @importFrom stats sd
 .pi_T_moments <- function(scaled_doses, n = 10000,
                           alpha_mean, alpha_sd,
                           beta_mean, beta_sd) {
@@ -36,6 +37,7 @@
   inv.logit(A %*% t(B))
 }
 
+#' @importFrom stats sd
 .pi_E_moments <- function(scaled_doses, n = 10000,
                           gamma_mean, gamma_sd,
                           zeta_mean, zeta_sd,
