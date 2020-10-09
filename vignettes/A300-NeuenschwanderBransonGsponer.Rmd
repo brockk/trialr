@@ -1,0 +1,110 @@
+---
+title: "Two-parameter logistic model for dose-finding by Neuenschwander, Branson & Gsponer"
+author: "Kristian Brock"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{NeuenschwanderBransonGsponer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+@neuenschwanderCriticalAspectsBayesian2008 (NBG) introduced a derivative of the CRM for dose-escalation clinical trials using the model:
+
+$$ \text{logit} p_i = \alpha + \exp{(\beta)} \log{(x_i / d^*)}, $$
+
+where $p_i$ is the probability of toxicity at the $i$th dose, $x_i$, and $d^*$ is a reference dose.
+Here $\alpha$ and $\beta$ are model parameters on which the authors place a bivariate normal prior. 
+This model is very similar to the two-parameter logistic CRM, implemented with `stan_crm(model = 'logistic2')`.
+However, a notable difference is that the dose, $x_i$, enters the model as a covariate.
+This dispenses with the toxicity skeleton that is used in the CRM.
+
+The authors introduce their approach in a paper that argues for greater parameterisation in dose-escalation models so that they might more accurately estimate the entire dose-toxicity curve than simplistic one-parameter models.
+
+# Usage
+Let's run some examples. 
+
+To access the Stan implementations of the NBG model, we must load `trialr`:
+```{r, message=FALSE, warning=FALSE}
+library(trialr)
+```
+
+For illustration, let us reproduce the model fit in the lower right pane in Figure 1 of @neuenschwanderCriticalAspectsBayesian2008.
+The authors fit their model to a partially-completed historic trial investigating 15 doses, using the highest dose as the reference dose:
+
+```{r}
+dose <- c(1, 2.5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250)
+d_star <- 250
+```
+
+The original investigators sought a dose associated with 30% toxicity:
+```{r}
+target <- 0.30
+```
+
+and the analysis concerns which dose to give after observing the following outcomes:
+```{r}
+outcomes <- '1NNN 2NNNN 3NNNN 4NNNN 7TT'
+```
+
+We see that the original investigators escalated through doses 1 to 3, but after having observed no toxicity, seem to have thrown caution to the wind and escalated straight to dose 7.
+Unfortunately, that move seems to have be imprudent because two toxicities were seen in two patients.
+
+Neuenschwander _et al._ introduce normal priors for the parameters $\alpha$ and $\beta$ which we specify when we call `stan_nbg` to fit the model:
+```{r}
+fit <- stan_nbg(outcome_str = outcomes, real_doses = dose, d_star = d_star,
+                target = target, alpha_mean = 2.15, alpha_sd = 0.84,
+                beta_mean = 0.52, beta_sd = 0.8, seed = 2020, refresh = 0)
+```
+
+Note that presently, the implementation in `trialr` uses independent normal priors on $\alpha$ and $\beta$, and not the bivariate normal that the authors used.
+This will hopefully be addressed in a future release of `trialr`.
+Nevertheless, we see that the small difference of prior apparently makes little difference to the posterior because the mean estimates of the probability of toxicity are very close to that shown in Figure 1 of NBG's manuscript:
+
+```{r}
+fit
+```
+
+We see that the design advocates selecting dose 7 for the next patients.
+This can be verified in the manuscript.
+
+To illustrate the researchers' motivation for developing their method, the original one-parameter CRM model using the original investigators' skeleton was:
+
+```{r}
+skeleton = c(0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.10, 0.17, 0.30)
+fit2 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                 model = 'empiric', beta_sd = 1.34, seed = 2020, refresh = 0)
+fit2
+```
+
+Note that the above fit uses just the lowest ten doses, to be consistent with Table 1 in @neuenschwanderCriticalAspectsBayesian2008.
+Incredibly, this design advocates escalating two more doses to dose 9, despite the outcomes `7TT` in the previous cohort.
+
+To be fair to the CRM, this scenario has become a didactic example for how not to choose a skeleton.
+The prior probabilities of toxicity are far too close together.
+Choosing a perhaps more sensible skeleton, the model advocates more defensible behaviour:
+
+```{r}
+skeleton = c(0.03, 0.06, 0.12, 0.20, 0.30, 0.40, 0.50, 0.59, 0.67, 0.74)
+# Obtained using dfcrm::getprior(0.05, 0.3, 5, 10)
+fit3 <- stan_crm(outcomes, skeleton = skeleton, target = target, 
+                 model = 'empiric', beta_sd = 1.34, seed = 2020, refresh = 0)
+fit3
+```
+
+With this particular skeleton that places the prior guess of MTD at dose 5 and spaces out the prior probabilities of toxicity, de-escalation to dose 6 is suggested.
+
+
+# trialr
+`trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
+
+
+# References

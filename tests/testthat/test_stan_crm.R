@@ -7,7 +7,8 @@ test_that('stan_crm passes ellipsis variables to rstan::sampling', {
                 target = 0.25,
                 model = 'empiric',
                 beta_sd = sqrt(1.34),
-                iter = 1000, chains = 2, seed = 123)
+                iter = 1000, chains = 2, seed = 123,
+                refresh = 0)
   df <- as.data.frame(x$fit)
   # Expect 2 * 500 / 2 post-warmup samples
   expect_equal(nrow(df), 1000)
@@ -18,7 +19,8 @@ test_that('stan_crm fits to zero patients', {
                 skeleton = c(0.1, 0.25, 0.4, 0.6),
                 target = 0.25,
                 model = 'empiric',
-                beta_sd = 1)
+                beta_sd = 1,
+                refresh = 0)
   expect_equal(x$num_patients, 0)
   expect_equal(length(x$doses), 0)
   expect_equal(length(x$tox), 0)
@@ -45,7 +47,8 @@ test_that('stan_crm fits to one patient', {
                 skeleton = c(0.1, 0.25, 0.4, 0.6),
                 target = 0.25,
                 model = 'empiric',
-                beta_sd = 1)
+                beta_sd = 1,
+                refresh = 0)
   expect_equal(x$num_patients, 1)
   expect_equal(length(x$doses), 1)
   expect_equal(length(x$tox), 1)
@@ -72,7 +75,8 @@ test_that('stan_crm fits to two patients in one cohort', {
                 skeleton = c(0.1, 0.25, 0.4, 0.6),
                 target = 0.25,
                 model = 'empiric',
-                beta_sd = 1)
+                beta_sd = 1,
+                refresh = 0)
   expect_equal(x$num_patients, 2)
   expect_equal(length(x$doses), 2)
   expect_equal(length(x$tox), 2)
@@ -99,7 +103,8 @@ test_that('stan_crm fits to two patients in two cohorts', {
                 skeleton = c(0.1, 0.25, 0.4, 0.6),
                 target = 0.25,
                 model = 'empiric',
-                beta_sd = 1)
+                beta_sd = 1,
+                refresh = 0)
   expect_equal(x$num_patients, 2)
   expect_equal(length(x$doses), 2)
   expect_equal(length(x$tox), 2)
@@ -129,8 +134,8 @@ test_that('stan_crm fits when weights are provided', {
                 beta_sd = 1,
                 doses = c(1, 1, 2, 2, 2),
                 tox   = c(0, 0, 0, 0, 0),
-                weights = c(1, 1, 0.9, 0.1, 0.1)
-                )
+                weights = c(1, 1, 0.9, 0.1, 0.1),
+                refresh = 0)
   expect_equal(x$num_patients, 5)
   expect_equal(length(x$doses), 5)
   expect_equal(length(x$tox), 5)
@@ -178,7 +183,7 @@ test_that('stan_crm output for logistic model matches DFCRM by Cheung', {
                 skeleton = skeleton, target = target,
                 model = 'logistic', a0 = a0,
                 beta_mean = beta_mean, beta_sd = beta_sd,
-                seed = 123)
+                seed = 123, refresh = 0)
   expect_equal(x$recommended_dose, 4)
   beta_samp <- as.data.frame(x, pars = 'beta')
   # fooB$estimate
@@ -217,7 +222,7 @@ test_that('stan_crm output for TITE-CRM empiric model matches DFCRM by Cheung', 
                tox = c(0, 0, 0, 0),
                weights = c(73, 66, 35, 28) / 126,
                model = 'empiric', beta_sd = sqrt(1.34),
-               seed = 123, iter = 5000)
+               seed = 123, iter = 5000, refresh = 0)
   expect_equal(x$recommended_dose, 4)
   beta_samp <- as.data.frame(x, pars = 'beta')
   expect_lt(abs(mean(beta_samp$beta) - 0.49), epsilon)
@@ -232,7 +237,7 @@ test_that("stan_crm demands monotonically increasing skeleton", {
                         target = 0.25,
                         model = 'empiric',
                         beta_sd = sqrt(1.34),
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_sd for 'empiric' model", {
@@ -240,7 +245,7 @@ test_that("stan_crm requires beta_sd for 'empiric' model", {
                 skeleton = c(0.1, 0.25, 0.4, 0.6),
                 target = 0.25,
                 model = 'empiric',
-                seed = 123))
+                seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires a0 for 'logistic' model", {
@@ -250,7 +255,7 @@ test_that("stan_crm requires a0 for 'logistic' model", {
                         model = 'logistic',
                         beta_mean = 0,
                         beta_sd = sqrt(1.34),
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_mean for 'logistic' model", {
@@ -260,7 +265,7 @@ test_that("stan_crm requires beta_mean for 'logistic' model", {
                         model = 'logistic',
                         a0 = 1,
                         beta_sd = sqrt(1.34),
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_sd for 'logistic' model", {
@@ -270,7 +275,7 @@ test_that("stan_crm requires beta_sd for 'logistic' model", {
                         model = 'logistic',
                         a0 = 1,
                         beta_mean = 0,
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 
@@ -281,7 +286,7 @@ test_that("stan_crm requires a0 for 'logistic_gamma' model", {
                         model = 'logistic_gamma',
                         beta_shape = 1,
                         beta_inverse_scale = 1,
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_shape for 'logistic_gamma' model", {
@@ -291,7 +296,7 @@ test_that("stan_crm requires beta_shape for 'logistic_gamma' model", {
                         model = 'logistic_gamma',
                         a0 = 1,
                         beta_inverse_scale = 1,
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_inverse_scale for 'logistic_gamma' model", {
@@ -301,7 +306,7 @@ test_that("stan_crm requires beta_inverse_scale for 'logistic_gamma' model", {
                         model = 'logistic_gamma',
                         a0 = 1,
                         beta_shape = 1,
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires alpha_mean for 'logistic2' model", {
@@ -312,7 +317,7 @@ test_that("stan_crm requires alpha_mean for 'logistic2' model", {
                         alpha_sd = 1,
                         beta_mean = 0,
                         beta_sd = sqrt(1.34),
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires alpha_sd for 'logistic2' model", {
@@ -323,7 +328,7 @@ test_that("stan_crm requires alpha_sd for 'logistic2' model", {
                         alpha_mean = 0,
                         beta_mean = 0,
                         beta_sd = sqrt(1.34),
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_mean for 'logistic2' model", {
@@ -334,7 +339,7 @@ test_that("stan_crm requires beta_mean for 'logistic2' model", {
                         alpha_mean = 0,
                         alpha_sd = 1,
                         beta_sd = sqrt(1.34),
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 test_that("stan_crm requires beta_sd for 'logistic2' model", {
@@ -345,7 +350,7 @@ test_that("stan_crm requires beta_sd for 'logistic2' model", {
                         alpha_mean = 0,
                         alpha_sd = 1,
                         beta_mean = 0,
-                        seed = 123))
+                        seed = 123, refresh = 0))
 })
 
 
@@ -357,7 +362,7 @@ test_that('careful_escalation advocates start_dose when n = 0', {
 
   fit <- stan_crm('', skeleton = c(0.1, 0.2, 0.33, 0.6),
                   target = 0.33, model = 'empiric', beta_sd = 1,
-                  seed = 123)
+                  seed = 123, refresh = 0)
   dose <- careful_escalation(fit, tox_threshold = 0.33,
                              certainty_threshold = 0.8,
                              start_dose = 1)
@@ -382,7 +387,7 @@ test_that('careful_escalation advocates start_dose when n = 0', {
 test_that('careful_escalation does not skip doses', {
   fit1 <- stan_crm('1NNN', skeleton = c(0.1, 0.2, 0.33, 0.6),
                    target = 0.33, model = 'empiric', beta_sd = 1,
-                   seed = 123)
+                   seed = 123, refresh = 0)
   dose <- careful_escalation(fit1, tox_threshold = 0.33,
                              certainty_threshold = 0.8)
   expect_lte(dose, max(fit1$doses) + 1)
@@ -390,7 +395,7 @@ test_that('careful_escalation does not skip doses', {
 
   fit2 <- stan_crm('1NNN 2NNN', skeleton = c(0.1, 0.2, 0.33, 0.6),
                    target = 0.33, model = 'empiric', beta_sd = 1,
-                   seed = 123)
+                   seed = 123, refresh = 0)
   dose <- careful_escalation(fit2, tox_threshold = 0.33,
                              certainty_threshold = 0.8)
   expect_lte(dose, max(fit2$doses) + 1)
@@ -401,7 +406,7 @@ test_that('careful_escalation does not skip doses', {
 test_that('careful_escalation stops appropriately', {
   fit1 <- stan_crm('1NNN 2TTT', skeleton = c(0.1, 0.2, 0.33, 0.6),
                    target = 0.33, model = 'empiric', beta_sd = 1,
-                   seed = 123)
+                   seed = 123, refresh = 0)
   dose <- careful_escalation(fit1,
                              tox_threshold = 0.33,
                              certainty_threshold = 0.8,
@@ -418,7 +423,7 @@ test_that('careful_escalation stops appropriately', {
 
   fit2 <- stan_crm('1NNN 2TTT 1T', skeleton = c(0.1, 0.2, 0.33, 0.6),
                    target = 0.33, model = 'empiric', beta_sd = 1,
-                   seed = 123)
+                   seed = 123, refresh = 0)
   dose <- careful_escalation(fit2,
                              tox_threshold = 0.33,
                              certainty_threshold = 0.8,
@@ -435,7 +440,7 @@ test_that('careful_escalation stops appropriately', {
 
   fit3 <- stan_crm('1NNN 2TTT 1TT', skeleton = c(0.1, 0.2, 0.33, 0.6),
                    target = 0.33, model = 'empiric', beta_sd = 1,
-                   seed = 123)
+                   seed = 123, refresh = 0)
   dose <- careful_escalation(fit3,
                              tox_threshold = 0.33,
                              certainty_threshold = 0.8,

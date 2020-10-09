@@ -19,14 +19,14 @@ test_that('stan_efftox passes ellipsis variables to rstan::sampling', {
                    zeta_mean = l$zeta_mean, zeta_sd = l$zeta_sd,
                    eta_mean = l$eta_mean, eta_sd = l$eta_sd,
                    psi_mean = l$psi_mean, psi_sd = l$psi_sd,
-                   iter = 500, chains = 2, seed = 123)
+                   iter = 500, chains = 2, seed = 123, refresh = 0)
   df <- as.data.frame(x$fit)
   # Expect 2 * 500 / 2 post-warmup samples
   expect_equal(nrow(df), 500)
 })
 
 test_that('stan_efftox_demo fits to zero patients', {
-  x <- stan_efftox_demo(outcome_str = '')
+  x <- stan_efftox_demo(outcome_str = '', refresh = 0)
   expect_equal(x$num_patients, 0)
   expect_equal(length(x$doses), 0)
   expect_equal(length(x$tox), 0)
@@ -50,7 +50,7 @@ test_that('stan_efftox_demo fits to zero patients', {
 })
 
 test_that('stan_efftox_demo fits to one patient', {
-  x <- stan_efftox_demo(outcome_str = '1N')
+  x <- stan_efftox_demo(outcome_str = '1N', refresh = 0)
   expect_equal(x$num_patients, 1)
   expect_equal(length(x$doses), 1)
   expect_equal(length(x$tox), 1)
@@ -75,7 +75,7 @@ test_that('stan_efftox_demo fits to one patient', {
 })
 
 test_that('stan_efftox_demo fits to two patients in one cohort', {
-  x <- stan_efftox_demo(outcome_str = '1NE')
+  x <- stan_efftox_demo(outcome_str = '1NE', refresh = 0)
   expect_equal(x$num_patients, 2)
   expect_equal(length(x$doses), 2)
   expect_equal(length(x$tox), 2)
@@ -100,7 +100,7 @@ test_that('stan_efftox_demo fits to two patients in one cohort', {
 })
 
 test_that('stan_efftox_demo fits to two patients in two cohorts', {
-  x <- stan_efftox_demo(outcome_str = '1N 2E')
+  x <- stan_efftox_demo(outcome_str = '1N 2E', refresh = 0)
   expect_equal(x$num_patients, 2)
   expect_equal(length(x$doses), 2)
   expect_equal(length(x$tox), 2)
@@ -128,7 +128,7 @@ test_that('stan_efftox_demo fits to two patients in two cohorts', {
 # Accuracy checks ----
 # Recreate some known (i.e. independently calculated) output:
 test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN"', {
-  mod <- stan_efftox_demo('1NNN 2ENN', seed = 123)
+  mod <- stan_efftox_demo('1NNN 2ENN', seed = 123, refresh = 0)
 
   # In each case, the expected values are taken from the MD Anderson app at
   # https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software_Id=2
@@ -150,7 +150,7 @@ test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN"', {
 })
 
 test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN 3ETB"', {
-  mod <- stan_efftox_demo('1NNN 2ENN 3ETB', seed = 123)
+  mod <- stan_efftox_demo('1NNN 2ENN 3ETB', seed = 123, refresh = 0)
 
   # In each case, the expected values are taken from the MD Anderson app at
   # https://biostatistics.mdanderson.org/softwaredownload/SingleSoftware.aspx?Software_Id=2
@@ -172,7 +172,7 @@ test_that('Thall et al. (2014) model fits correctly to "1NNN 2ENN 3ETB"', {
 })
 
 test_that('EffTox fails on nonsense input string', {
-  expect_error(stan_efftox_demo('1NZN 2ENN', seed = 123))
+  expect_error(stan_efftox_demo('1NZN 2ENN', seed = 123, refresh = 0))
 })
 
 

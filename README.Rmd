@@ -106,6 +106,29 @@ Several visualisation techniques are illustrated in the _Visualisation in CRM_ v
 The time-to-event CRM is introduced in the TITE-CRM vignette.
 
 
+## Neuenschwander, Branson & Gsponer
+@neuenschwanderCriticalAspectsBayesian2008 introduced a two-parameter logistic model for dose-escalation.
+It shares many characteristics of the CRM models presented above but instead of a skeleton, it uses as a covariate the doses under investigation divided by some reference dose.
+
+E.g., reproducing one of the analyses in their paper:
+
+```{r}
+dose <- c(1, 2.5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250)
+d_star <- 250
+target <- 0.30
+
+outcomes <- '1NNN 2NNNN 3NNNN 4NNNN 7TT'
+fit <- stan_nbg(outcome_str = outcomes, real_doses = dose, d_star = d_star,
+                target = target, alpha_mean = 2.15, alpha_sd = 0.84,
+                beta_mean = 0.52, beta_sd = 0.8, seed = 2020, refresh = 0)
+
+fit
+```
+
+This reproduces the inferences depicted in the lower right pane of Figure 1 in @neuenschwanderCriticalAspectsBayesian2008.
+
+For more, see the _Two-parameter logistic model for dose-finding by Neuenschwander, Branson & Gsponer_ vignette.
+
 ## EffTox
 EffTox by @Thall2004 is a dose-finding design that uses binary efficacy and toxicity outcomes to select a dose with a high utility score. 
 We present it briefly here but there is a much more thorough examination in the EffTox vignette.

@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
       </span>
     </div>
 
@@ -90,28 +90,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/BEBOP.html">BEBOP in PePS2</a>
+      <a href="../articles/A200-CRM.html">Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/CRM-pathways.html">Dose pathways with CRM</a>
+      <a href="../articles/A210-CRM-visualisation.html">Visualisation with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM-visualisation.html">Visualisation with CRM</a>
+      <a href="../articles/A220-CRM-pathways.html">Dose pathways with CRM</a>
     </li>
     <li>
-      <a href="../articles/CRM.html">Continual Reassessment Method</a>
+      <a href="../articles/A250-LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
     </li>
     <li>
-      <a href="../articles/EffTox.html">EffTox</a>
+      <a href="../articles/A260-TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
     </li>
     <li>
-      <a href="../articles/HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+      <a href="../articles/A300-NeuenschwanderBransonGsponer.html">Two-parameter logistic model for dose-finding by Neuenschwander, Branson &amp; Gsponer</a>
     </li>
     <li>
-      <a href="../articles/LevyCaseStudy.html">CRM Case Study 1 - Levy et al (2006)</a>
+      <a href="../articles/A400-EffTox.html">EffTox</a>
     </li>
     <li>
-      <a href="../articles/TITE-CRM.html">Time-to-Event Continual Reassessment Method</a>
+      <a href="../articles/A500-HierarchicalBayesianResponse.html">Hierarchical Bayesian Model for Binary Responses</a>
+    </li>
+    <li>
+      <a href="../articles/A600-BEBOP.html">BEBOP in PePS2</a>
     </li>
   </ul>
 </li>
@@ -144,69 +147,75 @@
       <small>Source: <a href='https://github.com/brockk/trialr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="trialr-0-1-4" class="section level1">
+    <div id="trialr-015" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.5">
+<a href="#trialr-015" class="anchor"></a>trialr 0.1.5<small> Unreleased </small>
+</h1>
+<p>Added the Neuenschwander, Branson &amp; Gsponer model for dose-escalation. Also added a method for calculating EffTox parameter priors. Re-ordered vignettes to be more intuitive. Suppressed all the MCMC log messages in the tests scripts.</p>
+</div>
+    <div id="trialr-014" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.4">
-<a href="#trialr-0-1-4" class="anchor"></a>trialr 0.1.4<small> Unreleased </small>
+<a href="#trialr-014" class="anchor"></a>trialr 0.1.4<small> 2020-04-06 </small>
 </h1>
 <p>Updated dependencies to account for recent breaking changes in tibble v3.0.0.</p>
 </div>
-    <div id="trialr-0-1-3" class="section level1">
+    <div id="trialr-013" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.3">
-<a href="#trialr-0-1-3" class="anchor"></a>trialr 0.1.3<small> 2020-01-08 </small>
+<a href="#trialr-013" class="anchor"></a>trialr 0.1.3<small> 2020-01-08 </small>
 </h1>
 <p>Adjusted uses of tidyr::unnest to suppress warnings when using v1.0 of tidyr.</p>
 </div>
-    <div id="trialr-0-1-2" class="section level1">
+    <div id="trialr-012" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.2">
-<a href="#trialr-0-1-2" class="anchor"></a>trialr 0.1.2<small> 2019-06-25 </small>
+<a href="#trialr-012" class="anchor"></a>trialr 0.1.2<small> 2019-06-25 </small>
 </h1>
 <p>Added the AugBin model for phase II response assessment in cancer. Just the two-stage single-arm version added for now. The others will follow. Also added a general routine for running simulation studies.</p>
 </div>
-    <div id="trialr-0-1-1" class="section level1">
+    <div id="trialr-011" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.1">
-<a href="#trialr-0-1-1" class="anchor"></a>trialr 0.1.1<small> 2019-05-24 </small>
+<a href="#trialr-011" class="anchor"></a>trialr 0.1.1<small> 2019-05-24 </small>
 </h1>
 <p>Plumbed in support for tidybayes. Added pathways analysis for CRM and rewrote the same for EffTox.</p>
 </div>
-    <div id="trialr-0-1-0" class="section level1">
+    <div id="trialr-010" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.0">
-<a href="#trialr-0-1-0" class="anchor"></a>trialr 0.1.0<small> 2019-04-21 </small>
+<a href="#trialr-010" class="anchor"></a>trialr 0.1.0<small> 2019-04-21 </small>
 </h1>
 <p>Added TITE-CRM implmentation plus tests and vignette. Rebased package to the format now advocated by rstantools.</p>
 </div>
-    <div id="trialr-0-0-7" class="section level1">
+    <div id="trialr-007" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.7">
-<a href="#trialr-0-0-7" class="anchor"></a>trialr 0.0.7<small> 2019-03-03 </small>
+<a href="#trialr-007" class="anchor"></a>trialr 0.0.7<small> 2019-03-03 </small>
 </h1>
 <p>Making package work with staged installation, with help from Tomas Kalibera.</p>
 </div>
-    <div id="trialr-0-0-6" class="section level1">
+    <div id="trialr-006" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.6">
-<a href="#trialr-0-0-6" class="anchor"></a>trialr 0.0.6<small> 2019-01-17 </small>
+<a href="#trialr-006" class="anchor"></a>trialr 0.0.6<small> 2019-01-17 </small>
 </h1>
 <p>Fixing some duplicated vignette titles</p>
 </div>
-    <div id="trialr-0-0-5" class="section level1">
+    <div id="trialr-005" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.5">
-<a href="#trialr-0-0-5" class="anchor"></a>trialr 0.0.5<small> 2018-11-12 </small>
+<a href="#trialr-005" class="anchor"></a>trialr 0.0.5<small> 2018-11-12 </small>
 </h1>
 <p>Adding changes advised by rstan maintainer so that package may build on Solaris.</p>
 </div>
-    <div id="trialr-0-0-4" class="section level1">
+    <div id="trialr-004" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.4">
-<a href="#trialr-0-0-4" class="anchor"></a>trialr 0.0.4<small> 2018-10-24 </small>
+<a href="#trialr-004" class="anchor"></a>trialr 0.0.4<small> 2018-10-24 </small>
 </h1>
 <p>Updated to use rstan 2.18.1, which in-turn has been updated to use C++14.</p>
 </div>
-    <div id="trialr-0-0-3" class="section level1">
+    <div id="trialr-003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
-<a href="#trialr-0-0-3" class="anchor"></a>trialr 0.0.3<small> 2018-08-09 </small>
+<a href="#trialr-003" class="anchor"></a>trialr 0.0.3<small> 2018-08-09 </small>
 </h1>
 <p>This release updates some Stan code that was generating C++ code that would compile on Linux, Mac &amp; Windows, but not Solaris.</p>
 </div>
-    <div id="trialr-0-0-2" class="section level1">
+    <div id="trialr-002" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.2">
-<a href="#trialr-0-0-2" class="anchor"></a>trialr 0.0.2<small> 2018-08-08 </small>
+<a href="#trialr-002" class="anchor"></a>trialr 0.0.2<small> 2018-08-08 </small>
 </h1>
 <p>This release adds the Continual Reassessment Method (CRM) for dose-finding. Four model variants are currently given:</p>
 <ul>
@@ -218,9 +227,9 @@
 <p>This release also adds general model-fitting functions stan_crm and stan_efftox. It also adds S3 classes crm_fit and efftox_fit with the expected generic methods.</p>
 <p>Unit tests have been added.</p>
 </div>
-    <div id="trialr-0-0-1" class="section level1">
+    <div id="trialr-001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
-<a href="#trialr-0-0-1" class="anchor"></a>trialr 0.0.1<small> 2017-11-21 </small>
+<a href="#trialr-001" class="anchor"></a>trialr 0.0.1<small> 2017-11-21 </small>
 </h1>
 <p>First release with implementations of:</p>
 <ul>

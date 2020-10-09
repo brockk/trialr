@@ -38,7 +38,8 @@ test_that('crm_dtps fails when cohort_sizes is not vector of +ve integers', {
              model = 'empiric',
              cohort_sizes = c(3, 3, NA),
              previous_outcomes = '',
-             beta_sd = 1)
+             beta_sd = 1,
+             refresh = 0)
   )
 })
 
@@ -53,7 +54,8 @@ test_that('crm_dtps and derived tibbles perform as expected.', {
                     model = 'empiric',
                     cohort_sizes = c(1, 1),
                     next_dose = 2,
-                    beta_sd = 1)
+                    beta_sd = 1,
+                    refresh = 0)
 
   # Expected number of nodes Here we expect 1 + 2 + 4  = 7 nodes
   expect_equal(length(paths), 7)

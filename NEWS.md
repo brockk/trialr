@@ -1,4 +1,10 @@
 
+# trialr 0.1.5
+Added the Neuenschwander, Branson & Gsponer model for dose-escalation. Also
+added a method for calculating EffTox parameter priors. Re-ordered vignettes
+to be more intuitive. Suppressed all the MCMC log messages in the tests scripts.
+
+
 # trialr 0.1.4
 
 Updated dependencies to account for recent breaking changes in tibble v3.0.0.

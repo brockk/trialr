@@ -136,6 +136,74 @@ demonstrated in the CRM vignette. Several visualisation techniques are
 illustrated in the *Visualisation in CRM* vignette. The time-to-event
 CRM is introduced in the TITE-CRM vignette.
 
+## Neuenschwander, Branson & Gsponer
+
+Neuenschwander, Branson, and Gsponer (2008) introduced a two-parameter
+logistic model for dose-escalation. It shares many characteristics of
+the CRM models presented above but instead of a skeleton, it uses as a
+covariate the doses under investigation divided by some reference dose.
+
+E.g., reproducing one of the analyses in their paper:
+
+``` r
+dose <- c(1, 2.5, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250)
+d_star <- 250
+target <- 0.30
+
+outcomes <- '1NNN 2NNNN 3NNNN 4NNNN 7TT'
+fit <- stan_nbg(outcome_str = outcomes, real_doses = dose, d_star = d_star,
+                target = target, alpha_mean = 2.15, alpha_sd = 0.84,
+                beta_mean = 0.52, beta_sd = 0.8, seed = 2020, refresh = 0)
+
+fit
+#>    Patient Dose Toxicity Weight
+#> 1        1    1        0      1
+#> 2        2    1        0      1
+#> 3        3    1        0      1
+#> 4        4    2        0      1
+#> 5        5    2        0      1
+#> 6        6    2        0      1
+#> 7        7    2        0      1
+#> 8        8    3        0      1
+#> 9        9    3        0      1
+#> 10      10    3        0      1
+#> 11      11    3        0      1
+#> 12      12    4        0      1
+#> 13      13    4        0      1
+#> 14      14    4        0      1
+#> 15      15    4        0      1
+#> 16      16    7        1      1
+#> 17      17    7        1      1
+#> 
+#>    Dose N Tox ProbTox MedianProbTox ProbMTD
+#> 1     1 3   0  0.0126       0.00563 0.00025
+#> 2     2 4   0  0.0325       0.01967 0.00050
+#> 3     3 4   0  0.0675       0.04934 0.02250
+#> 4     4 4   0  0.1385       0.11863 0.10450
+#> 5     5 0   0  0.2064       0.18937 0.16775
+#> 6     6 0   0  0.2692       0.25641 0.17100
+#> 7     7 2   2  0.3264       0.31878 0.14425
+#> 8     8 0   0  0.3780       0.37409 0.16850
+#> 9     9 0   0  0.4661       0.46884 0.12475
+#> 10   10 0   0  0.5371       0.54698 0.07125
+#> 11   11 0   0  0.6616       0.67700 0.02000
+#> 12   12 0   0  0.7390       0.75753 0.00375
+#> 13   13 0   0  0.8259       0.84691 0.00075
+#> 14   14 0   0  0.8717       0.89297 0.00025
+#> 15   15 0   0  0.8993       0.91986 0.00000
+#> 
+#> The model targets a toxicity level of 0.3.
+#> The dose with estimated toxicity probability closest to target is 7.
+#> The dose most likely to be the MTD is 6.
+#> Model entropy: 2.06
+```
+
+This reproduces the inferences depicted in the lower right pane of
+Figure 1 in Neuenschwander, Branson, and Gsponer (2008).
+
+For more, see the *Two-parameter logistic model for dose-finding by
+Neuenschwander, Branson & Gsponer* vignette.
+
 ## EffTox
 
 EffTox by Thall and Cook (2004) is a dose-finding design that uses
@@ -175,15 +243,15 @@ fit2
 #> 6       6    2        1        1
 #> 
 #>   Dose N ProbEff ProbTox ProbAccEff ProbAccTox Utility Acceptable ProbOBD
-#> 1    1 3   0.405  0.0899      0.332      0.927  -0.340       TRUE  0.0400
-#> 2    2 3   0.792  0.0988      0.946      0.922   0.424       TRUE  0.2512
-#> 3    3 0   0.931  0.2152      0.985      0.729   0.525       TRUE  0.2065
-#> 4    4 0   0.957  0.3061      0.985      0.629   0.438      FALSE  0.0622
-#> 5    5 0   0.966  0.3626      0.984      0.577   0.369      FALSE  0.4400
+#> 1    1 3   0.402   0.088      0.333      0.927  -0.342       TRUE  0.0465
+#> 2    2 3   0.789   0.103      0.943      0.921   0.412       TRUE  0.2625
+#> 3    3 0   0.929   0.225      0.984      0.718   0.506       TRUE  0.2077
+#> 4    4 0   0.955   0.315      0.983      0.617   0.420      FALSE  0.0620
+#> 5    5 0   0.964   0.372      0.980      0.561   0.349      FALSE  0.4213
 #> 
 #> The model recommends selecting dose-level 3.
 #> The dose most likely to be the OBD is 5.
-#> Model entropy: 1.34
+#> Model entropy: 1.36
 ```
 
 In this example, after evaluation of our six patients, the dose
@@ -199,7 +267,7 @@ This is not surprising because dose 3 has the highest utility score:
 
 ``` r
 fit2$utility
-#> [1] -0.3397885  0.4237935  0.5249445  0.4380717  0.3685257
+#> [1] -0.3418428  0.4120858  0.5064312  0.4199298  0.3493254
 ```
 
 Sometimes, doses other than the maximal-utility dose will be recommended
@@ -217,7 +285,7 @@ efftox_contour_plot(fit2)
 title('EffTox utility contours')
 ```
 
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->
 
 This example continues in the EffTox vignette. There are many
 publications related to EffTox, including Thall and Cook (2004) and
@@ -258,58 +326,58 @@ fit3
 #> 4 chains, each with iter=2000; warmup=1000; thin=1; 
 #> post-warmup draws per chain=1000, total post-warmup draws=4000.
 #> 
-#>                     mean se_mean   sd   2.5%    25%    50%    75%  97.5%
-#> mu                 -0.05    0.03 1.37  -2.80  -0.91  -0.04   0.89   2.51
-#> sigma2             11.49    0.29 9.39   3.27   6.15   8.81  13.53  35.38
-#> rho[1]             -0.03    0.06 3.60  -7.43  -2.19  -0.04   2.23   7.01
-#> rho[2]             -2.91    0.06 2.50  -9.20  -4.05  -2.48  -1.26   0.73
-#> rho[3]              2.21    0.06 2.60  -1.93   0.47   1.87   3.66   8.27
-#> rho[4]             -0.30    0.01 0.80  -1.89  -0.83  -0.29   0.24   1.24
-#> rho[5]              3.63    0.05 2.32   0.54   2.06   3.16   4.66   9.75
-#> rho[6]             -0.01    0.07 3.65  -7.14  -2.23  -0.01   2.20   7.26
-#> rho[7]             -0.01    0.02 1.54  -3.07  -0.98   0.00   0.96   3.12
-#> rho[8]              0.74    0.02 1.31  -1.75  -0.11   0.66   1.53   3.47
-#> rho[9]             -2.21    0.05 2.60  -8.41  -3.54  -1.85  -0.50   1.99
-#> rho[10]            -0.06    0.07 3.58  -7.23  -2.20  -0.08   2.15   6.99
-#> sigma               3.21    0.03 1.09   1.81   2.48   2.97   3.68   5.95
-#> prob_response[1]    0.50    0.01 0.38   0.00   0.10   0.49   0.90   1.00
-#> prob_response[2]    0.15    0.00 0.18   0.00   0.02   0.08   0.22   0.68
-#> prob_response[3]    0.76    0.00 0.26   0.13   0.62   0.87   0.97   1.00
-#> prob_response[4]    0.44    0.00 0.17   0.13   0.30   0.43   0.56   0.78
-#> prob_response[5]    0.92    0.00 0.10   0.63   0.89   0.96   0.99   1.00
-#> prob_response[6]    0.50    0.01 0.38   0.00   0.10   0.50   0.90   1.00
-#> prob_response[7]    0.50    0.00 0.27   0.04   0.27   0.50   0.72   0.96
-#> prob_response[8]    0.63    0.00 0.23   0.15   0.47   0.66   0.82   0.97
-#> prob_response[9]    0.24    0.00 0.26   0.00   0.03   0.14   0.38   0.88
-#> prob_response[10]   0.49    0.01 0.38   0.00   0.10   0.48   0.90   1.00
-#> lp__              -34.00    0.11 3.45 -42.04 -36.02 -33.51 -31.51 -28.70
-#>                   n_eff Rhat
-#> mu                 2140 1.00
-#> sigma2             1079 1.01
-#> rho[1]             3076 1.00
-#> rho[2]             1884 1.00
-#> rho[3]             2088 1.00
-#> rho[4]             4031 1.00
-#> rho[5]             1832 1.00
-#> rho[6]             3068 1.00
-#> rho[7]             4263 1.00
-#> rho[8]             3529 1.00
-#> rho[9]             2562 1.00
-#> rho[10]            2918 1.00
-#> sigma              1113 1.01
-#> prob_response[1]   3710 1.00
-#> prob_response[2]   4645 1.00
-#> prob_response[3]   3758 1.00
-#> prob_response[4]   4134 1.00
-#> prob_response[5]   4351 1.00
-#> prob_response[6]   3578 1.00
-#> prob_response[7]   4556 1.00
-#> prob_response[8]   4014 1.00
-#> prob_response[9]   4165 1.00
-#> prob_response[10]  3212 1.00
-#> lp__                967 1.01
+#>                     mean se_mean    sd   2.5%    25%    50%    75%  97.5% n_eff
+#> mu                  0.00    0.03  1.36  -2.76  -0.85   0.03   0.87   2.62  2330
+#> sigma2             12.15    0.32 10.06   3.31   6.19   9.32  14.39  39.31   966
+#> rho[1]             -0.04    0.07  3.77  -7.59  -2.15  -0.03   2.17   7.59  3112
+#> rho[2]             -3.00    0.06  2.54  -9.28  -4.28  -2.55  -1.32   0.74  1949
+#> rho[3]              2.28    0.05  2.60  -2.01   0.51   1.98   3.73   8.14  2720
+#> rho[4]             -0.31    0.01  0.78  -1.96  -0.81  -0.29   0.19   1.20  4176
+#> rho[5]              3.68    0.05  2.32   0.45   2.07   3.27   4.77   9.31  2166
+#> rho[6]              0.00    0.07  3.81  -7.88  -2.21   0.05   2.25   7.62  3332
+#> rho[7]              0.01    0.02  1.50  -3.01  -0.93   0.04   0.98   2.91  4556
+#> rho[8]              0.80    0.02  1.27  -1.50  -0.04   0.73   1.58   3.51  3675
+#> rho[9]             -2.34    0.07  2.71  -8.54  -3.78  -1.93  -0.55   1.90  1701
+#> rho[10]            -0.06    0.07  3.76  -7.66  -2.24   0.02   2.25   7.23  3278
+#> sigma               3.29    0.04  1.15   1.82   2.49   3.05   3.79   6.27   923
+#> prob_response[1]    0.50    0.01  0.38   0.00   0.10   0.49   0.90   1.00  3487
+#> prob_response[2]    0.15    0.00  0.19   0.00   0.01   0.07   0.21   0.68  4235
+#> prob_response[3]    0.77    0.00  0.26   0.12   0.62   0.88   0.98   1.00  4358
+#> prob_response[4]    0.43    0.00  0.17   0.12   0.31   0.43   0.55   0.77  4230
+#> prob_response[5]    0.92    0.00  0.11   0.61   0.89   0.96   0.99   1.00  4375
+#> prob_response[6]    0.50    0.01  0.38   0.00   0.10   0.51   0.90   1.00  3535
+#> prob_response[7]    0.50    0.00  0.27   0.05   0.28   0.51   0.73   0.95  4617
+#> prob_response[8]    0.65    0.00  0.22   0.18   0.49   0.68   0.83   0.97  4119
+#> prob_response[9]    0.23    0.00  0.26   0.00   0.02   0.13   0.37   0.87  3580
+#> prob_response[10]   0.50    0.01  0.38   0.00   0.10   0.51   0.90   1.00  3804
+#> lp__              -34.24    0.13  3.60 -43.04 -36.29 -33.73 -31.65 -28.76   786
+#>                   Rhat
+#> mu                1.00
+#> sigma2            1.00
+#> rho[1]            1.00
+#> rho[2]            1.00
+#> rho[3]            1.00
+#> rho[4]            1.00
+#> rho[5]            1.00
+#> rho[6]            1.00
+#> rho[7]            1.00
+#> rho[8]            1.00
+#> rho[9]            1.00
+#> rho[10]           1.00
+#> sigma             1.00
+#> prob_response[1]  1.00
+#> prob_response[2]  1.00
+#> prob_response[3]  1.00
+#> prob_response[4]  1.00
+#> prob_response[5]  1.00
+#> prob_response[6]  1.00
+#> prob_response[7]  1.00
+#> prob_response[8]  1.00
+#> prob_response[9]  1.00
+#> prob_response[10] 1.00
+#> lp__              1.01
 #> 
-#> Samples were drawn using NUTS(diag_e) at Mon Jun 24 15:50:13 2019.
+#> Samples were drawn using NUTS(diag_e) at Fri Oct  9 10:33:34 2020.
 #> For each parameter, n_eff is a crude measure of effective sample size,
 #> and Rhat is the potential scale reduction factor on split chains (at 
 #> convergence, Rhat=1).
@@ -326,7 +394,7 @@ plot(fit3, pars = 'prob_response') +
   labs(title = 'Partially-pooled response rates in 10 sarcoma subtypes')
 ```
 
-![](man/figures/README-unnamed-chunk-14-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-15-1.png)<!-- -->
 
 The hierarchical model for binary responses is developed in its own
 vignette.
@@ -335,7 +403,7 @@ vignette.
 
 Thall, Nguyen, and Estey (2008) introduced an extension of EffTox that
 allows dose-finding by efficacy and toxicity outcomes and adjusts for
-covariate information. Brock, et al. (manuscript accepted but not yet in
+covariate information. Brock, et al. (manuscript accepted but not yet in
 press) simplified the method by removing the dose-finding components to
 leave a design that studies associated co-primary and toxicity outcomes
 in an arbitrary number of cohorts determined by the basline covariates.
@@ -384,6 +452,15 @@ Balmanoukian, Joseph Paul Eder, Amita Patnaik, et al. 2015.
 “Pembrolizumab for the Treatment of Non-Small-Cell Lung Cancer.” *The
 New England Journal of Medicine* 372 (21): 2018–28.
 <https://doi.org/10.1056/NEJMoa1501824>.
+
+</div>
+
+<div id="ref-neuenschwanderCriticalAspectsBayesian2008">
+
+Neuenschwander, Beat, Michael Branson, and Thomas Gsponer. 2008.
+“Critical Aspects of the Bayesian Approach to Phase I Cancer Trials.”
+*Statistics in Medicine* 27 (13): 2420–39.
+<https://doi.org/10.1002/sim.3230>.
 
 </div>
 

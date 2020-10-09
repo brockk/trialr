@@ -37,7 +37,8 @@ test_that('peps2_process works', {
   fit <- stan_peps2(
     eff = c(0, 1, 0, 1, 0, 0),
     tox = c(0, 0, 1, 1, 0, 0),
-    cohorts = c(3, 1, 1, 4, 5, 6)
+    cohorts = c(3, 1, 1, 4, 5, 6),
+    refresh = 0
   )
   decision <- peps2_process(fit)
   expect_type(object = decision, type = "list")
@@ -58,7 +59,8 @@ test_that('stan_peps2 works', {
   fit <- stan_peps2(
     eff = c(0, 1, 0, 1, 0, 0),
     tox = c(0, 0, 1, 1, 0, 0),
-    cohorts = c(3, 1, 1, 4, 5, 6)
+    cohorts = c(3, 1, 1, 4, 5, 6),
+    refresh = 0
   )
   decision <- peps2_process(fit = fit, min_eff = 0.2, max_tox = 0.5,
                             eff_cert = 0.7, tox_cert = 0.8)

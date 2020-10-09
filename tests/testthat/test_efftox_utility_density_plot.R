@@ -1,7 +1,7 @@
 
 test_that('efftox_utility_density_plot works', {
   # Thall et al example ----
-  fit <- stan_efftox_demo('1N 2E 3B')
+  fit <- stan_efftox_demo('1N 2E 3B', refresh = 0)
 
   # All doses
   p <- efftox_utility_density_plot(fit)
@@ -20,7 +20,7 @@ test_that('efftox_utility_density_plot works', {
                       gamma_mean = 0.7367, gamma_sd = 2.5423,
                       zeta_mean = 3.4181, zeta_sd = 2.4406,
                       eta_mean = 0, eta_sd = 0.2,
-                      psi_mean = 0, psi_sd = 1, seed = 123)
+                      psi_mean = 0, psi_sd = 1, seed = 123, refresh = 0)
   # All doses
   p <- efftox_utility_density_plot(fit2)
   # Subset of doses

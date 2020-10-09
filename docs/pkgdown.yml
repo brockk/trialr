@@ -1,14 +1,15 @@
-pandoc: 2.3.1
+pandoc: 2.7.3
 pkgdown: 1.5.0
 pkgdown_sha: ~
 articles:
-  BEBOP: BEBOP.html
-  CRM-pathways: CRM-pathways.html
-  CRM-visualisation: CRM-visualisation.html
-  CRM: CRM.html
-  EffTox: EffTox.html
-  HierarchicalBayesianResponse: HierarchicalBayesianResponse.html
-  LevyCaseStudy: LevyCaseStudy.html
-  TITE-CRM: TITE-CRM.html
-last_built: 2020-04-06T11:38Z
+  A200-CRM: A200-CRM.html
+  A210-CRM-visualisation: A210-CRM-visualisation.html
+  A220-CRM-pathways: A220-CRM-pathways.html
+  A250-LevyCaseStudy: A250-LevyCaseStudy.html
+  A260-TITE-CRM: A260-TITE-CRM.html
+  A300-NeuenschwanderBransonGsponer: A300-NeuenschwanderBransonGsponer.html
+  A400-EffTox: A400-EffTox.html
+  A500-HierarchicalBayesianResponse: A500-HierarchicalBayesianResponse.html
+  A600-BEBOP: A600-BEBOP.html
+last_built: 2020-10-09T09:35Z
 

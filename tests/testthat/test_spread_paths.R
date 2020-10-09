@@ -6,7 +6,8 @@ test_that('spread_paths returns data.frames with the expected number of rows', {
   target <- 0.25
   skeleton <- c(0.05, 0.15, 0.25, 0.4, 0.6)
   paths <- crm_dtps(skeleton = skeleton, target = target, model = 'empiric',
-                    cohort_sizes = c(1, 1), next_dose = 3, beta_sd = 1)
+                    cohort_sizes = c(1, 1), next_dose = 3, beta_sd = 1,
+                    refresh = 0)
   expect_equal(length(paths), 7)
 
   df1 <- spread_paths(dose_finding_paths = paths)
