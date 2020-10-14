@@ -37,7 +37,7 @@ $\text{logit } \pi_E(x, \boldsymbol{\theta}) = \alpha + \beta x_{i1} + \gamma x_
 
 $\text{logit } \pi_T(x, \boldsymbol{\theta}) = \lambda$
 
-As with [EffTox](EffTox.html), let $(Y_j, Z_j)$ be random variables each taking values $\{0, 1\}$ respresenting the presence of efficacy and toxicity in patient $j$. 
+As with EffTox, let $(Y_j, Z_j)$ be random variables each taking values $\{0, 1\}$ respresenting the presence of efficacy and toxicity in patient $j$. 
 The efficacy and toxicity events are associated by the joint probability function
 
 $Pr(Y = a, Z = b) = \pi_{a,b}(\pi_E, \pi_T) = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}$.

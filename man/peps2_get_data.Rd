@@ -110,6 +110,7 @@ to RStan, as is the convention.
 See the accompanying vignette for a full description.
 }
 \examples{
+\dontrun{
 set.seed(123)
 dat <- peps2_get_data(num_patients = 60,
                       prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
@@ -120,5 +121,5 @@ fit <- stan_peps2(
   tox = dat$tox,
   cohorts = dat$cohorts
 )
-
+}
 }

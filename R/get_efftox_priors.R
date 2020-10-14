@@ -106,6 +106,7 @@
 #'     https://doi.org/10.1177/1740774514547397
 #'
 #' @examples
+#' \dontrun{
 #' # Reproduce the priors calculated in Thall et al. (2014)
 #' p <- get_efftox_priors(
 #'   doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
@@ -115,6 +116,7 @@
 #' p
 #' # These are close to the published example. They do not match exactly because
 #' # the process of deriving them is iterative.
+#' }
 get_efftox_priors <- function(doses = NULL, scaled_doses = NULL,
                               pi_T, ess_T, pi_E, ess_E, num_samples = 10^4,
                               seed = 123) {

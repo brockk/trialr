@@ -58,6 +58,7 @@ presented in Thall et al. (2014) that targets a family of priors with a
 pre-specified effective sample size (ESS).
 }
 \examples{
+\dontrun{
 # Reproduce the priors calculated in Thall et al. (2014)
 p <- get_efftox_priors(
   doses = c(1.0, 2.0, 4.0, 6.6, 10.0),
@@ -67,6 +68,7 @@ p <- get_efftox_priors(
 p
 # These are close to the published example. They do not match exactly because
 # the process of deriving them is iterative.
+}
 }
 \references{
 Thall, P., Herrick, R., Nguyen, H., Venier, J., & Norris, J. (2014).

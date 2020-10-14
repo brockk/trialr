@@ -1,18 +1,19 @@
 Package: trialr
-Version: 0.1.4.9006
-Date: 2020-10-09
+Version: 0.1.4.9007
+Date: 2020-10-14
 Title: Clinical Trial Designs in 'rstan'
 Description: A collection of clinical trial designs and methods, implemented in 
     'rstan' and R, including: the Continual Reassessment Method by O'Quigley et 
     al. (1990) <doi:10.2307/2531628>; EffTox by Thall & Cook (2004) 
-    <doi:10.1111/j.0006-341X.2004.00218.x>; and the Augmented Binary method by 
-    Wason & Seaman (2013) <doi:10.1002/sim.5867>; and more. We provide functions 
-    to aid model-fitting and analysis. The 'rstan' implementations may also 
-    serve as a cookbook to anyone looking to extend or embellish these models. 
-    We hope that this package encourages the use of Bayesian methods in clinical 
-    trials. There is a preponderance of early phase trial designs because this 
-    is where Bayesian methods are used most. If there is a method you would like 
-    implemented, please get in touch.
+    <doi:10.1111/j.0006-341X.2004.00218.x>; the two-parameter logistic method of
+    Neuenschwander, Branson & Sponer (2008) <doi:10.1002/sim.3230>; and the 
+    Augmented Binary method by Wason & Seaman (2013) <doi:10.1002/sim.5867>; and
+    more. We provide functions to aid model-fitting and analysis. 
+    The 'rstan' implementations may also serve as a cookbook to anyone looking 
+    to extend or embellish these models. We hope that this package encourages 
+    the use of Bayesian methods in clinical trials. There is a preponderance of 
+    early phase trial designs because this is where Bayesian methods are used 
+    most. If there is a method you would like implemented, please get in touch.
 Authors@R: c(
   person("Kristian", "Brock", 
          email = "kristian.brock@gmail.com", 

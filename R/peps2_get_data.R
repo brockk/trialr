@@ -67,6 +67,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' set.seed(123)
 #' dat <- peps2_get_data(num_patients = 60,
 #'                       prob_eff = c(0.167, 0.192, 0.5, 0.091, 0.156, 0.439),
@@ -77,7 +78,7 @@
 #'   tox = dat$tox,
 #'   cohorts = dat$cohorts
 #' )
-#'
+#' }
 peps2_get_data <- function(num_patients, cohort_probs = NULL,
                            prob_eff, prob_tox, eff_tox_or,
                            cohort_rho = c(15.7, 21.8, 12.4, 20.7, 18.0, 11.4),

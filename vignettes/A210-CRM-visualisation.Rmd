@@ -172,16 +172,24 @@ fit %>%
 
 Based on our prior and the data assembled thus far, dose-levels 4 and 5 look quite likely to be overdoses.
 
+
 ## Other CRM vignettes
-There are many vignettes illuminating the CRM in `trialr`:
+There are many vignettes illustrating the CRM and other dose-finding models in `trialr`.
+Be sure to check them out.
 
-- [An introduction to CRM in 'trialr'](CRM.html)
-- [Visualisation in CRM](CRM-visualisation.html)
-- [TITE-CRM](TITE-CRM.html)
-- [Pathways and stopping in CRM](CRM-pathways.html)
-- [Case study using Levy, et al. (2006)](LevyCaseStudy.html)
-- Simulation
+# `trialr` and the `escalation` package
+[`escalation`](https://cran.r-project.org/package=escalation) is an R package that provides a grammar for specifying dose-finding clinical trials.
+For instance, it is common for trialists to say something like 'I want to use this published design... but I want it to stop once $n$ patients have been treated at the recommended dose' or '...but I want to prevent dose skipping' or '...but I want to select dose using a more risk-averse metric than merely _closest-to-target_'.
 
+`trialr` and `escalation` work together to achieve these goals.
+`trialr` provides model-fitting capabilities to `escalation`, including the CRM methods described here.
+`escalation` then provides additional classes to achieve all of the above custom behaviours, and more.
+
+`escalation` also provides methods for running simulations and calculating dose-paths.
+Simulations are regularly used to appraise the operating characteristics of adaptive clinical trial designs.
+Dose-paths are a tool for analysing and visualising all possible future trial behaviours.
+Both are provided for a wide array of dose-finding designs, with or without custom behaviours like those identified above.
+There are many examples in the `escalation` vignettes at https://cran.r-project.org/package=escalation.
 
 # trialr
 `trialr` is available at https://github.com/brockk/trialr and https://CRAN.R-project.org/package=trialr 
