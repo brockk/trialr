@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-In the general [introductory CRM vignette](CRM.html), we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in `trialr`.
+In the general introductory CRM vignette, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in `trialr`.
 In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.
 
 The following visualisation methods are applicable in all `trialr` variants of the CRM because they rely only on the family of `prob_tox` parameters that are estimated by all CRM models.
@@ -51,7 +51,7 @@ fit
 Recall that we set the random number generator seed in demonstrations for reproducibility.
 You may or may not choose to do this in a real analysis.
 
-We saw [before](CRM.html) that dose-level 2 is closest to our target toxicity rate of 25%.
+We saw before that dose-level 2 is closest to our target toxicity rate of 25%.
 However, we will probably like to convey this information to the research world in a visually-appealing manner.
 This is simple with access to the posterior samples.
 
@@ -117,7 +117,7 @@ Assuming normality has been one method for performing posterior inference with C
 With the posterior samples provided by `rstan`, we do not need to assume.
 
 We will naturally want to visualise quantities beyond just the probability of toxicity.
-We learned in the [introductory CRM vignette](CRM.html) that with the full Bayesian CRM provided by `trialr` and `rstan`, we can calculate the probability that each dose is the maximum tolerable dose (MTD).
+We learned in the introductory CRM vignette that with the full Bayesian CRM provided by `trialr` and `rstan`, we can calculate the probability that each dose is the maximum tolerable dose (MTD).
 
 We can visualise the MCMC candidates for the dose-toxicity curve on one plot.
 Colouring them by the MTD candidate they propose (i.e. using a single colour for all the curves that suggest dose-level 1 is the maximum tolerable dose, etc), we get an idea of uncertainty still in this trial:

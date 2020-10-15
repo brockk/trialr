@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 This vignette concerns the _Time to Event Continual Reassessment Method_ (TITE-CRM) dose-finding clinical trial design.
 
-@Cheung2000 introduced TITE-CRM as a variant of the regular [CRM](CRM.html) [OQuigley1990] that handles late-onset toxicities.
+@Cheung2000 introduced TITE-CRM as a variant of the regular CRM [OQuigley1990] that handles late-onset toxicities.
 Dose-finding trials tend to use a short toxicity window after the commencement of therapy, during which each patient is evaluated for the presence or absence of dose-limiting toxicity (DLT).
 This approach works well in treatments like chemotherapy where toxic reactions are expected to manifest relatively quickly.
 In contrast, one of the hallmarks of radiotherapy, for instance, is that related adverse reactions can manifest many months after the start of treatment.
@@ -36,7 +36,7 @@ If the patient goes on to complete the window with no toxic reaction, they will 
 This notion of partial events is only applied to tolerances, however.
 If a patient experiences toxicity at any point during the evaluation window, they are immediately regarded as having experienced 100% of a DLT event.
 
-To illustrate TITE-CRM mathematically, we start with the likelihood from the plain vanilla [CRM](CRM.html).
+To illustrate TITE-CRM mathematically, we start with the likelihood from the plain vanilla CRM.
 Let $Y_i$ be a random variable taking values $\{0, 1\}$ reflecting the absence and presence of DLT respectively in patient $i$.
 A patient administered dose $x_i$ has estimated probability of toxicity $F(x_i, \theta)$, where $\theta$ represents the set of model parameters.
 The likelihood component arising from patient $i$ is
@@ -79,11 +79,11 @@ This exuberance should be tempered by the fact that we have not yet treated any 
 
 A TITE-CRM option is provided for each of the CRM variants implemented in `trialr`.
 It is enabled simply by specifying the `weights` parameter.
-The necessity to provide weights under TITE-CRM rather obscures the attraction of using the outcome string approach of describing patients' doses and DLT outcomes demonstrated in the [CRM](CRM.html) vignette.
+The necessity to provide weights under TITE-CRM rather obscures the attraction of using the outcome string approach of describing patients' doses and DLT outcomes demonstrated in the CRM vignette.
 Thus, we provide `stan_crm` the three vectors `doses_given`, `tox` and `weights` to convey the patient-level information.
 
 The object returned by `stan_crm` is the same, regardless of whether `weights` are provided or not.
-Thus, all of the visualistion methods presented in the [CRM visualistion vignette](CRM-visualisation.html) apply.
+Thus, all of the visualistion methods presented in the CRM visualistion vignette apply.
 
 
 ## Other CRM vignettes## Other CRM vignettes

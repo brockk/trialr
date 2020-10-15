@@ -37,7 +37,7 @@ Features implemented in one package for one design may be missing in another.
 Sometimes the technology chosen may only be available on a particular operating system, or the chosen technology may have fallen into disuse.
 
 `trialr` seeks to address these problems.
-Models are specified in [Stan](http://mc-stan.org/), a state-of-the-art environment for Bayesian analysis.
+Models are specified in [Stan](https://mc-stan.org/), a state-of-the-art environment for Bayesian analysis.
 It uses Hamiltonian Monte Carlo to take samples from the posterior distribution.
 This method is more efficient than Gibbs sampling and reliable inference can usually be performed on a few thousand posterior samples.
 R, Stan and `trialr` are each available on Mac, Linux, and Windows, so all of the examples presented here work on each operating system.

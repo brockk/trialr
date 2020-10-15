@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Time-to-Event Continual Reassessment Method</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2020-10-09</h4>
+            <h4 class="date">2020-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/A260-TITE-CRM.Rmd"><code>vignettes/A260-TITE-CRM.Rmd</code></a></small>
       <div class="hidden name"><code>A260-TITE-CRM.Rmd</code></div>
@@ -119,10 +119,10 @@
     
     
 <p>This vignette concerns the <em>Time to Event Continual Reassessment Method</em> (TITE-CRM) dose-finding clinical trial design.</p>
-<p><span class="citation">Cheung and Chappell (2000)</span> introduced TITE-CRM as a variant of the regular <a href="CRM.html">CRM</a> [OQuigley1990] that handles late-onset toxicities. Dose-finding trials tend to use a short toxicity window after the commencement of therapy, during which each patient is evaluated for the presence or absence of dose-limiting toxicity (DLT). This approach works well in treatments like chemotherapy where toxic reactions are expected to manifest relatively quickly. In contrast, one of the hallmarks of radiotherapy, for instance, is that related adverse reactions can manifest many months after the start of treatment. A similar phenomenon may arise with immunotherapies.</p>
+<p><span class="citation">Cheung and Chappell (2000)</span> introduced TITE-CRM as a variant of the regular CRM [OQuigley1990] that handles late-onset toxicities. Dose-finding trials tend to use a short toxicity window after the commencement of therapy, during which each patient is evaluated for the presence or absence of dose-limiting toxicity (DLT). This approach works well in treatments like chemotherapy where toxic reactions are expected to manifest relatively quickly. In contrast, one of the hallmarks of radiotherapy, for instance, is that related adverse reactions can manifest many months after the start of treatment. A similar phenomenon may arise with immunotherapies.</p>
 <p>In adaptive dose-finding clinical trials, where doses are selected mid-trial in response to the outcomes experienced by patients evaluated hitherto, late-onset toxic events present a distinct methodological challenge. Naturally, the toxicity window will need to be long enough to give the trial a good chance of observing events of interest. If, however, we wait until each patient completes the evaluation window before using their outcome to forecast the best dose, the trial may take an infeasibly long time and ignore pertinent interim data.</p>
 <p>TITE-CRM presents a solution by introducing the notion of a <em>partial tolerance</em> event. If a patient is half way through the evaluation window and has not yet experienced toxicity, we may say that they have experienced half a tolerance. This simple novelty allows partial information to be used in dose-recommendation decisions. If the patient goes on to complete the window with no toxic reaction, they will be regarded as having completely tolerated treatment, as is normally the case with CRM and other dose-finding algorithms. This notion of partial events is only applied to tolerances, however. If a patient experiences toxicity at any point during the evaluation window, they are immediately regarded as having experienced 100% of a DLT event.</p>
-<p>To illustrate TITE-CRM mathematically, we start with the likelihood from the plain vanilla <a href="CRM.html">CRM</a>. Let <span class="math inline">\(Y_i\)</span> be a random variable taking values <span class="math inline">\(\{0, 1\}\)</span> reflecting the absence and presence of DLT respectively in patient <span class="math inline">\(i\)</span>. A patient administered dose <span class="math inline">\(x_i\)</span> has estimated probability of toxicity <span class="math inline">\(F(x_i, \theta)\)</span>, where <span class="math inline">\(\theta\)</span> represents the set of model parameters. The likelihood component arising from patient <span class="math inline">\(i\)</span> is</p>
+<p>To illustrate TITE-CRM mathematically, we start with the likelihood from the plain vanilla CRM. Let <span class="math inline">\(Y_i\)</span> be a random variable taking values <span class="math inline">\(\{0, 1\}\)</span> reflecting the absence and presence of DLT respectively in patient <span class="math inline">\(i\)</span>. A patient administered dose <span class="math inline">\(x_i\)</span> has estimated probability of toxicity <span class="math inline">\(F(x_i, \theta)\)</span>, where <span class="math inline">\(\theta\)</span> represents the set of model parameters. The likelihood component arising from patient <span class="math inline">\(i\)</span> is</p>
 <p><span class="math display">\[ F(x_i, \theta)^{Y_i} (1 - F(x_i, \theta))^{1-Y_i} \]</span></p>
 <p>and the aggregate likelihood after the evaluation of <span class="math inline">\(J\)</span> patients is</p>
 <p><span class="math display">\[ L_J(\theta) = \prod_{i=1}^J \left\{ F(x_i, \theta) \right\}^{Y_i} \left\{ 1 - F(x_i, \theta) \right\}^{1-Y_i} \]</span></p>
@@ -156,20 +156,19 @@
 <span class="co">#&gt; The dose most likely to be the MTD is 5.</span>
 <span class="co">#&gt; Model entropy: 1.45</span></pre></body></html></div>
 <p>The first table gives a summary of the patient information. We see that each patient has received dose-level 3, none have yet experienced toxicity although all are only partly through the evaluation window. The second table summarises dose-level information. We see that dose-level 4 has estimated mean probability of toxicity closest to the target 25%, although dose-level 5 is the dose most frequently advocated by the dose-toxicity curves generated by MCMC. This exuberance should be tempered by the fact that we have not yet treated any patients at dose-level 4, although it is currently recommended for the next patient.</p>
-<p>A TITE-CRM option is provided for each of the CRM variants implemented in <code>trialr</code>. It is enabled simply by specifying the <code>weights</code> parameter. The necessity to provide weights under TITE-CRM rather obscures the attraction of using the outcome string approach of describing patients’ doses and DLT outcomes demonstrated in the <a href="CRM.html">CRM</a> vignette. Thus, we provide <code>stan_crm</code> the three vectors <code>doses_given</code>, <code>tox</code> and <code>weights</code> to convey the patient-level information.</p>
-<p>The object returned by <code>stan_crm</code> is the same, regardless of whether <code>weights</code> are provided or not. Thus, all of the visualistion methods presented in the <a href="CRM-visualisation.html">CRM visualistion vignette</a> apply.</p>
-<div id="other-crm-vignettes" class="section level2">
+<p>A TITE-CRM option is provided for each of the CRM variants implemented in <code>trialr</code>. It is enabled simply by specifying the <code>weights</code> parameter. The necessity to provide weights under TITE-CRM rather obscures the attraction of using the outcome string approach of describing patients’ doses and DLT outcomes demonstrated in the CRM vignette. Thus, we provide <code>stan_crm</code> the three vectors <code>doses_given</code>, <code>tox</code> and <code>weights</code> to convey the patient-level information.</p>
+<p>The object returned by <code>stan_crm</code> is the same, regardless of whether <code>weights</code> are provided or not. Thus, all of the visualistion methods presented in the CRM visualistion vignette apply.</p>
+<div id="other-crm-vignettes-other-crm-vignettes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-crm-vignettes" class="anchor"></a>Other CRM vignettes</h2>
-<p>There are many vignettes illuminating the CRM in <code>trialr</code>:</p>
-<ul>
-<li><a href="CRM.html">An introduction to CRM in ‘trialr’</a></li>
-<li><a href="CRM-visualisation.html">Visualisation in CRM</a></li>
-<li><a href="TITE-CRM.html">TITE-CRM</a></li>
-<li><a href="CRM-pathways.html">Pathways and stopping in CRM</a></li>
-<li><a href="LevyCaseStudy.html">Case study using Levy, et al. (2006)</a></li>
-<li>Simulation</li>
-</ul>
+<a href="#other-crm-vignettes-other-crm-vignettes" class="anchor"></a>Other CRM vignettes## Other CRM vignettes</h2>
+<p>There are many vignettes illustrating the CRM and other dose-finding models in <code>trialr</code>. Be sure to check them out.</p>
+</div>
+<div id="trialr-and-the-escalation-package" class="section level1">
+<h1 class="hasAnchor">
+<a href="#trialr-and-the-escalation-package" class="anchor"></a><code>trialr</code> and the <code>escalation</code> package</h1>
+<p><a href="https://cran.r-project.org/package=escalation"><code>escalation</code></a> is an R package that provides a grammar for specifying dose-finding clinical trials. For instance, it is common for trialists to say something like ‘I want to use this published design… but I want it to stop once <span class="math inline">\(n\)</span> patients have been treated at the recommended dose’ or ‘…but I want to prevent dose skipping’ or ‘…but I want to select dose using a more risk-averse metric than merely <em>closest-to-target</em>’.</p>
+<p><code>trialr</code> and <code>escalation</code> work together to achieve these goals. <code>trialr</code> provides model-fitting capabilities to <code>escalation</code>, including the CRM methods described here. <code>escalation</code> then provides additional classes to achieve all of the above custom behaviours, and more.</p>
+<p><code>escalation</code> also provides methods for running simulations and calculating dose-paths. Simulations are regularly used to appraise the operating characteristics of adaptive clinical trial designs. Dose-paths are a tool for analysing and visualising all possible future trial behaviours. Both are provided for a wide array of dose-finding designs, with or without custom behaviours like those identified above. There are many examples in the <code>escalation</code> vignettes at <a href="https://cran.r-project.org/package=escalation" class="uri">https://cran.r-project.org/package=escalation</a>.</p>
 </div>
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">

@@ -73,7 +73,7 @@ pre-specified effective sample size (ESS)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -240,52 +240,17 @@ for repeatable results.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Reproduce the priors calculated in Thall et al. (2014)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># Reproduce the priors calculated in Thall et al. (2014)</span>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>get_efftox_priors</span>(
   <span class='kw'>doses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.0</span>, <span class='fl'>2.0</span>, <span class='fl'>4.0</span>, <span class='fl'>6.6</span>, <span class='fl'>10.0</span>),
   <span class='kw'>pi_T</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.02</span>, <span class='fl'>0.04</span>, <span class='fl'>0.06</span>, <span class='fl'>0.08</span>, <span class='fl'>0.10</span>), <span class='kw'>ess_T</span> <span class='kw'>=</span> <span class='fl'>0.9</span>,
   <span class='kw'>pi_E</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.2</span>, <span class='fl'>0.4</span>, <span class='fl'>0.6</span>, <span class='fl'>0.8</span>, <span class='fl'>0.9</span>), <span class='kw'>ess_E</span> <span class='kw'>=</span> <span class='fl'>0.9</span>
 )
-<span class='no'>p</span></div><div class='output co'>#&gt; $alpha_mean
-#&gt; [1] -6.579017
-#&gt; 
-#&gt; $alpha_sd
-#&gt; [1] 3.109381
-#&gt; 
-#&gt; $beta_mean
-#&gt; [1] 0.1983621
-#&gt; 
-#&gt; $beta_sd
-#&gt; [1] 2.984978
-#&gt; 
-#&gt; $gamma_mean
-#&gt; [1] 0.1438015
-#&gt; 
-#&gt; $gamma_sd
-#&gt; [1] 2.793757
-#&gt; 
-#&gt; $zeta_mean
-#&gt; [1] 3.801282
-#&gt; 
-#&gt; $zeta_sd
-#&gt; [1] 2.74302
-#&gt; 
-#&gt; $eta_mean
-#&gt; [1] 0
-#&gt; 
-#&gt; $eta_sd
-#&gt; [1] 0.2
-#&gt; 
-#&gt; $psi_mean
-#&gt; [1] 0
-#&gt; 
-#&gt; $psi_sd
-#&gt; [1] 1
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "efftox_priors"</div><div class='input'># These are close to the published example. They do not match exactly because
-# the process of deriving them is iterative.
-</div></pre>
+<span class='no'>p</span>
+<span class='co'># These are close to the published example. They do not match exactly because</span>
+<span class='co'># the process of deriving them is iterative.</span>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

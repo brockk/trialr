@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Continual Reassessment Method</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2020-10-09</h4>
+            <h4 class="date">2020-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/A200-CRM.Rmd"><code>vignettes/A200-CRM.Rmd</code></a></small>
       <div class="hidden name"><code>A200-CRM.Rmd</code></div>
@@ -510,16 +510,15 @@
 <div id="other-crm-vignettes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-crm-vignettes" class="anchor"></a>Other CRM vignettes</h2>
-<p>There are many vignettes illuminating the CRM in <code>trialr</code>:</p>
-<ul>
-<li><a href="CRM.html">An introduction to CRM in ‘trialr’</a></li>
-<li><a href="CRM-visualisation.html">Visualisation in CRM</a></li>
-<li><a href="TITE-CRM.html">TITE-CRM</a></li>
-<li><a href="CRM-pathways.html">Pathways and stopping in CRM</a></li>
-<li><a href="LevyCaseStudy.html">Case study using Levy, et al. (2006)</a></li>
-<li>Simulation</li>
-</ul>
+<p>There are many vignettes illustrating the CRM and other dose-finding models in <code>trialr</code>. Be sure to check them out.</p>
 </div>
+</div>
+<div id="trialr-and-the-escalation-package" class="section level1">
+<h1 class="hasAnchor">
+<a href="#trialr-and-the-escalation-package" class="anchor"></a><code>trialr</code> and the <code>escalation</code> package</h1>
+<p><a href="https://cran.r-project.org/package=escalation"><code>escalation</code></a> is an R package that provides a grammar for specifying dose-finding clinical trials. For instance, it is common for trialists to say something like ‘I want to use this published design… but I want it to stop once <span class="math inline">\(n\)</span> patients have been treated at the recommended dose’ or ‘…but I want to prevent dose skipping’ or ‘…but I want to select dose using a more risk-averse metric than merely <em>closest-to-target</em>’.</p>
+<p><code>trialr</code> and <code>escalation</code> work together to achieve these goals. <code>trialr</code> provides model-fitting capabilities to <code>escalation</code>, including the CRM methods described here. <code>escalation</code> then provides additional classes to achieve all of the above custom behaviours, and more.</p>
+<p><code>escalation</code> also provides methods for running simulations and calculating dose-paths. Simulations are regularly used to appraise the operating characteristics of adaptive clinical trial designs. Dose-paths are a tool for analysing and visualising all possible future trial behaviours. Both are provided for a wide array of dose-finding designs, with or without custom behaviours like those identified above. There are many examples in the <code>escalation</code> vignettes at <a href="https://cran.r-project.org/package=escalation" class="uri">https://cran.r-project.org/package=escalation</a>.</p>
 </div>
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">

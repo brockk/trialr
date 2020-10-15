@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-In the general [introductory CRM vignette](CRM.html), we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in `trialr`.
+In the general introductory CRM vignette, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in `trialr`.
 In this vignette, we demonstrate some of `trialr`'s capabilities for analysing dose transition pathways [@Yap2017] with the general CRM model.
 
 ## Introduction
@@ -19,7 +19,7 @@ A pathway in a dose-finding trial represents a sequence of doses that were deliv
 
 A syntax for succinctly representing pathways will be useful.
 @Brock2017a introduced a method for describing dose pathways in efficacy and toxicity dose-finding trials using the characters E, T, N & B to represent patients that experienced efficacy only, toxicity only, neither or both.
-This syntax is used in the [EffTox vignette](EffTox.html).
+This syntax is used in the EffTox vignette.
 In the CRM setting, where patients experience only _toxicity_ or _no toxicity_, we can restrict the character set to simply T and N.
 
 Thus, a dose-finding trial that treated a cohort of three patients at dose-level 1, with none experiencing the dose-limiting toxicity (DLT) event, may be represented as `1NNN`.
@@ -198,7 +198,7 @@ paths <- crm_dtps(skeleton = skeleton,
 The parameters `skeleton`, `target` and `model` are mandatory because they are passed to `stan_crm`.
 Depending on the `model` type chosen, further parameters will be required.
 For instance, under the `empiric` model we must provide a value for the prior standard deviation of $\beta$ via the `beta_sd` parameter.
-Refer to the [introductory CRM vignette](CRM.html) for more details.
+Refer to the introductory CRM vignette for more details.
 
 In the example above, the parameter `next_dose` determines the dose-level that will be given to the first cohort.
 If omitted, the first cohort is treated at the dose suggested by the model fit only to the prior information.

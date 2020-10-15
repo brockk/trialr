@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>BEBOP in PePS2</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2020-10-09</h4>
+            <h4 class="date">2020-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/A600-BEBOP.Rmd"><code>vignettes/A600-BEBOP.Rmd</code></a></small>
       <div class="hidden name"><code>A600-BEBOP.Rmd</code></div>
@@ -126,7 +126,7 @@
 <p>In PePS2, we have <span class="math inline">\(x_{i1} = 1\)</span> if a patient has been previously treated. To convey PD-L1 expression, the authors use <span class="math inline">\(x_{i2} = 1\)</span> and <span class="math inline">\(x_{i3} = 0\)</span> if a patient has a Low PD-L1 score; <span class="math inline">\(x_{i2} = 0\)</span> and <span class="math inline">\(x_{i3} = 1\)</span> if a patient has a Medium PD-L1 score; and <span class="math inline">\(x_{i2} = 0\)</span> and <span class="math inline">\(x_{i3} = 0\)</span> if a patient has a High PD-L1 score. Thus, we have <span class="math inline">\(x_i = (x_{i1}, x_{i2}, x_{i3})\)</span>. The marginal efficacy and toxicity functions in PePS2 take the form</p>
 <p><span class="math inline">\(\text{logit } \pi_E(x, \boldsymbol{\theta}) = \alpha + \beta x_{i1} + \gamma x_{i2} + \zeta x_{i3}\)</span></p>
 <p><span class="math inline">\(\text{logit } \pi_T(x, \boldsymbol{\theta}) = \lambda\)</span></p>
-<p>As with <a href="EffTox.html">EffTox</a>, let <span class="math inline">\((Y_j, Z_j)\)</span> be random variables each taking values <span class="math inline">\(\{0, 1\}\)</span> respresenting the presence of efficacy and toxicity in patient <span class="math inline">\(j\)</span>. The efficacy and toxicity events are associated by the joint probability function</p>
+<p>As with EffTox, let <span class="math inline">\((Y_j, Z_j)\)</span> be random variables each taking values <span class="math inline">\(\{0, 1\}\)</span> respresenting the presence of efficacy and toxicity in patient <span class="math inline">\(j\)</span>. The efficacy and toxicity events are associated by the joint probability function</p>
 <p><span class="math inline">\(Pr(Y = a, Z = b) = \pi_{a,b}(\pi_E, \pi_T) = (\pi_E)^a (1-\pi_E)^{1-a} (\pi_T)^b (1-\pi_T)^{1-b} + (-1)^{a+b} (\pi_E) (1-\pi_E) (\pi_T) (1-\pi_T) \frac{e^\psi-1}{e^\psi+1}\)</span>.</p>
 <p>The complete vector of parameters is <span class="math inline">\(\boldsymbol{\theta} = (\alpha, \beta, \gamma, \zeta, \lambda, \psi)\)</span>. Normal priors are specified for the elements of <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
 <p>The treatment is acceptable for patients with predictive vector <span class="math inline">\(x\)</span> if</p>

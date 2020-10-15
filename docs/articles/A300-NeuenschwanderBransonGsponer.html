@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Two-parameter logistic model for dose-finding by Neuenschwander, Branson &amp; Gsponer</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2020-10-09</h4>
+            <h4 class="date">2020-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/A300-NeuenschwanderBransonGsponer.Rmd"><code>vignettes/A300-NeuenschwanderBransonGsponer.Rmd</code></a></small>
       <div class="hidden name"><code>A300-NeuenschwanderBransonGsponer.Rmd</code></div>
@@ -266,6 +266,13 @@
 <span class="co">#&gt; The dose most likely to be the MTD is 6.</span>
 <span class="co">#&gt; Model entropy: 1.77</span></pre></body></html></div>
 <p>With this particular skeleton that places the prior guess of MTD at dose 5 and spaces out the prior probabilities of toxicity, de-escalation to dose 6 is suggested.</p>
+</div>
+<div id="trialr-and-the-escalation-package" class="section level1">
+<h1 class="hasAnchor">
+<a href="#trialr-and-the-escalation-package" class="anchor"></a><code>trialr</code> and the <code>escalation</code> package</h1>
+<p><a href="https://cran.r-project.org/package=escalation"><code>escalation</code></a> is an R package that provides a grammar for specifying dose-finding clinical trials. For instance, it is common for trialists to say something like ‘I want to use this published design… but I want it to stop once <span class="math inline">\(n\)</span> patients have been treated at the recommended dose’ or ‘…but I want to prevent dose skipping’ or ‘…but I want to select dose using a more risk-averse metric than merely <em>closest-to-target</em>’.</p>
+<p><code>trialr</code> and <code>escalation</code> work together to achieve these goals. <code>trialr</code> provides model-fitting capabilities to <code>escalation</code>, including the NBG method described here. <code>escalation</code> then provides additional classes to achieve all of the above custom behaviours, and more.</p>
+<p><code>escalation</code> also provides methods for running simulations and calculating dose-paths. Simulations are regularly used to appraise the operating characteristics of adaptive clinical trial designs. Dose-paths are a tool for analysing and visualising all possible future trial behaviours. Both are provided for a wide array of dose-finding designs, with or without custom behaviours like those identified above. There are many examples in the <code>escalation</code> vignettes at <a href="https://cran.r-project.org/package=escalation" class="uri">https://cran.r-project.org/package=escalation</a>.</p>
 </div>
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">

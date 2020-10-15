@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">trialr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
       <h1 data-toc-skip>Visualisation with CRM</h1>
                         <h4 class="author">Kristian Brock</h4>
             
-            <h4 class="date">2020-10-09</h4>
+            <h4 class="date">2020-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/brockk/trialr/blob/master/vignettes/A210-CRM-visualisation.Rmd"><code>vignettes/A210-CRM-visualisation.Rmd</code></a></small>
       <div class="hidden name"><code>A210-CRM-visualisation.Rmd</code></div>
@@ -118,7 +118,7 @@
 
     
     
-<p>In the general <a href="CRM.html">introductory CRM vignette</a>, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in <code>trialr</code>. In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.</p>
+<p>In the general introductory CRM vignette, we introduced the different flavours of the Continual Reassessment Method (CRM) implmented in <code>trialr</code>. In this vignette, we demonstrate some visualisation methods that will be useful for conveying inferences to investigators and the wider research community.</p>
 <p>The following visualisation methods are applicable in all <code>trialr</code> variants of the CRM because they rely only on the family of <code>prob_tox</code> parameters that are estimated by all CRM models.</p>
 <p>For illustration, let us assume that we have treated 6 patients at 3 dose-levels:</p>
 <table class="table">
@@ -178,7 +178,7 @@
                 <span class="kw">beta_sd</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">1.34</span>), <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">123</span>)
 <span class="no">fit</span></pre></body></html></div>
 <p>Recall that we set the random number generator seed in demonstrations for reproducibility. You may or may not choose to do this in a real analysis.</p>
-<p>We saw <a href="CRM.html">before</a> that dose-level 2 is closest to our target toxicity rate of 25%. However, we will probably like to convey this information to the research world in a visually-appealing manner. This is simple with access to the posterior samples.</p>
+<p>We saw before that dose-level 2 is closest to our target toxicity rate of 25%. However, we will probably like to convey this information to the research world in a visually-appealing manner. This is simple with access to the posterior samples.</p>
 <p>For ease of plotting with <code>ggplot2</code>, we recompose the posterior samples to a tall “tidy” format using <code>tidyr</code> and <code>dplyr</code>:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidybayes</span>)
@@ -230,7 +230,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">'bottom'</span>)</pre></body></html></div>
 <p><img src="A210-CRM-visualisation_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <p>Hopefully none of us would try to claim these posterior probabilities of toxicity are normally distributed under this model. Assuming normality has been one method for performing posterior inference with CRM models in the non-MCMC setting. With the posterior samples provided by <code>rstan</code>, we do not need to assume.</p>
-<p>We will naturally want to visualise quantities beyond just the probability of toxicity. We learned in the <a href="CRM.html">introductory CRM vignette</a> that with the full Bayesian CRM provided by <code>trialr</code> and <code>rstan</code>, we can calculate the probability that each dose is the maximum tolerable dose (MTD).</p>
+<p>We will naturally want to visualise quantities beyond just the probability of toxicity. We learned in the introductory CRM vignette that with the full Bayesian CRM provided by <code>trialr</code> and <code>rstan</code>, we can calculate the probability that each dose is the maximum tolerable dose (MTD).</p>
 <p>We can visualise the MCMC candidates for the dose-toxicity curve on one plot. Colouring them by the MTD candidate they propose (i.e. using a single colour for all the curves that suggest dose-level 1 is the maximum tolerable dose, etc), we get an idea of uncertainty still in this trial:</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">prob_tox_samp_tall</span>  <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">.draw</span>) <span class="kw">%&gt;%</span>
@@ -274,15 +274,14 @@
 <div id="other-crm-vignettes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-crm-vignettes" class="anchor"></a>Other CRM vignettes</h2>
-<p>There are many vignettes illuminating the CRM in <code>trialr</code>:</p>
-<ul>
-<li><a href="CRM.html">An introduction to CRM in ‘trialr’</a></li>
-<li><a href="CRM-visualisation.html">Visualisation in CRM</a></li>
-<li><a href="TITE-CRM.html">TITE-CRM</a></li>
-<li><a href="CRM-pathways.html">Pathways and stopping in CRM</a></li>
-<li><a href="LevyCaseStudy.html">Case study using Levy, et al. (2006)</a></li>
-<li>Simulation</li>
-</ul>
+<p>There are many vignettes illustrating the CRM and other dose-finding models in <code>trialr</code>. Be sure to check them out.</p>
+</div>
+<div id="trialr-and-the-escalation-package" class="section level1">
+<h1 class="hasAnchor">
+<a href="#trialr-and-the-escalation-package" class="anchor"></a><code>trialr</code> and the <code>escalation</code> package</h1>
+<p><a href="https://cran.r-project.org/package=escalation"><code>escalation</code></a> is an R package that provides a grammar for specifying dose-finding clinical trials. For instance, it is common for trialists to say something like ‘I want to use this published design… but I want it to stop once <span class="math inline">\(n\)</span> patients have been treated at the recommended dose’ or ‘…but I want to prevent dose skipping’ or ‘…but I want to select dose using a more risk-averse metric than merely <em>closest-to-target</em>’.</p>
+<p><code>trialr</code> and <code>escalation</code> work together to achieve these goals. <code>trialr</code> provides model-fitting capabilities to <code>escalation</code>, including the CRM methods described here. <code>escalation</code> then provides additional classes to achieve all of the above custom behaviours, and more.</p>
+<p><code>escalation</code> also provides methods for running simulations and calculating dose-paths. Simulations are regularly used to appraise the operating characteristics of adaptive clinical trial designs. Dose-paths are a tool for analysing and visualising all possible future trial behaviours. Both are provided for a wide array of dose-finding designs, with or without custom behaviours like those identified above. There are many examples in the <code>escalation</code> vignettes at <a href="https://cran.r-project.org/package=escalation" class="uri">https://cran.r-project.org/package=escalation</a>.</p>
 </div>
 <div id="trialr" class="section level1">
 <h1 class="hasAnchor">

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The Continual Reassessment Method (CRM) for dose-finding is introduced in [its own article](CRM.html).
+The Continual Reassessment Method (CRM) for dose-finding is introduced in the CRM vignette.
 This vignette reproduces the analysis in a real dose-finding trial that used the CRM by @Levy2006.
 The chosen example is particularly attractive because the authors present sequential analyses of their dose decisions in their Table 1, allowing us the opportunity to reproduce their analysis.
 
@@ -233,7 +233,7 @@ apply(as.data.frame(fit6, pars = 'prob_tox'), 2, quantile,
 The 95% CI at dose-level 4 is very close to that reported.
 
 They say "The estimated DLT probability associated with the dose level of 5mg/m2 would have been expected to change by less than 5% even if three further patients were included."
-It is possible to show this with [DTPs](CRM-pathways.html).
+It is possible to show this with DTPs (see for example the dose pathways vignette).
 
 The prevailing probability of toxicity given the patients evaluated thus far is:
 ```{r}

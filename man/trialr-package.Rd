@@ -10,5 +10,7 @@ trialr collects in one place Bayesian clinical trial designs and methods.
 Models are implemented in Stan and helper functions are provided in R.
 }
 \references{
-Stan Development Team (2018). RStan: the R interface to Stan. R package version 2.18.2. http://mc-stan.org
+Stan Development Team (2018).
+RStan: the R interface to Stan. R package version 2.18.2.
+https://mc-stan.org/
 }

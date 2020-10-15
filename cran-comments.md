@@ -1,5 +1,64 @@
 
-# Version 0.1.4
+# Version 0.1.5
+
+
+## Test environment - WinBuilder R-release
+
+0 errors | 0 warnings | 1 notes
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Kristian Brock <kristian.brock@gmail.com>'
+
+Version contains large components (0.1.4.9007)
+
+Possibly mis-spelled words in DESCRIPTION:
+  Branson (9:21)
+  Neuenschwander (9:5)
+  Sponer (9:31)
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.2307/2531628
+    From: inst/doc/A200-CRM.html
+          inst/doc/A220-CRM-pathways.html
+          inst/doc/A400-EffTox.html
+          README.md
+    Status: 403
+    Message: Forbidden
+
+Found the following (possibly) invalid DOIs:
+  DOI: 10.2307/2531628
+    From: DESCRIPTION
+    Status: Forbidden
+    Message: 403
+
+The questioned words are all correct spellings of researchers' names.
+The questioned URL is valid; it points to a publication on J-Stor.
+The questioned DOI is associated with this same paper. 
+It is on old paper. I have checked the details are correct.
+
+
+## Test environment - WinBuilder WinBuilder R-devel
+
+Exactly the same as checks under R-release.
+
+
+## Test environment - Ubuntu 16.04.6 LTS on travis-ci, R 4.0.2
+
+0 errors | 0 warnings | 2 notes
+
+### NOTEs
+
+* checking installed package size ... NOTE
+  installed size is  8.3Mb
+  sub-directories of 1Mb or more:
+    doc    1.5Mb
+    libs   5.8Mb
+
+* checking for GNU extensions in Makefiles ... NOTE
+GNU make is a SystemRequirements.
+
+Both of these notes are accurate and sound.
+
 
 ## Test environment - local Mac install, R 3.6.2
 
@@ -11,21 +70,15 @@
     installed size is 12.6Mb
     sub-directories of 1Mb or more:
       doc    3.8Mb
-      libs   8.0Mb
+      libs   9.2Mb
 
 ❯ checking for GNU extensions in Makefiles ... NOTE
   GNU make is a SystemRequirements.
 
-Both on these notes are OK.
+As above.
 
-## Test environment - WinBuilder R-release, 3.6.3
-TODO
 
-## Test environment - WinBuilder WinBuilder R-devel
-TODO
 
-## Test environment - TODO on travis-ci
-TODO
 
 
 # Version 0.1.4
