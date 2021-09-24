@@ -49,10 +49,11 @@ LinkingTo:
   rstan (>= 2.18.2), 
   BH (>= 1.69.0-1), 
   Rcpp (>= 1.0.1), 
-  RcppEigen (>= 0.3.3.5.0)
+  RcppEigen (>= 0.3.3.5.0), 
+  RcppParallel (>= 5.0.2)
 SystemRequirements: GNU make
 NeedsCompilation: yes
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 URL: https://github.com/brockk/trialr
 BugReports: https://github.com/brockk/trialr/issues
