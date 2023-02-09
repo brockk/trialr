@@ -19,3 +19,4 @@ cran-comments\.md
 ^\.httr-oauth$
 ^doc$
 ^Meta$
+^\.github$
