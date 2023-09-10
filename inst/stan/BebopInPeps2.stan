@@ -4,7 +4,7 @@
 // by Thall and Cook.
 
 functions {
-  real log_joint_pdf(int J, int[] eff, int[] tox, int[] x1, int[] x2, int[] x3,
+  real log_joint_pdf(int J, array[] int eff, array[] int tox, array[] int x1, array[] int x2, array[] int x3,
                      real alpha, real beta, real gamma, real zeta, real lambda,
                      real psi) {
     real p;
@@ -28,11 +28,11 @@ functions {
 
 data {
   int<lower=0> J; // number of obs
-  int<lower=0, upper=1> eff[J]; // event one
-  int<lower=0, upper=1> tox[J]; // event two
-  int<lower=0, upper=1> x1[J];  // x1=1 if pre-treated, else 0
-  int<lower=0, upper=1> x2[J];  // x2=1 if PD-L1 is low
-  int<lower=0, upper=1> x3[J];  // x3=1 if PD-L1 is medium
+  array[J] int<lower=0, upper=1> eff; // event one
+  array[J] int<lower=0, upper=1> tox; // event two
+  array[J] int<lower=0, upper=1> x1;  // x1=1 if pre-treated, else 0
+  array[J] int<lower=0, upper=1> x2;  // x2=1 if PD-L1 is low
+  array[J] int<lower=0, upper=1> x3;  // x3=1 if PD-L1 is medium
                                 // Implicityly, x2=0 & x3=0 if PD-L1 is high
 
   // Hyperparameters
@@ -60,8 +60,8 @@ parameters {
 }
 
 transformed parameters {
-  real<lower=0, upper=1> prob_eff[6];
-  real<lower=0, upper=1> prob_tox[6];
+  array[6] real<lower=0, upper=1> prob_eff;
+  array[6] real<lower=0, upper=1> prob_tox;
   prob_eff[1] = inv_logit(alpha + beta*0 + gamma*1 + zeta*0);
   prob_eff[2] = inv_logit(alpha + beta*0 + gamma*0 + zeta*1);
   prob_eff[3] = inv_logit(alpha + beta*0 + gamma*0 + zeta*0);

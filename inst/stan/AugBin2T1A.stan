@@ -6,8 +6,8 @@ data {
   vector[N] z1;  // Tumour sizes at assessment 1
   vector[N] z2;  // Tumour sizes at assessment 2
 
-  int<lower=0, upper=1> d1[N]; // Non-shrinkage failures at assessment 1
-  int<lower=0, upper=1> d2[N]; // Non-shrinkage failures at assessment 2
+  array[N] int<lower=0, upper=1> d1; // Non-shrinkage failures at assessment 1
+  array[N] int<lower=0, upper=1> d2; // Non-shrinkage failures at assessment 2
 
   // Hyperparameters
   // Tumour size model
@@ -33,7 +33,7 @@ data {
 }
 
 transformed data {
-  vector[2] y[N]; // y, log tumour size ratios, has N rows and 2 columns
+  array[N] vector[2] y; // y, log tumour size ratios, has N rows and 2 columns
   for(i in 1:N) {
     y[i][1] = log(z1[i] / z0[i]);
     y[i][2] = log(z2[i] / z0[i]);
@@ -53,9 +53,9 @@ parameters {
 }
 
 transformed parameters {
-  vector[2] Mu[N];
+  array[N] vector[2] Mu;
   cov_matrix[2] Sigma;
-  vector[2] ProbD[N];
+  array[N] vector[2] ProbD;
 
   for(i in 1:N) {
     Mu[i][1] = alpha + gamma * z0[i];

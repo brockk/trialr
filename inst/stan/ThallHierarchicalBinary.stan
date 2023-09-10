@@ -8,8 +8,8 @@
 data {
   // Observed data and trial constants
   int<lower=1> num_groups;                   // Number of cohorts
-  int<lower=0> group_responses[num_groups];  // Number of responses by cohort
-  int<lower=0> group_sizes[num_groups];      // Number of patients by cohort
+  array[num_groups] int<lower=0> group_responses;  // Number of responses by cohort
+  array[num_groups] int<lower=0> group_sizes;      // Number of patients by cohort
 
   // Hyperparameters for mu
   real mu_mean;
@@ -23,12 +23,12 @@ data {
 parameters {
   real mu;                // Mean of the groupwise log-odds of response
   real<lower=0.0> sigma2;  // Variance of the groupwise log-odds of response
-  real rho[num_groups];   // Log-odds of response by cohort
+  array[num_groups] real rho;   // Log-odds of response by cohort
 }
 
 transformed parameters {
   real<lower=0.0> sigma;
-  real<lower=0.0, upper=1.0> prob_response[num_groups]; // Probability of response by cohort
+  array[num_groups] real<lower=0.0, upper=1.0> prob_response; // Probability of response by cohort
   sigma = sqrt(sigma2);
   for (i in 1:num_groups)
   {

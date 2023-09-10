@@ -17,8 +17,8 @@
 // New York: Chapman & Hall / CRC Press.
 
 functions {
-  real log_joint_pdf(int num_patients, int[] tox, int[] doses, real[] weights,
-                     real[] skeleton, real beta) {
+  real log_joint_pdf(int num_patients, array[] int tox, array[] int doses, array[] real weights,
+                     array[] real skeleton, real beta) {
     real p;
     p = 0;
     for(j in 1:num_patients) {
@@ -40,20 +40,20 @@ data {
   int<lower=1> num_doses;
   // Prior probability of toxicity at each dose, commonly referred to as the
   // skeleton. Should be monotonically increasing.
-  real<lower=0, upper = 1> skeleton[num_doses];
+  array[num_doses] real<lower=0, upper = 1> skeleton;
 
   // Observed trial outcomes
   int<lower=0> num_patients;
   // Binary toxicity event for patients j=1,..,num_patients
-  int<lower=0, upper=1> tox[num_patients];
+  array[num_patients] int<lower=0, upper=1> tox;
   // Dose-levels given for patients j=1,..,num_patients.
   // Dose-levels are 1-based indices of real_doses.
   // E.g. 1 means 1st dose in real_doses was given
-  int<lower=1, upper=num_doses> doses[num_patients];
+  array[num_patients] int<lower=1, upper=num_doses> doses;
   // Weights given to observations j=1, .., num_patients.
   // Weights between 0 and 1 suggest use of TITE-CRM.
   // However, weights can take whatever real value you want.
-  real weights[num_patients];
+  array[num_patients] real weights;
 }
 
 parameters {
@@ -63,7 +63,7 @@ parameters {
 
 transformed parameters {
   // Posterior probability of toxicity at doses i=1,...,num_doses
-  real<lower=0, upper=1> prob_tox[num_doses];
+  array[num_doses] real<lower=0, upper=1> prob_tox;
   for(i in 1:num_doses) {
     prob_tox[i] = skeleton[i] ^ exp(beta);
   }
