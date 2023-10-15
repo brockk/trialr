@@ -5,10 +5,10 @@
 \title{Convert \code{\link{efftox_fit}} to instance of
 \code{\link[coda]{mcmc.list}}}
 \usage{
-\method{as.mcmc.list}{efftox_fit}(efftox_fit, ...)
+\method{as.mcmc.list}{efftox_fit}(x, ...)
 }
 \arguments{
-\item{efftox_fit}{Object of class \code{\link{efftox_fit}}}
+\item{x}{Object of class \code{\link{efftox_fit}}}
 
 \item{...}{Extra variables that are passed onwards.}
 }

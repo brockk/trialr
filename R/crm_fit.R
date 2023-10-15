@@ -170,7 +170,7 @@ summary.crm_fit <- function(object, ...) {
 #'
 #' @description This function allows trialr to use tidybayes functions.
 #'
-#' @param crm_fit Object of class \code{\link{crm_fit}}
+#' @param x Object of class \code{\link{crm_fit}}
 #' @param ... Extra variables that are passed onwards.
 #'
 #' @return Object of class \code{\link[coda]{mcmc.list}}
@@ -180,10 +180,10 @@ summary.crm_fit <- function(object, ...) {
 #' @importFrom coda mcmc
 #' @importFrom rstan As.mcmc.list
 #' @export
-as.mcmc.list.crm_fit <- function(crm_fit, ...) {
-  if(is.null(crm_fit$fit)) {
-    as.mcmc.list(mcmc(crm_fit$samples))
+as.mcmc.list.crm_fit <- function(x, ...) {
+  if(is.null(x$fit)) {
+    as.mcmc.list(mcmc(x$samples))
   } else {
-    As.mcmc.list(crm_fit$fit, ...)
+    As.mcmc.list(x$fit, ...)
   }
 }

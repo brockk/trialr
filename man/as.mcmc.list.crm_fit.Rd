@@ -5,10 +5,10 @@
 \title{Convert \code{\link{crm_fit}} to instance of
 \code{\link[coda]{mcmc.list}}}
 \usage{
-\method{as.mcmc.list}{crm_fit}(crm_fit, ...)
+\method{as.mcmc.list}{crm_fit}(x, ...)
 }
 \arguments{
-\item{crm_fit}{Object of class \code{\link{crm_fit}}}
+\item{x}{Object of class \code{\link{crm_fit}}}
 
 \item{...}{Extra variables that are passed onwards.}
 }

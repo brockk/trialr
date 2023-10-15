@@ -85,7 +85,7 @@ summary.efftox_fit <- function(object, ...) {
 #'
 #' @description This function allows trialr to use tidybayes functions.
 #'
-#' @param efftox_fit Object of class \code{\link{efftox_fit}}
+#' @param x Object of class \code{\link{efftox_fit}}
 #' @param ... Extra variables that are passed onwards.
 #'
 #' @return Object of class \code{\link[coda]{mcmc.list}}
@@ -94,7 +94,7 @@ summary.efftox_fit <- function(object, ...) {
 #' @importFrom coda as.mcmc.list
 #' @importFrom rstan As.mcmc.list
 #' @export
-as.mcmc.list.efftox_fit <- function(efftox_fit, ...) {
-  As.mcmc.list(efftox_fit$fit, ...)
+as.mcmc.list.efftox_fit <- function(x, ...) {
+  As.mcmc.list(x$fit, ...)
 }
 

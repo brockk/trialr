@@ -3,8 +3,8 @@
 //  by Thall, Herrick, Nguyen, Venier, Norris
 
 functions {
-  real log_joint_pdf(real[] coded_doses, real[] coded_doses_squ,
-                     int num_patients, int[] eff, int[] tox, int[] doses,
+  real log_joint_pdf(array[] real coded_doses, array[] real coded_doses_squ,
+                     int num_patients, array[] int eff, array[] int tox, array[] int doses,
                      real alpha, real beta, real gamma, real zeta, real eta, real psi) {
     real p;
     p = 0;
@@ -40,7 +40,7 @@ data {
   real<lower=0> psi_sd;
   // Fixed trial parameters
   int<lower=1> num_doses;
-  real<lower=0> real_doses[num_doses]; // Doses under investigation, e.g. 10, 20, 30 for 10mg, 20mg, 30mg
+  array[num_doses] real<lower=0> real_doses; // Doses under investigation, e.g. 10, 20, 30 for 10mg, 20mg, 30mg
   real p;  // The p of the L^p norm used to model the efficacy-toxicity indifference contours.
            // See Efficacy-Toxicity trade-offs based on L-p norms: Technical Report UTMDABTR-003-06
   real eff0; // Minimum required Pr(Efficacy) when Pr(Toxicity) = 0
@@ -49,17 +49,17 @@ data {
   real toxicity_hurdle; //  ... and prob(tox) is less than this hurdle
   // Observed trial outcomes
   int<lower=0> num_patients;
-  int<lower=0, upper=1> eff[num_patients]; // Binary efficacy event for patients j=1,..,num_patients
-  int<lower=0, upper=1> tox[num_patients]; // Binary toxicity event for patients j=1,..,num_patients
-  int<lower=1, upper=num_doses> doses[num_patients];  // Dose-levels given for patients j=1,..,num_patients.
+  array[num_patients] int<lower=0, upper=1> eff; // Binary efficacy event for patients j=1,..,num_patients
+  array[num_patients] int<lower=0, upper=1> tox; // Binary toxicity event for patients j=1,..,num_patients
+  array[num_patients] int<lower=1, upper=num_doses> doses;  // Dose-levels given for patients j=1,..,num_patients.
                                    // Dose-levels are 1-based indices of real_doses
                                    // E.g. 1 means 1st dose in real_doses was given
 }
 
 transformed data {
   // Thall & Cook transform the actual doses by logging and centralising:
-  real coded_doses[num_doses];
-  real coded_doses_squ[num_doses]; // The square of coded_doses
+  array[num_doses] real coded_doses;
+  array[num_doses] real coded_doses_squ; // The square of coded_doses
   real mean_log_dose; // Variable created for convenience
   mean_log_dose = 0.0;
   for(i in 1:num_doses)
@@ -86,9 +86,9 @@ parameters {
 }
 
 transformed parameters {
-  real<lower=0, upper=1> prob_eff[num_doses]; // Posterior probability of efficacy at doses i=1,...,num_doses
-  real<lower=0, upper=1> prob_tox[num_doses]; // Posterior probability of toxicity at doses i=1,...,num_doses
-  real utility[num_doses]; // Posterior utility of doses i=1,...,num_doses
+  array[num_doses] real<lower=0, upper=1> prob_eff; // Posterior probability of efficacy at doses i=1,...,num_doses
+  array[num_doses] real<lower=0, upper=1> prob_tox; // Posterior probability of toxicity at doses i=1,...,num_doses
+  array[num_doses] real utility; // Posterior utility of doses i=1,...,num_doses
   // Calculate the utility of each dose using the method described in
   // "Efficacy-Toxicity trade-offs based on L-p norms: Technical Report UTMDABTR-003-06", John Cook
   for(i in 1:num_doses)
